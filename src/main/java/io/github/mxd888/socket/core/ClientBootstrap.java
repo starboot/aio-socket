@@ -106,7 +106,7 @@ public class ClientBootstrap {
             public void completed(ChannelContext session, CompletableFuture<ChannelContext> future) {
                 if (future.isDone() || future.isCancelled()) {
                     session.close();
-                    System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed");
+                    System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed because of future is done or cancelled");
                 } else {
                     future.complete(session);
                     System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started successfully");
@@ -116,6 +116,7 @@ public class ClientBootstrap {
             @Override
             public void failed(Throwable exc, CompletableFuture<ChannelContext> future) {
                 future.completeExceptionally(exc);
+                System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed");
             }
         });
         try {
@@ -166,7 +167,7 @@ public class ClientBootstrap {
                     if (connectedChannel == null) {
                         throw new RuntimeException("NetMonitor refuse channel");
                     }
-                    //连接成功则构造AIOSession对象
+                    //连接成功则构造AIOChannelContext对象
                     channelContext = new ChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage());
                     channelContext.initSession(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
                     handler.completed(channelContext, future);

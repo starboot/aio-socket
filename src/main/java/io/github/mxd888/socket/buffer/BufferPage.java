@@ -58,7 +58,7 @@ public final class BufferPage {
      *
      * @param size   物理空间大小
      * @param direct true:堆外缓冲区,false:堆内缓冲区
-     * @return 缓冲区
+     * @return       缓冲区
      */
     private ByteBuffer allocate0(int size, boolean direct) {
         return direct ? ByteBuffer.allocateDirect(size) : ByteBuffer.allocate(size);
@@ -68,7 +68,7 @@ public final class BufferPage {
      * 申请虚拟内存
      *
      * @param size 申请大小
-     * @return 虚拟内存对象
+     * @return     虚拟内存对象
      */
     public VirtualBuffer allocate(final int size) {
         VirtualBuffer virtualBuffer = allocate0(size);
@@ -79,7 +79,7 @@ public final class BufferPage {
      * 申请虚拟内存
      *
      * @param size 申请大小
-     * @return 虚拟内存对象
+     * @return     虚拟内存对象
      */
     private VirtualBuffer allocate0(final int size) {
         idle = false;
@@ -122,7 +122,7 @@ public final class BufferPage {
      * 快速匹配
      *
      * @param size 申请内存大小
-     * @return 申请到的内存块, 若空间不足则范围null
+     * @return     申请到的内存块, 若空间不足则范围null
      */
     private VirtualBuffer fastAllocate(int size) {
         VirtualBuffer freeChunk = availableBuffers.get(0);
@@ -137,7 +137,7 @@ public final class BufferPage {
      * 迭代申请
      *
      * @param size 申请内存大小
-     * @return 申请到的内存块, 若空间不足则范围null
+     * @return     申请到的内存块, 若空间不足则范围null
      */
     private VirtualBuffer slowAllocate(int size) {
         Iterator<VirtualBuffer> iterator = availableBuffers.listIterator(0);
@@ -160,7 +160,7 @@ public final class BufferPage {
      *
      * @param size      申请内存大小
      * @param freeChunk 可用于申请的内存块
-     * @return 申请到的内存块, 若空间不足则范围null
+     * @return          申请到的内存块, 若空间不足则范围null
      */
     private VirtualBuffer allocate(int size, VirtualBuffer freeChunk) {
         final int capacity = freeChunk.getCapacity();
