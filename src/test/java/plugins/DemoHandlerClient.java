@@ -43,6 +43,15 @@ public class DemoHandlerClient implements AioHandler {
         readBuffer.buffer().mark();
         Packet packet = new Packet();
         packet.setFromId(new String(b));
+        int length1 = readBuffer.buffer().getInt();
+        if (length1 > readBuffer.buffer().remaining()) {
+            readBuffer.buffer().reset();
+            return null;
+        }
+        byte[] b1 = new byte[length1];
+        readBuffer.buffer().get(b1);
+        readBuffer.buffer().mark();
+        packet.setToId(new String(b1));
         return packet;
 
     }
@@ -54,6 +63,8 @@ public class DemoHandlerClient implements AioHandler {
 //        System.out.println(packet.getFromId());
         byteBuf.putInt(packet.getFromId().getBytes().length);
         byteBuf.put(packet.getFromId().getBytes());
+        byteBuf.putInt(packet.getToId().getBytes().length);
+        byteBuf.put(packet.getToId().getBytes());
         byteBuf.flip();
         return virtualBuffer;
     }

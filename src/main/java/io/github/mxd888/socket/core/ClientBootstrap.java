@@ -158,13 +158,11 @@ public class ClientBootstrap {
         if (this.bufferPool == null) {
             this.bufferPool = getConfig().getBufferFactory().create();
         }
-        //set socket options
         if (this.config.getSocketOptions() != null) {
             for (Map.Entry<SocketOption<Object>, Object> entry : this.config.getSocketOptions().entrySet()) {
                 socketChannel.setOption(entry.getKey(), entry.getValue());
             }
         }
-        //bind host
         if (this.localAddress != null) {
             socketChannel.bind(this.localAddress);
         }
@@ -222,13 +220,13 @@ public class ClientBootstrap {
      */
     private void heartMessage() {
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(()-> {
-            System.out.println("心跳...");
+            System.out.println("aio-socket version: 2.10.1.v20211002-RELEASE; client kernel are sending heart");
             Packet packet = new Packet();
-            packet.setFromId(channelContext.getId());
-            packet.setToId(channelContext.getId());
+            packet.setFromId("1191998028");
+            packet.setToId("1191998028");
             Aio.send(channelContext, packet);
             heartMessage();
-        }, 60, TimeUnit.SECONDS);
+        }, 20, TimeUnit.SECONDS);
     }
 
     /**

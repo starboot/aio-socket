@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by DELL(mxd) on 2022/7/13 23:01
+ * 重连插件 客户端使用
  */
 public class ReconnectPlugin extends AbstractPlugin {
 

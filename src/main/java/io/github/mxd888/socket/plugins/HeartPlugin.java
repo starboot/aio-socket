@@ -2,12 +2,9 @@ package io.github.mxd888.socket.plugins;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
-import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
@@ -21,26 +18,13 @@ public class HeartPlugin extends AbstractPlugin {
     private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (context, lastTime) -> context.close(true);
 
     private final Map<ChannelContext, Long> sessionMap = new HashMap<>();
-    /**
-     * 心跳频率
-     */
-    private long heartRate;
+
     /**
      * 在超时时间内未收到消息,关闭连接。
      */
-    private long timeout;
+    private final long timeout;
 
-    private TimeoutCallback timeoutCallback;
-
-    /**
-     * 心跳插件
-     *
-     * @param heartRate 心跳触发频率
-     * @param timeUnit  heatRate单位
-     */
-    public HeartPlugin(int heartRate, TimeUnit timeUnit) {
-        this(heartRate, 0, timeUnit);
-    }
+    private final TimeoutCallback timeoutCallback;
 
     /**
      * 心跳插件
@@ -48,12 +32,11 @@ public class HeartPlugin extends AbstractPlugin {
      * 心跳插件在断网场景可能会触发TCP Retransmission,导致无法感知到网络实际状态,可通过设置timeout关闭连接
      * </p>
      *
-     * @param heartRate 心跳触发频率
      * @param timeout   消息超时时间
      * @param unit      时间单位
      */
-    public HeartPlugin(int heartRate, int timeout, TimeUnit unit) {
-        this(heartRate, timeout, unit, DEFAULT_TIMEOUT_CALLBACK);
+    public HeartPlugin(int timeout, TimeUnit unit) {
+        this(timeout, unit, DEFAULT_TIMEOUT_CALLBACK);
     }
 
     /**
@@ -62,14 +45,12 @@ public class HeartPlugin extends AbstractPlugin {
      * 心跳插件在断网场景可能会触发TCP Retransmission,导致无法感知到网络实际状态,可通过设置timeout关闭连接
      * </p>
      *
-     * @param heartRate 心跳触发频率
      * @param timeout   消息超时时间
      */
-    public HeartPlugin(int heartRate, int timeout, TimeUnit timeUnit, TimeoutCallback timeoutCallback) {
-        if (timeout > 0 && heartRate >= timeout) {
-            throw new IllegalArgumentException("heartRate must little then timeout");
+    private HeartPlugin(int timeout, TimeUnit timeUnit, TimeoutCallback timeoutCallback) {
+        if (timeout <= 0) {
+            throw new IllegalArgumentException("timeout should bigger than zero");
         }
-        this.heartRate = timeUnit.toMillis(heartRate);
         this.timeout = timeUnit.toMillis(timeout);
         this.timeoutCallback = timeoutCallback;
     }
@@ -78,7 +59,7 @@ public class HeartPlugin extends AbstractPlugin {
     public final boolean preProcess(ChannelContext channelContext, Packet packet) {
         sessionMap.put(channelContext, System.currentTimeMillis());
         //是否心跳响应消息 延长心跳监测时间
-        return !isHeartMessage(channelContext, packet);
+        return !isHeartMessage(packet);
     }
 
     @Override
@@ -86,7 +67,7 @@ public class HeartPlugin extends AbstractPlugin {
         switch (stateMachineEnum) {
             case NEW_CHANNEL:
                 sessionMap.put(context, System.currentTimeMillis());
-                registerHeart(context, heartRate);
+                registerHeart(context);
                 //注册心跳监测
                 break;
             case CHANNEL_CLOSED:
@@ -99,33 +80,17 @@ public class HeartPlugin extends AbstractPlugin {
     }
 
     /**
-     * 自定义心跳消息并发送
-     *
-     * @param context 用户上下文
-     */
-    public void sendHeartRequest(ChannelContext context) {
-        Packet packet = new Packet();
-        packet.setFromId(context.getId());
-        packet.setToId(context.getId());
-        Aio.send(context, packet);
-    };
-
-    /**
      * 判断当前收到的消息是否为心跳消息。
      * 心跳请求消息与响应消息可能相同，也可能不同，因实际场景而异，故接口定义不做区分。
      *
-     * @param channelContext
-     * @param packet
-     * @return
+     * @param packet 心跳包
+     * @return 判断是否为心跳包
      */
-    public boolean isHeartMessage(ChannelContext channelContext, Packet packet) {
+    public boolean isHeartMessage(Packet packet) {
         return packet.getFromId().equals(packet.getToId());
     };
 
-    private void registerHeart(final ChannelContext channelContext, final long heartRate) {
-        if (heartRate <= 0) {
-            return;
-        }
+    private void registerHeart(final ChannelContext channelContext) {
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -143,13 +108,9 @@ public class HeartPlugin extends AbstractPlugin {
                 if (timeout > 0 && (current - lastTime) > timeout) {
                     timeoutCallback.callback(channelContext, lastTime);
                 }
-                //超时未收到消息,尝试发送心跳消息
-                else if (current - lastTime > heartRate) {
-                    sendHeartRequest(channelContext);
-                }
-                registerHeart(channelContext, heartRate);
+                registerHeart(channelContext);
             }
-        }, heartRate, TimeUnit.MILLISECONDS);
+        }, 20000, TimeUnit.MILLISECONDS);
     }
 
     public interface TimeoutCallback {

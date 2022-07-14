@@ -33,13 +33,13 @@ public class DemoClient {
 
 //        MulitClient();
 //        recoon();
-//        ReconnPlug();
+        ReconnPlug();
 
-        Map<String, String> map = new HashMap<>();
-        map.put("1","k");
-        map.put("1","k2");
-        map.put("1","k3");
-        System.out.println(map.size()+map.get("1"));
+//        Map<String, String> map = new HashMap<>();
+//        map.put("1","k");
+//        map.put("1","k2");
+//        map.put("1","k3");
+//        System.out.println(map.size()+map.get("1"));
     }
 
     public static void ReconnPlug() throws IOException {
@@ -49,6 +49,7 @@ public class DemoClient {
         ChannelContext start = clientBootstrap.start();
         Packet packet = new Packet();
         packet.setFromId("hello");
+        packet.setToId("123");
         Aio.send(start, packet);
     }
 
