@@ -1,11 +1,15 @@
 package plugins;
 
+import io.github.mxd888.socket.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
+import io.github.mxd888.socket.plugins.ReconnectPlugin;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DemoClient {
 
@@ -27,8 +31,25 @@ public class DemoClient {
 //        ClientBootstrap clientBootstrap2 = new ClientBootstrap("localhost", 8888, new DemoHandler());
 //        clientBootstrap2.start();
 
-        MulitClient();
+//        MulitClient();
 //        recoon();
+//        ReconnPlug();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("1","k");
+        map.put("1","k2");
+        map.put("1","k3");
+        System.out.println(map.size()+map.get("1"));
+    }
+
+    public static void ReconnPlug() throws IOException {
+        ClientBootstrap clientBootstrap = new ClientBootstrap("localhost", 8888, new DemoHandlerClient());
+        clientBootstrap.getConfig().setEnablePlugins(true);
+        clientBootstrap.getConfig().getPlugins().addPlugin(new ReconnectPlugin(clientBootstrap));
+        ChannelContext start = clientBootstrap.start();
+        Packet packet = new Packet();
+        packet.setFromId("hello");
+        Aio.send(start, packet);
     }
 
     static void recoon() {

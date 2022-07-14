@@ -54,4 +54,5 @@ public class Packet implements Serializable {
     public void setEntity(ClusterEntity entity) {
         this.entity = entity;
     }
+
 }

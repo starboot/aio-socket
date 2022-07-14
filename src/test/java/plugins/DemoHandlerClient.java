@@ -14,6 +14,7 @@ public class DemoHandlerClient implements AioHandler {
         if (!"hello".equals(packet.getFromId())) {
             System.out.println("消息出错啦");
         }
+
         System.out.println(packet.getFromId());
 //        WriteBuffer outputStream = channelContext.writeBuffer();
 //        try {

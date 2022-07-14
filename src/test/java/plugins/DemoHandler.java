@@ -9,6 +9,7 @@ import io.github.mxd888.socket.core.ChannelContext;
 public class DemoHandler implements AioHandler {
     @Override
     public void handle(ChannelContext channelContext, Packet packet) {
+        channelContext.close();
 //        System.out.println("receive from client: " + ((DemoPacket) packet).getMsg());
 //        WriteBuffer outputStream = channelContext.writeBuffer();
 //        try {

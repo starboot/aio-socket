@@ -1,9 +1,14 @@
 package io.github.mxd888.socket.core;
 
+import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.buffer.BufferPagePool;
 import io.github.mxd888.socket.buffer.VirtualBufferFactory;
+import io.github.mxd888.socket.cluster.ClusterBootstrap;
 import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.plugins.AioPlugins;
+import io.github.mxd888.socket.plugins.ClusterPlugin;
 import io.github.mxd888.socket.utils.IOUtil;
+import io.github.mxd888.socket.utils.QuickTimerTask;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,6 +18,7 @@ import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.Map;
+import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -54,6 +60,8 @@ public class ClientBootstrap {
      * 连接超时时间
      */
     private final static int connectTimeout = 2000;
+
+    private boolean isCheck = true;
 
     /**
      * 构造虚拟缓冲区工厂
@@ -100,6 +108,9 @@ public class ClientBootstrap {
      * @see AsynchronousSocketChannel#connect(SocketAddress)
      */
     public ChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
+        if (isCheck) {
+            checkAndResetConfig();
+        }
         CompletableFuture<ChannelContext> future = new CompletableFuture<>();
         start(asynchronousChannelGroup, future, new CompletionHandler<ChannelContext, CompletableFuture<ChannelContext>>() {
             @Override
@@ -109,6 +120,7 @@ public class ClientBootstrap {
                     System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed because of future is done or cancelled");
                 } else {
                     future.complete(session);
+                    heartMessage();
                     System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started successfully");
                 }
             }
@@ -193,6 +205,33 @@ public class ClientBootstrap {
     }
 
     /**
+     * 检查配置项
+     */
+    private void checkAndResetConfig() {
+        // 检查是否启用插件模块
+        if (getConfig().isEnablePlugins()) {
+            AioPlugins plugins = getConfig().getPlugins();
+            plugins.setAioHandler(getConfig().getHandler());
+            getConfig().setMonitor(plugins);
+            getConfig().setHandler(plugins);
+        }
+    }
+
+    /**
+     * 心跳
+     */
+    private void heartMessage() {
+        QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(()-> {
+            System.out.println("心跳...");
+            Packet packet = new Packet();
+            packet.setFromId(channelContext.getId());
+            packet.setToId(channelContext.getId());
+            Aio.send(channelContext, packet);
+            heartMessage();
+        }, 60, TimeUnit.SECONDS);
+    }
+
+    /**
      * 获取连接上下文
      *
      * @return ChannelContext
@@ -242,5 +281,9 @@ public class ClientBootstrap {
      */
     public AioConfig getConfig() {
         return this.config;
+    }
+
+    public void setCheck(boolean isCheck) {
+        this.isCheck = isCheck;
     }
 }
