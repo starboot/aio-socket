@@ -9,10 +9,14 @@
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
+1.  
+~~~
+<dependency>
+  <groupId>io.github.mxd888.socket</groupId>
+  <artifactId>aio-socket</artifactId>
+  <version>2.10.1.v20211002-RELEASE</version>
+</dependency>
+~~~
 #### 使用说明
 
 1.  xxxx
