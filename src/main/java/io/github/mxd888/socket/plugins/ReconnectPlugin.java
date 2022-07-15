@@ -11,12 +11,15 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by DELL(mxd) on 2022/7/13 23:01
  * 重连插件 客户端使用
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class ReconnectPlugin extends AbstractPlugin {
 
     private final AsynchronousChannelGroup asynchronousChannelGroup;
+
     private final ClientBootstrap client;
 
     public ReconnectPlugin(ClientBootstrap client) {

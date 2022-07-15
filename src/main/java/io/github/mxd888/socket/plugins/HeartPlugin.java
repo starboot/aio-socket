@@ -11,7 +11,10 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by DELL(mxd) on 2022/7/13 19:09
+ *心跳插件
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class HeartPlugin extends AbstractPlugin {
 
@@ -19,18 +22,13 @@ public class HeartPlugin extends AbstractPlugin {
 
     private final Map<ChannelContext, Long> sessionMap = new HashMap<>();
 
-    /**
-     * 在超时时间内未收到消息,关闭连接。
-     */
     private final long timeout;
 
     private final TimeoutCallback timeoutCallback;
 
     /**
      * 心跳插件
-     * <p>
      * 心跳插件在断网场景可能会触发TCP Retransmission,导致无法感知到网络实际状态,可通过设置timeout关闭连接
-     * </p>
      *
      * @param timeout   消息超时时间
      * @param unit      时间单位
@@ -41,9 +39,7 @@ public class HeartPlugin extends AbstractPlugin {
 
     /**
      * 心跳插件
-     * <p>
      * 心跳插件在断网场景可能会触发TCP Retransmission,导致无法感知到网络实际状态,可通过设置timeout关闭连接
-     * </p>
      *
      * @param timeout   消息超时时间
      */

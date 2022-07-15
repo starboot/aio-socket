@@ -1,15 +1,12 @@
 package io.github.mxd888.socket.utils;
 
-/**
- * Created by DELL(mxd) on 2022/7/13 19:17
- */
-
 import java.util.concurrent.*;
 
 /**
  * 服务器定时任务
  *
- * @author 三刀
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public abstract class QuickTimerTask implements Runnable {
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
@@ -44,8 +41,6 @@ public abstract class QuickTimerTask implements Runnable {
 
     /**
      * 获取定时任务的执行频率
-     *
-     * @return
      */
     protected abstract long getPeriod();
 }
