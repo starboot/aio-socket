@@ -8,6 +8,7 @@
 	<a href="https://gitee.com/mxd_2022/aio-socket/stargazers"><img src="https://gitee.com/mxd_2022/aio-socket/badge/star.svg?theme=dark"></a>
 	<a href="https://gitee.com/mxd_2022/aio-socket"><img src="https://img.shields.io/badge/aio--socket-2.10.1.v20211002--RELEASE-yellowgreen"></a>
     <a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg"></a>
+    <a target="_blank" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html"><img src="https://img.shields.io/badge/JDK-8+-green.svg" /></a>
 </p>
 
 ## aio-socket 简介
