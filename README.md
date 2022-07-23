@@ -3,7 +3,8 @@
 [![输开源协议](https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg "Apache")](https://www.apache.org/licenses/LICENSE-2.0)
 ## aio-socket 简介
 
-自研Java AIO通讯内核<br/>
+    Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等思想进行设计，借鉴了前人的优秀设计
+    意在制作一个易于理解、性能强悍的通讯内核。为单机驾驭百万连接不懈努力。
 > 1. 内核级集群（去中心化分布式集群）
 > 2. 断线重连功能
 > 3. 内核级ACK消息确认（保证消息必达）
