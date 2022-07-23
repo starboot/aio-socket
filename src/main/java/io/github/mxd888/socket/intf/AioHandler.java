@@ -28,7 +28,7 @@ public interface AioHandler {
      * @param channelContext 用户上下文
      * @return               返回Packet消息包
      */
-    Packet decode(final VirtualBuffer readBuffer, ChannelContext channelContext);
+    Packet decode(final VirtualBuffer readBuffer, ChannelContext channelContext, Packet packet);
 
     /**
      * 编码回调方法
@@ -37,7 +37,7 @@ public interface AioHandler {
      * @param channelContext 用户上下文
      * @return               buffer流
      */
-    VirtualBuffer encode(Packet packet, ChannelContext channelContext);
+    VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer);
 
     /**
      * 状态机事件,当枚举事件发生时由框架触发该方法

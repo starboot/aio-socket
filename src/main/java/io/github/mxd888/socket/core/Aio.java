@@ -33,7 +33,7 @@ public class Aio {
             Packet packet = new Packet();
             packet.setToId(id);
             packet.setEntity(new ClusterEntity(false));
-            VirtualBuffer encode = config.getHandler().encode(packet, channelContext);
+            VirtualBuffer encode = config.getHandler().encode(packet, channelContext, channelContext.getByteBuf());
             config.getGroups().writeToGroup("ClusterServer", encode, null);
         }
     }
@@ -57,7 +57,7 @@ public class Aio {
      * @param packet         数据包
      */
     public static void send(ChannelContext channelContext, Packet packet) {
-        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext);
+        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getByteBuf());
         send(channelContext, buffer);
     }
 
@@ -80,7 +80,7 @@ public class Aio {
      * @param channelContext 发送者上下文
      */
     public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext) {
-        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext);
+        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getByteBuf());
         channelContext.getAioConfig().getGroups().writeToGroup(groupId, buffer, channelContext);
     }
 

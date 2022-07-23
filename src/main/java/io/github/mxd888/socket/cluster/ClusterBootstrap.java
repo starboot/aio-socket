@@ -40,6 +40,7 @@ public class ClusterBootstrap {
             ClientBootstrap clientBootstrap = new ClientBootstrap(split[0], Integer.parseInt(split[1]), config.getHandler());
             ChannelContext start = clientBootstrap.start();
             Packet packet = new Packet();
+            packet.setToId(split[0]);
             // 写入自己的IP
             packet.setFromId(this.config.getHost());
             // 设置内核集群消息标识位

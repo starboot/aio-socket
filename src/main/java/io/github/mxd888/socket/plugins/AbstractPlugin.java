@@ -17,7 +17,7 @@ import java.nio.channels.AsynchronousSocketChannel;
 public abstract class AbstractPlugin implements Plugin {
 
     @Override
-    public boolean preProcess(ChannelContext channelContext, Packet packet) {
+    public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
         return true;
     }
 
@@ -27,13 +27,11 @@ public abstract class AbstractPlugin implements Plugin {
     }
 
     @Override
-    public Packet preDecode(VirtualBuffer readBuffer, ChannelContext channelContext) {
-        return null;
+    public void beforeDecode(VirtualBuffer readBuffer, ChannelContext channelContext, Packet packet) {
     }
 
     @Override
-    public VirtualBuffer preEncode(Packet packet, ChannelContext channelContext) {
-        return null;
+    public void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
     }
 
     @Override

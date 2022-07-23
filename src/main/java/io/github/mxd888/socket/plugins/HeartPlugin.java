@@ -52,7 +52,7 @@ public class HeartPlugin extends AbstractPlugin {
     }
 
     @Override
-    public final boolean preProcess(ChannelContext channelContext, Packet packet) {
+    public final boolean beforeProcess(ChannelContext channelContext, Packet packet) {
         sessionMap.put(channelContext, System.currentTimeMillis());
         //是否心跳响应消息 延长心跳监测时间
         return !isHeartMessage(packet);
@@ -80,7 +80,7 @@ public class HeartPlugin extends AbstractPlugin {
      * 心跳请求消息与响应消息可能相同，也可能不同，因实际场景而异，故接口定义不做区分。
      *
      * @param packet 心跳包
-     * @return 判断是否为心跳包
+     * @return       判断是否为心跳包
      */
     public boolean isHeartMessage(Packet packet) {
         return packet.getFromId().equals(packet.getToId());

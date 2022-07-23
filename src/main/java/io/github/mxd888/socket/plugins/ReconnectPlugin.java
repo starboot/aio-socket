@@ -36,7 +36,7 @@ public class ReconnectPlugin extends AbstractPlugin {
         if (stateMachineEnum != StateMachineEnum.CHANNEL_CLOSED) {
             return;
         }
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + ";client kernel starting reconnect");
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel starting reconnect");
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(new TimerTask() {
             @Override
             public void run() {

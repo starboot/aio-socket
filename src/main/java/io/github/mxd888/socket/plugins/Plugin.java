@@ -23,25 +23,25 @@ public interface Plugin extends NetMonitor {
      * @param packet         消息包
      * @return               是否在本服务器进行处理逻辑
      */
-    boolean preProcess(ChannelContext channelContext, Packet packet);
+    boolean beforeProcess(ChannelContext channelContext, Packet packet);
 
     /**
      * 解码前处理
      *
      * @param readBuffer     待解码的比特流数据
      * @param channelContext 用户通道
-     * @return               解码完成的数据包
+     * @param packet         解码成功后的消息报
      */
-    Packet preDecode(VirtualBuffer readBuffer, ChannelContext channelContext);
+    void beforeDecode(VirtualBuffer readBuffer, ChannelContext channelContext, Packet packet);
 
     /**
      * 编码前处理
      *
      * @param packet         待编码的数据包
      * @param channelContext 用户通道
-     * @return               编码完成后的比特流
+     * @param virtualBuffer  编码成功后的虚拟buffer
      */
-    VirtualBuffer preEncode(Packet packet, ChannelContext channelContext);
+    void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer virtualBuffer);
 
     /**
      * 监听状态机事件

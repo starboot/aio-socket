@@ -67,7 +67,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     public void handle(ChannelContext channelContext, Packet packet) {
         boolean flag = true;
         for (Plugin plugin : plugins) {
-            if (!plugin.preProcess(channelContext, packet)) {
+            if (!plugin.beforeProcess(channelContext, packet)) {
                 flag = false;
             }
         }
@@ -77,13 +77,25 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) {
-        return aioHandler.decode(readBuffer, channelContext);
+    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext, Packet packet) {
+        int remaining = readBuffer.buffer().remaining();
+        if (remaining < Integer.BYTES * 34) {
+            return null;
+        }
+        readBuffer.buffer().mark();
+        Packet newPacket = new Packet();
+        for (Plugin plugin : plugins) {
+            plugin.beforeDecode(readBuffer, channelContext, newPacket);
+        }
+        return aioHandler.decode(readBuffer, channelContext, newPacket);
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext) {
-        return aioHandler.encode(packet, channelContext);
+    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+        for (Plugin plugin : plugins) {
+            plugin.beforeEncode(packet, channelContext, writeBuffer);
+        }
+        return aioHandler.encode(packet, channelContext, writeBuffer);
     }
 
     @Override
