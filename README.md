@@ -26,8 +26,11 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 
 
 ## 安装教程
-
-引入Maven坐标  
+aio-socket 作者电脑环境
+> 1. jdk 1.8.0_221
+> 2. maven 3.6.1
+> 3. IDEA 2020.1 社区版
+#### 引入Maven坐标  
 ~~~
 <dependency>
   <groupId>io.github.mxd888.socket</groupId>
