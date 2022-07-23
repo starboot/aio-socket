@@ -21,11 +21,11 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 > 13. 完全调用底层jdk，无任何依赖，无任何jdk底层源码的增强
 > 14. 5G时代、稳定、实时、亚毫秒级、百万并发级的TCP协议底层通讯内核
 
-#### 软件架构
+## 软件架构
 软件架构：
 
 
-#### 安装教程
+## 安装教程
 
 引入Maven坐标  
 ~~~
@@ -35,25 +35,24 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
   <version>2.10.1.v20211002-RELEASE</version>
 </dependency>
 ~~~
-#### 使用说明
+## 联系方式
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+   官方QQ群号：867691377 
+   <a target="_blank"  href="https://jq.qq.com/?_wv=1027&k=Gd6P6BcT">
+   <img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="t-im" title="t-im"></a><br>
 
-#### 参与贡献
+## 进群前先gitee上star ★
+   请看完再进群，进群是为了相互交流技术，共同学习进步，设置进群问题是防止有某云服务器销售人员，或其他乱发广告的进入；
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+## 重要说明 ☆☆☆
 
+   第一本项目完全开源免费，可以拥有其任何使用权，但不代表可以做非法乱纪的事情，本项目以质朴质简思想开发，意在打造最易读懂源码为主，并不是以高深的设计哲学为主，
+   可用作学习或不重要的作业使用，切勿商用，商用出现后果概不负责！！！非常感谢配合
 
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+## 附上部分优秀开源项目链接
+   
+   t-io：稳如泰山，性能炸裂的Java通讯框架，官网：  https://www.tiocloud.com/tio/  <br>  
+   Hutool：一个小而全的Java工具类库，官网：  https://www.hutool.cn/   <br>  
+   smart-socket：高性能Aio通讯，官网： https://smartboot.gitee.io/book/smart-socket/    <br>  
+   J-IM：高性能IM，官网（暂时打不来，或许作者正在开发中，尽情期待）：  http://www.j-im.cn/ <br>  
+   本项目如有侵犯到任何个人或组织的权益请联系邮箱：1191998028@qq.com （如有侵权请联系删除）
