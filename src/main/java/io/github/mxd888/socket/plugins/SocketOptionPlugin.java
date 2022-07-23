@@ -1,5 +1,7 @@
 package io.github.mxd888.socket.plugins;
 
+import io.github.mxd888.socket.core.AioConfig;
+
 import java.io.IOException;
 import java.net.SocketOption;
 import java.net.StandardSocketOptions;
@@ -16,6 +18,10 @@ import java.util.Map;
 public class SocketOptionPlugin extends AbstractPlugin {
 
     private final Map<SocketOption<Object>, Object> optionMap = new HashMap<>();
+
+    public SocketOptionPlugin() {
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream socket option plugin added successfully");
+    }
 
     @Override
     public final AsynchronousSocketChannel shouldAccept(AsynchronousSocketChannel channel) {
@@ -58,17 +64,16 @@ public class SocketOptionPlugin extends AbstractPlugin {
      * @param value        配置值
      * @return .
      */
-    public final <V> SocketOptionPlugin setOption(SocketOption<V> socketOption, V value) {
+    public final SocketOptionPlugin setOption(SocketOption<Object> socketOption, Object value) {
         put0(socketOption, value);
         return this;
     }
 
-    public final <V> V getOption(SocketOption<V> socketOption) {
-        Object value = optionMap.get(socketOption);
-        return value == null ? null : (V) value;
+    public final Object getOption(SocketOption<Object> socketOption) {
+        return optionMap.get(socketOption);
     }
 
-    private void put0(SocketOption socketOption, Object value) {
+    private void put0(SocketOption<Object> socketOption, Object value) {
         optionMap.put(socketOption, value);
     }
 }

@@ -53,6 +53,9 @@ public class Groups {
 
     public void writeToGroup(String group, VirtualBuffer buffer, ChannelContext channelContext) {
         GroupUnit groupUnit = channelGroup.get(group);
+        if (groupUnit == null) {
+            return;
+        }
         if (channelContext == null) {
             for (ChannelContext context : groupUnit.groupList) {
                 Aio.send(context, buffer);

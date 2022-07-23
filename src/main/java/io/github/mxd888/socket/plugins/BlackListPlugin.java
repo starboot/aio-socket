@@ -1,5 +1,7 @@
 package io.github.mxd888.socket.plugins;
 
+import io.github.mxd888.socket.core.AioConfig;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -14,6 +16,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public final class BlackListPlugin extends AbstractPlugin {
 
     private final ConcurrentLinkedQueue<BlackListRule> ipBlackList = new ConcurrentLinkedQueue<>();
+
+    public BlackListPlugin() {
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's black list plugin added successfully");
+    }
 
     @Override
     public AsynchronousSocketChannel shouldAccept(AsynchronousSocketChannel channel) {

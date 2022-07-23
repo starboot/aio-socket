@@ -32,6 +32,7 @@ public class Aio {
             // 通知其他集群机器
             Packet packet = new Packet();
             packet.setToId(id);
+            packet.setFromId("15511090455");
             packet.setEntity(new ClusterEntity(false));
             VirtualBuffer encode = config.getHandler().encode(packet, channelContext, channelContext.getByteBuf());
             config.getGroups().writeToGroup("ClusterServer", encode, null);

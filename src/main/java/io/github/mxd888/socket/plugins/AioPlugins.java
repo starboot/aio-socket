@@ -79,13 +79,17 @@ public class AioPlugins implements AioHandler, NetMonitor {
     @Override
     public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext, Packet packet) {
         int remaining = readBuffer.buffer().remaining();
-        if (remaining < Integer.BYTES * 34) {
+        if (remaining < 34 && channelContext.getAioConfig().isEnableCluster()) {
+            System.out.println("不够集群协议报文呢");
             return null;
         }
         readBuffer.buffer().mark();
         Packet newPacket = new Packet();
         for (Plugin plugin : plugins) {
             plugin.beforeDecode(readBuffer, channelContext, newPacket);
+        }
+        if (remaining == 34) {
+            return newPacket;
         }
         return aioHandler.decode(readBuffer, channelContext, newPacket);
     }

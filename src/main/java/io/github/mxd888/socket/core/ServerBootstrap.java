@@ -6,6 +6,7 @@ import io.github.mxd888.socket.cluster.ClusterBootstrap;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
 import io.github.mxd888.socket.plugins.ClusterPlugin;
+import io.github.mxd888.socket.plugins.KernelProtocolPlugin;
 import io.github.mxd888.socket.utils.IOUtil;
 import io.github.mxd888.socket.utils.ThreadUtils;
 
@@ -19,6 +20,7 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -33,7 +35,7 @@ public class ServerBootstrap {
     /**
      * 服务器配置类
      */
-    private final AioConfig config = new AioConfig();
+    private final AioConfig config = new AioConfig(true);
 
     /**
      * 内存池
@@ -191,13 +193,16 @@ public class ServerBootstrap {
             plugins.setAioHandler(getConfig().getHandler());
             getConfig().setMonitor(plugins);
             getConfig().setHandler(plugins);
+            plugins.addPlugin(new KernelProtocolPlugin());
         }
         // 检查是否启用集群插件
         if (getConfig().isEnableCluster() && getConfig().isEnablePlugins()) {
             // 注册集群插件
             getConfig().getPlugins().addPlugin(new ClusterPlugin());
-            // 启动集群服务
-            new ClusterBootstrap(this.Cluster, getConfig()).start();
+            // 连接其他集群服务器
+            if (Objects.nonNull(this.Cluster) && this.Cluster.length != 0) {
+                new ClusterBootstrap(this.Cluster, getConfig()).start();
+            }
         }
     }
 

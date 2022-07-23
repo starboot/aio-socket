@@ -2,6 +2,7 @@ package io.github.mxd888.socket.plugins;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
+import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 
@@ -49,6 +50,7 @@ public class HeartPlugin extends AbstractPlugin {
         }
         this.timeout = timeUnit.toMillis(timeout);
         this.timeoutCallback = timeoutCallback;
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's heart plugin added successfully");
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.github.mxd888.socket.plugins;
 
 import io.github.mxd888.socket.buffer.BufferFactory;
 import io.github.mxd888.socket.buffer.BufferPagePool;
+import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.plugins.ssl.ClientAuth;
 import io.github.mxd888.socket.plugins.ssl.SslAsynchronousSocketChannel;
 import io.github.mxd888.socket.plugins.ssl.SslService;
@@ -30,6 +31,7 @@ public final class SslPlugin extends AbstractPlugin {
     public SslPlugin(SSLContextFactory factory, Consumer<SSLEngine> consumer, BufferPagePool bufferPagePool) throws Exception {
         this.bufferPagePool = bufferPagePool;
         sslService = new SslService(factory.create(), consumer);
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream SSL/TCL plugin added successfully");
     }
 
     public SslPlugin(ClientSSLContextFactory factory) throws Exception {

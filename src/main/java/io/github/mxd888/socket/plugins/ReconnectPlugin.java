@@ -29,6 +29,7 @@ public class ReconnectPlugin extends AbstractPlugin {
     public ReconnectPlugin(ClientBootstrap client, AsynchronousChannelGroup asynchronousChannelGroup) {
         this.client = client;
         this.asynchronousChannelGroup = asynchronousChannelGroup;
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's reconnect plugin added successfully");
     }
 
     @Override

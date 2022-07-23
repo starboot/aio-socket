@@ -78,7 +78,7 @@ public class AioConfig {
     /**
      * 是否是服务器
      */
-    private boolean isServer = false;
+    private boolean isServer;
 
     /**
      * 群组和其ChannelContext绑定
@@ -109,6 +109,10 @@ public class AioConfig {
      * 用户ID与集群服务器IP对应关系
      */
     private final ClusterIds clusterIds = new ClusterIds();
+
+    public AioConfig(boolean isServer) {
+        this.isServer = isServer;
+    }
 
     public int getWriteBufferSize() {
         return writeBufferSize;

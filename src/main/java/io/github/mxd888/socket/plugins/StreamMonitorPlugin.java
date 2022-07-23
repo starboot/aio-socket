@@ -2,6 +2,7 @@ package io.github.mxd888.socket.plugins;
 
 import io.github.mxd888.socket.channels.AsynchronousSocketChannelProxy;
 import io.github.mxd888.socket.channels.UnsupportedAsynchronousSocketChannel;
+import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.utils.StringUtils;
 
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class StreamMonitorPlugin extends AbstractPlugin {
     public StreamMonitorPlugin(BiConsumer<AsynchronousSocketChannel, byte[]> inputStreamConsumer, BiConsumer<AsynchronousSocketChannel, byte[]> outputStreamConsumer) {
         this.inputStreamConsumer = Objects.requireNonNull(inputStreamConsumer);
         this.outputStreamConsumer = Objects.requireNonNull(outputStreamConsumer);
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream monitor plugin added successfully");
     }
 
     @Override

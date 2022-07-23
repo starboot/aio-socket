@@ -18,10 +18,18 @@ import java.util.Objects;
  */
 public class ClusterPlugin extends AbstractPlugin {
 
+    public ClusterPlugin() {
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's cluster plugin added successfully");
+    }
+
     @Override
     public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
+        if (!channelContext.getAioConfig().isServer()) {
+            return true;
+        }
         AioConfig config = channelContext.getAioConfig();
         if (Objects.nonNull(packet.getEntity())) {
+            // 是否新机器绑定到现有集群机器中、将其他机器的用户告知别的集群机器
             if (packet.getEntity().isAuth()) {
                 // 绑定到集群组
                 config.getGroups().join("ClusterServer", channelContext);
@@ -37,6 +45,10 @@ public class ClusterPlugin extends AbstractPlugin {
         }
         // 获取接收方所在ServerIP
         String s = config.getClusterIds().get(packet.getToId());
+        if (Objects.isNull(s)) {
+            Aio.bindID(packet.getToId(), channelContext);
+            return true;
+        }
         // 判断接收方是否在本服务器
         if (s.equals(config.getHost())) {
             // 执行处理逻辑
@@ -48,42 +60,5 @@ public class ClusterPlugin extends AbstractPlugin {
         return false;
     }
 
-    @Override
-    public void beforeDecode(VirtualBuffer readBuffer, ChannelContext channelContext, Packet packet) {
-        ByteBuffer buffer = readBuffer.buffer();
-        int anInt = buffer.getInt();
-        byte[] b = new byte[anInt];
-        readBuffer.buffer().get(b);
-        packet.setFromId(new String(b));
-        int bnInt = buffer.getInt();
-        byte[] b1 = new byte[bnInt];
-        readBuffer.buffer().get(b);
-        packet.setToId(new String(b1));
-        int cnInt = buffer.getInt();
-        if (cnInt == 1) {
-            packet.setEntity(new ClusterEntity(true));
-        } else if (cnInt == 2) {
-            packet.setEntity(new ClusterEntity(false));
-        }else {
-            packet.setEntity(null);
-        }
-    }
 
-    @Override
-    public void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
-        ByteBuffer buffer = writeBuffer.buffer();
-        buffer.putInt(packet.getFromId().length());
-        buffer.put(packet.getFromId().getBytes());
-        buffer.putInt(packet.getToId().length());
-        buffer.put(packet.getToId().getBytes());
-        if (Objects.nonNull(packet.getEntity())) {
-            if (packet.getEntity().isAuth()) {
-                buffer.putInt(1);
-            } else {
-                buffer.putInt(2);
-            }
-        } else {
-            buffer.putInt(0);
-        }
-    }
 }

@@ -29,6 +29,7 @@ public class DemoServer {
         buffer.put(s.getBytes());
         buffer.putInt(s.length());
         buffer.put(s.getBytes());
+        buffer.putInt(2);
         buffer.flip();
         System.out.println(buffer.remaining());
 

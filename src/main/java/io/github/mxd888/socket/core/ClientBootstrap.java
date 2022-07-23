@@ -7,6 +7,7 @@ import io.github.mxd888.socket.cluster.ClusterBootstrap;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
 import io.github.mxd888.socket.plugins.ClusterPlugin;
+import io.github.mxd888.socket.plugins.KernelProtocolPlugin;
 import io.github.mxd888.socket.utils.IOUtil;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 
@@ -18,6 +19,7 @@ import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +35,7 @@ public class ClientBootstrap {
     /**
      * 客户端服务配置。
      */
-    private final AioConfig config = new AioConfig();
+    private final AioConfig config = new AioConfig(false);
 
     /**
      * 网络连接的会话对象
@@ -212,6 +214,12 @@ public class ClientBootstrap {
             plugins.setAioHandler(getConfig().getHandler());
             getConfig().setMonitor(plugins);
             getConfig().setHandler(plugins);
+            plugins.addPlugin(new KernelProtocolPlugin());
+        }
+        // 检查是否启用集群插件
+        if (getConfig().isEnableCluster() && getConfig().isEnablePlugins()) {
+            // 注册集群插件
+            getConfig().getPlugins().addPlugin(new ClusterPlugin());
         }
     }
 
@@ -220,10 +228,10 @@ public class ClientBootstrap {
      */
     private void heartMessage() {
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(()-> {
-            System.out.println("aio-socket version: 2.10.1.v20211002-RELEASE; client kernel are sending heart");
+            System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel are sending heart");
             Packet packet = new Packet();
-            packet.setFromId("1191998028");
-            packet.setToId("1191998028");
+            packet.setFromId("15511090451");
+            packet.setToId("15511090451");
             Aio.send(channelContext, packet);
             heartMessage();
         }, 20, TimeUnit.SECONDS);
