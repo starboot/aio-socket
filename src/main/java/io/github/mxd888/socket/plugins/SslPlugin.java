@@ -31,7 +31,7 @@ public final class SslPlugin extends AbstractPlugin {
     public SslPlugin(SSLContextFactory factory, Consumer<SSLEngine> consumer, BufferPagePool bufferPagePool) throws Exception {
         this.bufferPagePool = bufferPagePool;
         sslService = new SslService(factory.create(), consumer);
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream SSL/TCL plugin added successfully");
+        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream SSL/TLS plugin added successfully");
     }
 
     public SslPlugin(ClientSSLContextFactory factory) throws Exception {

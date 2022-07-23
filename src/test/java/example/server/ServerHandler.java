@@ -12,7 +12,7 @@ public class ServerHandler extends Handler {
 
     @Override
     public void handle(ChannelContext channelContext, Packet packet) {
-        System.out.println("----server:" + ((DemoPacket) packet).getData());
+//        System.out.println("----server:" + ((DemoPacket) packet).getData());
         Aio.send(channelContext, packet);
     }
 }
