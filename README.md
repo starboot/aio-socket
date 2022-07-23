@@ -64,6 +64,8 @@ aio-socket 作者电脑环境
 
 ## 附上部分优秀开源项目链接
    
+   t-im：由本人开发，基于aio-socket开发的高性能IM通讯框架，官网：  https://gitee.com/mxd_2022/t-im  <br>  
+   WeChat：由本人开发，为t-im 提供基本的UI功能，官网：  https://gitee.com/mxd_2022/we-chat  <br>  
    t-io：稳如泰山，性能炸裂的Java通讯框架，官网：  https://www.tiocloud.com/tio/  <br>  
    Hutool：一个小而全的Java工具类库，官网：  https://www.hutool.cn/   <br>  
    smart-socket：高性能Aio通讯，官网： https://smartboot.gitee.io/book/smart-socket/    <br>  
