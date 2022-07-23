@@ -23,7 +23,7 @@
 
 #### 安装教程
 
-1.  
+引入Maven坐标  
 ~~~
 <dependency>
   <groupId>io.github.mxd888.socket</groupId>
