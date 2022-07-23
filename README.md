@@ -1,6 +1,8 @@
-# aio-socket
+## aio-socket 一款强大且轻量的面向网络层通讯框架
 
-#### 介绍
+[![输开源协议](https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg "Apache")](https://www.apache.org/licenses/LICENSE-2.0)
+## aio-socket 简介
+
 自研Java AIO通讯内核<br/>
 > 1. 内核级集群（去中心化分布式集群）
 > 2. 断线重连功能
