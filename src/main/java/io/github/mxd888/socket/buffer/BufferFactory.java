@@ -17,7 +17,7 @@ public interface BufferFactory {
     /**
      * 可用状态的内存池  这里 5120 2 false，表示有两个内存页可申请  每个5KB * 2 = 20   10GB = 5KB * 2  * 1024 * 1024 = 20 * 1024 *1024 = 20971520个用户  30w用户 = 300MB
      */
-    BufferFactory DISABLED_ENABLE_FACTORY = () -> new BufferPagePool(5 * 1024, 2, false);
+    BufferFactory ENABLE_BUFFER_FACTORY = () -> new BufferPagePool(5 * 1024, 2, false);
 
     /**
      * 创建内存池

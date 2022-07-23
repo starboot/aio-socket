@@ -73,7 +73,7 @@ public class AioConfig {
     /**
      * 内存池工厂
      */
-    private BufferFactory bufferFactory = BufferFactory.DISABLED_ENABLE_FACTORY;
+    private BufferFactory bufferFactory = BufferFactory.ENABLE_BUFFER_FACTORY;
 
     /**
      * 是否是服务器
