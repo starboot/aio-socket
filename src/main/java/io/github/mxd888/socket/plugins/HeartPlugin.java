@@ -84,7 +84,7 @@ public class HeartPlugin extends AbstractPlugin {
      */
     public boolean isHeartMessage(Packet packet) {
         return packet.getFromId().equals(packet.getToId());
-    };
+    }
 
     private void registerHeart(final ChannelContext channelContext) {
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(new TimerTask() {
