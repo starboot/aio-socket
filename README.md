@@ -37,8 +37,8 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 给大家画个架构图🎉 （我太笨了用了免费软件却去不掉它自带的水印）
 
 ![Image text](https://gitee.com/mxd_2022/aio-socket/raw/master/images/aio-socket%20frame.jpg)
-## 安装教程
-aio-socket 作者电脑环境
+## 开始使用
+#### aio-socket 作者电脑环境
 > 1. jdk 1.8.0_221
 > 2. maven 3.6.1
 > 3. IDEA 2020.1 社区版
@@ -50,6 +50,8 @@ aio-socket 作者电脑环境
   <version>2.10.1.v20211002-RELEASE</version>
 </dependency>
 ~~~
+#### 起步
+我写了example工程，放在了src/test/java/example文件夹下
 ## 联系方式
 
    官方QQ群号：867691377 
