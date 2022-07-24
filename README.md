@@ -5,9 +5,10 @@
 <h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket 2.10.1.v20211002-RELEASE</h2>
 <h4 align="center">一款强大且轻量的面向网络层通讯框架</h4>
 <p align="center">
-	<a href="https://gitee.com/mxd_2022/aio-socket/stargazers"><img src="https://gitee.com/mxd_2022/aio-socket/badge/star.svg?theme=dark"></a>
+	<a href="https://gitee.com/mxd_2022/aio-socket/stargazers"><img
+            src="https://gitee.com/mxd_2022/aio-socket/badge/star.svg?theme=dark"/></a>
 	<a href="https://gitee.com/mxd_2022/aio-socket"><img src="https://img.shields.io/badge/aio--socket-2.10.1.v20211002--RELEASE-yellowgreen"></a>
-    <a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg"></a>
+    <a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg"/></a>
     <a target="_blank" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html"><img src="https://img.shields.io/badge/JDK-8+-green.svg" /></a>
 </p>
 
@@ -35,7 +36,7 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 ## 软件架构
 等有时间了给大家画个架构图🎉 
 
-
+![Image text](https://gitee.com/mxd_2022/aio-socket/blob/master/images/aio-socket%20frame.jpg)
 ## 安装教程
 aio-socket 作者电脑环境
 > 1. jdk 1.8.0_221
