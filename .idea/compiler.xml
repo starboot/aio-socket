@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="aio-socket-websocket" />
+        <module name="aio-socket-cluster" />
+        <module name="aio-socket-demo" />
+        <module name="aio-socket-http" />
+        <module name="aio-socket-core" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="aio-socket" target="1.8" />
+      <module name="aio-socket-cluster" target="1.8" />
+      <module name="aio-socket-core" target="1.8" />
+      <module name="aio-socket-demo" target="1.8" />
+      <module name="aio-socket-http" target="1.8" />
+      <module name="aio-socket-websocket" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

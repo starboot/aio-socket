@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="aio-socket:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/aio_socket_jar</output-path>
+    <root id="archive" name="aio-socket.jar">
+      <element id="module-output" name="aio-socket" />
+    </root>
+  </artifact>
+</component>

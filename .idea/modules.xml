@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/aio-socket.iml" filepath="$PROJECT_DIR$/aio-socket.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aio-socket-cluster/aio-socket-cluster.iml" filepath="$PROJECT_DIR$/aio-socket-cluster/aio-socket-cluster.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aio-socket-core/aio-socket-core.iml" filepath="$PROJECT_DIR$/aio-socket-core/aio-socket-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aio-socket-demo/aio-socket-demo.iml" filepath="$PROJECT_DIR$/aio-socket-demo/aio-socket-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aio-socket-http/aio-socket-http.iml" filepath="$PROJECT_DIR$/aio-socket-http/aio-socket-http.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aio-socket-websocket/aio-socket-websocket.iml" filepath="$PROJECT_DIR$/aio-socket-websocket/aio-socket-websocket.iml" />
+    </modules>
+  </component>
+</project>
