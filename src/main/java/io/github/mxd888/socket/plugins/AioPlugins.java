@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class AioPlugins implements AioHandler, NetMonitor {
 
+    private  int protocolLength = 0;
+
     private AioHandler aioHandler;
 
     private final List<Plugin> plugins = new ArrayList<>();
@@ -79,19 +81,17 @@ public class AioPlugins implements AioHandler, NetMonitor {
     @Override
     public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext, Packet packet) {
         int remaining = readBuffer.buffer().remaining();
-        if (remaining < 34) {
+        if (remaining < this.protocolLength) {
             return null;
         }
         readBuffer.buffer().mark();
-        Packet newPacket = new Packet();
         for (Plugin plugin : plugins) {
-            plugin.beforeDecode(readBuffer, channelContext, newPacket);
-
+            plugin.beforeDecode(readBuffer, channelContext, packet);
         }
-        if (newPacket.getFromId().equals(newPacket.getToId())) {
-            return newPacket;
+        if (packet.getFromId().equals(packet.getToId())) {
+            return packet;
         }
-        return aioHandler.decode(readBuffer, channelContext, newPacket);
+        return aioHandler.decode(readBuffer, channelContext, packet);
     }
 
     @Override
@@ -116,5 +116,6 @@ public class AioPlugins implements AioHandler, NetMonitor {
 
     public final void addPlugin(Plugin plugin) {
         this.plugins.add(plugin);
+        this.protocolLength += plugin.getProtocolLength();
     }
 }

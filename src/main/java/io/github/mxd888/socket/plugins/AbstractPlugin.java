@@ -16,6 +16,8 @@ import java.nio.channels.AsynchronousSocketChannel;
  */
 public abstract class AbstractPlugin implements Plugin {
 
+    protected int protocolLength = 0;
+
     @Override
     public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
         return true;
@@ -57,5 +59,10 @@ public abstract class AbstractPlugin implements Plugin {
     @Override
     public void beforeWrite(ChannelContext channelContext) {
 
+    }
+
+    @Override
+    public int getProtocolLength() {
+        return this.protocolLength;
     }
 }

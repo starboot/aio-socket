@@ -46,6 +46,7 @@ public class Client {
                 // 81.70.149.16 127.0.0.1
                 ClientBootstrap clientBootstrap = new ClientBootstrap("127.0.0.1", 8888, new ClientHandler());
                 clientBootstrap.getConfig().setEnablePlugins(true);
+                clientBootstrap.getConfig().setEnableHeart(true);
 //                clientBootstrap.getConfig().getPlugins().addPlugin(new ReconnectPlugin(clientBootstrap));
                 try {
                     ChannelContext start = clientBootstrap.start();

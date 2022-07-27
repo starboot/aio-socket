@@ -96,6 +96,11 @@ public class AioConfig {
     private boolean enablePlugins = false;
 
     /**
+     * 是否启用心跳发送（客户端使用）
+     */
+    private boolean enableHeart = false;
+
+    /**
      * 插件
      */
     private final AioPlugins plugins = new AioPlugins();
@@ -223,6 +228,17 @@ public class AioConfig {
 
     public void setEnablePlugins(boolean enablePlugins) {
         this.enablePlugins = enablePlugins;
+    }
+
+    public boolean isEnableHeart() {
+        if (isServer()) {
+            new RuntimeException("服务器端不要调用它").printStackTrace();
+        }
+        return enableHeart;
+    }
+
+    public void setEnableHeart(boolean enableHeart) {
+        this.enableHeart = enableHeart;
     }
 
     public AioPlugins getPlugins() {

@@ -53,4 +53,11 @@ public interface Plugin extends NetMonitor {
      */
     void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable);
 
+    /**
+     * 获取自定义插件所需协议bytebuffer长度
+     *
+     * @return 协议编码长度
+     */
+    int getProtocolLength();
+
 }

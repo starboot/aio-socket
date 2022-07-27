@@ -122,7 +122,9 @@ public class ClientBootstrap {
                     System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed because of future is done or cancelled");
                 } else {
                     future.complete(session);
-                    heartMessage();
+                    if (getConfig().isEnableHeart()) {
+                        heartMessage();
+                    }
                     System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started successfully");
                 }
             }

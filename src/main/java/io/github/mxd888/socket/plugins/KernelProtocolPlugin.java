@@ -13,6 +13,10 @@ import java.util.Objects;
  */
 public class KernelProtocolPlugin extends AbstractPlugin{
 
+    public KernelProtocolPlugin() {
+        this.protocolLength = 34;
+    }
+
     @Override
     public void beforeDecode(VirtualBuffer readBuffer, ChannelContext channelContext, Packet packet) {
         ByteBuffer buffer = readBuffer.buffer();

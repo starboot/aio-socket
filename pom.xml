@@ -6,7 +6,11 @@
 
     <groupId>io.github.mxd888.socket</groupId>
     <artifactId>aio-socket</artifactId>
+    <packaging>pom</packaging>
     <version>2.10.1.v20211002-RELEASE</version>
+    <modules>
+        <module>aio-socket-core</module>
+    </modules>
     <name>aio-socket</name>
     <url>https://gitee.com/mxd_2022/aio-socket.git</url>
     <description>a little but strong java aio component</description>

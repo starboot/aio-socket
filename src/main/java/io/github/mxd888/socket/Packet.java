@@ -17,6 +17,16 @@ public class Packet implements Serializable {
     private static final long serialVersionUID = -4108736058242170393L;
 
     /**
+     * TCP报文版本号
+     */
+    private byte versionID;
+
+    /**
+     * 同步消息唯一ID
+     */
+    private String synNum;
+
+    /**
      * 发送者ID
      */
     private String fromId;

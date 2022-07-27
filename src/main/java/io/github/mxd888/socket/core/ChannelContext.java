@@ -149,7 +149,7 @@ public final class ChannelContext {
         while (readBuffer.hasRemaining() && status == CHANNEL_STATUS_ENABLED) {
             Packet dataEntry;
             try {
-                dataEntry = handler.decode(this.readBuffer, this, null);
+                dataEntry = handler.decode(this.readBuffer, this, new Packet());
             } catch (Exception e) {
                 handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, e);
                 throw e;
