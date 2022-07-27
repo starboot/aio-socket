@@ -37,6 +37,13 @@ final class ReadCompletionHandler implements CompletionHandler<Integer, ChannelC
         }
     }
 
+    /**
+     * 读失败，他会在什么时候触发呢？（忽略completed方法中异常后的调用）
+     * 1. 会在客户端机器主动杀死aio-socket客户端进程或者客户端机器突然宕机或坏掉时，则服务器端对应的ChannelContext会调用此方法
+     * 2. 相比之下，当客户端的ChannelContext正在读通道时，服务器关闭了对应的连接，则客户端的ChannelContext会调用此方法
+     * @param exc            异常信息
+     * @param channelContext 读完成出错的通道
+     */
     @Override
     public void failed(Throwable exc, ChannelContext channelContext) {
         try {

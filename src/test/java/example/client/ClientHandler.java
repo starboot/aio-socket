@@ -12,9 +12,10 @@ public class ClientHandler extends Handler {
 
     @Override
     public void handle(ChannelContext channelContext, Packet packet) {
+//        System.out.println("客户端处理");
         DemoPacket packet1 = (DemoPacket) packet;
         if (!packet1.getData().equals("hello aio-socket")) {
-            System.out.println("不一致，出错啦");
+            System.out.println("不一致，出错啦:" + packet1.getData() + " ,是否心跳:" + packet.getEntity());
         }else {
             count++;
             if (count % 1000000 ==0) {

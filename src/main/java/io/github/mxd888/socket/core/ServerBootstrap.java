@@ -159,7 +159,7 @@ public class ServerBootstrap {
      * @param channel 用户通道
      */
     private void initChannelContext(AsynchronousSocketChannel channel) {
-        //连接成功则构造AIOSession对象
+        //连接成功则构造ChannelContext对象
         ChannelContext context = null;
         AsynchronousSocketChannel acceptChannel = channel;
         try {

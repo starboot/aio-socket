@@ -61,7 +61,7 @@ public class ClientBootstrap {
     /**
      * 连接超时时间
      */
-    private final static int connectTimeout = 2000;
+    private final static int connectTimeout = 5000;
 
     private boolean isCheck = true;
 

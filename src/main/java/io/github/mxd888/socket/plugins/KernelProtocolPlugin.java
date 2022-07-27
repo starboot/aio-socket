@@ -37,9 +37,9 @@ public class KernelProtocolPlugin extends AbstractPlugin{
     @Override
     public void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
         ByteBuffer buffer = writeBuffer.buffer();
-        buffer.putInt(packet.getFromId().length());
+        buffer.putInt(packet.getFromId().getBytes().length);
         buffer.put(packet.getFromId().getBytes());
-        buffer.putInt(packet.getToId().length());
+        buffer.putInt(packet.getToId().getBytes().length);
         buffer.put(packet.getToId().getBytes());
         if (Objects.nonNull(packet.getEntity())) {
             if (packet.getEntity().isAuth()) {
@@ -48,7 +48,7 @@ public class KernelProtocolPlugin extends AbstractPlugin{
                 buffer.putInt(2);
             }
         } else {
-            buffer.putInt(0);
+            buffer.putInt(3);
         }
     }
 }
