@@ -10,6 +10,10 @@
     <version>2.10.1.v20211002-RELEASE</version>
     <modules>
         <module>aio-socket-core</module>
+        <module>aio-socket-cluster</module>
+        <module>aio-socket-http</module>
+        <module>aio-socket-websocket</module>
+        <module>aio-socket-demo</module>
     </modules>
     <name>aio-socket</name>
     <url>https://gitee.com/mxd_2022/aio-socket.git</url>
