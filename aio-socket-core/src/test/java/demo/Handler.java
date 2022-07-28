@@ -26,7 +26,7 @@ public class Handler implements AioHandler {
         buffer.mark();
         int length = buffer.getInt();
         if (length > buffer.remaining()) {
-            System.out.println("重置2");
+//            System.out.println("重置2");
             buffer.reset();
             return null;
         }

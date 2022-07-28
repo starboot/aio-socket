@@ -1,6 +1,5 @@
 package io.github.mxd888.socket.core;
 
-import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.buffer.BufferPagePool;
 import io.github.mxd888.socket.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -220,10 +219,7 @@ public class ClientBootstrap {
     private void heartMessage() {
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(()-> {
             System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel are sending heart");
-            Packet packet = new Packet();
-            packet.setFromId("15511090451");
-            packet.setToId("15511090451");
-            Aio.send(channelContext, packet);
+            Aio.send(channelContext, getConfig().getHeartPacket());
             heartMessage();
         }, 20, TimeUnit.SECONDS);
     }
