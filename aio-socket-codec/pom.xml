@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>aio-socket-demo</artifactId>
+    <artifactId>aio-socket-codec</artifactId>
 
 
 </project>
