@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="aio-socket-http" />
         <module name="aio-socket-websocket" />
+        <module name="aio-socket-pro" />
         <module name="aio-socket-codec" />
         <module name="aio-socket-core" />
       </profile>
@@ -19,6 +20,7 @@
       <module name="aio-socket-core" target="1.8" />
       <module name="aio-socket-demo" target="1.8" />
       <module name="aio-socket-http" target="1.8" />
+      <module name="aio-socket-pro" target="1.8" />
       <module name="aio-socket-websocket" target="1.8" />
     </bytecodeTargetLevel>
   </component>

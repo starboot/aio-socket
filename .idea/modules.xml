@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/aio-socket-codec/aio-socket-codec.iml" filepath="$PROJECT_DIR$/aio-socket-codec/aio-socket-codec.iml" />
       <module fileurl="file://$PROJECT_DIR$/aio-socket-core/aio-socket-core.iml" filepath="$PROJECT_DIR$/aio-socket-core/aio-socket-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/aio-socket-http/aio-socket-http.iml" filepath="$PROJECT_DIR$/aio-socket-http/aio-socket-http.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aio-socket-pro/aio-socket-pro.iml" filepath="$PROJECT_DIR$/aio-socket-pro/aio-socket-pro.iml" />
       <module fileurl="file://$PROJECT_DIR$/aio-socket-websocket/aio-socket-websocket.iml" filepath="$PROJECT_DIR$/aio-socket-websocket/aio-socket-websocket.iml" />
     </modules>
   </component>

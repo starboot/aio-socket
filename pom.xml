@@ -13,6 +13,7 @@
         <module>aio-socket-http</module>
         <module>aio-socket-websocket</module>
         <module>aio-socket-codec</module>
+        <module>aio-socket-pro</module>
     </modules>
     <name>aio-socket</name>
     <url>https://gitee.com/mxd_2022/aio-socket.git</url>
