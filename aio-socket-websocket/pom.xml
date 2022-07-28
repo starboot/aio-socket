@@ -9,16 +9,12 @@
     <version>2.10.1.v20211002-RELEASE</version>
 
     <packaging>pom</packaging>
+
     <parent>
-        <artifactId>aio-socket-websocket-parent</artifactId>
+        <artifactId>aio-socket</artifactId>
         <groupId>io.github.mxd888.socket</groupId>
         <version>2.10.1.v20211002-RELEASE</version>
     </parent>
-
-
-    <modules>
-        <module>aio-socket-websocket-parent</module>
-    </modules>
 
 
 </project>
