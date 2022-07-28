@@ -78,9 +78,9 @@ public final class SslService {
      * @param handshakeModel .
      */
     public void doHandshake(HandshakeModel handshakeModel) {
-        SSLEngineResult result = null;
+        SSLEngineResult result;
         try {
-            SSLEngineResult.HandshakeStatus handshakeStatus = null;
+            SSLEngineResult.HandshakeStatus handshakeStatus;
             ByteBuffer netReadBuffer = handshakeModel.getNetReadBuffer().buffer();
             ByteBuffer appReadBuffer = handshakeModel.getAppReadBuffer().buffer();
             ByteBuffer netWriteBuffer = handshakeModel.getNetWriteBuffer().buffer();

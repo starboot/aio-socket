@@ -24,7 +24,7 @@ public class SslAsynchronousSocketChannel extends AsynchronousSocketChannelProxy
     private final VirtualBuffer netWriteBuffer;
     private final VirtualBuffer netReadBuffer;
     private final VirtualBuffer appReadBuffer;
-    private SSLEngine sslEngine = null;
+    private SSLEngine sslEngine;
     /**
      * 完成握手置null
      */
@@ -53,25 +53,22 @@ public class SslAsynchronousSocketChannel extends AsynchronousSocketChannelProxy
     @Override
     public <A> void read(ByteBuffer dst, long timeout, TimeUnit unit, A attachment, CompletionHandler<Integer, ? super A> handler) {
         if (handshake) {
-            handshakeModel.setHandshakeCallback(new HandshakeCallback() {
-                @Override
-                public void callback() {
-                    handshake = false;
-                    synchronized (SslAsynchronousSocketChannel.this) {
-                        //释放内存
-                        handshakeModel.getAppWriteBuffer().clean();
-                        netReadBuffer.buffer().clear();
-                        netWriteBuffer.buffer().clear();
-                        appReadBuffer.buffer().clear().flip();
-                        SslAsynchronousSocketChannel.this.notifyAll();
-                    }
-                    if (handshakeModel.isEof()) {
-                        handler.completed(-1, attachment);
-                    } else {
-                        SslAsynchronousSocketChannel.this.read(dst, timeout, unit, attachment, handler);
-                    }
-                    handshakeModel = null;
+            handshakeModel.setHandshakeCallback(() -> {
+                handshake = false;
+                synchronized (SslAsynchronousSocketChannel.this) {
+                    //释放内存
+                    handshakeModel.getAppWriteBuffer().clean();
+                    netReadBuffer.buffer().clear();
+                    netWriteBuffer.buffer().clear();
+                    appReadBuffer.buffer().clear().flip();
+                    SslAsynchronousSocketChannel.this.notifyAll();
                 }
+                if (handshakeModel.isEof()) {
+                    handler.completed(-1, attachment);
+                } else {
+                    SslAsynchronousSocketChannel.this.read(dst, timeout, unit, attachment, handler);
+                }
+                handshakeModel = null;
             });
             //触发握手
             sslService.doHandshake(handshakeModel);
