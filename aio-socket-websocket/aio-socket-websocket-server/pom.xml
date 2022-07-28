@@ -3,23 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>aio-socket-parent</artifactId>
+        <artifactId>aio-socket-websocket-parent</artifactId>
         <groupId>io.github.mxd888.socket</groupId>
         <version>2.10.1.v20211002-RELEASE</version>
-        <relativePath>../aio-socket-parent/pom.xml</relativePath>
+        <relativePath>../aio-socket-websocket-parent/pom.xml</relativePath>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>aio-socket-pro</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>io.github.mxd888.socket</groupId>
-            <artifactId>aio-socket-core</artifactId>
-            <version>2.10.1.v20211002-RELEASE</version>
-        </dependency>
-    </dependencies>
+    <artifactId>aio-socket-websocket-server</artifactId>
 
 
 </project>
