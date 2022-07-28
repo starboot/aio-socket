@@ -31,10 +31,6 @@ public class WriteCompletionHandler implements CompletionHandler<Integer, Channe
     public void failed(Throwable exc, ChannelContext channelContext) {
         try {
             channelContext.getAioConfig().getHandler().stateEvent(channelContext, StateMachineEnum.OUTPUT_EXCEPTION, exc);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             channelContext.close();
         } catch (Exception e) {
             e.printStackTrace();

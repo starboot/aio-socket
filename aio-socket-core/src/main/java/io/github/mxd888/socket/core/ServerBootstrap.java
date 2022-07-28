@@ -17,7 +17,6 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -63,11 +62,6 @@ public class ServerBootstrap {
      * AIO 通道组
      */
     private AsynchronousChannelGroup asynchronousChannelGroup;
-
-    /**
-     * 集群机器 IP+port
-     */
-    private String[] Cluster;
 
     /**
      * 虚拟内存工厂，这里为读操作获取虚拟内存
@@ -183,7 +177,7 @@ public class ServerBootstrap {
     /**
      * 检查配置项
      */
-    private void checkAndResetConfig() throws IOException {
+    private void checkAndResetConfig() {
         // 检查是否启用插件模块
         if (getConfig().isEnablePlugins()) {
             AioPlugins plugins = getConfig().getPlugins();
@@ -232,12 +226,4 @@ public class ServerBootstrap {
         return this.config;
     }
 
-    /**
-     * 设置集群服务器IP、 port；当开启集群时才有效
-     *
-     * @param cluster 字符串数组类型
-     */
-    public void setCluster(String[] cluster) {
-        this.Cluster = cluster;
-    }
 }
