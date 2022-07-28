@@ -19,7 +19,6 @@
     <modules>
         <module>aio-socket-parent</module>
         <module>aio-socket-demo/aio-socket-demo-parent</module>
-        <module>test</module>
     </modules>
 
 
