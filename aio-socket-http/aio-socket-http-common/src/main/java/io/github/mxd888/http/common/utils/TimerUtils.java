@@ -1,12 +1,5 @@
-/*******************************************************************************
- * Copyright (c) 2017-2022, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: TimerUtils.java
- * Date: 2022-02-04
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
 
-package io.github.mxd888.http.utils;
+package io.github.mxd888.http.common.utils;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

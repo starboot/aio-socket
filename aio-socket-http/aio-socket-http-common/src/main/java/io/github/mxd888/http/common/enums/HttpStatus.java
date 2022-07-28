@@ -1,5 +1,5 @@
 
-package io.github.mxd888.http.enums;
+package io.github.mxd888.http.common.enums;
 
 /**
  * 本类取自Spring代码org.springframework.http.HttpStatus

@@ -1,8 +1,8 @@
 package io.github.mxd888.http.common;
 
 
-import io.github.mxd888.http.utils.DateUtils;
-import io.github.mxd888.http.utils.StringUtils;
+import io.github.mxd888.http.common.utils.DateUtils;
+import io.github.mxd888.http.common.utils.StringUtils;
 
 import java.util.Date;
 

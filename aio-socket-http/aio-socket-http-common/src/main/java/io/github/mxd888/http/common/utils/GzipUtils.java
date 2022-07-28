@@ -1,12 +1,5 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: GzipUtils.java
- * Date: 2021-07-12
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
 
-package io.github.mxd888.http.utils;
+package io.github.mxd888.http.common.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,8 +1,8 @@
 
-package io.github.mxd888.http.utils;
+package io.github.mxd888.http.common.utils;
 
-import io.github.mxd888.http.enums.HeaderNameEnum;
-import io.github.mxd888.http.enums.HeaderValueEnum;
+import io.github.mxd888.http.common.enums.HeaderNameEnum;
+import io.github.mxd888.http.common.enums.HeaderValueEnum;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
