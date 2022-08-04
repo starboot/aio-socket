@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
@@ -54,7 +55,6 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
     public final void write(byte[] b, int off, int len) throws IOException {
         check();
         writeHeader();
-        virtualBuffer = channelContext.getByteBuf();
         if (chunked) {
             if (gzip) {
                 b = GzipUtils.compress(b, off, len);
@@ -66,8 +66,12 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
             virtualBuffer.buffer().put(b, off, len);
             virtualBuffer.buffer().put(Constant.CRLF_BYTES);
         } else {
+            if (virtualBuffer.buffer().remaining() == 0) {
+                virtualBuffer = channelContext.getByteBuf();
+            }
             virtualBuffer.buffer().put(b, off, len);
         }
+        flush();
     }
 
     /**
@@ -78,14 +82,15 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
      * @param len
      */
     public final void directWrite(byte[] b, int off, int len) throws IOException {
-        virtualBuffer = channelContext.getByteBuf();
+//        virtualBuffer = channelContext.getByteBuf();
         virtualBuffer.buffer().put(b, off, len);
     }
 
     public final void write(ByteBuffer buffer) throws IOException {
         check();
+        System.out.println("write(ByteBuffer buffer)");
         writeHeader();
-        virtualBuffer = channelContext.getByteBuf();
+//        virtualBuffer = channelContext.getByteBuf();
         if (chunked) {
             byte[] start = getBytes(Integer.toHexString(buffer.remaining()) + "\r\n");
             virtualBuffer.buffer().put(start);
@@ -99,6 +104,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
     @Override
     public final void flush() throws IOException {
         writeHeader();
+        virtualBuffer.buffer().flip();
         Aio.send(channelContext, virtualBuffer);
     }
 

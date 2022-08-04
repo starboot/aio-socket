@@ -11,6 +11,7 @@ import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.IOUtil;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -98,6 +99,15 @@ public final class ChannelContext {
     protected byte status = CHANNEL_STATUS_ENABLED;
 
     /**
+     * 附件对象
+     */
+    private Object attachment;
+
+    private int modCount = 0;
+
+    private InputStream inputStream = null;
+
+    /**
      * 构造通道上下文对象
      *
      * @param channel                Socket通道
@@ -140,7 +150,8 @@ public final class ChannelContext {
     /**
      * 触发通道的读回调操作
      */
-    void signalRead() {
+    public void signalRead() {
+        int modCount = this.modCount;
         if (status == CHANNEL_STATUS_CLOSED) {
             return;
         }
@@ -161,6 +172,9 @@ public final class ChannelContext {
             //处理消息
             try {
                 handler.handle(this, dataEntry);
+                if (modCount != this.modCount) {
+                    return;
+                }
             } catch (Exception e) {
                 handler.stateEvent(this, StateMachineEnum.PROCESS_EXCEPTION, e);
             }
@@ -252,7 +266,7 @@ public final class ChannelContext {
      *
      * @return 输入流
      */
-    WriteBuffer writeBuffer() {
+    public WriteBuffer writeBuffer() {
         return byteBuf;
     }
 
@@ -379,4 +393,167 @@ public final class ChannelContext {
     public VirtualBuffer getByteBuf() {
         return byteBuf.newVirtualBuffer();
     }
+
+    /**
+     * 获取附件对象
+     *
+     * @param <A> 附件对象类型
+     * @return 附件
+     */
+    public final <A> A getAttachment() {
+        return (A) attachment;
+    }
+
+    /**
+     * 存放附件，支持任意类型
+     *
+     * @param <A>        附件对象类型
+     * @param attachment 附件对象
+     */
+    public final <A> void setAttachment(A attachment) {
+        this.attachment = attachment;
+    }
+
+    public VirtualBuffer getReadBuffer() {
+        return readBuffer;
+    }
+
+    public void awaitRead() {
+        modCount++;
+    }
+
+    /**
+     * 同步读取数据
+     */
+    private int synRead() throws IOException {
+        ByteBuffer buffer = readBuffer.buffer();
+        if (buffer.remaining() > 0) {
+            return 0;
+        }
+        try {
+            buffer.clear();
+            int size = channel.read(buffer).get();
+            buffer.flip();
+            return size;
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
+    /**
+     * 获得数据输入流对象。
+     * <p>
+     * faster模式下调用该方法会触发UnsupportedOperationException异常。
+     * </p>
+     * <p>
+     * MessageProcessor采用异步处理消息的方式时，调用该方法可能会出现异常。
+     * </p>
+     *
+     * @return 同步读操作的流对象
+     * @throws IOException io异常
+     */
+    public final InputStream getInputStream() throws IOException {
+        return inputStream == null ? getInputStream(-1) : inputStream;
+    }
+
+    /**
+     * 获取已知长度的InputStream
+     *
+     * @param length InputStream长度
+     * @return 同步读操作的流对象
+     * @throws IOException io异常
+     */
+    public final InputStream getInputStream(int length) throws IOException {
+        if (inputStream != null) {
+            throw new IOException("pre inputStream has not closed");
+        }
+        synchronized (this) {
+            if (inputStream == null) {
+                inputStream = new InnerInputStream(length);
+            }
+        }
+        return inputStream;
+    }
+
+    /**
+     * 同步读操作的InputStream
+     */
+    private class InnerInputStream extends InputStream {
+        /**
+         * 当前InputSteam可读字节数
+         */
+        private int remainLength;
+
+        InnerInputStream(int length) {
+            this.remainLength = length >= 0 ? length : -1;
+        }
+
+        @Override
+        public int read() throws IOException {
+            if (remainLength == 0) {
+                return -1;
+            }
+            ByteBuffer readBuffer = ChannelContext.this.readBuffer.buffer();
+            if (readBuffer.hasRemaining()) {
+                remainLength--;
+                return readBuffer.get();
+            }
+            if (synRead() == -1) {
+                remainLength = 0;
+            }
+            return read();
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            if (b == null) {
+                throw new NullPointerException();
+            } else if (off < 0 || len < 0 || len > b.length - off) {
+                throw new IndexOutOfBoundsException();
+            } else if (len == 0) {
+                return 0;
+            }
+            if (remainLength == 0) {
+                return -1;
+            }
+            if (remainLength > 0 && remainLength < len) {
+                len = remainLength;
+            }
+            ByteBuffer readBuffer = ChannelContext.this.readBuffer.buffer();
+            int size = 0;
+            while (len > 0 && synRead() != -1) {
+                int readSize = Math.min(readBuffer.remaining(), len);
+                readBuffer.get(b, off + size, readSize);
+                size += readSize;
+                len -= readSize;
+            }
+            remainLength -= size;
+            return size;
+        }
+
+        @Override
+        public int available() throws IOException {
+            if (remainLength == 0) {
+                return 0;
+            }
+            if (synRead() == -1) {
+                remainLength = 0;
+                return remainLength;
+            }
+            ByteBuffer readBuffer = ChannelContext.this.readBuffer.buffer();
+            if (remainLength < -1) {
+                return readBuffer.remaining();
+            } else {
+                return Math.min(remainLength, readBuffer.remaining());
+            }
+        }
+
+        @Override
+        public void close() {
+            if (ChannelContext.this.inputStream == InnerInputStream.this) {
+                ChannelContext.this.inputStream = null;
+            }
+        }
+    }
+
 }

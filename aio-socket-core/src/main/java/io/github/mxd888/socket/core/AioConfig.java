@@ -28,12 +28,12 @@ public class AioConfig {
     /**
      * 消息体缓存大小,字节
      */
-    private int readBufferSize = 512;
+    private int readBufferSize = 2048;
 
     /**
      * 内存块大小限制
      */
-    private int writeBufferSize = 128;
+    private int writeBufferSize = 2048;
 
     /**
      * Write缓存区容量
