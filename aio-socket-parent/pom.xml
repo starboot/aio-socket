@@ -12,7 +12,6 @@
     <modules>
         <module>../aio-socket-core</module>
         <module>../aio-socket-http/aio-socket-http-parent</module>
-        <module>../aio-socket-websocket/aio-socket-websocket-parent</module>
         <module>../aio-socket-codec</module>
         <module>../aio-socket-pro</module>
     </modules>

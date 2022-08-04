@@ -21,7 +21,6 @@
         <module>aio-socket-demo/aio-socket-demo-parent</module>
         <module>aio-socket-demo</module>
         <module>aio-socket-http</module>
-        <module>aio-socket-websocket</module>
     </modules>
 
 
