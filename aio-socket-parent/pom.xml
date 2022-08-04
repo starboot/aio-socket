@@ -8,7 +8,7 @@
     <groupId>io.github.mxd888.socket</groupId>
     <artifactId>aio-socket-parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.10.1.v20211002-RELEASE</version>
+    <version>3.8.4.v20220804-RELEASE</version>
     <modules>
         <module>../aio-socket-core</module>
         <module>../aio-socket-http/aio-socket-http-parent</module>

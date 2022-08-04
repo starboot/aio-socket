@@ -5,12 +5,13 @@
     <parent>
         <artifactId>aio-socket-http-parent</artifactId>
         <groupId>io.github.mxd888.socket</groupId>
-        <version>2.10.1.v20211002-RELEASE</version>
+        <version>3.8.4.v20220804-RELEASE</version>
         <relativePath>../aio-socket-http-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aio-socket-http-client</artifactId>
+    <version>3.8.4.v20220804-RELEASE</version>
 
 
 </project>
