@@ -4,6 +4,7 @@ import io.github.mxd888.demo.server.tcp.DemoPacket;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
+import io.github.mxd888.socket.plugins.ReconnectPlugin;
 
 
 import java.io.IOException;
@@ -18,6 +19,9 @@ public class Client {
             new Thread(() -> {
                 ClientBootstrap clientBootstrap = new ClientBootstrap("127.0.0.1", 8888, new ClientHandler());
                 try {
+                    clientBootstrap.getConfig().setEnablePlugins(true);
+                    clientBootstrap.getConfig().getPlugins().addPlugin(new ReconnectPlugin(clientBootstrap));
+                    clientBootstrap.getConfig().setHeartPacket(new DemoPacket("heart message"));
                     ChannelContext start = clientBootstrap.start();
                     long num = 0;
                     long startnum = System.currentTimeMillis();
