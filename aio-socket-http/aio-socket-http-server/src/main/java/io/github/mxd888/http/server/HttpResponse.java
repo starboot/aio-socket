@@ -1,14 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: HttpResponse.java
- * Date: 2021-02-07
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server;
-
-
 
 import io.github.mxd888.http.common.BufferOutputStream;
 import io.github.mxd888.http.common.Cookie;
@@ -20,8 +10,8 @@ import java.util.Collection;
 /**
  * Http消息响应接口
  *
- * @author 三刀
- * @version V1.0 , 2018/2/3
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public interface HttpResponse {
 

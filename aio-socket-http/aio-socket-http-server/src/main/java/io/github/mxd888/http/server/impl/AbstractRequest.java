@@ -1,7 +1,4 @@
-
 package io.github.mxd888.http.server.impl;
-
-
 
 import io.github.mxd888.http.common.Cookie;
 import io.github.mxd888.http.common.Reset;
@@ -14,8 +11,9 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * @author 三刀
- * @version V1.0 , 2018/8/31
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 abstract class AbstractRequest implements HttpRequest, Reset {
 

@@ -1,14 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: ServerHandler.java
- * Date: 2021-07-25
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server;
-
-
 
 import io.github.mxd888.http.common.Handler;
 import io.github.mxd888.http.server.impl.Request;
@@ -17,8 +7,9 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/7/25
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public interface ServerHandler<REQ, RSP> extends Handler<Request> {
 

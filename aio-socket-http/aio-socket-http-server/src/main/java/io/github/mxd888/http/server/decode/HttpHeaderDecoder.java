@@ -1,4 +1,3 @@
-
 package io.github.mxd888.http.server.decode;
 
 
@@ -17,8 +16,9 @@ import java.nio.ByteBuffer;
 import java.util.function.Function;
 
 /**
- * @author 三刀
- * @version V1.0 , 2020/3/30
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 class HttpHeaderDecoder extends AbstractDecoder {
     private static final ByteTree.EndMatcher COLON_END_MATCHER = endByte -> endByte == Constant.COLON;

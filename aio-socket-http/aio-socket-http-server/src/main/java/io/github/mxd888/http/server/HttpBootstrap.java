@@ -1,7 +1,5 @@
 package io.github.mxd888.http.server;
 
-
-
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.enums.HeaderValueEnum;
 import io.github.mxd888.http.common.enums.HttpMethodEnum;
@@ -14,16 +12,21 @@ import io.github.mxd888.socket.core.ServerBootstrap;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
+ */
 public class HttpBootstrap {
 
-    private static final String BANNER = "                               _       _      _    _          \n" +
-            "                              ( )_    ( )    ( )_ ( )_        \n" +
-            "  ___   ___ ___     _ _  _ __ | ,_)   | |__  | ,_)| ,_) _ _   \n" +
-            "/',__)/' _ ` _ `\\ /'_` )( '__)| |     |  _ `\\| |  | |  ( '_`\\ \n" +
-            "\\__, \\| ( ) ( ) |( (_| || |   | |_    | | | || |_ | |_ | (_) )\n" +
-            "(____/(_) (_) (_)`\\__,_)(_)   `\\__)   (_) (_)`\\__)`\\__)| ,__/'\n" +
-            "                                                       | |    \n" +
-            "                                                       (_)   ";
+    private static final String BANNER = "  _      _    _    _          \n" +
+            " ( )    ( )_ ( )_        \n" +
+            " | |__  | ,_)| ,_) _ _   \n" +
+            " |  _ `\\| |  | |  ( '_`\\ \n" +
+            " | | | || |_ | |_ | (_) )\n" +
+            " (_) (_)`\\__)`\\__)| ,__/'\n" +
+            "                  | |    \n" +
+            "                  (_)   ";
 
     private static final String VERSION = "1.1.16-SNAPSHOT";
     /**
@@ -95,7 +98,7 @@ public class HttpBootstrap {
 
         server = new ServerBootstrap(configuration.getHost(), port, new HttpRequestHandler(configuration, processor));
         if (configuration.isBannerEnabled()) {
-            System.out.println(BANNER + "\r\n :: smart-http :: (" + VERSION + ")");
+            System.out.println(BANNER + "\r\n :: aio-socket-http :: (" + VERSION + ")");
         }
         server.start();
     }

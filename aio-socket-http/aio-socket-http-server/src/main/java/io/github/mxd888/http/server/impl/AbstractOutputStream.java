@@ -13,13 +13,13 @@ import io.github.mxd888.http.server.HttpServerConfiguration;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author 三刀
- * @version V1.0 , 2018/2/3
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 abstract class AbstractOutputStream extends BufferOutputStream {
 

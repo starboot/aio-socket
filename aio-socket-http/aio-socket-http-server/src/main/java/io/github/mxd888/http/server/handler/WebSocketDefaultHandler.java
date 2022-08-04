@@ -13,8 +13,9 @@ import java.nio.charset.StandardCharsets;
 
 
 /**
- * @author 三刀
- * @version V1.0 , 2020/3/31
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class WebSocketDefaultHandler extends WebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketDefaultHandler.class);

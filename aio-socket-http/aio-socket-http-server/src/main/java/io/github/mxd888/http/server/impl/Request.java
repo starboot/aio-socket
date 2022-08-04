@@ -1,7 +1,4 @@
-
 package io.github.mxd888.http.server.impl;
-
-
 
 import io.github.mxd888.http.common.Cookie;
 import io.github.mxd888.http.common.HeaderValue;
@@ -31,8 +28,9 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * @author 三刀
- * @version V1.0 , 2018/8/31
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public final class Request extends Packet implements HttpRequest, Reset {
     private static final Locale defaultLocale = Locale.getDefault();

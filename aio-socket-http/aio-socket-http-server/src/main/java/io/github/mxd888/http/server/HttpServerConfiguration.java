@@ -1,19 +1,8 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: HttpServerConfiguration.java
- * Date: 2021-02-22
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server;
-
-
 
 import io.github.mxd888.http.common.utils.ByteTree;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.StringUtils;
-import io.github.mxd888.http.server.impl.Request;
 import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.plugins.StreamMonitorPlugin;
 
@@ -24,8 +13,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/2/22
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class HttpServerConfiguration {
 
@@ -72,7 +62,7 @@ public class HttpServerConfiguration {
     /**
      * 服务器名称
      */
-    private String serverName = "smart-http";
+    private String serverName = "aio-socket-http";
 
     /**
      * Form长度上限
@@ -82,7 +72,7 @@ public class HttpServerConfiguration {
     private HttpServerHandler httpServerHandler = new HttpServerHandler() {
         @Override
         public void handle(HttpRequest request, HttpResponse response) throws IOException {
-            response.write("Hello smart-http".getBytes(StandardCharsets.UTF_8));
+            response.write("Hello aio-socket-http".getBytes(StandardCharsets.UTF_8));
         }
     };
     private WebSocketHandler webSocketHandler;

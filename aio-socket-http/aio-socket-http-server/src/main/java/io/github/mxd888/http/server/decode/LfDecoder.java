@@ -10,8 +10,9 @@ import io.github.mxd888.socket.core.ChannelContext;
 import java.nio.ByteBuffer;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2022/1/12
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 class LfDecoder extends AbstractDecoder {
     private final AbstractDecoder nextDecoder;

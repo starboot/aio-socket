@@ -53,29 +53,6 @@ public class httpServer {
             public void handle(HttpRequest request, HttpResponse response) throws IOException {
                 response.write(("收到Post参数text=" + request.getParameter("text")).getBytes());
             }
-        }).route("/upload", new HttpServerHandler() {
-            @Override
-            public void handle(HttpRequest request, HttpResponse response) throws IOException {
-                InputStream in = request.getInputStream();
-                byte[] buffer = new byte[1024];
-                int len = 0;
-                while ((len = in.read(buffer)) != -1) {
-                    response.getOutputStream().write(buffer, 0, len);
-                }
-                in.close();
-            }
-        }).route("/post_json", new HttpServerHandler() {
-            @Override
-            public void handle(HttpRequest request, HttpResponse response) throws IOException {
-                InputStream in = request.getInputStream();
-                byte[] buffer = new byte[1024];
-                int len = 0;
-                System.out.println(request.getContentType());
-                while ((len = in.read(buffer)) != -1) {
-                    response.getOutputStream().write(buffer, 0, len);
-                }
-                in.close();
-            }
         }).route("/plaintext", new HttpServerHandler() {
             byte[] body = "Hello World!".getBytes();
 

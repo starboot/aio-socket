@@ -1,6 +1,4 @@
-
 package io.github.mxd888.http.server.impl;
-
 
 import io.github.mxd888.http.common.enums.*;
 import io.github.mxd888.http.common.exception.HttpException;
@@ -20,8 +18,9 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * @author 三刀
- * @version V1.0 , 2018/6/10
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class HttpMessageProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpMessageProcessor.class);
@@ -29,7 +28,8 @@ public class HttpMessageProcessor {
     private HttpServerConfiguration configuration;
 
     public void process0(ChannelContext context, Request request) {
-        RequestAttachment attachment = context.getAttachment();
+        Object aioAttachment = context.getAttachment();
+        RequestAttachment attachment = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
         AbstractRequest abstractRequest = request.newAbstractRequest();
         AbstractResponse response = abstractRequest.getResponse();
         try {
@@ -64,35 +64,24 @@ public class HttpMessageProcessor {
     private void handleWebSocketRequest(ChannelContext context, Request request) throws IOException {
         AbstractRequest abstractRequest = request.newAbstractRequest();
         CompletableFuture<Object> future = new CompletableFuture<>();
+        assert abstractRequest != null;
         request.getServerHandler().handle(abstractRequest, abstractRequest.getResponse(), future);
         if (future.isDone()) {
             finishResponse(abstractRequest);
         } else {
-            Thread thread = Thread.currentThread();
-            context.awaitRead();
-            future.thenRun(() -> {
-                try {
-                    finishResponse(abstractRequest);
-                    if (thread != Thread.currentThread()) {
-                        context.writeBuffer().flush();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    abstractRequest.getResponse().close();
-                } finally {
-                    context.signalRead();
-                }
-            });
+            System.out.println("into -> io.github.mxd888.http.server.impl.HttpMessageProcessor");
+            future.thenRun(() -> abstractRequest.getResponse().close());
         }
     }
 
     private void handleHttpRequest(ChannelContext context, Request request) throws IOException {
         AbstractRequest abstractRequest = request.newAbstractRequest();
+        assert abstractRequest != null;
         AbstractResponse response = abstractRequest.getResponse();
         CompletableFuture<Object> future = new CompletableFuture<>();
         boolean keepAlive = true;
-        // http/1.0兼容长连接。此处用 == 性能更高
-        if (HttpProtocolEnum.HTTP_10.getProtocol() == abstractRequest.getProtocol()) {
+        // http/1.0兼容长连接。
+        if (HttpProtocolEnum.HTTP_10.getProtocol().equals(abstractRequest.getProtocol())) {
             keepAlive = HeaderValueEnum.KEEPALIVE.getName().equalsIgnoreCase(abstractRequest.getHeader(HeaderNameEnum.CONNECTION.getName()));
             if (keepAlive) {
                 response.setHeader(HeaderNameEnum.CONNECTION.getName(), HeaderValueEnum.KEEPALIVE.getName());
@@ -120,46 +109,14 @@ public class HttpMessageProcessor {
                 finishResponse(abstractRequest);
             }
         } else {
-            context.awaitRead();
-            Thread thread = Thread.currentThread();
             AbstractResponse response = abstractRequest.getResponse();
-            future.thenRun(() -> {
-                try {
-                    if (keepConnection(abstractRequest, keepAlive)) {
-                        finishResponse(abstractRequest);
-                        if (thread != Thread.currentThread()) {
-                            context.writeBuffer().flush();
-                        }
-                    }
-                } catch (HttpException e) {
-                    e.printStackTrace();
-
-                    response.setHttpStatus(HttpStatus.valueOf(e.getHttpCode()));
-                    try {
-                        response.write(e.getDesc().getBytes());
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    response.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-                    try {
-                        response.getOutputStream().write(e.fillInStackTrace().toString().getBytes());
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    response.close();
-                } finally {
-                    context.signalRead();
-                }
-            });
+            future.thenRun(response::close);
         }
     }
 
-    private boolean keepConnection(AbstractRequest request, boolean keepAlive) throws IOException {
+    private boolean keepConnection(AbstractRequest request, boolean keepAlive) {
         //非keepAlive或者 body部分未读取完毕,释放连接资源
-        if (!keepAlive || !HttpMethodEnum.GET.getMethod().equals(request.getMethod()) && request.getContentLength() > 0 && request.getInputStream().available() > 0) {
+        if (!keepAlive || !HttpMethodEnum.GET.getMethod().equals(request.getMethod()) && request.getContentLength() > 0) {
             request.getResponse().close();
             return false;
         }
@@ -207,8 +164,9 @@ public class HttpMessageProcessor {
                 channelContext.close();
                 break;
             case CHANNEL_CLOSED:
-                RequestAttachment att = channelContext.getAttachment();
-                if (att.getRequest().getServerHandler() != null) {
+                Object aioAttachment = channelContext.getAttachment();
+                RequestAttachment att = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
+                if (att != null && att.getRequest().getServerHandler() != null) {
                     att.getRequest().getServerHandler().onClose(att.getRequest());
                 }
                 break;

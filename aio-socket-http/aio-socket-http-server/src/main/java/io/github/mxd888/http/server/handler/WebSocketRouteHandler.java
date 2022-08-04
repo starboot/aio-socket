@@ -14,8 +14,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author 三刀
- * @version V1.0 , 2018/3/24
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public final class WebSocketRouteHandler extends WebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketRouteHandler.class);

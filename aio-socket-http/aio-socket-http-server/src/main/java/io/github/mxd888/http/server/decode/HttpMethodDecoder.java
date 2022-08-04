@@ -1,13 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2017-2020, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: RequestLineDecoder.java
- * Date: 2020-03-30
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server.decode;
-
 
 import io.github.mxd888.http.common.utils.ByteTree;
 import io.github.mxd888.http.common.utils.StringUtils;
@@ -18,8 +9,9 @@ import io.github.mxd888.socket.core.ChannelContext;
 import java.nio.ByteBuffer;
 
 /**
- * @author 三刀
- * @version V1.0 , 2020/3/30
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class HttpMethodDecoder extends AbstractDecoder {
 

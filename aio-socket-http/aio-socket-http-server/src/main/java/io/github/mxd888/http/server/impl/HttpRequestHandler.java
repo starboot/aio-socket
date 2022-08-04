@@ -1,14 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: HttpRequestHandler.java
- * Date: 2021-02-07
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server.impl;
-
-
 
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.decode.Decoder;
@@ -19,11 +9,10 @@ import io.github.mxd888.socket.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.intf.AioHandler;
 
-import java.nio.ByteBuffer;
-
 /**
- * @author 三刀
- * @version V1.0 , 2018/8/31
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class HttpRequestHandler implements AioHandler {
     public static final Decoder BODY_READY_DECODER = (byteBuffer, aioSession, response) -> null;
@@ -55,8 +44,8 @@ public class HttpRequestHandler implements AioHandler {
         if (readBuffer.buffer().remaining() == 0) {
             return null;
         }
-        RequestAttachment attachment = channelContext.getAttachment();
-
+        Object aioAttachment = channelContext.getAttachment();
+        RequestAttachment attachment = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
         Request request = attachment.getRequest();
         Decoder decodeChain = attachment.getDecoder();
         if (decodeChain == null) {

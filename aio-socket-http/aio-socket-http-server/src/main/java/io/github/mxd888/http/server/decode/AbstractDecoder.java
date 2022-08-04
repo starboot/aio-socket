@@ -5,8 +5,9 @@ import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/6/10
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public abstract class AbstractDecoder implements Decoder {
     protected static final ByteTree.EndMatcher CR_END_MATCHER = endByte -> endByte == Constant.CR;

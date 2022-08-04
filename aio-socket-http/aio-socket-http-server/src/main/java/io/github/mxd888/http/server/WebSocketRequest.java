@@ -1,21 +1,12 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: WebSocketRequest.java
- * Date: 2021-02-07
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server;
 
 import java.net.InetSocketAddress;
 import java.util.Map;
 
 /**
- * WebSocket消息请求接口
  *
- * @author 三刀
- * @version V1.0 , 2020/4/1
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public interface WebSocketRequest {
 

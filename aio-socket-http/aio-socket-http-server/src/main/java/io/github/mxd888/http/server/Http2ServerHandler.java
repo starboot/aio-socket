@@ -21,8 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Http消息处理器
  *
- * @author 三刀
- * @version V1.0 , 2018/2/6
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public abstract class Http2ServerHandler implements ServerHandler<HttpRequest, HttpResponse> {
     private final Map<Request, SmartDecoder> bodyDecoderMap = new ConcurrentHashMap<>();

@@ -1,14 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: WebSocketHandle.java
- * Date: 2021-02-07
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server;
-
-
 
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.enums.HeaderValueEnum;
@@ -29,8 +19,8 @@ import java.util.Base64;
 /**
  * WebSocket消息处理器
  *
- * @author 三刀
- * @version V1.0 , 2018/2/6
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public abstract class WebSocketHandler implements ServerHandler<WebSocketRequest, WebSocketResponse> {
     public static final String WEBSOCKET_13_ACCEPT_GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";

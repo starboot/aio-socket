@@ -1,7 +1,4 @@
-
 package io.github.mxd888.http.server.handler;
-
-
 
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.enums.HttpStatus;
@@ -16,8 +13,9 @@ import java.nio.ByteBuffer;
 import java.util.Base64;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/2/23
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public final class BasicAuthServerHandler extends HttpServerHandler {
     private final HttpServerHandler httpServerHandler;

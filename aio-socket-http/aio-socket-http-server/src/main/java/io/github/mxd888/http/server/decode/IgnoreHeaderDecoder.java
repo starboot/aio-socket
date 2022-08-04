@@ -1,11 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: IgnoreHeaderDecoder.java
- * Date: 2021-04-10
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server.decode;
 
 import io.github.mxd888.http.common.utils.Constant;
@@ -16,8 +8,9 @@ import io.github.mxd888.socket.core.ChannelContext;
 import java.nio.ByteBuffer;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/4/10
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class IgnoreHeaderDecoder implements Decoder {
 

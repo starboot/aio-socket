@@ -1,14 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: RequestAttachment.java
- * Date: 2021-05-26
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server.impl;
-
-
 
 import io.github.mxd888.http.common.utils.SmartDecoder;
 import io.github.mxd888.http.server.decode.Decoder;
@@ -16,10 +6,9 @@ import io.github.mxd888.http.server.decode.Decoder;
 
 
 /**
- * Http/Ws 请求解码附件对象
  *
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/5/26
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class RequestAttachment {
     /**

@@ -10,8 +10,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
- * @author 三刀
- * @version V1.0 , 2018/2/3
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class WebSocketResponseImpl extends AbstractResponse implements WebSocketResponse {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketResponseImpl.class);

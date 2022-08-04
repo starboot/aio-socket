@@ -1,18 +1,9 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: WebSocketResponse.java
- * Date: 2021-02-07
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server;
 
 /**
- * WebSocket消息响应接口
  *
- * @author 三刀
- * @version V1.0 , 2020/3/31
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public interface WebSocketResponse {
     /**

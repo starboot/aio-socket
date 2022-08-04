@@ -1,14 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2017-2021, org.smartboot. All rights reserved.
- * project name: smart-http
- * file name: HttpServerHandle.java
- * Date: 2021-02-07
- * Author: sandao (zhengjunweimail@163.com)
- ******************************************************************************/
-
 package io.github.mxd888.http.server;
-
-
 
 import io.github.mxd888.http.common.enums.HeaderValueEnum;
 import io.github.mxd888.http.common.enums.HttpMethodEnum;
@@ -23,10 +13,9 @@ import io.github.mxd888.http.server.impl.RequestAttachment;
 import java.nio.ByteBuffer;
 
 /**
- * Http消息处理器
  *
- * @author 三刀
- * @version V1.0 , 2018/2/6
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public abstract class HttpServerHandler implements ServerHandler<HttpRequest, HttpResponse> {
 
@@ -44,7 +33,8 @@ public abstract class HttpServerHandler implements ServerHandler<HttpRequest, Ht
             } else if (postLength < 0) {
                 throw new HttpException(HttpStatus.LENGTH_REQUIRED);
             }
-            RequestAttachment attachment = request.getAioChannelContext().getAttachment();
+            Object aioAttachment = request.getAioChannelContext().getAttachment();
+            RequestAttachment attachment = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
             SmartDecoder smartDecoder = attachment.getBodyDecoder();
             if (smartDecoder == null) {
                 smartDecoder = new FixedLengthFrameDecoder(request.getContentLength());
