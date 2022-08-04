@@ -9,7 +9,6 @@ import io.github.mxd888.http.server.handler.WebSocketDefaultHandler;
 import io.github.mxd888.http.server.handler.WebSocketRouteHandler;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 
 /**
@@ -28,7 +27,7 @@ public class httpServer {
             }
         }));
         routeHandle.route("/", new HttpServerHandler() {
-            byte[] body = ("<html>" +
+            final byte[] body = ("<html>" +
                     "<head><title>smart-http demo</title></head>" +
                     "<body>" +
                     "GET 表单提交<form action='/get' method='get'><input type='text' name='text'/><input type='submit'/></form></br>" +
@@ -54,14 +53,14 @@ public class httpServer {
                 response.write(("收到Post参数text=" + request.getParameter("text")).getBytes());
             }
         }).route("/plaintext", new HttpServerHandler() {
-            byte[] body = "Hello World!".getBytes();
+            final byte[] body = "Hello World!".getBytes();
 
             @Override
             public void handle(HttpRequest request, HttpResponse response) throws IOException {
                 response.setContentLength(body.length);
                 response.setContentType("text/plain; charset=UTF-8");
                 response.write(body);
-//                LOGGER.info("hello world");
+                LOGGER.info("hello world");
             }
         }).route("/head", new HttpServerHandler() {
             @Override

@@ -14,7 +14,7 @@ Welcome<br/>
 <hr/>
 <div id="message"></div>
 <script>
-    let websocket = null;
+    let websocket;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
         websocket = new WebSocket("ws://localhost:8080/ws");
@@ -59,7 +59,7 @@ Welcome<br/>
 
     //发送消息
     function send() {
-        var message = document.getElementById('text').value;
+        const message = document.getElementById('text').value;
         websocket.send(message);
     }
 
