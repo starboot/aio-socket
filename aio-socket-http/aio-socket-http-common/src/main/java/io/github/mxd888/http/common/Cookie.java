@@ -1,13 +1,14 @@
 package io.github.mxd888.http.common;
 
-
 import io.github.mxd888.http.common.utils.DateUtils;
 import io.github.mxd888.http.common.utils.StringUtils;
 
 import java.util.Date;
 
 /**
- * Created by DELL(mxd) on 2022/7/28 18:20
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class Cookie {
 

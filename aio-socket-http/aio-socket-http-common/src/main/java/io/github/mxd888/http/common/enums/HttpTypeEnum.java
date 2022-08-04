@@ -1,9 +1,9 @@
-
 package io.github.mxd888.http.common.enums;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/7/11
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public enum HttpTypeEnum {
     /**

@@ -1,8 +1,12 @@
-
 package io.github.mxd888.http.common.utils;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
+ */
 public interface Constant {
     public static final int WS_DEFAULT_MAX_FRAME_SIZE = (2 << 16) - 1;
     public static final int WS_PLAY_LOAD_126 = 126;

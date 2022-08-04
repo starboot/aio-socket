@@ -1,9 +1,9 @@
-
 package io.github.mxd888.http.common.enums;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/2/4
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public enum HttpProtocolEnum {
     HTTP_11("HTTP/1.1"),

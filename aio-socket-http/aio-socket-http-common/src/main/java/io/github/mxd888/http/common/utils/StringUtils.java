@@ -1,4 +1,3 @@
-
 package io.github.mxd888.http.common.utils;
 
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
@@ -11,6 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
+/**
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
+ */
 public class StringUtils {
 
     /**

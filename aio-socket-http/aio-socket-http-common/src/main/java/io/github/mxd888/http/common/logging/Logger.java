@@ -1,9 +1,9 @@
-
 package io.github.mxd888.http.common.logging;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/1/27
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public interface Logger {
 

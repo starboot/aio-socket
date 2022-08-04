@@ -1,9 +1,9 @@
-
 package io.github.mxd888.http.common.enums;
 
 /**
- * @author 三刀
- * @version V1.0 , 2018/12/6
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public enum HeaderValueEnum {
     CHUNKED("chunked"),

@@ -1,12 +1,11 @@
-
 package io.github.mxd888.http.common.exception;
-
 
 import io.github.mxd888.http.common.enums.HttpStatus;
 
 /**
- * @author 三刀
- * @version V1.0 , 2018/6/3
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class HttpException extends RuntimeException {
     private int httpCode;

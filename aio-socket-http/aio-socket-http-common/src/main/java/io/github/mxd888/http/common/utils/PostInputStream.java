@@ -1,12 +1,12 @@
-
 package io.github.mxd888.http.common.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @author 三刀
- * @version V1.0 , 2019/12/1
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class PostInputStream extends InputStream {
     private InputStream inputStream;

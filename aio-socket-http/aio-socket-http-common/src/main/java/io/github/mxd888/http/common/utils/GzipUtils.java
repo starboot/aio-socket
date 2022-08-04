@@ -1,4 +1,3 @@
-
 package io.github.mxd888.http.common.utils;
 
 import java.io.ByteArrayInputStream;
@@ -7,8 +6,9 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/7/12
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class GzipUtils {
     public static final String GZIP_ENCODE_UTF_8 = "UTF-8";

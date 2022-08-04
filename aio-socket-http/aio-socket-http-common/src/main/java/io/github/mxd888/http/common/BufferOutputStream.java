@@ -1,6 +1,4 @@
-
 package io.github.mxd888.http.common;
-
 
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.utils.Constant;
@@ -19,8 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 /**
- * @author 三刀
- * @version V1.0 , 2020/12/7
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public abstract class BufferOutputStream extends OutputStream implements Reset {
     private static final Map<String, byte[]> HEADER_NAME_EXT_MAP = new ConcurrentHashMap<>();

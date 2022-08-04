@@ -1,13 +1,11 @@
-
 package io.github.mxd888.http.common.utils;
 
 import java.nio.ByteBuffer;
 
 /**
- * 指定长度的解码器
  *
- * @author 三刀
- * @version V1.0 , 2017/10/20
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class FixedLengthFrameDecoder implements SmartDecoder{
     private ByteBuffer buffer;

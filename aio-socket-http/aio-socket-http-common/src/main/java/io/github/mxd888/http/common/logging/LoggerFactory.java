@@ -1,12 +1,12 @@
-
 package io.github.mxd888.http.common.logging;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2021/1/27
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public final class LoggerFactory {
     private static final Map<String, Logger> loggerMap = new HashMap<>();

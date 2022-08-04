@@ -1,7 +1,9 @@
 package io.github.mxd888.http.common;
 
 /**
- * Created by DELL(mxd) on 2022/7/28 18:17
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public interface Reset {
 

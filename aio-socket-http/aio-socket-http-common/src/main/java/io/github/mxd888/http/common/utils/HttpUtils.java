@@ -1,4 +1,3 @@
-
 package io.github.mxd888.http.common.utils;
 
 import java.io.UnsupportedEncodingException;
@@ -6,8 +5,9 @@ import java.net.URLDecoder;
 import java.util.Map;
 
 /**
- * @author 三刀
- * @version V1.0 , 2020/11/22
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class HttpUtils {
     /**

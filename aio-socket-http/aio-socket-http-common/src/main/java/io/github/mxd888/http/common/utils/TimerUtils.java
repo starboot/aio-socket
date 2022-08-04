@@ -1,4 +1,3 @@
-
 package io.github.mxd888.http.common.utils;
 
 import java.util.concurrent.Executors;
@@ -6,8 +5,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2022/2/4
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class TimerUtils {
 

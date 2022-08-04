@@ -1,4 +1,3 @@
-
 package io.github.mxd888.http.common.utils;
 
 import java.text.ParseException;
@@ -8,8 +7,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * @author 三刀
- * @version V1.0 , 2020/12/3
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class DateUtils {
     private static final String COOKIE_PATTERN = "EEE, dd-MMM-yyyy HH:mm:ss z";

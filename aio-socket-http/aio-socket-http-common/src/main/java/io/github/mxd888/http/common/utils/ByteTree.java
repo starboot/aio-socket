@@ -1,9 +1,9 @@
-
 package io.github.mxd888.http.common.utils;
 
 /**
- * @author 三刀（zhengjunweimail@163.com）
- * @version V1.0 , 2022/1/2
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class ByteTree<T> {
     private static final int MAX_DEPTH = 128;

@@ -1,12 +1,15 @@
-
 package io.github.mxd888.http.common.utils;
-
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 
+/**
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
+ */
 public class Mimetypes {
     /* The default MIME type */
     public static final String DEFAULT_MIMETYPE = "application/octet-stream";

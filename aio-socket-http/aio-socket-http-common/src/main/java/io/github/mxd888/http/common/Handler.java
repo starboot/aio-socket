@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * Created by DELL(mxd) on 2022/7/28 18:19
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public interface Handler<T> {
 

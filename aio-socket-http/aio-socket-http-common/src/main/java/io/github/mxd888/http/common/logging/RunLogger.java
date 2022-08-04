@@ -1,6 +1,4 @@
-
 package io.github.mxd888.http.common.logging;
-
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
@@ -9,8 +7,9 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
- * @author 三刀
- * @version V1.0 , 2020/1/1
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 class RunLogger implements io.github.mxd888.http.common.logging.Logger {
 
