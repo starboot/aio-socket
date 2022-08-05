@@ -1,7 +1,5 @@
 package io.github.mxd888.socket.utils;
 
-
-
 import java.util.concurrent.*;
 
 /**
