@@ -28,7 +28,7 @@ public class ThreadUtils {
     /**
      * 保持活跃时间
      */
-    public static final long KEEP_ALIVE_TIME = 60L;
+    public static final long KEEP_ALIVE_TIME = 0L;
 
     /**
      * 构造线程池执行器

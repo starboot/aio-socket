@@ -1,6 +1,4 @@
-
 package io.github.mxd888.socket.core;
-
 
 import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;

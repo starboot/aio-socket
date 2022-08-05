@@ -1,4 +1,3 @@
-
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.buffer.BufferPage;
