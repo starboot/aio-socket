@@ -41,6 +41,22 @@ public class Packet implements Serializable {
      */
     private ClusterEntity entity;
 
+    public byte getVersionID() {
+        return versionID;
+    }
+
+    public void setVersionID(byte versionID) {
+        this.versionID = versionID;
+    }
+
+    public String getSynNum() {
+        return synNum;
+    }
+
+    public void setSynNum(String synNum) {
+        this.synNum = synNum;
+    }
+
     public String getFromId() {
         return fromId;
     }
