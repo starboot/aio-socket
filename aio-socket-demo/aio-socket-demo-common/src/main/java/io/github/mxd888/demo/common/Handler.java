@@ -1,4 +1,4 @@
-package io.github.mxd888.demo.server.tcp;
+package io.github.mxd888.demo.common;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
@@ -49,6 +49,16 @@ public class Handler implements AioHandler {
 
     @Override
     public void stateEvent(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
-
+        switch (stateMachineEnum){
+            case DECODE_EXCEPTION:
+                System.out.println("解码异常");
+                break;
+            case PROCESS_EXCEPTION:
+                System.out.println("处理异常");
+                break;
+            case INPUT_SHUTDOWN:
+                System.out.println("输入流已关闭");
+                break;
+        }
     }
 }

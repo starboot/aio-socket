@@ -13,5 +13,12 @@
     <artifactId>aio-socket-demo-client</artifactId>
     <version>3.8.4.v20220804-RELEASE</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.github.mxd888.socket</groupId>
+            <artifactId>aio-socket-demo-common</artifactId>
+            <version>3.8.4.v20220804-RELEASE</version>
+        </dependency>
+    </dependencies>
 
 </project>

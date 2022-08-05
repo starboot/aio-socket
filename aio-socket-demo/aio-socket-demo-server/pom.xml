@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>io.github.mxd888.socket</groupId>
-            <artifactId>aio-socket-http-server</artifactId>
+            <artifactId>aio-socket-demo-common</artifactId>
             <version>3.8.4.v20220804-RELEASE</version>
         </dependency>
     </dependencies>
