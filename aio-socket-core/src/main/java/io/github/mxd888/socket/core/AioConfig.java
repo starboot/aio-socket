@@ -4,6 +4,7 @@ import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.buffer.BufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.maintain.ClusterIds;
 import io.github.mxd888.socket.maintain.Groups;
 import io.github.mxd888.socket.maintain.Ids;
 import io.github.mxd888.socket.plugins.AioPlugins;
@@ -89,6 +90,11 @@ public class AioConfig {
      * 用户ID和其ChannelContext绑定
      */
     private final Ids ids = new Ids();
+
+    /**
+     * 集群服务器：用户ID与集群服务器ID一一对应
+     */
+    private final ClusterIds clusterIds = new ClusterIds();
 
     /**
      * 是否启用插件
@@ -210,6 +216,10 @@ public class AioConfig {
 
     public Ids getIds() {
         return ids;
+    }
+
+    public ClusterIds getClusterIds() {
+        return clusterIds;
     }
 
     public boolean isEnablePlugins() {

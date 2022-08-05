@@ -1,5 +1,7 @@
 package io.github.mxd888.socket;
 
+import io.github.mxd888.socket.cluster.ClusterEntity;
+
 import java.io.Serializable;
 
 /**
@@ -34,6 +36,11 @@ public class Packet implements Serializable {
      */
     private String toId;
 
+    /**
+     * 内核集群所需实体
+     */
+    private ClusterEntity entity;
+
     public String getFromId() {
         return fromId;
     }
@@ -50,4 +57,11 @@ public class Packet implements Serializable {
         this.toId = toId;
     }
 
+    public ClusterEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(ClusterEntity entity) {
+        this.entity = entity;
+    }
 }
