@@ -44,7 +44,7 @@ public class ClusterBootstrap {
             // 写入自己的IP
             packet.setFromId(this.config.getHost());
             // 设置内核集群消息标识位
-//            packet.setEntity(new ClusterEntity(true));
+            packet.setEntity(new ClusterEntity(true));
             // 向其他服务器注册自己
             Aio.send(start, packet);
             // 绑定通道ID
