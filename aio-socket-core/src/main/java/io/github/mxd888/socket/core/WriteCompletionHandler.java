@@ -5,7 +5,6 @@ import io.github.mxd888.socket.StateMachineEnum;
 
 import java.nio.channels.CompletionHandler;
 
-
 /**
  * 写完成回调函数
  *
