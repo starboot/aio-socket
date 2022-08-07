@@ -1,5 +1,6 @@
 package io.github.mxd888.socket.core;
 
+import io.github.mxd888.socket.EnhanceAsynchronousChannelProvider;
 import io.github.mxd888.socket.buffer.BufferPagePool;
 import io.github.mxd888.socket.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -99,7 +100,10 @@ public class ServerBootstrap {
                 this.bufferPool = getConfig().getBufferFactory().create();
             }
             this.aioChannelContextFunction = aioContextFunction;
-            AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
+            // 普通版
+//            AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
+            // 增强版
+            AsynchronousChannelProvider provider = EnhanceAsynchronousChannelProvider.provider();
             this.aioReadCompletionHandler = new ReadCompletionHandler();
             this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(), 0);
             this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
