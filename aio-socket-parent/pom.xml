@@ -13,7 +13,6 @@
         <module>../aio-socket-core</module>
         <module>../aio-socket-http/aio-socket-http-parent</module>
         <module>../aio-socket-codec</module>
-        <module>../aio-socket-pro</module>
     </modules>
     <name>aio-socket-parent</name>
     <url>https://gitee.com/mxd_2022/aio-socket.git</url>
