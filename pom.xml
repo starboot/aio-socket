@@ -21,6 +21,7 @@
         <module>aio-socket-demo/aio-socket-demo-parent</module>
         <module>aio-socket-demo</module>
         <module>aio-socket-http</module>
+        <module>netty-im</module>
     </modules>
 
 
