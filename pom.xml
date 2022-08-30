@@ -13,16 +13,14 @@
         <artifactId>aio-socket-parent</artifactId>
         <groupId>io.github.mxd888.socket</groupId>
         <version>3.8.4.v20220804-RELEASE</version>
+        <relativePath>aio-socket-parent/pom.xml</relativePath>
     </parent>
-
 
     <modules>
         <module>aio-socket-parent</module>
         <module>aio-socket-demo/aio-socket-demo-parent</module>
         <module>aio-socket-demo</module>
         <module>aio-socket-http</module>
-        <module>netty-im</module>
     </modules>
-
 
 </project>
