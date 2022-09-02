@@ -101,9 +101,9 @@ public class ServerBootstrap {
             }
             this.aioChannelContextFunction = aioContextFunction;
             // 普通版
-//            AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
+            AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
             // 增强版
-            AsynchronousChannelProvider provider = EnhanceAsynchronousChannelProvider.provider();
+//            AsynchronousChannelProvider provider = EnhanceAsynchronousChannelProvider.provider();
             this.aioReadCompletionHandler = new ReadCompletionHandler();
             this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(), 0);
             this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
