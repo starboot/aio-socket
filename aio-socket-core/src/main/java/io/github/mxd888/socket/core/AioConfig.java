@@ -77,6 +77,11 @@ public class AioConfig {
     private BufferFactory bufferFactory = BufferFactory.ENABLE_BUFFER_FACTORY;
 
     /**
+     * 启用AIO内核增强
+     */
+    private boolean enhanceCore = false;
+
+    /**
      * 是否是服务器
      */
     private boolean isServer;
@@ -184,6 +189,14 @@ public class AioConfig {
 
     public void setBacklog(int backlog) {
         this.backlog = backlog;
+    }
+
+    public boolean isEnhanceCore() {
+        return enhanceCore;
+    }
+
+    public void setEnhanceCore(boolean enhanceCore) {
+        this.enhanceCore = enhanceCore;
     }
 
     public boolean isServer() {

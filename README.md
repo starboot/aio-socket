@@ -54,7 +54,7 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 <dependency>
   <groupId>io.github.mxd888.socket</groupId>
   <artifactId>aio-socket</artifactId>
-  <version>2.10.1.v20211002-RELEASE</version>
+  <version>3.8.5.v20221001-RELEASE</version>
 </dependency>
 ~~~
 #### 起步

@@ -40,10 +40,15 @@ public class Client {
             int finalI = i;
             new Thread(() -> {
                 // 81.70.149.16 127.0.0.1
-                ClientBootstrap clientBootstrap = new ClientBootstrap("127.0.0.1", 8888, new ClientHandler());
+                ClientBootstrap clientBootstrap = new ClientBootstrap((args != null && args.length != 0) ? args[0] : "127.0.0.1", (args != null && args.length != 0) ? Integer.parseInt(args[1]) : 8888, new ClientHandler());
                 clientBootstrap.getConfig().setEnablePlugins(true);
                 clientBootstrap.getConfig().setHeartPacket(new DemoPacket("heart message"));
                 clientBootstrap.getConfig().getPlugins().addPlugin(new ReconnectPlugin(clientBootstrap));
+                if (((args != null && args.length != 0) ? Integer.parseInt(args[2]) : 0) == 1) {
+                    // 启用内核增强
+                    clientBootstrap.getConfig().setEnhanceCore(true);
+                    System.out.println("启动内核增强");
+                }
                 try {
                     ChannelContext start = clientBootstrap.start();
                     long num = 0;

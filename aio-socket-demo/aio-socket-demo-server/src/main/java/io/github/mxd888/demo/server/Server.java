@@ -56,9 +56,18 @@ import java.util.concurrent.TimeUnit;
  */
 public class Server {
 
+    // java -jar ***** host port enhanceCore:0=false 1=true
     public static void main(String[] args) {
 
-        ServerBootstrap bootstrap = new ServerBootstrap("127.0.0.1",8888, new ServerHandler());
+        ServerBootstrap bootstrap = new ServerBootstrap((args != null && args.length != 0) ? args[0] : "127.0.0.1", (args != null && args.length != 0) ? Integer.parseInt(args[1]) : 8888, new ServerHandler());
+        if (((args != null && args.length != 0) ? Integer.parseInt(args[2]) : 0) == 1) {
+            // 启用内核增强
+            bootstrap.getConfig().setEnhanceCore(true);
+            System.out.println("启动内核增强");
+        }
+        if (args != null && args.length > 0) {
+            System.out.println(args[0] + "--" + Integer.parseInt(args[1]) + "--" + Integer.parseInt(args[2]));
+        }
         // 使插件功能生效
         bootstrap.getConfig().setEnablePlugins(true);
         // 注册流量监控插件

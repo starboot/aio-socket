@@ -100,10 +100,14 @@ public class ServerBootstrap {
                 this.bufferPool = getConfig().getBufferFactory().create();
             }
             this.aioChannelContextFunction = aioContextFunction;
-            // 普通版
-            AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
-            // 增强版
-//            AsynchronousChannelProvider provider = EnhanceAsynchronousChannelProvider.provider();
+            AsynchronousChannelProvider provider;
+            if (getConfig().isEnhanceCore()) {
+                // 增强版
+                provider = EnhanceAsynchronousChannelProvider.provider();
+            } else {
+                // 普通版
+                provider = AsynchronousChannelProvider.provider();
+            }
             this.aioReadCompletionHandler = new ReadCompletionHandler();
             this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(), 0);
             this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
