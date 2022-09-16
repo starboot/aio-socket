@@ -53,12 +53,12 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 ~~~
 <dependency>
   <groupId>io.github.mxd888.socket</groupId>
-  <artifactId>aio-socket</artifactId>
+  <artifactId>aio-socket-kernel</artifactId>
   <version>3.8.5.v20221001-RELEASE</version>
 </dependency>
 ~~~
 #### 起步
-我写了example工程，放在了src/test/java/example文件夹下
+我写了demo工程，项目还在快速迭代中，大家尽情期待....
 ## 联系方式
 
    官方QQ群号：867691377 
