@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>io.github.mxd888.socket</groupId>
-            <artifactId>aio-socket-core</artifactId>
+            <artifactId>aio-socket-kernel</artifactId>
             <version>3.8.5.v20221001-RELEASE</version>
         </dependency>
 

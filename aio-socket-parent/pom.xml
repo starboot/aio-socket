@@ -9,12 +9,7 @@
     <artifactId>aio-socket-parent</artifactId>
     <packaging>pom</packaging>
     <version>3.8.5.v20221001-RELEASE</version>
-    <modules>
-        <module>../aio-socket-core</module>
-        <module>../aio-socket-http/aio-socket-http-parent</module>
-        <module>../aio-socket-codec</module>
-        <module>../aio-socket-core-enhance</module>
-    </modules>
+
     <name>aio-socket-parent</name>
     <url>https://gitee.com/mxd_2022/aio-socket.git</url>
     <description>a little but strong java aio component</description>
@@ -25,11 +20,13 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
     <scm>
         <connection>scm:git:https://gitee.com/mxd_2022/aio-socket.git</connection>
         <developerConnection>scm:git:https://gitee.com/mxd_2022/aio-socket.git</developerConnection>
         <url>git:https://gitee.com/mxd_2022/aio-socket.git</url>
     </scm>
+
     <developers>
         <developer>
             <name>MDong</name>
@@ -42,6 +39,128 @@
             <timezone>2021.10.02</timezone>
         </developer>
     </developers>
+
+    <properties>
+        <aio-socket.version>3.8.5.v20221001-RELEASE</aio-socket.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <logback.version>1.2.9</logback.version>
+        <lombok.version>1.18.20</lombok.version>
+        <hutool.version>5.8.7</hutool.version>
+        <protobuff.version>3.21.4</protobuff.version>
+        <grpc.version>1.27.2</grpc.version>
+        <redisson.version>3.17.6</redisson.version>
+        <commons-codec.version>1.15</commons-codec.version>
+        <commons-configuration2.version>2.8.0</commons-configuration2.version>
+        <javacpp.platform.android-arm>android-arm</javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64>android-arm64</javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86>android-x86</javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64>android-x86_64</javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm>ios-arm</javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64>ios-arm64</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86>ios-x86</javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64>ios-x86_64</javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf>linux-armhf</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64>linux-arm64</javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le>linux-ppc64le</javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86>linux-x86</javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64>macosx-x86_64</javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86>windows-x86</javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64>windows-x86_64</javacpp.platform.windows-x86_64>
+        <javacpp.platform.dependencies>${javacpp.platform.windows-x86_64}</javacpp.platform.dependencies>
+        <javacpp.version>1.4.4</javacpp.version>
+        <ffmpeg.version>4.1-${javacpp.version}</ffmpeg.version>
+        <opencv.version>4.0.1-${javacpp.version}</opencv.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.mxd888.socket</groupId>
+                <artifactId>aio-socket-kernel</artifactId>
+                <version>${aio-socket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.mxd888.socket</groupId>
+                <artifactId>aio-socket-codec</artifactId>
+                <version>${aio-socket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.mxd888.socket</groupId>
+                <artifactId>aio-socket-http-common</artifactId>
+                <version>${aio-socket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.mxd888.socket</groupId>
+                <artifactId>aio-socket-utils</artifactId>
+                <version>${aio-socket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.mxd888.socket</groupId>
+                <artifactId>aio-socket-http-server</artifactId>
+                <version>${aio-socket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.mxd888.socket</groupId>
+                <artifactId>aio-socket-http-client</artifactId>
+                <version>${aio-socket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuff.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java-util</artifactId>
+                <version>${protobuff.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-all</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>${commons-configuration2.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>../aio-socket-kernel</module>
+        <module>../aio-socket-http/aio-socket-http-parent</module>
+        <module>../aio-socket-codec</module>
+        <module>../aio-socket-utils</module>
+    </modules>
 
     <build>
         <plugins>
@@ -70,6 +189,18 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>jdk-1.8</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+            </properties>
+        </profile>
         <profile>
             <id>release</id>
             <build>

@@ -1,6 +1,7 @@
 package io.github.mxd888.demo.client;
 
 import io.github.mxd888.demo.common.DemoPacket;
+import io.github.mxd888.socket.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
@@ -9,6 +10,22 @@ import io.github.mxd888.socket.plugins.ReconnectPlugin;
 import java.io.IOException;
 import java.io.PrintStream;
 
+
+/**
+ * -----5seconds ----
+ * inflow:		556.9914922714233(MB)
+ * outflow:	560.5402374267578(MB)
+ * process fail:	0
+ * process count:	29084023
+ * process total:	148858031
+ * read count:	552	write count:	4732
+ * connect count:	0
+ * disconnect count:	0
+ * online count:	10
+ * connected total:	10
+ * Requests/sec:	5816804.6
+ * Transfer/sec:	111.39829845428467(MB)
+ */
 public class Client {
 
     public static void main(String[] args) {
@@ -43,7 +60,11 @@ public class Client {
                 ClientBootstrap clientBootstrap = new ClientBootstrap((args != null && args.length != 0) ? args[0] : "127.0.0.1", (args != null && args.length != 0) ? Integer.parseInt(args[1]) : 8888, new ClientHandler());
                 clientBootstrap.getConfig().setEnablePlugins(true);
                 clientBootstrap.getConfig().setHeartPacket(new DemoPacket("heart message"));
+                clientBootstrap.getConfig().setReadBufferSize(1024 * 1024);
+                clientBootstrap.getConfig().setWriteBufferSize(1024 * 1024);
+                clientBootstrap.getConfig().setWriteBufferCapacity(16);
                 clientBootstrap.getConfig().getPlugins().addPlugin(new ReconnectPlugin(clientBootstrap));
+                clientBootstrap.getConfig().setBufferFactory(() -> new BufferPagePool(5 * 1024 * 1024, 9, false));
                 if (((args != null && args.length != 0) ? Integer.parseInt(args[2]) : 0) == 1) {
                     // 启用内核增强
                     clientBootstrap.getConfig().setEnhanceCore(true);
@@ -57,6 +78,7 @@ public class Client {
                         if (start == null) {
                             System.out.println("连接失败了.....");
                         }else {
+//                            demoPacket.setData("奥德赛阿斯达大叔控阿斯达阿斯达asasd水电费是个是个个数人所能四收到广东省开发还是个但是不分开就是的个覅安抚");
                             Aio.send(start, demoPacket);
                         }
                     }

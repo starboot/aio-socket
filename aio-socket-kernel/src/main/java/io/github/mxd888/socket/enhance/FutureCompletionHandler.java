@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 
-package io.github.mxd888.socket;
+package io.github.mxd888.socket.enhance;
 
 import java.nio.channels.CompletionHandler;
 import java.util.concurrent.ExecutionException;

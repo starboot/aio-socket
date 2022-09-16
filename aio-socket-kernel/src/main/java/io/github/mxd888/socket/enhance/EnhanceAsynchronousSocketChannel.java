@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 
-package io.github.mxd888.socket;
+package io.github.mxd888.socket.enhance;
 
 import java.io.IOException;
 import java.net.SocketAddress;
