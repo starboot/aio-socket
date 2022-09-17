@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -100,6 +102,8 @@ public final class ChannelContext {
      */
     private Object attachment;
 
+    private final Map<String, Object> attr = new HashMap<>();
+
     /**
      * 构造通道上下文对象
      *
@@ -163,7 +167,10 @@ public final class ChannelContext {
 
             //处理消息
             try {
-                handler.handle(this, dataEntry);
+                Packet packet = handler.handle(this, dataEntry);
+                if (packet != null) {
+                    Aio.send(this, packet);
+                }
             } catch (Exception e) {
                 handler.stateEvent(this, StateMachineEnum.PROCESS_EXCEPTION, e);
             }
@@ -405,4 +412,7 @@ public final class ChannelContext {
         return readBuffer;
     }
 
+    public Map<String, Object> getAttr() {
+        return attr;
+    }
 }

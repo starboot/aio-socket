@@ -27,7 +27,7 @@ public abstract class AbstractPlugin implements Plugin {
     }
 
     @Override
-    public void beforeDecode(VirtualBuffer readBuffer, ChannelContext channelContext) {
+    public void afterDecode(Packet packet, ChannelContext channelContext) {
     }
 
     @Override

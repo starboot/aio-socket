@@ -9,9 +9,10 @@ import io.github.mxd888.socket.core.ChannelContext;
 public class ServerHandler extends Handler {
 
     @Override
-    public void handle(ChannelContext channelContext, Packet packet) {
+    public Packet handle(ChannelContext channelContext, Packet packet) {
         if (packet instanceof DemoPacket) {
-            Aio.send(channelContext, packet);
+            return packet;
         }
+        return null;
     }
 }

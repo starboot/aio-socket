@@ -5,6 +5,13 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
+import io.github.mxd888.socket.utils.cache.redis.RedisCache;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.RedisConnectionException;
+import org.redisson.config.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -16,6 +23,8 @@ import java.util.Arrays;
  * @version 2.10.1.v20211002-RELEASE
  */
 public class ClusterBootstrap {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClusterBootstrap.class);
 
     /**
      * 集群服务器IP+port
@@ -55,5 +64,35 @@ public class ClusterBootstrap {
             this.config.getIds().join(start.getId(), start);
         }
 
+    }
+
+    private void init() {
+        LOGGER.info("用户选择开启持久化，redis默认连接http://127.0.0.1:6379");
+        try {
+            Config redisConfig = new Config();
+            redisConfig.useSingleServer().setTimeout(1000000).setAddress("redis://127.0.0.1:6379").setDatabase(0);
+                /*
+                哨兵
+                Config config = new Config();
+                config.useSentinelServers().addSentinelAddress(
+                        "redis://172.29.3.245:1234","redis://172.29.3.245:1234", "redis://172.29.3.245:1234")
+                        .setMasterName("mymaster")
+                        .setPassword("a123456").setDatabase(0);
+                集群
+                Config config = new Config();
+                config.useClusterServers().addNodeAddress(
+                        "redis://172.29.3.245:6375","redis://172.29.3.245:6376", "redis://172.29.3.245:6377",
+                        "redis://172.29.3.245:6378","redis://172.29.3.245:6379", "redis://172.29.3.245:6380")
+                        .setPassword("a123456").setScanInterval(5000);
+                 */
+            RedissonClient redissonClient = Redisson.create(redisConfig);
+            // timeToLiveSeconds : 生存时间   timeToIdleSeconds 计时器，  设置一个即可
+            Long aLong = 604800L;
+            // 注册TIMServer
+            RedisCache.register(redissonClient, "TIMServer", aLong, null);
+            RedisCache.register(redissonClient, "AioSocketCluster", aLong, null);
+        } catch (RedisConnectionException redisConnectionException) {
+            LOGGER.error("Redis连接失败，持久化失效，请先启动本地Redis服务");
+        }
     }
 }

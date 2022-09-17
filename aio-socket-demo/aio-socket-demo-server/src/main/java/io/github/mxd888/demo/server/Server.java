@@ -5,7 +5,9 @@ import io.github.mxd888.demo.common.DemoPacket;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.buffer.BufferFactory;
 import io.github.mxd888.socket.buffer.BufferPagePool;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.ServerBootstrap;
+import io.github.mxd888.socket.plugins.ACKPlugin;
 import io.github.mxd888.socket.plugins.HeartPlugin;
 import io.github.mxd888.socket.plugins.MonitorPlugin;
 import io.github.mxd888.socket.plugins.StreamMonitorPlugin;
@@ -182,6 +184,9 @@ public class Server {
                 return false;
             }
         });
+        bootstrap.getConfig().getPlugins().addPlugin(new ACKPlugin(30, TimeUnit.SECONDS, (context, lastTime) -> {
+            System.out.println("超时了：..." + lastTime);
+        }));
         bootstrap.start();
 
     }

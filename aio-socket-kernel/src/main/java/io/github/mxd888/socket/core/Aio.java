@@ -40,7 +40,7 @@ public class Aio {
     }
 
     /**
-     * 异步发送
+     * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
      *
      * @param channelContext 接收方通道
      * @param packet         数据包

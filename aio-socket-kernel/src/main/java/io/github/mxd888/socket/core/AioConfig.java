@@ -111,6 +111,8 @@ public class AioConfig {
      */
     private Packet heartPacket;
 
+    private int maxOnlineNum;
+
     /**
      * 插件
      */
@@ -255,4 +257,11 @@ public class AioConfig {
         return plugins;
     }
 
+    public int getMaxOnlineNum() {
+        return maxOnlineNum;
+    }
+
+    public void setMaxOnlineNum(int maxOnlineNum) {
+        this.maxOnlineNum = maxOnlineNum;
+    }
 }

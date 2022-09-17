@@ -6,13 +6,12 @@
     <name>aio-socket-demo</name>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>aio-socket-demo</artifactId>
-    <version>3.8.5.v20221001-RELEASE</version>
 
     <packaging>pom</packaging>
     <parent>
         <artifactId>aio-socket</artifactId>
         <groupId>io.github.mxd888.socket</groupId>
-        <version>3.8.5.v20221001-RELEASE</version>
+        <version>3.8.6.v20221002-RELEASE</version>
     </parent>
 
 

@@ -19,7 +19,7 @@ public interface AioHandler {
      * @param channelContext 用户上下文
      * @param packet         消息包
      */
-    void handle(ChannelContext channelContext, Packet packet);
+    Packet handle(ChannelContext channelContext, Packet packet);
 
     /**
      * 解码回调方法

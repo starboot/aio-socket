@@ -24,7 +24,12 @@ public class Packet implements Serializable {
     /**
      * 同步消息唯一ID
      */
-    private String synNum;
+    private String req;
+
+    /**
+     * 同步消息响应ID
+     */
+    private String resp;
 
     /**
      * 发送者ID
@@ -49,12 +54,20 @@ public class Packet implements Serializable {
         this.versionID = versionID;
     }
 
-    public String getSynNum() {
-        return synNum;
+    public String getReq() {
+        return req;
     }
 
-    public void setSynNum(String synNum) {
-        this.synNum = synNum;
+    public void setReq(String req) {
+        this.req = req;
+    }
+
+    public String getResp() {
+        return resp;
+    }
+
+    public void setResp(String resp) {
+        this.resp = resp;
     }
 
     public String getFromId() {

@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
 public class Handler implements AioHandler {
 
     @Override
-    public void handle(ChannelContext channelContext, Packet packet) {
-
+    public Packet handle(ChannelContext channelContext, Packet packet) {
+        return null;
     }
 
     @Override
@@ -58,6 +58,9 @@ public class Handler implements AioHandler {
                 break;
             case INPUT_SHUTDOWN:
                 System.out.println("输入流已关闭");
+                break;
+            case REJECT_ACCEPT:
+                System.out.println("超过负载，拒绝连接");
                 break;
         }
     }

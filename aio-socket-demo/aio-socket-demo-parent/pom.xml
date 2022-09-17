@@ -5,7 +5,7 @@
     <parent>
         <artifactId>aio-socket</artifactId>
         <groupId>io.github.mxd888.socket</groupId>
-        <version>3.8.5.v20221001-RELEASE</version>
+        <version>3.8.6.v20221002-RELEASE</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -18,5 +18,14 @@
         <module>../aio-socket-demo-client</module>
     </modules>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.mxd888.socket</groupId>
+                <artifactId>aio-socket-demo-common</artifactId>
+                <version>${aio-socket.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

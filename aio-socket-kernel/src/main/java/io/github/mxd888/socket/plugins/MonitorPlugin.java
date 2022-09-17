@@ -90,6 +90,10 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
                 processFailNum.increment();
                 break;
             case NEW_CHANNEL:
+                AioConfig config = channelContext.getAioConfig();
+                if (newConnect.longValue() > config.getMaxOnlineNum()) {
+                    config.getHandler().stateEvent(channelContext, StateMachineEnum.REJECT_ACCEPT, throwable);
+                }
                 newConnect.increment();
                 break;
             case CHANNEL_CLOSED:

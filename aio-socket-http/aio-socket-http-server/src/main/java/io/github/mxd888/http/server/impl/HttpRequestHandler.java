@@ -30,13 +30,13 @@ public class HttpRequestHandler implements AioHandler {
     }
 
     @Override
-    public void handle(ChannelContext channelContext, Packet packet) {
+    public Packet handle(ChannelContext channelContext, Packet packet) {
         if (packet instanceof Request) {
             processor.process0(channelContext, (Request) packet);
         }else {
             System.out.println("在io.github.mxd888.http.server.impl.HttpRequestHandler的handle方法里出现http处理错误");
         }
-
+        return null;
     }
 
     @Override

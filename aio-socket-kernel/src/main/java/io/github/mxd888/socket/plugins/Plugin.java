@@ -26,12 +26,12 @@ public interface Plugin extends NetMonitor {
     boolean beforeProcess(ChannelContext channelContext, Packet packet);
 
     /**
-     * 解码前处理
+     * 解码后处理
      *
-     * @param readBuffer     待解码的比特流数据
+     * @param packet         解码后得到的数据包
      * @param channelContext 用户通道
      */
-    void beforeDecode(VirtualBuffer readBuffer, ChannelContext channelContext);
+    void afterDecode(Packet packet, ChannelContext channelContext);
 
     /**
      * 编码前处理
