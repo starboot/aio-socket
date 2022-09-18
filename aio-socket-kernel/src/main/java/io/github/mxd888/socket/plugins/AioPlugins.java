@@ -81,8 +81,10 @@ public class AioPlugins implements AioHandler, NetMonitor {
     public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) {
 
         Packet packet = aioHandler.decode(readBuffer, channelContext);
-        for (Plugin plugin : plugins) {
-            plugin.afterDecode(packet, channelContext);
+        if (packet != null) {
+            for (Plugin plugin : plugins) {
+                plugin.afterDecode(packet, channelContext);
+            }
         }
         return packet;
     }
