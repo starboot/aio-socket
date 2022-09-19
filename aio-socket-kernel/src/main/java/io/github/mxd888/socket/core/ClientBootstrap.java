@@ -221,7 +221,7 @@ public class ClientBootstrap {
             System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel are sending heart");
             Aio.send(channelContext, getConfig().getHeartPacket());
             heartMessage();
-        }, 20, TimeUnit.SECONDS);
+        }, 5, TimeUnit.SECONDS);
     }
 
     /**
