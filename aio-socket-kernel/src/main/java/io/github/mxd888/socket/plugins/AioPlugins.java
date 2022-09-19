@@ -5,6 +5,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
 
 import java.nio.channels.AsynchronousSocketChannel;
@@ -90,7 +91,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, WriteBuffer writeBuffer) {
         for (Plugin plugin : plugins) {
             plugin.beforeEncode(packet, channelContext, writeBuffer);
         }

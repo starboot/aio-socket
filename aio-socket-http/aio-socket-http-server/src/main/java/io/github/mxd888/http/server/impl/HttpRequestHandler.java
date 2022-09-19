@@ -7,6 +7,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
 
 /**
@@ -71,7 +72,7 @@ public class HttpRequestHandler implements AioHandler {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, WriteBuffer writeBuffer) {
         return null;
     }
 

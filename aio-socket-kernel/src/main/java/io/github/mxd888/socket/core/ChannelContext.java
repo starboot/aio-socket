@@ -262,7 +262,7 @@ public final class ChannelContext {
      *
      * @return 输入流
      */
-    WriteBuffer writeBuffer() {
+    WriteBuffer getWriteBuffer() {
         return byteBuf;
     }
 
@@ -386,10 +386,6 @@ public final class ChannelContext {
      *
      * @return 在内存页中快速匹配一个虚拟内存
      */
-    public WriteBuffer getWriteBuffer() {
-        return byteBuf;
-    }
-
     public VirtualBuffer getByteBuf() {
         return byteBuf.newVirtualBuffer(getAioConfig().getWriteBufferSize());
     }

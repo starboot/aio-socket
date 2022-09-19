@@ -4,6 +4,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class ACKPlugin extends AbstractPlugin{
     }
 
     @Override
-    public void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public void beforeEncode(Packet packet, ChannelContext channelContext, WriteBuffer writeBuffer) {
         // 编码前对数据进行ACK码计时
         String req = packet.getReq();
         if (req != null && req.length() != 0) {

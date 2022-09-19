@@ -37,15 +37,13 @@ public class Handler implements AioHandler {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, WriteBuffer writeBuffer) {
         if (packet instanceof DemoPacket) {
             DemoPacket demoPacket = (DemoPacket) packet;
             // 自定义协议
-            WriteBuffer writeBuffer1 = channelContext.getWriteBuffer();
-//            ByteBuffer byteBuf = writeBuffer.buffer();
             try {
-                writeBuffer1.writeInt(demoPacket.getData().getBytes().length);
-                writeBuffer1.write(demoPacket.getData().getBytes());
+                writeBuffer.writeInt(demoPacket.getData().getBytes().length);
+                writeBuffer.write(demoPacket.getData().getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
