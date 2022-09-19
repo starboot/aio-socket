@@ -205,8 +205,8 @@ public class ServerBootstrap {
         if (getConfig().isEnablePlugins()) {
             AioPlugins plugins = getConfig().getPlugins();
             plugins.setAioHandler(getConfig().getHandler());
-            getConfig().setMonitor(plugins);
-            getConfig().setHandler(plugins);
+            getConfig().setMonitor(plugins)
+                    .setHandler(plugins);
         }
         if (getConfig().getMaxOnlineNum() == 0) {
             // 默认单台aio-socket内核承载1000人，根据具体情况可以自由设置

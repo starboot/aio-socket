@@ -109,7 +109,8 @@ public class AioPlugins implements AioHandler, NetMonitor {
         this.aioHandler = aioHandler;
     }
 
-    public final void addPlugin(Plugin plugin) {
+    public final AioPlugins addPlugin(Plugin plugin) {
         this.plugins.add(plugin);
+        return this;
     }
 }

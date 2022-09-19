@@ -208,8 +208,8 @@ public class ClientBootstrap {
         if (getConfig().isEnablePlugins()) {
             AioPlugins plugins = getConfig().getPlugins();
             plugins.setAioHandler(getConfig().getHandler());
-            getConfig().setMonitor(plugins);
-            getConfig().setHandler(plugins);
+            getConfig().setMonitor(plugins)
+                    .setHandler(plugins);
         }
     }
 

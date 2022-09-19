@@ -126,8 +126,9 @@ public class AioConfig {
         return writeBufferSize;
     }
 
-    public void setWriteBufferSize(int writeBufferSize) {
+    public AioConfig setWriteBufferSize(int writeBufferSize) {
         this.writeBufferSize = writeBufferSize;
+        return this;
     }
 
     public String getHost() {
@@ -150,79 +151,84 @@ public class AioConfig {
         return monitor;
     }
 
-    public void setMonitor(NetMonitor monitor) {
+    public AioConfig setMonitor(NetMonitor monitor) {
         this.monitor = monitor;
+        return this;
     }
 
     public int getReadBufferSize() {
         return readBufferSize;
     }
 
-    public void setReadBufferSize(int readBufferSize) {
+    public AioConfig setReadBufferSize(int readBufferSize) {
         this.readBufferSize = readBufferSize;
+        return this;
     }
 
     public Map<SocketOption<Object>, Object> getSocketOptions() {
         return socketOptions;
     }
 
-    public void setOption(SocketOption<Object> socketOption, Object f) {
+    public AioConfig setOption(SocketOption<Object> socketOption, Object f) {
         if (socketOptions == null) {
             socketOptions = new HashMap<>(4);
         }
         socketOptions.put(socketOption, f);
+        return this;
     }
 
-    public void setSocketOptions(Map<SocketOption<Object>, Object> socketOptions) {
+    public AioConfig setSocketOptions(Map<SocketOption<Object>, Object> socketOptions) {
         this.socketOptions = socketOptions;
+        return this;
     }
 
     public int getWriteBufferCapacity() {
         return writeBufferCapacity;
     }
 
-    public void setWriteBufferCapacity(int writeBufferCapacity) {
+    public AioConfig setWriteBufferCapacity(int writeBufferCapacity) {
         this.writeBufferCapacity = writeBufferCapacity;
+        return this;
     }
 
     public int getBacklog() {
         return backlog;
     }
 
-    public void setBacklog(int backlog) {
+    public AioConfig setBacklog(int backlog) {
         this.backlog = backlog;
+        return this;
     }
 
     public boolean isEnhanceCore() {
         return enhanceCore;
     }
 
-    public void setEnhanceCore(boolean enhanceCore) {
+    public AioConfig setEnhanceCore(boolean enhanceCore) {
         this.enhanceCore = enhanceCore;
+        return this;
     }
 
     public boolean isServer() {
         return isServer;
     }
 
-    public void setServer(boolean server) {
-        isServer = server;
-    }
-
     public AioHandler getHandler() {
         return handler;
     }
 
-    public void setHandler(AioHandler handler) {
+    public AioConfig setHandler(AioHandler handler) {
         this.handler = handler;
+        return this;
     }
 
     public BufferFactory getBufferFactory() {
         return bufferFactory;
     }
 
-    public void setBufferFactory(BufferFactory bufferFactory) {
+    public AioConfig setBufferFactory(BufferFactory bufferFactory) {
         this.bufferFactory = bufferFactory;
+        return this;
     }
 
     public Groups getGroups() {
@@ -241,16 +247,18 @@ public class AioConfig {
         return enablePlugins;
     }
 
-    public void setEnablePlugins(boolean enablePlugins) {
+    public AioConfig setEnablePlugins(boolean enablePlugins) {
         this.enablePlugins = enablePlugins;
+        return this;
     }
 
     public Packet getHeartPacket() {
         return heartPacket;
     }
 
-    public void setHeartPacket(Packet heartPacket) {
+    public AioConfig setHeartPacket(Packet heartPacket) {
         this.heartPacket = heartPacket;
+        return this;
     }
 
     public AioPlugins getPlugins() {
