@@ -46,7 +46,7 @@ public class Aio {
      * @param packet         数据包
      */
     public static void send(ChannelContext channelContext, Packet packet) {
-        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getByteBuf());
+        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, null); // channelContext.getByteBuf()
         send(channelContext, buffer);
     }
 
@@ -57,7 +57,7 @@ public class Aio {
      * @param buffer         待发送比特流
      */
     public static void send(ChannelContext channelContext, VirtualBuffer buffer) {
-        channelContext.writeBuffer().write(buffer);
+//        channelContext.writeBuffer().write(buffer);
         channelContext.writeBuffer().flush();
     }
 

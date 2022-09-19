@@ -1,11 +1,14 @@
 package io.github.mxd888.demo.common;
 
+import cn.hutool.core.util.ByteUtil;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class Handler implements AioHandler {
@@ -38,11 +41,16 @@ public class Handler implements AioHandler {
         if (packet instanceof DemoPacket) {
             DemoPacket demoPacket = (DemoPacket) packet;
             // 自定义协议
-            ByteBuffer byteBuf = writeBuffer.buffer();
-            byteBuf.putInt(demoPacket.getData().getBytes().length);
-            byteBuf.put(demoPacket.getData().getBytes());
-            byteBuf.flip();
-            return writeBuffer;
+            WriteBuffer writeBuffer1 = channelContext.getWriteBuffer();
+//            ByteBuffer byteBuf = writeBuffer.buffer();
+            try {
+                writeBuffer1.writeInt(demoPacket.getData().getBytes().length);
+                writeBuffer1.write(demoPacket.getData().getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+//            return writeBuffer;
         }
         return null;
     }
@@ -52,6 +60,7 @@ public class Handler implements AioHandler {
         switch (stateMachineEnum){
             case DECODE_EXCEPTION:
                 System.out.println("解码异常");
+                throwable.printStackTrace();
                 break;
             case PROCESS_EXCEPTION:
                 System.out.println("处理异常");

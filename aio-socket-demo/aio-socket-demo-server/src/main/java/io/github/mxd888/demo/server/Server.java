@@ -32,19 +32,6 @@ import java.util.concurrent.TimeUnit;
  * -----60seconds END ----
  * enhance启动后
  * -----60seconds ----
- * inflow:		1710.0232257843018(MB)
- * outflow:	1710.059471130371(MB)
- * process fail:	0
- * process count:	89654663
- * process total:	140941121
- * read count:	878968	write count:	1007756
- * connect count:	0
- * disconnect count:	0
- * online count:	10
- * connected total:	10
- * Requests/sec:	1494244.3833333333
- * Transfer/sec:	28.500387096405028(MB)
- * -----60seconds ----
  * inflow:		1755.8204431533813(MB)
  * outflow:	1755.7857513427734(MB)
  * process fail:	0
@@ -59,19 +46,6 @@ import java.util.concurrent.TimeUnit;
  * Transfer/sec:	29.263674052556357(MB)
  *
  * i7 9200
- * -----60seconds ----
- * inflow:		4072.0993843078613(MB)
- * outflow:	4072.073097229004(MB)
- * process fail:	0
- * process count:	213495282
- * process total:	213495282
- * read count:	2093101	write count:	2765627
- * connect count:	10
- * disconnect count:	0
- * online count:	10
- * connected total:	10
- * Requests/sec:	3558254.7
- * Transfer/sec:	67.86832307179769(MB)
  *
  * -----60seconds ----
  * inflow:		4569.511960029602(MB)
@@ -87,33 +61,6 @@ import java.util.concurrent.TimeUnit;
  * Requests/sec:	3992899.6333333333
  * Transfer/sec:	76.15853266716003(MB)
  *
- * -----60seconds ----
- * inflow:		4421.979174613953(MB)
- * outflow:	4421.972923278809(MB)
- * process fail:	0
- * process count:	231838817
- * process total:	684908077
- * read count:	2272930	write count:	3166874
- * connect count:	0
- * disconnect count:	0
- * online count:	10
- * connected total:	10
- * Requests/sec:	3863980.283333333
- * Transfer/sec:	73.69965291023254(MB)
- *
- * -----60seconds ----
- * inflow:		4408.335428237915(MB)
- * outflow:	4408.3258056640625(MB)
- * process fail:	0
- * process count:	231123967
- * process total:	916032044
- * read count:	2265922	write count:	3135271
- * connect count:	0
- * disconnect count:	0
- * online count:	10
- * connected total:	10
- * Requests/sec:	3852066.1166666667
- * Transfer/sec:	73.47225713729858(MB)
  *
  * 开启零拷贝后只有900多万/min 开启之前24000万/min
  * -----60seconds ----
@@ -145,6 +92,67 @@ import java.util.concurrent.TimeUnit;
  * connected total:	10
  * Requests/sec:	4877577.75
  * Transfer/sec:	93.03243188858032(MB)
+ *
+ *
+ * 开启零拷贝后性能
+ * -----5seconds ----
+ * inflow:		730.9888458251953(MB)
+ * outflow:	723.3613929748535(MB)
+ * process fail:	0
+ * process count:	38165869
+ * process total:	116162983
+ * read count:	724	write count:	87277
+ * connect count:	0
+ * disconnect count:	0
+ * online count:	10
+ * connected total:	10
+ * Requests/sec:	7633173.8
+ * Transfer/sec:	146.19776916503906(MB)
+ *
+ *  -----5seconds ----
+ *  inflow:		414.99841690063477(MB)
+ *  outflow:	413.89660453796387(MB)
+ *  process fail:	0
+ *  process count:	72276676
+ *  process total:	213580975
+ *  read count:	416	write count:	109193
+ *  connect count:	0
+ *  disconnect count:	0
+ *  online count:	10
+ *  connected total:	10
+ *  Requests/sec:	1.44553352E7
+ *  Transfer/sec:	82.99968338012695(MB)
+ *
+ *
+ * 没有开启零拷贝
+ * -----5seconds ----
+ * inflow:		665.9898376464844(MB)
+ * outflow:	663.3517456054688(MB)
+ * process fail:	0
+ * process count:	34905530
+ * process total:	97386647
+ * read count:	667	write count:	7090
+ * connect count:	0
+ * disconnect count:	0
+ * online count:	10
+ * connected total:	10
+ * Requests/sec:	6981106.0
+ * Transfer/sec:	133.19796752929688(MB)
+ *
+
+ *  -----5seconds ----
+ *  inflow:		347.99867248535156(MB)
+ *  outflow:	346.63309478759766(MB)
+ *  process fail:	0
+ *  process count:	60999573
+ *  process total:	221453433
+ *  read count:	352	write count:	95129
+ *  connect count:	0
+ *  disconnect count:	0
+ *  online count:	9
+ *  connected total:	10
+ *  Requests/sec:	1.21999146E7
+ *  Transfer/sec:	69.59973449707032(MB)
  *
  * Process finished with exit code -1
  */

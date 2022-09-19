@@ -10,21 +10,8 @@ import io.github.mxd888.socket.plugins.ReconnectPlugin;
 import java.io.IOException;
 import java.io.PrintStream;
 
-
 /**
- * -----5seconds ----
- * inflow:		556.9914922714233(MB)
- * outflow:	560.5402374267578(MB)
- * process fail:	0
- * process count:	29084023
- * process total:	148858031
- * read count:	552	write count:	4732
- * connect count:	0
- * disconnect count:	0
- * online count:	10
- * connected total:	10
- * Requests/sec:	5816804.6
- * Transfer/sec:	111.39829845428467(MB)
+ * 内存池bug，多个线程同时往输出流里面写入数据，导致消息混乱
  */
 public class Client {
 
@@ -78,7 +65,7 @@ public class Client {
                         if (start == null) {
                             System.out.println("连接失败了.....");
                         }else {
-//                            demoPacket.setData("奥德赛阿斯达大叔控阿斯达阿斯达asasd水电费是个是个个数人所能四收到广东省开发还是个但是不分开就是的个覅安抚");
+//                            零拷贝优化前2000， 非零拷贝50
                             Aio.send(start, demoPacket);
                         }
                     }
