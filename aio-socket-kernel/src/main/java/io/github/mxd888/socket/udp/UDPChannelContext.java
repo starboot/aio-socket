@@ -15,42 +15,37 @@
  */
 package io.github.mxd888.socket.udp;
 
+import io.github.mxd888.socket.StateMachineEnum;
+import io.github.mxd888.socket.core.AioConfig;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
-final class UDPChannelContext {
+final class UDPChannelContext extends ChannelContext {
 
     private final UDPChannel udpChannel;
 
     private final SocketAddress remote;
 
-//    private final WriteBuffer byteBuf;
+    private final WriteBuffer byteBuf;
 
     UDPChannelContext(final UDPChannel udpChannel, final SocketAddress remote, BufferPage bufferPage) {
         this.udpChannel = udpChannel;
         this.remote = remote;
         Consumer<WriteBuffer> consumer = var -> {
-//            VirtualBuffer writeBuffer = var.poll();
-//            if (writeBuffer != null) {
-//                udpChannel.write(writeBuffer, UDPChannelContext.this);
-//            }
+            VirtualBuffer writeBuffer = var.poll();
+            if (writeBuffer != null) {
+                udpChannel.write(writeBuffer, UDPChannelContext.this);
+            }
         };
-//        this.byteBuf = new WriteBuffer(bufferPage, consumer, udpChannel.config.getWriteBufferSize(), 1);
-//        udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
-    }
-
-//    public WriteBuffer writeBuffer() {
-//        return byteBuf;
-//    }
-
-    public ByteBuffer readBuffer() {
-        throw new UnsupportedOperationException();
+        this.byteBuf = new WriteBuffer(bufferPage, consumer, udpChannel.config.getWriteBufferSize(), 1);
+        udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }
 
     public void awaitRead() {
@@ -61,20 +56,53 @@ final class UDPChannelContext {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public VirtualBuffer getVirtualBuffer() {
+        return byteBuf.newVirtualBuffer();
+    }
+
+    @Override
+    public WriteBuffer getWriteBuffer() {
+        return byteBuf;
+    }
+
+    @Override
+    public VirtualBuffer getReadBuffer() {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * 为确保消息尽可能发送，UDP不支持立即close
      *
-     * @param 、 true:立即关闭,false:响应消息发送完后关闭
+     * @param immediate true:立即关闭,false:响应消息发送完后关闭
      */
-//    public void close(boolean immediate) {
+    @Override
+    public void close(boolean immediate) {
 //        byteBuf.flush();
-//    }
+    }
 
+    @Override
+    public String getId() {
+        return "";
+    }
+
+    @Override
+    public void setId(String id) {
+        throw new  UnsupportedOperationException("UDP content unsuppert set id");
+    }
+
+
+    @Override
     public InetSocketAddress getLocalAddress() throws IOException {
         return (InetSocketAddress) udpChannel.getChannel().getLocalAddress();
     }
-
+    @Override
     public InetSocketAddress getRemoteAddress() {
         return (InetSocketAddress) remote;
+    }
+
+    @Override
+    public AioConfig getAioConfig() {
+        throw new UnsupportedOperationException();
     }
 }

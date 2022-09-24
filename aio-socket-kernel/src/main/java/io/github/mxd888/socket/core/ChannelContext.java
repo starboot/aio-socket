@@ -63,6 +63,8 @@ public abstract class ChannelContext {
      */
     public abstract void setId(String id);
 
+    public abstract void signalRead();
+
     /**
      * 获取当前会话的本地连接地址
      *
@@ -111,4 +113,6 @@ public abstract class ChannelContext {
     public Map<String, Object> getAttr() {
         return attr;
     }
+
+    public abstract AioConfig getAioConfig();
 }

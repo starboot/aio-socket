@@ -5,6 +5,7 @@ import io.github.mxd888.http.common.exception.HttpException;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.nio.ByteBuffer;
@@ -23,7 +24,7 @@ class LfDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, TCPChannelContext channelContext, Request request) {
+    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
         if (byteBuffer.hasRemaining()) {
             if (byteBuffer.get() != Constant.LF) {
                 throw new HttpException(HttpStatus.BAD_REQUEST);

@@ -18,21 +18,21 @@ import java.nio.channels.AsynchronousSocketChannel;
 public abstract class AbstractPlugin implements Plugin {
 
     @Override
-    public boolean beforeProcess(TCPChannelContext channelContext, Packet packet) {
+    public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
         return true;
     }
 
     @Override
-    public void stateEvent(StateMachineEnum stateMachineEnum, TCPChannelContext channelContext, Throwable throwable) {
+    public void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable) {
 
     }
 
     @Override
-    public void afterDecode(Packet packet, TCPChannelContext channelContext) {
+    public void afterDecode(Packet packet, ChannelContext channelContext) {
     }
 
     @Override
-    public void beforeEncode(Packet packet, TCPChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
     }
 
     @Override

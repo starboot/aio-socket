@@ -124,7 +124,8 @@ public final class TCPChannelContext extends ChannelContext{
     /**
      * 触发通道的读回调操作
      */
-    void signalRead() {
+    @Override
+    public void signalRead() {
         if (status == CHANNEL_STATUS_CLOSED) {
             return;
         }
@@ -320,6 +321,7 @@ public final class TCPChannelContext extends ChannelContext{
      *
      * @return ServerConfig
      */
+    @Override
     public AioConfig getAioConfig() {
         return this.aioConfig;
     }

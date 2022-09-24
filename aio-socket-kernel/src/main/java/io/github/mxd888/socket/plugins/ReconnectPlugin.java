@@ -2,6 +2,7 @@ package io.github.mxd888.socket.plugins;
 
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
 import io.github.mxd888.socket.utils.QuickTimerTask;
@@ -33,7 +34,7 @@ public class ReconnectPlugin extends AbstractPlugin {
     }
 
     @Override
-    public void stateEvent(StateMachineEnum stateMachineEnum, TCPChannelContext context, Throwable throwable) {
+    public void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext context, Throwable throwable) {
         if (stateMachineEnum != StateMachineEnum.CHANNEL_CLOSED) {
             return;
         }

@@ -120,7 +120,7 @@ public final class UDPChannel {
 
     private int send(ByteBuffer byteBuffer, UDPChannelContext session) {
         if (config.getMonitor() != null) {
-//            config.getMonitor().beforeWrite(session);
+            config.getMonitor().beforeWrite(session);
         }
         int size = 0;
         try {
@@ -129,7 +129,7 @@ public final class UDPChannel {
             throw new RuntimeException(e);
         }
         if (config.getMonitor() != null) {
-//            config.getMonitor().afterWrite(session, size);
+            config.getMonitor().afterWrite(session, size);
         }
         return size;
     }

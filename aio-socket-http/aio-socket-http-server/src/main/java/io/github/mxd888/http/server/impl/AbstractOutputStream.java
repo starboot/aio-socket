@@ -10,6 +10,8 @@ import io.github.mxd888.http.common.enums.HttpStatus;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.server.HttpRequest;
 import io.github.mxd888.http.server.HttpServerConfiguration;
+import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -30,7 +32,7 @@ abstract class AbstractOutputStream extends BufferOutputStream {
     protected final HttpServerConfiguration configuration;
 
     public AbstractOutputStream(HttpRequest httpRequest, AbstractResponse response, Request request) {
-        super(request.getAioChannelContext());
+        super((TCPChannelContext) request.getAioChannelContext());
         this.response = response;
         this.request = httpRequest;
         this.configuration = request.getConfiguration();

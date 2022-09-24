@@ -3,6 +3,7 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.AioConfig;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class ClusterPlugin extends AbstractPlugin {
     }
 
     @Override
-    public boolean beforeProcess(TCPChannelContext channelContext, Packet packet) {
+    public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
         if (!channelContext.getAioConfig().isServer()) {
             return true;
         }
@@ -29,9 +30,9 @@ public class ClusterPlugin extends AbstractPlugin {
             // 是否新机器绑定到现有集群机器中、将其他机器的用户告知别的集群机器
             if (packet.getEntity().isAuth()) {
                 // 绑定到集群组
-                config.getGroups().join("ClusterServer", channelContext);
+//                config.getGroups().join("ClusterServer", channelContext);
                 // 绑定集群ID
-                config.getIds().join(packet.getFromId(), channelContext);
+//                config.getIds().join(packet.getFromId(), channelContext);
                 // 设置通道ID
                 channelContext.setId(packet.getFromId());
             }else {
@@ -43,7 +44,7 @@ public class ClusterPlugin extends AbstractPlugin {
         // 获取接收方所在ServerIP
         String s = config.getClusterIds().get(packet.getToId());
         if (Objects.isNull(s)) {
-            Aio.bindID(packet.getToId(), channelContext);
+//            Aio.bindID(packet.getToId(), channelContext);
             return true;
         }
         // 判断接收方是否在本服务器

@@ -4,6 +4,7 @@ import io.github.mxd888.http.common.utils.ByteTree;
 import io.github.mxd888.http.common.utils.StringUtils;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.nio.ByteBuffer;
@@ -22,7 +23,7 @@ public class HttpMethodDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, TCPChannelContext channelContext, Request request) {
+    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
         ByteTree<?> method = StringUtils.scanByteTree(byteBuffer, SP_END_MATCHER, getConfiguration().getByteCache());
         if (method != null) {
             request.setMethod(method.getStringValue());

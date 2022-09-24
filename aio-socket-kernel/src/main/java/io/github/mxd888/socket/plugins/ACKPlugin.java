@@ -2,6 +2,7 @@ package io.github.mxd888.socket.plugins;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.AioConfig;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
@@ -40,7 +41,7 @@ public class ACKPlugin extends AbstractPlugin{
     }
 
     @Override
-    public void afterDecode(Packet packet, TCPChannelContext channelContext) {
+    public void afterDecode(Packet packet, ChannelContext channelContext) {
         // 解码后得到的数据进行处理ACK确认
         String resp = packet.getResp();
         if (resp != null && resp.length() != 0) {
@@ -49,7 +50,7 @@ public class ACKPlugin extends AbstractPlugin{
     }
 
     @Override
-    public void beforeEncode(Packet packet, TCPChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
         // 编码前对数据进行ACK码计时
         String req = packet.getReq();
         if (req != null && req.length() != 0) {

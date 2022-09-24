@@ -8,6 +8,7 @@ import io.github.mxd888.http.common.utils.StringUtils;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.ServerHandler;
 import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.nio.ByteBuffer;
@@ -27,7 +28,7 @@ class HttpUriDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, TCPChannelContext channelContext, Request request) {
+    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
         ByteTree<ServerHandler<?, ?>> uriTreeNode = StringUtils.scanByteTree(byteBuffer, URI_END_MATCHER, getConfiguration().getUriByteTree());
         if (uriTreeNode != null) {
             request.setUri(uriTreeNode.getStringValue());

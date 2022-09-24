@@ -79,13 +79,13 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
 
 
     @Override
-    public boolean beforeProcess(TCPChannelContext channelContext, Packet packet) {
+    public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
         processMsgNum.increment();
         return true;
     }
 
     @Override
-    public void stateEvent(StateMachineEnum stateMachineEnum, TCPChannelContext channelContext, Throwable throwable) {
+    public void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable) {
         switch (stateMachineEnum) {
             case PROCESS_EXCEPTION:
                 processFailNum.increment();

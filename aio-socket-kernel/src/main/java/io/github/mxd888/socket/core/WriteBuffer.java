@@ -69,7 +69,7 @@ public final class WriteBuffer {
      */
     private final ReentrantLock lock = new ReentrantLock();
 
-    WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
+    public WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
         this.bufferPage = bufferPage;
         this.consumer = consumer;
         this.items = new VirtualBuffer[capacity];
@@ -81,7 +81,7 @@ public final class WriteBuffer {
      *
      * @return 虚拟空间
      */
-    VirtualBuffer newVirtualBuffer() {
+    public VirtualBuffer newVirtualBuffer() {
         return bufferPage.allocate(chunkSize);
     }
 
@@ -211,7 +211,7 @@ public final class WriteBuffer {
      *
      * @return 待输出的VirtualBuffer
      */
-    synchronized VirtualBuffer poll() {
+    public synchronized VirtualBuffer poll() {
         VirtualBuffer item = pollItem();
         if (item != null) {
             return item;

@@ -16,6 +16,10 @@
 package io.github.mxd888.socket.udp;
 
 import io.github.mxd888.socket.NetMonitor;
+import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.StateMachineEnum;
+import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.exception.AioException;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.AioConfig;
@@ -158,22 +162,22 @@ public final class Worker implements Runnable {
             buffer.flip();
             Runnable runnable = () -> {
                 //解码
-                UDPChannelContext session = new UDPChannelContext(channel, remote, bufferPool.allocateBufferPage());
+                ChannelContext session = new UDPChannelContext(channel, remote, bufferPool.allocateBufferPage());
                 try {
                     NetMonitor netMonitor = config.getMonitor();
                     if (netMonitor != null) {
-//                        netMonitor.beforeRead(session);
-//                        netMonitor.afterRead(session, buffer.remaining());
+                        netMonitor.beforeRead(session);
+                        netMonitor.afterRead(session, buffer.remaining());
                     }
                     do {
-//                        Object request = config.getHandler().decode(buffer, session);
+                        Packet request = config.getHandler().decode(readyBuffer, session);
                         //理论上每个UDP包都是一个完整的消息
-//                        if (request == null) {
-//                            config.getHandler().stateEvent(session, StateMachineEnum.DECODE_EXCEPTION, new DecoderException("decode result is null, buffer size: " + buffer.remaining()));
-//                            break;
-//                        } else {
-//                            config.getHandler().handle(session, request);
-//                        }
+                        if (request == null) {
+                            config.getHandler().stateEvent(session, StateMachineEnum.DECODE_EXCEPTION, new AioException("decode result is null, buffer size: " + buffer.remaining()));
+                            break;
+                        } else {
+                            config.getHandler().handle(session, request);
+                        }
                     } while (buffer.hasRemaining());
                 } catch (Throwable e) {
                     e.printStackTrace();

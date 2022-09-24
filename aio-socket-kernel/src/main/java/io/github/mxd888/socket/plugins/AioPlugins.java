@@ -65,7 +65,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public Packet handle(TCPChannelContext channelContext, Packet packet) {
+    public Packet handle(ChannelContext channelContext, Packet packet) {
         boolean flag = true;
         for (Plugin plugin : plugins) {
             if (!plugin.beforeProcess(channelContext, packet)) {
@@ -79,7 +79,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public Packet decode(VirtualBuffer readBuffer, TCPChannelContext channelContext) {
+    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) {
 
         Packet packet = aioHandler.decode(readBuffer, channelContext);
         if (packet != null) {
@@ -91,7 +91,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, TCPChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
         for (Plugin plugin : plugins) {
             plugin.beforeEncode(packet, channelContext, writeBuffer);
         }
@@ -99,7 +99,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public void stateEvent(TCPChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
+    public void stateEvent(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
         for (Plugin plugin : plugins) {
             plugin.stateEvent(stateMachineEnum, channelContext, throwable);
         }
