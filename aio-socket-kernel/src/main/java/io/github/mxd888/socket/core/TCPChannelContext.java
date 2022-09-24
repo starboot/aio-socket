@@ -231,19 +231,27 @@ public final class TCPChannelContext extends ChannelContext{
         channel.write(writeBuffer.buffer(), 0L, TimeUnit.MILLISECONDS, this, writeCompletionHandler);
     }
 
+    void flipRead(boolean eof) {
+        this.eof = eof;
+        this.readBuffer.buffer().flip();
+    }
+
     /**
-     * 强制关闭当前AIOSession。
-     * 若此时还存留待输出的数据，则会导致该部分数据丢失
+     * 断言当前会话是否可用
+     *
+     * @throws IOException IO异常
      */
+    private void assertChannel() throws IOException {
+        if (status == CHANNEL_STATUS_CLOSED || channel == null) {
+            throw new IOException("session is closed");
+        }
+    }
+
+    @Override
     public final void close() {
         close(false);
     }
 
-    /**
-     * 是否立即关闭会话
-     *
-     * @param immediate true:立即关闭,false:响应消息发送完后关闭
-     */
     @Override
     public synchronized void close(boolean immediate) {
         if (status == CHANNEL_STATUS_CLOSED) {
@@ -270,83 +278,35 @@ public final class TCPChannelContext extends ChannelContext{
         }
     }
 
-    void flipRead(boolean eof) {
-        this.eof = eof;
-        this.readBuffer.buffer().flip();
-    }
 
-    /**
-     * 获取地址
-     *
-     * @return 本地地址
-     * @throws IOException IO异常
-     * @see AsynchronousSocketChannel#getLocalAddress()
-     */
+
     @Override
     public final InetSocketAddress getLocalAddress() throws IOException {
         assertChannel();
         return (InetSocketAddress) channel.getLocalAddress();
     }
 
-    /**
-     * 获取远程地址
-     *
-     * @return 远程地址
-     * @throws IOException IO异常
-     * @see AsynchronousSocketChannel#getRemoteAddress()
-     */
     @Override
     public final InetSocketAddress getRemoteAddress() throws IOException {
         assertChannel();
         return (InetSocketAddress) channel.getRemoteAddress();
     }
 
-    /**
-     * 断言当前会话是否可用
-     *
-     * @throws IOException IO异常
-     */
-    private void assertChannel() throws IOException {
-        if (status == CHANNEL_STATUS_CLOSED || channel == null) {
-            throw new IOException("session is closed");
-        }
-    }
-
-    /**
-     * 获取配置
-     *
-     * @return ServerConfig
-     */
-    @Override
-    public AioConfig getAioConfig() {
-        return this.aioConfig;
-    }
-
-    /**
-     * 获取通道ID
-     *
-     * @return 通道上下文唯一ID
-     */
     @Override
     public String getId() {
         return id;
     }
 
-    /**
-     * 通道上下文绑定唯一ID
-     *
-     * @param id ID内容
-     */
     @Override
     public void setId(String id) {
         this.id = id;
     }
 
-    /**
-     * 获取一个虚拟内存用来存放待发送数据
-     *
-     * @return 在内存页中快速匹配一个虚拟内存
-     */
+    @Override
+    public AioConfig getAioConfig() {
+        return this.aioConfig;
+    }
+
     @Override
     public VirtualBuffer getVirtualBuffer() {
         return byteBuf.newVirtualBuffer();
@@ -362,21 +322,11 @@ public final class TCPChannelContext extends ChannelContext{
         return readBuffer;
     }
 
-    /**
-     * 获取附件对象
-     *
-     * @return 附件
-     */
     @Override
     public Object getAttachment() {
         return super.getAttachment();
     }
 
-    /**
-     * 存放附件，支持任意类型
-     *
-     * @param attachment 附件对象
-     */
     @Override
     public void setAttachment(Object attachment) {
         super.setAttachment(attachment);

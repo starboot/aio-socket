@@ -65,9 +65,16 @@ public abstract class ChannelContext {
     public abstract VirtualBuffer getReadBuffer();
 
     /**
-     * 断开连接
+     * 关闭连接
+     */
+    public void close() {
+        close(false);
+    }
+
+    /**
+     * 是否立即关闭会话
      *
-     * @param immediate 是否立即
+     * @param immediate true:立即关闭,false:响应消息发送完后关闭
      */
     public abstract void close(boolean immediate);
 
