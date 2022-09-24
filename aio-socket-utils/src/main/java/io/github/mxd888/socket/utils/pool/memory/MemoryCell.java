@@ -10,6 +10,7 @@ import java.util.concurrent.Semaphore;
  * @version 2.10.1.v20211002-RELEASE
  */
 public class MemoryCell {
+
     /**
      * 当前虚拟buffer的归属内存页 用来申请物理空间
      */

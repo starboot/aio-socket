@@ -74,9 +74,6 @@ public class MemoryChunk {
      */
     public MemoryCell allocate(final int size) {
         MemoryCell virtualBuffer = allocate0(size);
-        if (virtualBuffer == null) {
-            System.out.println("开始申请堆内内存");
-        }
         return virtualBuffer == null ? new MemoryCell(null, allocate0(size, false), 0, 0) : virtualBuffer;
     }
 
