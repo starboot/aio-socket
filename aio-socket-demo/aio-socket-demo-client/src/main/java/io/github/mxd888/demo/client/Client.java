@@ -40,7 +40,7 @@ public class Client {
 
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
         // 5000
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             int finalI = i;
             new Thread(() -> {
                 // 81.70.149.16 127.0.0.1
@@ -61,7 +61,7 @@ public class Client {
                     ChannelContext start = clientBootstrap.start();
                     long num = 0;
                     long startnum = System.currentTimeMillis();
-                    while (num++ < Integer.MAX_VALUE) {
+                    while (num++ < 10) {
                         if (start == null) {
                             System.out.println("连接失败了.....");
                         }else {
