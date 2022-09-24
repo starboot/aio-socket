@@ -30,22 +30,6 @@ public class TestMemory {
         TestMemory testMemory = new TestMemory();
         testMemory.testByteBuff();
 
-        AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
-        AsynchronousSocketChannel asynchronousSocketChannel = provider.openAsynchronousSocketChannel(provider.openAsynchronousChannelGroup(2, Executors.defaultThreadFactory()));
-        ByteBuffer allocate = ByteBuffer.allocate(1024);
-        asynchronousSocketChannel.read(allocate, allocate, new CompletionHandler<Integer, ByteBuffer>() {
-            @Override
-            public void completed(Integer result, ByteBuffer attachment) {
-
-            }
-
-            @Override
-            public void failed(Throwable exc, ByteBuffer attachment) {
-
-            }
-        });
-
-
     }
 
     void testByteBuff(){
