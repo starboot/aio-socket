@@ -3,8 +3,8 @@ package io.github.mxd888.socket.core;
 import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.buffer.BufferPage;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.IOUtil;
 
@@ -258,15 +258,6 @@ public final class ChannelContext {
     }
 
     /**
-     * 获取输入流用于发送消息
-     *
-     * @return 输入流
-     */
-    WriteBuffer getWriteBuffer() {
-        return byteBuf;
-    }
-
-    /**
      * 强制关闭当前AIOSession。
      * 若此时还存留待输出的数据，则会导致该部分数据丢失
      */
@@ -386,8 +377,12 @@ public final class ChannelContext {
      *
      * @return 在内存页中快速匹配一个虚拟内存
      */
-    public VirtualBuffer getByteBuf() {
-        return byteBuf.newVirtualBuffer(getAioConfig().getWriteBufferSize());
+    public VirtualBuffer getVirtualBuffer() {
+        return byteBuf.newVirtualBuffer();
+    }
+
+    WriteBuffer getWriteBuffer() {
+        return byteBuf;
     }
 
     /**

@@ -1,4 +1,5 @@
-package io.github.mxd888.socket.utils.pool.memory;
+
+package io.github.mxd888.socket.utils.pool.buffer;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -6,12 +7,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 内存池：设计合理无需修正
+ * ByteBuffer内存池
  *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class MemoryPool {
+public final class BufferPagePool {
+
     /**
      * 守护线程在空闲时期回收内存资源
      */
@@ -29,7 +31,7 @@ public class MemoryPool {
     /**
      * 内存页组
      */
-    private MemoryChunk[] bufferPages;
+    private BufferPage[] bufferPages;
 
     /**
      * 定义内存页池可用状态
@@ -43,10 +45,10 @@ public class MemoryPool {
      * @param pageNum  内存页个数
      * @param isDirect 是否使用直接缓冲区
      */
-    public MemoryPool(final int pageSize, final int pageNum, final boolean isDirect) {
-        bufferPages = new MemoryChunk[pageNum];
+    public BufferPagePool(final int pageSize, final int pageNum, final boolean isDirect) {
+        bufferPages = new BufferPage[pageNum];
         for (int i = 0; i < pageNum; i++) {
-            bufferPages[i] = new MemoryChunk(pageSize, isDirect);
+            bufferPages[i] = new BufferPage(pageSize, isDirect);
         }
         if (pageNum == 0 || pageSize == 0) {
             future.cancel(false);
@@ -58,7 +60,7 @@ public class MemoryPool {
      *
      * @return 缓存页对象
      */
-    public MemoryChunk allocateBufferPage() {
+    public BufferPage allocateBufferPage() {
         assertEnabled();
         //轮训游标，均衡分配内存页
         return bufferPages[(cursor.getAndIncrement() & Integer.MAX_VALUE) % bufferPages.length];
@@ -87,12 +89,12 @@ public class MemoryPool {
         @Override
         public void run() {
             if (enabled) {
-                for (MemoryChunk bufferPage : bufferPages) {
+                for (BufferPage bufferPage : bufferPages) {
                     bufferPage.tryClean();
                 }
             } else {
                 if (bufferPages != null) {
-                    for (MemoryChunk page : bufferPages) {
+                    for (BufferPage page : bufferPages) {
                         page.release();
                     }
                     bufferPages = null;
@@ -102,4 +104,6 @@ public class MemoryPool {
         }
     }, 500, 1000, TimeUnit.MILLISECONDS);
 
+
 }
+

@@ -1,5 +1,5 @@
 
-package io.github.mxd888.socket.buffer;
+package io.github.mxd888.socket.utils.pool.buffer;
 
 /**
  * 内存池工厂

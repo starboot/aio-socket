@@ -1,7 +1,7 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.maintain.Groups;
 
 /**
@@ -46,7 +46,7 @@ public class Aio {
      * @param packet         数据包
      */
     public static void send(ChannelContext channelContext, Packet packet) {
-        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getWriteBuffer()); // channelContext.getByteBuf()
+        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getVirtualBuffer()); // channelContext.getByteBuf()
         send(channelContext, buffer);
     }
 
@@ -57,8 +57,7 @@ public class Aio {
      * @param buffer         待发送比特流
      */
     public static void send(ChannelContext channelContext, VirtualBuffer buffer) {
-//        channelContext.writeBuffer().write(buffer);
-        channelContext.getWriteBuffer().flush();
+        channelContext.getWriteBuffer().write(buffer);
     }
 
     /**
@@ -69,7 +68,7 @@ public class Aio {
      * @param channelContext 发送者上下文
      */
     public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext) {
-        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getWriteBuffer());
+        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getVirtualBuffer());
         channelContext.getAioConfig().getGroups().writeToGroup(groupId, buffer, channelContext);
     }
 

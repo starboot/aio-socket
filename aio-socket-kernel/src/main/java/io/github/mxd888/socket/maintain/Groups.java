@@ -1,6 +1,6 @@
 package io.github.mxd888.socket.maintain;
 
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
 

@@ -1,4 +1,5 @@
-package io.github.mxd888.socket.utils.pool.memory;
+
+package io.github.mxd888.socket.utils.pool.buffer;
 
 import sun.nio.ch.DirectBuffer;
 
@@ -8,12 +9,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * ByteBuffer内存块
+ * ByteBuffer内存页
  *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class MemoryChunk {
+public final class BufferPage {
 
     /**
      * 条件锁
@@ -28,18 +29,17 @@ public class MemoryChunk {
     /**
      * 待回收的虚拟Buffer
      */
-    private final ConcurrentLinkedQueue<MemoryCell> cleanBuffers = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<VirtualBuffer> cleanBuffers = new ConcurrentLinkedQueue<>();
 
     /**
      * 当前空闲的虚拟Buffer
      */
-    private final List<MemoryCell> availableBuffers;
+    private final List<VirtualBuffer> availableBuffers;
 
     /**
      * 内存页是否处于空闲状态
      */
     private boolean idle = true;
-
 
     /**
      * 默认范围构造方法，只允许本包内进行构造
@@ -47,10 +47,10 @@ public class MemoryChunk {
      * @param size   缓存页大小
      * @param direct 是否使用堆外内存
      */
-    MemoryChunk(int size, boolean direct) {
+    BufferPage(int size, boolean direct) {
         availableBuffers = new LinkedList<>();
         this.buffer = allocate0(size, direct);
-        availableBuffers.add(new MemoryCell(this, null, buffer.position(), buffer.limit()));
+        availableBuffers.add(new VirtualBuffer(this, null, buffer.position(), buffer.limit()));
     }
 
     /**
@@ -70,9 +70,9 @@ public class MemoryChunk {
      * @param size 申请大小
      * @return     虚拟内存对象
      */
-    public MemoryCell allocate(final int size) {
-        MemoryCell virtualBuffer = allocate0(size);
-        return virtualBuffer == null ? new MemoryCell(null, allocate0(size, false), 0, 0) : virtualBuffer;
+    public VirtualBuffer allocate(final int size) {
+        VirtualBuffer virtualBuffer = allocate0(size);
+        return virtualBuffer == null ? new VirtualBuffer(null, allocate0(size, false), 0, 0) : virtualBuffer;
     }
 
     /**
@@ -81,9 +81,9 @@ public class MemoryChunk {
      * @param size 申请大小
      * @return     虚拟内存对象
      */
-    private MemoryCell allocate0(final int size) {
+    private VirtualBuffer allocate0(final int size) {
         idle = false;
-        MemoryCell cleanBuffer = cleanBuffers.poll();
+        VirtualBuffer cleanBuffer = cleanBuffers.poll();
         if (cleanBuffer != null && cleanBuffer.getCapacity() >= size) {
             cleanBuffer.buffer().clear();
             cleanBuffer.buffer(cleanBuffer.buffer());
@@ -105,7 +105,7 @@ public class MemoryChunk {
             }
 
             int count = availableBuffers.size();
-            MemoryCell bufferChunk = null;
+            VirtualBuffer bufferChunk = null;
             //仅剩一个可用内存块的时候使用快速匹配算法
             if (count == 1) {
                 bufferChunk = fastAllocate(size);
@@ -124,9 +124,9 @@ public class MemoryChunk {
      * @param size 申请内存大小
      * @return     申请到的内存块, 若空间不足则范围null
      */
-    private MemoryCell fastAllocate(int size) {
-        MemoryCell freeChunk = availableBuffers.get(0);
-        MemoryCell bufferChunk = allocate(size, freeChunk);
+    private VirtualBuffer fastAllocate(int size) {
+        VirtualBuffer freeChunk = availableBuffers.get(0);
+        VirtualBuffer bufferChunk = allocate(size, freeChunk);
         if (freeChunk == bufferChunk) {
             availableBuffers.clear();
         }
@@ -139,11 +139,11 @@ public class MemoryChunk {
      * @param size 申请内存大小
      * @return     申请到的内存块, 若空间不足则范围null
      */
-    private MemoryCell slowAllocate(int size) {
-        Iterator<MemoryCell> iterator = availableBuffers.listIterator(0);
-        MemoryCell bufferChunk;
+    private VirtualBuffer slowAllocate(int size) {
+        Iterator<VirtualBuffer> iterator = availableBuffers.listIterator(0);
+        VirtualBuffer bufferChunk;
         while (iterator.hasNext()) {
-            MemoryCell freeChunk = iterator.next();
+            VirtualBuffer freeChunk = iterator.next();
             bufferChunk = allocate(size, freeChunk);
             if (freeChunk == bufferChunk) {
                 iterator.remove();
@@ -162,12 +162,12 @@ public class MemoryChunk {
      * @param freeChunk 可用于申请的内存块
      * @return          申请到的内存块, 若空间不足则范围null
      */
-    private MemoryCell allocate(int size, MemoryCell freeChunk) {
+    private VirtualBuffer allocate(int size, VirtualBuffer freeChunk) {
         final int capacity = freeChunk.getCapacity();
         if (capacity < size) {
             return null;
         }
-        MemoryCell bufferChunk;
+        VirtualBuffer bufferChunk;
         if (capacity == size) {
             buffer.limit(freeChunk.getParentLimit());
             buffer.position(freeChunk.getParentPosition());
@@ -176,11 +176,11 @@ public class MemoryChunk {
         } else {
             buffer.limit(freeChunk.getParentPosition() + size);
             buffer.position(freeChunk.getParentPosition());
-            bufferChunk = new MemoryCell(this, buffer.slice(), buffer.position(), buffer.limit());
+            bufferChunk = new VirtualBuffer(this, buffer.slice(), buffer.position(), buffer.limit());
             freeChunk.setParentPosition(buffer.limit());
         }
         if (bufferChunk.buffer().remaining() != size) {
-            throw new RuntimeException("allocate " + size + ", io.github.mxd888.socket.buffer:" + bufferChunk);
+            throw new RuntimeException("allocate " + size + ", io.github.mxd888.socket.utils.pool.buffer:" + bufferChunk);
         }
         return bufferChunk;
     }
@@ -191,7 +191,7 @@ public class MemoryChunk {
      *
      * @param cleanBuffer 待回收的虚拟内存
      */
-    void clean(MemoryCell cleanBuffer) {
+    void clean(VirtualBuffer cleanBuffer) {
         cleanBuffers.offer(cleanBuffer);
     }
 
@@ -204,7 +204,7 @@ public class MemoryChunk {
             idle = true;
         } else if (!cleanBuffers.isEmpty() && lock.tryLock()) {
             try {
-                MemoryCell cleanBuffer;
+                VirtualBuffer cleanBuffer;
                 while ((cleanBuffer = cleanBuffers.poll()) != null) {
                     clean0(cleanBuffer);
                 }
@@ -215,14 +215,14 @@ public class MemoryChunk {
     }
 
     /**
-     * 回收虚拟缓冲区：修正
+     * 回收虚拟缓冲区
      *
      * @param cleanBuffer 虚拟缓冲区
      */
-    private void clean0(MemoryCell cleanBuffer) {
-        ListIterator<MemoryCell> iterator = availableBuffers.listIterator(0);
+    private void clean0(VirtualBuffer cleanBuffer) {
+        ListIterator<VirtualBuffer> iterator = availableBuffers.listIterator(0);
         while (iterator.hasNext()) {
-            MemoryCell freeBuffer = iterator.next();
+            VirtualBuffer freeBuffer = iterator.next();
             //cleanBuffer在freeBuffer之前并且形成连续块
             if (freeBuffer.getParentPosition() == cleanBuffer.getParentLimit()) {
                 freeBuffer.setParentPosition(cleanBuffer.getParentPosition());
@@ -233,7 +233,7 @@ public class MemoryChunk {
                 freeBuffer.setParentLimit(cleanBuffer.getParentLimit());
                 //判断后一个是否连续
                 if (iterator.hasNext()) {
-                    MemoryCell next = iterator.next();
+                    VirtualBuffer next = iterator.next();
                     if (next.getParentPosition() == freeBuffer.getParentLimit()) {
                         freeBuffer.setParentLimit(next.getParentLimit());
                         iterator.remove();

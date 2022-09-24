@@ -3,9 +3,9 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 /**
  * aio-socket 插件接口
@@ -41,7 +41,7 @@ public interface Plugin extends NetMonitor {
      * @param channelContext 用户通道
      * @param virtualBuffer  编码成功后的虚拟buffer
      */
-    void beforeEncode(Packet packet, ChannelContext channelContext, WriteBuffer virtualBuffer);
+    void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer virtualBuffer);
 
     /**
      * 监听状态机事件

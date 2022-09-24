@@ -1,7 +1,7 @@
 package io.github.mxd888.demo.client;
 
 import io.github.mxd888.demo.common.DemoPacket;
-import io.github.mxd888.socket.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;

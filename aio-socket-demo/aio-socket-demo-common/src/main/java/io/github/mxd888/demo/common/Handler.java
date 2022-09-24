@@ -1,9 +1,8 @@
 package io.github.mxd888.demo.common;
 
-import cn.hutool.core.util.ByteUtil;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -37,18 +36,15 @@ public class Handler implements AioHandler {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, WriteBuffer writeBuffer) {
+    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
         if (packet instanceof DemoPacket) {
             DemoPacket demoPacket = (DemoPacket) packet;
             // 自定义协议
-            try {
-                writeBuffer.writeInt(demoPacket.getData().getBytes().length);
-                writeBuffer.write(demoPacket.getData().getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-//            return writeBuffer;
+            ByteBuffer buffer = writeBuffer.buffer();
+            buffer.putInt(demoPacket.getData().getBytes().length);
+            buffer.put(demoPacket.getData().getBytes());
+            buffer.flip();
+            return writeBuffer;
         }
         return null;
     }

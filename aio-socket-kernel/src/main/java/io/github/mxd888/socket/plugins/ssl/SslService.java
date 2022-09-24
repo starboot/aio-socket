@@ -2,7 +2,7 @@
 package io.github.mxd888.socket.plugins.ssl;
 
 
-import io.github.mxd888.socket.buffer.BufferPage;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 
 import javax.net.ssl.*;
 import java.nio.ByteBuffer;

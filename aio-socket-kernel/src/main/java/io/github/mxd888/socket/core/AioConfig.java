@@ -2,7 +2,7 @@ package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.buffer.BufferFactory;
+import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.maintain.ClusterIds;
 import io.github.mxd888.socket.maintain.Groups;

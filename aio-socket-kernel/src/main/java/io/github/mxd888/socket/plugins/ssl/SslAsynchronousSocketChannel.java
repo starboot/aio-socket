@@ -1,8 +1,8 @@
 
 package io.github.mxd888.socket.plugins.ssl;
 
-import io.github.mxd888.socket.buffer.BufferPage;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.plugins.channels.AsynchronousSocketChannelProxy;
 
 import javax.net.ssl.SSLEngine;

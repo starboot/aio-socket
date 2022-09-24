@@ -1,7 +1,7 @@
 package io.github.mxd888.socket.plugins;
 
-import io.github.mxd888.socket.buffer.BufferFactory;
-import io.github.mxd888.socket.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.plugins.ssl.ClientAuth;
 import io.github.mxd888.socket.plugins.ssl.SslAsynchronousSocketChannel;

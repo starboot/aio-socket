@@ -3,7 +3,7 @@ package io.github.mxd888.http.common;
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.GzipUtils;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
 
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
@@ -66,7 +65,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
             virtualBuffer.buffer().put(Constant.CRLF_BYTES);
         } else {
             if (virtualBuffer.buffer().remaining() == 0) {
-                virtualBuffer = channelContext.getByteBuf();
+                virtualBuffer = channelContext.getVirtualBuffer();
             }
             virtualBuffer.buffer().put(b, off, len);
         }
@@ -115,7 +114,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
         writeHeader();
 
         if (chunked) {
-            virtualBuffer = channelContext.getByteBuf();
+            virtualBuffer = channelContext.getVirtualBuffer();
             virtualBuffer.buffer().put(Constant.CHUNKED_END_BYTES);
         }
         closed = true;

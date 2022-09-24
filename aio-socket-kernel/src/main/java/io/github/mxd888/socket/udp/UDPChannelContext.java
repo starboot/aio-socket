@@ -15,9 +15,7 @@
  */
 package io.github.mxd888.socket.udp;
 
-import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.buffer.BufferPage;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.core.WriteBuffer;
 
 import java.io.IOException;

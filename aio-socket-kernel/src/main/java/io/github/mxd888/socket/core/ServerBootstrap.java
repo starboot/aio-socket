@@ -16,8 +16,8 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.enhance.EnhanceAsynchronousChannelProvider;
-import io.github.mxd888.socket.buffer.BufferPagePool;
-import io.github.mxd888.socket.buffer.VirtualBufferFactory;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
 import io.github.mxd888.socket.utils.IOUtil;

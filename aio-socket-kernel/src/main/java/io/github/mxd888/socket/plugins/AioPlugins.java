@@ -3,7 +3,7 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -91,7 +91,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, WriteBuffer writeBuffer) {
+    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
         for (Plugin plugin : plugins) {
             plugin.beforeEncode(packet, channelContext, writeBuffer);
         }

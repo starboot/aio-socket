@@ -15,8 +15,8 @@
  */
 package io.github.mxd888.socket.udp;
 
-import io.github.mxd888.socket.buffer.BufferPage;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.AioConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

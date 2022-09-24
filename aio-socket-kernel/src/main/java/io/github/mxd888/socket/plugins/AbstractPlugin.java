@@ -2,9 +2,9 @@ package io.github.mxd888.socket.plugins;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 import java.nio.channels.AsynchronousSocketChannel;
 
@@ -32,7 +32,7 @@ public abstract class AbstractPlugin implements Plugin {
     }
 
     @Override
-    public void beforeEncode(Packet packet, ChannelContext channelContext, WriteBuffer writeBuffer) {
+    public void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
     }
 
     @Override

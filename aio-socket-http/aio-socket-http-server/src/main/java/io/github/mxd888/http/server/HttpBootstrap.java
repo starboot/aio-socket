@@ -6,7 +6,7 @@ import io.github.mxd888.http.common.enums.HttpMethodEnum;
 import io.github.mxd888.http.common.enums.HttpProtocolEnum;
 import io.github.mxd888.http.server.impl.HttpMessageProcessor;
 import io.github.mxd888.http.server.impl.HttpRequestHandler;
-import io.github.mxd888.socket.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.ServerBootstrap;
 
 import java.io.IOException;

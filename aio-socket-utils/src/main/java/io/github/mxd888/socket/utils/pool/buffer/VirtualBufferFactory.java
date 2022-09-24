@@ -1,5 +1,5 @@
 
-package io.github.mxd888.socket.buffer;
+package io.github.mxd888.socket.utils.pool.buffer;
 
 /**
  * 创建虚拟ByteBuffer缓冲区的工厂

@@ -1,5 +1,5 @@
 
-package io.github.mxd888.socket.buffer;
+package io.github.mxd888.socket.utils.pool.buffer;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.Semaphore;

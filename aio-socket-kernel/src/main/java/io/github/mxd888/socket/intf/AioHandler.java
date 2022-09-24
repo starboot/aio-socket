@@ -2,7 +2,7 @@ package io.github.mxd888.socket.intf;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 
@@ -38,7 +38,7 @@ public interface AioHandler {
      * @param channelContext 用户上下文
      * @return               buffer流
      */
-    VirtualBuffer encode(Packet packet, ChannelContext channelContext, WriteBuffer writeBuffer);
+    VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer);
 
     /**
      * 状态机事件,当枚举事件发生时由框架触发该方法
