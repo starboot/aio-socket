@@ -3,7 +3,7 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.AioConfig;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.util.Objects;
 
@@ -20,7 +20,7 @@ public class ClusterPlugin extends AbstractPlugin {
     }
 
     @Override
-    public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
+    public boolean beforeProcess(TCPChannelContext channelContext, Packet packet) {
         if (!channelContext.getAioConfig().isServer()) {
             return true;
         }

@@ -3,7 +3,7 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public abstract class HeartPlugin extends AbstractPlugin {
 
     private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (context, lastTime) -> context.close(true);
 
-    private final Map<ChannelContext, Long> sessionMap = new HashMap<>();
+    private final Map<TCPChannelContext, Long> sessionMap = new HashMap<>();
 
     private final long timeout;
 
@@ -54,14 +54,14 @@ public abstract class HeartPlugin extends AbstractPlugin {
     }
 
     @Override
-    public final boolean beforeProcess(ChannelContext channelContext, Packet packet) {
+    public final boolean beforeProcess(TCPChannelContext channelContext, Packet packet) {
         sessionMap.put(channelContext, System.currentTimeMillis());
         //是否心跳响应消息 延长心跳监测时间
         return !isHeartMessage(packet);
     }
 
     @Override
-    public final void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext context, Throwable throwable) {
+    public final void stateEvent(StateMachineEnum stateMachineEnum, TCPChannelContext context, Throwable throwable) {
         switch (stateMachineEnum) {
             case NEW_CHANNEL:
                 sessionMap.put(context, System.currentTimeMillis());
@@ -86,7 +86,7 @@ public abstract class HeartPlugin extends AbstractPlugin {
      */
     public abstract boolean isHeartMessage(Packet packet);
 
-    private void registerHeart(final ChannelContext channelContext) {
+    private void registerHeart(final TCPChannelContext channelContext) {
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -111,6 +111,6 @@ public abstract class HeartPlugin extends AbstractPlugin {
 
     public interface TimeoutCallback {
 
-        void callback(ChannelContext context, long lastTime);
+        void callback(TCPChannelContext context, long lastTime);
     }
 }

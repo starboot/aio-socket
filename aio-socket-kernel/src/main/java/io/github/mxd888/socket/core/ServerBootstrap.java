@@ -67,7 +67,7 @@ public class ServerBootstrap {
     /**
      * socketChannel 和 ChannelContext联系
      */
-    private Function<AsynchronousSocketChannel, ChannelContext> aioChannelContextFunction;
+    private Function<AsynchronousSocketChannel, TCPChannelContext> aioChannelContextFunction;
 
     /**
      * AIO Server 通道
@@ -98,7 +98,7 @@ public class ServerBootstrap {
      * 启动AIO Socket Server
      */
     public void start() {
-        start0(channel -> new ChannelContext(channel, getConfig(), this.aioReadCompletionHandler,
+        start0(channel -> new TCPChannelContext(channel, getConfig(), this.aioReadCompletionHandler,
                 this.aioWriteCompletionHandler, this.bufferPool.allocateBufferPage()));
     }
 
@@ -107,7 +107,7 @@ public class ServerBootstrap {
      *
      * @param aioContextFunction 通道和上下文信息的联系
      */
-    private void start0(Function<AsynchronousSocketChannel, ChannelContext> aioContextFunction) {
+    private void start0(Function<AsynchronousSocketChannel, TCPChannelContext> aioContextFunction) {
         try {
             checkAndResetConfig();
             this.aioWriteCompletionHandler = new WriteCompletionHandler();
@@ -174,7 +174,7 @@ public class ServerBootstrap {
      */
     private void initChannelContext(AsynchronousSocketChannel channel) {
         //连接成功则构造ChannelContext对象
-        ChannelContext context = null;
+        TCPChannelContext context = null;
         AsynchronousSocketChannel acceptChannel = channel;
         try {
             if (this.config.getMonitor() != null) {

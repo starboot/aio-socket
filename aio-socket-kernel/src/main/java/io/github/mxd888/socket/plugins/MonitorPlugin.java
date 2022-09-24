@@ -4,6 +4,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 
 import java.util.concurrent.TimeUnit;
@@ -78,13 +79,13 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
 
 
     @Override
-    public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
+    public boolean beforeProcess(TCPChannelContext channelContext, Packet packet) {
         processMsgNum.increment();
         return true;
     }
 
     @Override
-    public void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable) {
+    public void stateEvent(StateMachineEnum stateMachineEnum, TCPChannelContext channelContext, Throwable throwable) {
         switch (stateMachineEnum) {
             case PROCESS_EXCEPTION:
                 processFailNum.increment();

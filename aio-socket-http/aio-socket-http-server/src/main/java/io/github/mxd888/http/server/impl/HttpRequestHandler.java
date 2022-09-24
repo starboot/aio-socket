@@ -6,8 +6,7 @@ import io.github.mxd888.http.server.decode.HttpMethodDecoder;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.intf.AioHandler;
 
 /**
@@ -31,7 +30,7 @@ public class HttpRequestHandler implements AioHandler {
     }
 
     @Override
-    public Packet handle(ChannelContext channelContext, Packet packet) {
+    public Packet handle(TCPChannelContext channelContext, Packet packet) {
         if (packet instanceof Request) {
             processor.process0(channelContext, (Request) packet);
         }else {
@@ -41,7 +40,7 @@ public class HttpRequestHandler implements AioHandler {
     }
 
     @Override
-    public Packet decode(final VirtualBuffer readBuffer, ChannelContext channelContext) {
+    public Packet decode(final VirtualBuffer readBuffer, TCPChannelContext channelContext) {
         if (readBuffer.buffer().remaining() == 0) {
             return null;
         }
@@ -72,12 +71,12 @@ public class HttpRequestHandler implements AioHandler {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public VirtualBuffer encode(Packet packet, TCPChannelContext channelContext, VirtualBuffer writeBuffer) {
         return null;
     }
 
     @Override
-    public void stateEvent(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
+    public void stateEvent(TCPChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
         processor.stateEvent0(channelContext, stateMachineEnum, throwable);
     }
 }

@@ -9,7 +9,7 @@ import io.github.mxd888.http.common.enums.HttpTypeEnum;
 import io.github.mxd888.http.common.utils.*;
 import io.github.mxd888.http.server.*;
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +36,7 @@ public final class Request extends Packet implements HttpRequest, Reset {
     private static final Locale defaultLocale = Locale.getDefault();
     private static final int INIT_CONTENT_LENGTH = -2;
     private static final int NONE_CONTENT_LENGTH = -1;
-    private final ChannelContext channelContext;
+    private final TCPChannelContext channelContext;
     /**
      * Http请求头
      */
@@ -93,7 +93,7 @@ public final class Request extends Packet implements HttpRequest, Reset {
     private WebSocketRequestImpl webSocketRequest;
     private ServerHandler serverHandler;
 
-    Request(HttpServerConfiguration configuration, ChannelContext channelContext) {
+    Request(HttpServerConfiguration configuration, TCPChannelContext channelContext) {
         this.configuration = configuration;
         this.channelContext = channelContext;
     }
@@ -107,7 +107,7 @@ public final class Request extends Packet implements HttpRequest, Reset {
     }
 
 
-    public ChannelContext getAioChannelContext() {
+    public TCPChannelContext getAioChannelContext() {
         return channelContext;
     }
 

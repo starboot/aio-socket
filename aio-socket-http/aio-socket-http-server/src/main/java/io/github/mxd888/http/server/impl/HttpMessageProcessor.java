@@ -10,7 +10,7 @@ import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.HttpServerHandler;
 import io.github.mxd888.http.server.WebSocketHandler;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -27,7 +27,7 @@ public class HttpMessageProcessor {
     private static final int MAX_LENGTH = 255 * 1024;
     private HttpServerConfiguration configuration;
 
-    public void process0(ChannelContext context, Request request) {
+    public void process0(TCPChannelContext context, Request request) {
         Object aioAttachment = context.getAttachment();
         RequestAttachment attachment = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
         AbstractRequest abstractRequest = request.newAbstractRequest();
@@ -61,7 +61,7 @@ public class HttpMessageProcessor {
         }
     }
 
-    private void handleWebSocketRequest(ChannelContext context, Request request) throws IOException {
+    private void handleWebSocketRequest(TCPChannelContext context, Request request) throws IOException {
         AbstractRequest abstractRequest = request.newAbstractRequest();
         CompletableFuture<Object> future = new CompletableFuture<>();
         assert abstractRequest != null;
@@ -74,7 +74,7 @@ public class HttpMessageProcessor {
         }
     }
 
-    private void handleHttpRequest(ChannelContext context, Request request) throws IOException {
+    private void handleHttpRequest(TCPChannelContext context, Request request) throws IOException {
         AbstractRequest abstractRequest = request.newAbstractRequest();
         assert abstractRequest != null;
         AbstractResponse response = abstractRequest.getResponse();
@@ -103,7 +103,7 @@ public class HttpMessageProcessor {
         }
     }
 
-    private void finishHttpHandle(ChannelContext context, AbstractRequest abstractRequest, boolean keepAlive, CompletableFuture<Object> future) throws IOException {
+    private void finishHttpHandle(TCPChannelContext context, AbstractRequest abstractRequest, boolean keepAlive, CompletableFuture<Object> future) throws IOException {
         if (future.isDone()) {
             if (keepConnection(abstractRequest, keepAlive)) {
                 finishResponse(abstractRequest);
@@ -153,7 +153,7 @@ public class HttpMessageProcessor {
         request.setDecodePartEnum(DecodePartEnum.BODY);
     }
 
-    public void stateEvent0(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
+    public void stateEvent0(TCPChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
         switch (stateMachineEnum) {
             case NEW_CHANNEL:
                 RequestAttachment attachment = new RequestAttachment(new Request(configuration, channelContext));

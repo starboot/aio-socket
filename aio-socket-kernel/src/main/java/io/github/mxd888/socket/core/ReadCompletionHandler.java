@@ -11,7 +11,7 @@ import java.nio.channels.CompletionHandler;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-final class ReadCompletionHandler implements CompletionHandler<Integer, ChannelContext> {
+final class ReadCompletionHandler implements CompletionHandler<Integer, TCPChannelContext> {
 
     /**
      * 只在本包下可以被调用
@@ -21,7 +21,7 @@ final class ReadCompletionHandler implements CompletionHandler<Integer, ChannelC
 
 
     @Override
-    public void completed(Integer result, ChannelContext channelContext) {
+    public void completed(Integer result, TCPChannelContext channelContext) {
         // 读取完成,result:实际读取的字节数。如果对方关闭连接则result=-1。
         try {
             // 接收到的消息进行预处理
@@ -45,7 +45,7 @@ final class ReadCompletionHandler implements CompletionHandler<Integer, ChannelC
      * @param channelContext 读完成出错的通道
      */
     @Override
-    public void failed(Throwable exc, ChannelContext channelContext) {
+    public void failed(Throwable exc, TCPChannelContext channelContext) {
         try {
             channelContext.getAioConfig().getHandler().stateEvent(channelContext, StateMachineEnum.INPUT_EXCEPTION, exc);
         } catch (Exception e) {

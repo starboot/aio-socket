@@ -3,7 +3,7 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 import java.nio.channels.AsynchronousSocketChannel;
@@ -18,21 +18,21 @@ import java.nio.channels.AsynchronousSocketChannel;
 public abstract class AbstractPlugin implements Plugin {
 
     @Override
-    public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
+    public boolean beforeProcess(TCPChannelContext channelContext, Packet packet) {
         return true;
     }
 
     @Override
-    public void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable) {
+    public void stateEvent(StateMachineEnum stateMachineEnum, TCPChannelContext channelContext, Throwable throwable) {
 
     }
 
     @Override
-    public void afterDecode(Packet packet, ChannelContext channelContext) {
+    public void afterDecode(Packet packet, TCPChannelContext channelContext) {
     }
 
     @Override
-    public void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public void beforeEncode(Packet packet, TCPChannelContext channelContext, VirtualBuffer writeBuffer) {
     }
 
     @Override

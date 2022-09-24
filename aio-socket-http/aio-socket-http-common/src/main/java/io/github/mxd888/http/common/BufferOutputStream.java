@@ -5,7 +5,7 @@ import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.GzipUtils;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.Aio;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,7 +22,7 @@ import java.util.concurrent.Semaphore;
  */
 public abstract class BufferOutputStream extends OutputStream implements Reset {
     private static final Map<String, byte[]> HEADER_NAME_EXT_MAP = new ConcurrentHashMap<>();
-    protected final ChannelContext channelContext;
+    protected final TCPChannelContext channelContext;
     protected VirtualBuffer virtualBuffer = null;
     protected boolean committed = false;
     protected boolean chunked = false;
@@ -33,7 +33,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
      */
     private boolean closed = false;
 
-    public BufferOutputStream(ChannelContext channelContext) {
+    public BufferOutputStream(TCPChannelContext channelContext) {
         this.channelContext = channelContext;
     }
 

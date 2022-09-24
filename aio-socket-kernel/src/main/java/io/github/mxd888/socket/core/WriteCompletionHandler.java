@@ -11,10 +11,10 @@ import java.nio.channels.CompletionHandler;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class WriteCompletionHandler implements CompletionHandler<Integer, ChannelContext> {
+public class WriteCompletionHandler implements CompletionHandler<Integer, TCPChannelContext> {
 
     @Override
-    public void completed(Integer result, ChannelContext channelContext) {
+    public void completed(Integer result, TCPChannelContext channelContext) {
         try {
             NetMonitor monitor = channelContext.getAioConfig().getMonitor();
             if (monitor != null) {
@@ -27,7 +27,7 @@ public class WriteCompletionHandler implements CompletionHandler<Integer, Channe
     }
 
     @Override
-    public void failed(Throwable exc, ChannelContext channelContext) {
+    public void failed(Throwable exc, TCPChannelContext channelContext) {
         try {
             channelContext.getAioConfig().getHandler().stateEvent(channelContext, StateMachineEnum.OUTPUT_EXCEPTION, exc);
             channelContext.close();

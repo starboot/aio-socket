@@ -4,7 +4,7 @@ import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.StringUtils;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.impl.Request;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.nio.ByteBuffer;
 
@@ -22,7 +22,7 @@ class HttpUriQueryDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
+    public Decoder decode(ByteBuffer byteBuffer, TCPChannelContext channelContext, Request request) {
         int length = scanUriQuery(byteBuffer);
         if (length >= 0) {
             String query = StringUtils.convertToString(byteBuffer, byteBuffer.position() - 1 - length, length);

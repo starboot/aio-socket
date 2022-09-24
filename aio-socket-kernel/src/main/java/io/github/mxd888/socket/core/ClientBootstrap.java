@@ -34,7 +34,7 @@ public class ClientBootstrap {
     /**
      * 网络连接的会话对象
      */
-    private ChannelContext channelContext;
+    private TCPChannelContext channelContext;
 
     /**
      * 内存池
@@ -87,7 +87,7 @@ public class ClientBootstrap {
      *
      * @see ClientBootstrap#start(AsynchronousChannelGroup)
      */
-    public final ChannelContext start() throws IOException {
+    public final TCPChannelContext start() throws IOException {
         this.asynchronousChannelGroup = AsynchronousChannelGroup.withFixedThreadPool(2, Thread::new);
         return start(this.asynchronousChannelGroup);
     }
@@ -103,14 +103,14 @@ public class ClientBootstrap {
      *
      * @see AsynchronousSocketChannel#connect(SocketAddress)
      */
-    public ChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
+    public TCPChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
         if (isCheck) {
             checkAndResetConfig();
         }
-        CompletableFuture<ChannelContext> future = new CompletableFuture<>();
-        start(asynchronousChannelGroup, future, new CompletionHandler<ChannelContext, CompletableFuture<ChannelContext>>() {
+        CompletableFuture<TCPChannelContext> future = new CompletableFuture<>();
+        start(asynchronousChannelGroup, future, new CompletionHandler<TCPChannelContext, CompletableFuture<TCPChannelContext>>() {
             @Override
-            public void completed(ChannelContext session, CompletableFuture<ChannelContext> future) {
+            public void completed(TCPChannelContext session, CompletableFuture<TCPChannelContext> future) {
                 if (future.isDone() || future.isCancelled()) {
                     session.close();
                     System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed because of future is done or cancelled");
@@ -124,7 +124,7 @@ public class ClientBootstrap {
             }
 
             @Override
-            public void failed(Throwable exc, CompletableFuture<ChannelContext> future) {
+            public void failed(Throwable exc, CompletableFuture<TCPChannelContext> future) {
                 future.completeExceptionally(exc);
                 System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed");
             }
@@ -150,8 +150,8 @@ public class ClientBootstrap {
      * @param handler                   异步回调
      * @throws IOException              .
      */
-    private void start(AsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
-                          CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
+    private void start(AsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<TCPChannelContext> future,
+                          CompletionHandler<TCPChannelContext, ? super CompletableFuture<TCPChannelContext>> handler) throws IOException {
         AsynchronousSocketChannel socketChannel = AsynchronousSocketChannel.open(asynchronousChannelGroup);
         if (this.bufferPool == null) {
             this.bufferPool = getConfig().getBufferFactory().create();
@@ -176,7 +176,7 @@ public class ClientBootstrap {
                         throw new RuntimeException("NetMonitor refuse channel");
                     }
                     //连接成功则构造AIOChannelContext对象
-                    channelContext = new ChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage());
+                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage());
                     channelContext.initSession(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
                     handler.completed(channelContext, future);
                 } catch (Exception e) {
@@ -229,7 +229,7 @@ public class ClientBootstrap {
      *
      * @return ChannelContext
      */
-    public ChannelContext getChannelContext() {
+    public TCPChannelContext getChannelContext() {
         return this.channelContext;
     }
 

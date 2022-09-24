@@ -10,7 +10,7 @@ import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.ServerHandler;
 import io.github.mxd888.http.server.impl.HttpRequestHandler;
 import io.github.mxd888.http.server.impl.Request;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.nio.ByteBuffer;
 import java.util.function.Function;
@@ -32,7 +32,7 @@ class HttpHeaderDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
+    public Decoder decode(ByteBuffer byteBuffer, TCPChannelContext channelContext, Request request) {
         if (request.getHeaderSize() >= 0 && request.getHeaderSize() >= getConfiguration().getHeaderLimiter()) {
             return ignoreHeaderDecoder.decode(byteBuffer, channelContext, request);
         }
@@ -63,7 +63,7 @@ class HttpHeaderDecoder extends AbstractDecoder {
      */
     class HeaderValueDecoder implements Decoder {
         @Override
-        public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
+        public Decoder decode(ByteBuffer byteBuffer, TCPChannelContext channelContext, Request request) {
             ByteTree<?> value = StringUtils.scanByteTree(byteBuffer, CR_END_MATCHER, getConfiguration().getByteCache());
             if (value == null) {
                 if (byteBuffer.remaining() == byteBuffer.capacity()) {

@@ -3,8 +3,7 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 /**
@@ -24,7 +23,7 @@ public interface Plugin extends NetMonitor {
      * @param packet         消息包
      * @return               是否在本服务器进行处理逻辑
      */
-    boolean beforeProcess(ChannelContext channelContext, Packet packet);
+    boolean beforeProcess(TCPChannelContext channelContext, Packet packet);
 
     /**
      * 解码后处理
@@ -32,7 +31,7 @@ public interface Plugin extends NetMonitor {
      * @param packet         解码后得到的数据包
      * @param channelContext 用户通道
      */
-    void afterDecode(Packet packet, ChannelContext channelContext);
+    void afterDecode(Packet packet, TCPChannelContext channelContext);
 
     /**
      * 编码前处理
@@ -41,7 +40,7 @@ public interface Plugin extends NetMonitor {
      * @param channelContext 用户通道
      * @param virtualBuffer  编码成功后的虚拟buffer
      */
-    void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer virtualBuffer);
+    void beforeEncode(Packet packet, TCPChannelContext channelContext, VirtualBuffer virtualBuffer);
 
     /**
      * 监听状态机事件
@@ -49,8 +48,8 @@ public interface Plugin extends NetMonitor {
      * @param stateMachineEnum 机器状态
      * @param channelContext   通道上下文
      * @param throwable        异常处理
-     * @see io.github.mxd888.socket.intf.AioHandler#stateEvent(ChannelContext, StateMachineEnum, Throwable)
+     * @see io.github.mxd888.socket.intf.AioHandler#stateEvent(TCPChannelContext, StateMachineEnum, Throwable)
      */
-    void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable);
+    void stateEvent(StateMachineEnum stateMachineEnum, TCPChannelContext channelContext, Throwable throwable);
 
 }

@@ -2,7 +2,7 @@ package io.github.mxd888.socket.maintain;
 
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.Aio;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class Groups {
      * @param group 群组ID
      * @param context 用户上下文
      */
-    public final synchronized void join(String group, ChannelContext context) {
+    public final synchronized void join(String group, TCPChannelContext context) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
             groupUnit = new GroupUnit();
@@ -34,7 +34,7 @@ public class Groups {
         groupUnit.groupList.add(context);
     }
 
-    public final synchronized void remove(String group, ChannelContext context) {
+    public final synchronized void remove(String group, TCPChannelContext context) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
             return;
@@ -45,24 +45,24 @@ public class Groups {
         }
     }
 
-    public final void remove(ChannelContext context) {
+    public final void remove(TCPChannelContext context) {
         for (String group : channelGroup.keySet()) {
             remove(group, context);
         }
     }
 
-    public void writeToGroup(String group, VirtualBuffer buffer, ChannelContext channelContext) {
+    public void writeToGroup(String group, VirtualBuffer buffer, TCPChannelContext channelContext) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
             return;
         }
         if (channelContext == null) {
-            for (ChannelContext context : groupUnit.groupList) {
+            for (TCPChannelContext context : groupUnit.groupList) {
                 Aio.send(context, buffer);
             }
             return;
         }
-        for (ChannelContext context : groupUnit.groupList) {
+        for (TCPChannelContext context : groupUnit.groupList) {
             if (channelContext != context) {
                 Aio.send(context, buffer);
             }
@@ -70,6 +70,6 @@ public class Groups {
     }
 
     private static class GroupUnit {
-        Set<ChannelContext> groupList = new HashSet<>();
+        Set<TCPChannelContext> groupList = new HashSet<>();
     }
 }

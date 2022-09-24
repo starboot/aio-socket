@@ -3,9 +3,9 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.intf.AioHandler;
 
 import java.nio.channels.AsynchronousSocketChannel;
@@ -65,7 +65,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public Packet handle(ChannelContext channelContext, Packet packet) {
+    public Packet handle(TCPChannelContext channelContext, Packet packet) {
         boolean flag = true;
         for (Plugin plugin : plugins) {
             if (!plugin.beforeProcess(channelContext, packet)) {
@@ -79,7 +79,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) {
+    public Packet decode(VirtualBuffer readBuffer, TCPChannelContext channelContext) {
 
         Packet packet = aioHandler.decode(readBuffer, channelContext);
         if (packet != null) {
@@ -91,7 +91,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public VirtualBuffer encode(Packet packet, TCPChannelContext channelContext, VirtualBuffer writeBuffer) {
         for (Plugin plugin : plugins) {
             plugin.beforeEncode(packet, channelContext, writeBuffer);
         }
@@ -99,7 +99,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public void stateEvent(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
+    public void stateEvent(TCPChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
         for (Plugin plugin : plugins) {
             plugin.stateEvent(stateMachineEnum, channelContext, throwable);
         }

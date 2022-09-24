@@ -20,7 +20,7 @@ public class Aio {
      * @param id             用户ID
      * @param channelContext 用户通道
      */
-    public static void bindID(String id, ChannelContext channelContext) {
+    public static void bindID(String id, TCPChannelContext channelContext) {
         // 绑定ID
         AioConfig config = channelContext.getAioConfig();
         config.getIds().join(id, channelContext);
@@ -33,7 +33,7 @@ public class Aio {
      * @param groupId        群组ID
      * @param channelContext 用户通道
      */
-    public static void bindGroup(String groupId, ChannelContext channelContext) {
+    public static void bindGroup(String groupId, TCPChannelContext channelContext) {
         // 绑定群组
         Groups groups = channelContext.getAioConfig().getGroups();
         groups.join(groupId, channelContext);
@@ -45,7 +45,7 @@ public class Aio {
      * @param channelContext 接收方通道
      * @param packet         数据包
      */
-    public static void send(ChannelContext channelContext, Packet packet) {
+    public static void send(TCPChannelContext channelContext, Packet packet) {
         VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getVirtualBuffer()); // channelContext.getByteBuf()
         send(channelContext, buffer);
     }
@@ -56,7 +56,7 @@ public class Aio {
      * @param channelContext 接收方通道
      * @param buffer         待发送比特流
      */
-    public static void send(ChannelContext channelContext, VirtualBuffer buffer) {
+    public static void send(TCPChannelContext channelContext, VirtualBuffer buffer) {
         channelContext.getWriteBuffer().write(buffer);
     }
 
@@ -67,16 +67,16 @@ public class Aio {
      * @param packet         消息包
      * @param channelContext 发送者上下文
      */
-    public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext) {
+    public static void sendGroup(String groupId, Packet packet, TCPChannelContext channelContext) {
         VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getVirtualBuffer());
         channelContext.getAioConfig().getGroups().writeToGroup(groupId, buffer, channelContext);
     }
 
-    public static void removeUserFromAllGroup(ChannelContext channelContext) {
+    public static void removeUserFromAllGroup(TCPChannelContext channelContext) {
         channelContext.getAioConfig().getGroups().remove(channelContext);
     }
 
-    public static void removeUserFromGroup(ChannelContext channelContext, String groupId) {
+    public static void removeUserFromGroup(TCPChannelContext channelContext, String groupId) {
         channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
     }
 
@@ -85,7 +85,7 @@ public class Aio {
      *
      * @param channelContext 通道上下文
      */
-    public static void close(ChannelContext channelContext) {
+    public static void close(TCPChannelContext channelContext) {
         removeUserFromAllGroup(channelContext);
         channelContext.getAioConfig().getIds().remove(channelContext.getId());
         channelContext.close();

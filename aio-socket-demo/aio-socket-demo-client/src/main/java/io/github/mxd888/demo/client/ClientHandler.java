@@ -3,7 +3,7 @@ package io.github.mxd888.demo.client;
 import io.github.mxd888.demo.common.DemoPacket;
 import io.github.mxd888.demo.common.Handler;
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 
 
 public class ClientHandler extends Handler {
@@ -11,7 +11,7 @@ public class ClientHandler extends Handler {
     private long count = 0L;
 
     @Override
-    public Packet handle(ChannelContext channelContext, Packet packet) {
+    public Packet handle(TCPChannelContext channelContext, Packet packet) {
         DemoPacket packet1 = (DemoPacket) packet;
         if (!packet1.getData().equals("hello aio-socket")) {
             System.out.println("不一致，出错啦:" + packet1.getData());

@@ -3,7 +3,7 @@ package io.github.mxd888.demo.client;
 import io.github.mxd888.demo.common.DemoPacket;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.Aio;
-import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
 import io.github.mxd888.socket.plugins.ReconnectPlugin;
 
@@ -58,7 +58,7 @@ public class Client {
                         .addPlugin(new ReconnectPlugin(clientBootstrap));
 
                 try {
-                    ChannelContext start = clientBootstrap.start();
+                    TCPChannelContext start = clientBootstrap.start();
                     long num = 0;
                     long startnum = System.currentTimeMillis();
                     while (num++ < 10) {
