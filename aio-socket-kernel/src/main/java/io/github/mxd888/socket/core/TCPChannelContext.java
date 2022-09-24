@@ -77,10 +77,6 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private VirtualBuffer writeBuffer;
 
-
-
-
-
     /**
      * 构造通道上下文对象
      *
@@ -113,9 +109,9 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     /**
-     * 初始化Aio ChannelContext
+     * 初始化Aio TCPChannelContext
      */
-    void initSession(VirtualBuffer readBuffer) {
+    void initTCPChannelContext(VirtualBuffer readBuffer) {
         this.readBuffer = readBuffer;
         this.readBuffer.buffer().flip();
         signalRead();
@@ -387,7 +383,12 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public Map<String, Object> getAttr() {
-        return super.getAttr();
+    public <T> T getAttr(String s, T t) {
+        return super.getAttr(s, t);
+    }
+
+    @Override
+    public void attr(String s, Object o) {
+        super.attr(s, o);
     }
 }

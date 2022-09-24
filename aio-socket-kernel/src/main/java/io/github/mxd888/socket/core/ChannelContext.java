@@ -38,15 +38,37 @@ public abstract class ChannelContext {
      */
     private Object attachment;
 
+    /**
+     * 自定义属性Map
+     */
     private final Map<String, Object> attr = new HashMap<>();
 
-
+    /**
+     * 获取一个虚拟buffer用于存放数据
+     *
+     * @return 内存池虚拟buffer
+     */
     public abstract VirtualBuffer getVirtualBuffer();
 
+    /**
+     * 获取通道输出流
+     *
+     * @return IO输出流
+     */
     public abstract WriteBuffer getWriteBuffer();
 
+    /**
+     * 获取读buffer，不要轻易用
+     *
+     * @return 读虚拟buffer
+     */
     public abstract VirtualBuffer getReadBuffer();
 
+    /**
+     * 断开连接
+     *
+     * @param immediate 是否立即
+     */
     public abstract void close(boolean immediate);
 
     /**
@@ -63,6 +85,9 @@ public abstract class ChannelContext {
      */
     public abstract void setId(String id);
 
+    /**
+     * 读取通道
+     */
     public abstract void signalRead();
 
     /**
@@ -110,9 +135,31 @@ public abstract class ChannelContext {
         this.attachment = attachment;
     }
 
-    public Map<String, Object> getAttr() {
-        return attr;
+    /**
+     * 属性获取
+     * @param s key
+     * @param t 类型
+     * @param <T> 泛型
+     * @return 值
+     */
+    public <T> T getAttr(String s, T t) {
+        return (T) attr.get(s);
     }
 
+    /**
+     * 属性设置
+     *
+     * @param s key
+     * @param o value
+     */
+    public void attr(String s, Object o) {
+        attr.put(s, o);
+    }
+
+    /**
+     * 获取配置文件
+     *
+     * @return 配置信息
+     */
     public abstract AioConfig getAioConfig();
 }

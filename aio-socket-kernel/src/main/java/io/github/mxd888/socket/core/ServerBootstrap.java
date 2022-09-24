@@ -183,7 +183,7 @@ public class ServerBootstrap {
             if (acceptChannel != null) {
                 acceptChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
                 context = this.aioChannelContextFunction.apply(acceptChannel);
-                context.initSession(this.readBufferFactory.createBuffer(this.bufferPool.allocateBufferPage()));
+                context.initTCPChannelContext(this.readBufferFactory.createBuffer(this.bufferPool.allocateBufferPage()));
             } else {
                 IOUtil.close(channel);
             }

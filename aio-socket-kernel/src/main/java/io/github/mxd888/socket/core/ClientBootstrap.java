@@ -177,7 +177,7 @@ public class ClientBootstrap {
                     }
                     //连接成功则构造AIOChannelContext对象
                     channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage());
-                    channelContext.initSession(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
+                    channelContext.initTCPChannelContext(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
                     handler.completed(channelContext, future);
                 } catch (Exception e) {
                     failed(e, socketChannel);

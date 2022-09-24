@@ -1,5 +1,8 @@
 package io.github.mxd888.socket.exception;
 
+/**
+ * aio-socket异常处理类
+ */
 public class AioException extends Exception{
 
     public AioException() {
