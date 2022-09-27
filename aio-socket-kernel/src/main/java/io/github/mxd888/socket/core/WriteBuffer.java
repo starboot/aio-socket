@@ -17,6 +17,7 @@ package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
@@ -109,6 +110,10 @@ public final class WriteBuffer {
         // 有人在发送，这个消息进入等待队列  writeInBuf修改为读模式
         writeInBuf.buffer().flip();
         VirtualBuffer virtualBuffer = writeInBuf;
+//        System.setProperty("java.vm.name","Java HotSpot(TM) ");
+//        if (ObjectSizeCalculator.getObjectSize(itemsQueue) > 1024 * 1024 * 512) {
+//            System.out.println("itemsQueue大于512M了");
+//        }
         itemsQueue.offer(virtualBuffer);
         writeInBuf = null;
     }
@@ -117,15 +122,16 @@ public final class WriteBuffer {
      * 刷新缓冲区，将数据发送出去
      */
     void flush() {
+        if (lock.isHeldByCurrentThread()) {
+            lock.unlock();
+        }
         if (closed) {
             throw new RuntimeException("OutputStream has closed");
         }
         if (!itemsQueue.isEmpty() || (writeInBuf != null && writeInBuf.buffer().position() > 0)) {
             consumer.accept(this);
         }
-        if (lock.isHeldByCurrentThread()) {
-            lock.unlock();
-        }
+
     }
 
     public synchronized void close() {
@@ -171,26 +177,30 @@ public final class WriteBuffer {
      *
      * @return 待输出的VirtualBuffer
      */
-    public synchronized VirtualBuffer poll() {
+    public VirtualBuffer poll() {
         VirtualBuffer item = pollItem();
         if (item != null) {
             return item;
         }
-        if (!lock.isHeldByCurrentThread()) {
-            lock.lock();
-        }
-        if (writeInBuf != null && writeInBuf.buffer().position() > 0) {
-            // 将暂存器里面的数据更改为读模式，一会将其读出来并发送
-            writeInBuf.buffer().flip();
-            VirtualBuffer buffer = writeInBuf;
-            writeInBuf = null;
-            if (lock.isHeldByCurrentThread()) {
-                lock.unlock();
+        boolean held = lock.isHeldByCurrentThread();
+        if (held || lock.tryLock()) {
+            if (writeInBuf != null && writeInBuf.buffer().position() > 0) {
+                // 将暂存器里面的数据更改为读模式，一会将其读出来并发送
+                writeInBuf.buffer().flip();
+                VirtualBuffer buffer = writeInBuf;
+                writeInBuf = null;
+                if (!held) {
+                    lock.unlock();
+                }
+                return buffer;
+            } else {
+                if (!held) {
+                    lock.unlock();
+                }
+                return null;
             }
-            return buffer;
-        } else {
-            return null;
         }
+        return null;
     }
 
 }
