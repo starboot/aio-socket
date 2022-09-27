@@ -54,7 +54,7 @@ public class Handler implements AioHandler {
         if (packet instanceof DemoPacket) {
             DemoPacket demoPacket = (DemoPacket) packet;
             // 自定义协议
-            VirtualBuffer virtualBuffer = channelContext.getVirtualBuffer(20);
+            VirtualBuffer virtualBuffer = channelContext.getVirtualBuffer(demoPacket.getData().getBytes().length + 4);
             ByteBuffer buffer = virtualBuffer.buffer();
             buffer.putInt(demoPacket.getData().getBytes().length);
             buffer.put(demoPacket.getData().getBytes());

@@ -79,19 +79,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class Server {
 
-    // java -jar ***** host port
     public static void main(String[] args) {
 
-        ServerBootstrap bootstrap = new ServerBootstrap((args != null && args.length != 0) ? args[0] : "127.0.0.1", (args != null && args.length != 0) ? Integer.parseInt(args[1]) : 8888, new ServerHandler());
-        if (args != null && args.length > 0) {
-            System.out.println(args[0] + "--" + Integer.parseInt(args[1]));
-        }
+        ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
         bootstrap.getConfig()
-                .setEnhanceCore(true)
+//                .setEnhanceCore(true)
                 .setBufferFactory(() -> new BufferPagePool(50 * 1024 * 1024 * 2, 10, false))
                 .setReadBufferSize(1024 * 1024)
-                .setWriteBufferSize(1024 * 1024)
-                .setWriteBufferCapacity(16)
+                .setWriteBufferSize(1024 * 4)
                 // 使插件功能生效
                 .setEnablePlugins(true)
                 // 注册服务器统计插件

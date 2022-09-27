@@ -57,17 +57,15 @@ public class Client {
 //        demoPacket.setReq("177");   设置同步位
         // 5000
         for (int i = 0; i < 10; i++) {
-            int finalI = i;
             new Thread(() -> {
                 // 127.0.0.1
-                ClientBootstrap clientBootstrap = new ClientBootstrap((args != null && args.length != 0) ? args[0] : "127.0.0.1", (args != null && args.length != 0) ? Integer.parseInt(args[1]) : 8888, new ClientHandler());
+                ClientBootstrap clientBootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
                 clientBootstrap.getConfig()
                         .setHeartPacket(new DemoPacket("heartbeat message"))
                         .setReadBufferSize(1024 * 1024)
-                        .setWriteBufferSize(1024 * 1024)
-                        .setWriteBufferCapacity(16)
-                        .setBufferFactory(() -> new BufferPagePool(50 * 1024 * 1024, 2, false))
-                        .setEnhanceCore(true)
+                        .setWriteBufferSize(1024 * 4)
+                        .setBufferFactory(() -> new BufferPagePool(50 * 1024 * 1024, 1, false))
+//                        .setEnhanceCore(true)
                         // 启用插件
                         .setEnablePlugins(true)
                         .getPlugins()
@@ -77,20 +75,14 @@ public class Client {
                 try {
                     TCPChannelContext start = clientBootstrap.start();
                     long num = 0;
-                    long startnum = System.currentTimeMillis();
+                    long startTime = System.currentTimeMillis();
                     while (num++ < Integer.MAX_VALUE) {
-                        if (start == null) {
-                            System.out.println("连接失败了.....");
-                        }else {
-//                            零拷贝优化前2000， 非零拷贝50
-                            Aio.send(start, demoPacket);
-                        }
+                        Aio.send(start, demoPacket);
                     }
-                    System.out.println("安全消息结束" + (System.currentTimeMillis() - startnum));
+                    System.out.println("安全消息结束" + (System.currentTimeMillis() - startTime));
                     Thread.sleep(10000);
                     clientBootstrap.shutdown();
                 } catch (IOException | InterruptedException e) {
-                    System.out.println(finalI);
                     e.printStackTrace();
                 }
 

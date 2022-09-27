@@ -119,7 +119,7 @@ public final class TCPChannelContext extends ChannelContext{
             }
         };
         // 为当前ChannelContext添加对外输出流
-        byteBuf = new WriteBuffer(bufferPage, flushConsumer, getAioConfig().getWriteBufferSize(), getAioConfig().getWriteBufferCapacity());
+        byteBuf = new WriteBuffer(bufferPage, flushConsumer, getAioConfig().getWriteBufferSize());
         // 触发状态机
         getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }

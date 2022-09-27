@@ -52,11 +52,6 @@ public class AioConfig {
     private int writeBufferSize = 2048;
 
     /**
-     * Write缓存区容量
-     */
-    private int writeBufferCapacity = 16;
-
-    /**
      * 远程服务器IP
      */
     private String host;
@@ -99,7 +94,7 @@ public class AioConfig {
     /**
      * 是否是服务器
      */
-    private boolean isServer;
+    private final boolean isServer;
 
     /**
      * 群组和其ChannelContext绑定
@@ -197,15 +192,6 @@ public class AioConfig {
 
     public AioConfig setSocketOptions(Map<SocketOption<Object>, Object> socketOptions) {
         this.socketOptions = socketOptions;
-        return this;
-    }
-
-    public int getWriteBufferCapacity() {
-        return writeBufferCapacity;
-    }
-
-    public AioConfig setWriteBufferCapacity(int writeBufferCapacity) {
-        this.writeBufferCapacity = writeBufferCapacity;
         return this;
     }
 

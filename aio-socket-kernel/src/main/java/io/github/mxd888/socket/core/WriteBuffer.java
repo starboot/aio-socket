@@ -18,8 +18,7 @@ package io.github.mxd888.socket.core;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
-import java.nio.ByteBuffer;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
@@ -38,7 +37,7 @@ public final class WriteBuffer {
     /**
      * 存储已就绪待输出的数据
      */
-    private final VirtualBuffer[] items;
+    private final ConcurrentLinkedQueue<VirtualBuffer> itemsQueue;
 
     /**
      * 为当前 WriteBuffer 提供数据存放功能的缓存页 用于申请内存空间
@@ -56,21 +55,6 @@ public final class WriteBuffer {
     private final int chunkSize;
 
     /**
-     * items 读索引位
-     */
-    private int takeIndex;
-
-    /**
-     * items 写索引位
-     */
-    private int putIndex;
-
-    /**
-     * items 中存放的缓冲数据数量
-     */
-    private int count;
-
-    /**
      * 暂存当前业务正在输出的数据,输出完毕后会存放到items中
      */
     private VirtualBuffer writeInBuf;
@@ -85,17 +69,11 @@ public final class WriteBuffer {
      */
     private final ReentrantLock lock = new ReentrantLock();
 
-    /**
-     * 同步信号量
-     */
-    private final Semaphore semaphore;
-
-    public WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
+    public WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize) {
         this.bufferPage = bufferPage;
         this.consumer = consumer;
-        this.items = new VirtualBuffer[capacity];
+        this.itemsQueue = new ConcurrentLinkedQueue<>();
         this.chunkSize = chunkSize;
-        this.semaphore = new Semaphore(capacity);
     }
 
     /**
@@ -131,19 +109,8 @@ public final class WriteBuffer {
         // 有人在发送，这个消息进入等待队列  writeInBuf修改为读模式
         writeInBuf.buffer().flip();
         VirtualBuffer virtualBuffer = writeInBuf;
+        itemsQueue.offer(virtualBuffer);
         writeInBuf = null;
-        try {
-            semaphore.acquire();
-            synchronized (this) {
-                items[putIndex] = virtualBuffer;
-                if (++putIndex == items.length) {
-                    putIndex = 0;
-                }
-                count++;
-            }
-        } catch (InterruptedException e1) {
-            throw new RuntimeException(e1);
-        }
     }
 
     /**
@@ -153,7 +120,7 @@ public final class WriteBuffer {
         if (closed) {
             throw new RuntimeException("OutputStream has closed");
         }
-        if (this.count > 0 || (writeInBuf != null && writeInBuf.buffer().position() > 0)) {
+        if (!itemsQueue.isEmpty() || (writeInBuf != null && writeInBuf.buffer().position() > 0)) {
             consumer.accept(this);
         }
         if (lock.isHeldByCurrentThread()) {
@@ -184,7 +151,7 @@ public final class WriteBuffer {
      * @return true:有,false:无
      */
     boolean isEmpty() {
-        return count == 0 && (writeInBuf == null || writeInBuf.buffer().position() == 0);
+        return itemsQueue.isEmpty() && (writeInBuf == null || writeInBuf.buffer().position() == 0);
     }
 
     /**
@@ -193,19 +160,10 @@ public final class WriteBuffer {
      * @return VirtualBuffer类型的消息
      */
     VirtualBuffer pollItem() {
-        if (count == 0) {
+        if (itemsQueue.isEmpty()) {
             return null;
         }
-        synchronized (this) {
-            VirtualBuffer x = items[takeIndex];
-            items[takeIndex] = null;
-            if (++takeIndex == items.length) {
-                takeIndex = 0;
-            }
-            count--;
-            semaphore.release();
-            return x;
-        }
+        return itemsQueue.poll();
     }
 
     /**
