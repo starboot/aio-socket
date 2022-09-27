@@ -65,7 +65,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
             virtualBuffer.buffer().put(Constant.CRLF_BYTES);
         } else {
             if (virtualBuffer.buffer().remaining() == 0) {
-                virtualBuffer = channelContext.getVirtualBuffer();
+                virtualBuffer = channelContext.getVirtualBuffer(1024);
             }
             virtualBuffer.buffer().put(b, off, len);
         }
@@ -114,7 +114,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
         writeHeader();
 
         if (chunked) {
-            virtualBuffer = channelContext.getVirtualBuffer();
+            virtualBuffer = channelContext.getVirtualBuffer(1024);
             virtualBuffer.buffer().put(Constant.CHUNKED_END_BYTES);
         }
         closed = true;

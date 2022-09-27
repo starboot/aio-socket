@@ -40,7 +40,7 @@ public class Client {
 
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
         // 5000
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
             int finalI = i;
             new Thread(() -> {
                 // 81.70.149.16 127.0.0.1
@@ -50,7 +50,7 @@ public class Client {
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 1024)
                         .setWriteBufferCapacity(16)
-                        .setBufferFactory(() -> new BufferPagePool(5 * 1024 * 1024, 9, true))
+                        .setBufferFactory(() -> new BufferPagePool(50 * 1024 * 1024, 2, false))
                         .setEnhanceCore(true)
                         // 启用插件
                         .setEnablePlugins(true)
@@ -61,7 +61,7 @@ public class Client {
                     TCPChannelContext start = clientBootstrap.start();
                     long num = 0;
                     long startnum = System.currentTimeMillis();
-                    while (num++ < 10) {
+                    while (num++ < Integer.MAX_VALUE) {
                         if (start == null) {
                             System.out.println("连接失败了.....");
                         }else {

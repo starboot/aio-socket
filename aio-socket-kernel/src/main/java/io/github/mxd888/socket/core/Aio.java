@@ -61,8 +61,8 @@ public class Aio {
      * @param packet         数据包
      */
     public static void send(TCPChannelContext channelContext, Packet packet) {
-        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getVirtualBuffer()); // channelContext.getByteBuf()
-        send(channelContext, buffer);
+        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, null); // channelContext.getByteBuf()
+        channelContext.getWriteBuffer().flush();
     }
 
     /**
@@ -72,7 +72,7 @@ public class Aio {
      * @param buffer         待发送比特流
      */
     public static void send(TCPChannelContext channelContext, VirtualBuffer buffer) {
-        channelContext.getWriteBuffer().write(buffer);
+//        channelContext.getWriteBuffer().write(buffer);
     }
 
     /**
@@ -83,7 +83,7 @@ public class Aio {
      * @param channelContext 发送者上下文
      */
     public static void sendGroup(String groupId, Packet packet, TCPChannelContext channelContext) {
-        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, channelContext.getVirtualBuffer());
+        VirtualBuffer buffer = channelContext.getAioConfig().getHandler().encode(packet, channelContext, null);
         channelContext.getAioConfig().getGroups().writeToGroup(groupId, buffer, channelContext);
     }
 

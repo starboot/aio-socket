@@ -39,10 +39,10 @@ public class Handler implements AioHandler {
         if (packet instanceof DemoPacket) {
             DemoPacket demoPacket = (DemoPacket) packet;
             // 自定义协议
-            ByteBuffer buffer = writeBuffer.buffer();
+            VirtualBuffer virtualBuffer = channelContext.getVirtualBuffer(20);
+            ByteBuffer buffer = virtualBuffer.buffer();
             buffer.putInt(demoPacket.getData().getBytes().length);
             buffer.put(demoPacket.getData().getBytes());
-            buffer.flip();
             return writeBuffer;
         }
         return null;

@@ -63,7 +63,7 @@ public abstract class ChannelContext {
      *
      * @return 内存池虚拟buffer
      */
-    public abstract VirtualBuffer getVirtualBuffer();
+    public abstract VirtualBuffer getVirtualBuffer(int len);
 
     /**
      * 获取通道输出流

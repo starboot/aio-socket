@@ -18,15 +18,10 @@ public class ClientHandler extends Handler {
             System.out.println("不一致，出错啦:" + packet1.getData());
         }else {
             count++;
-            System.out.println(count + packet1.getData());
             if (count % 1000000 ==0) {
                 System.out.println("已收到" + (count / 1000000) + "百万条消息");
             }
         }
-//        count++;
-//        if (count % 1000000 ==0) {
-//            System.out.println("已收到" + (count / 1000000) + "百万条消息");
-//        }
         return null;
     }
 }

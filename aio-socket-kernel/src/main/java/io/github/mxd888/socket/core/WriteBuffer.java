@@ -19,6 +19,7 @@ import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 import java.nio.ByteBuffer;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
@@ -84,11 +85,17 @@ public final class WriteBuffer {
      */
     private final ReentrantLock lock = new ReentrantLock();
 
+    /**
+     * 同步信号量
+     */
+    private final Semaphore semaphore;
+
     public WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
         this.bufferPage = bufferPage;
         this.consumer = consumer;
         this.items = new VirtualBuffer[capacity];
         this.chunkSize = chunkSize;
+        this.semaphore = new Semaphore(capacity);
     }
 
     /**
@@ -96,8 +103,15 @@ public final class WriteBuffer {
      *
      * @return 虚拟空间
      */
-    public VirtualBuffer newVirtualBuffer() {
-        return bufferPage.allocate(chunkSize);
+    public VirtualBuffer newVirtualBuffer(int len) {
+        lock.lock();
+        if (writeInBuf == null) {
+            writeInBuf = bufferPage.allocate(Math.max(chunkSize, len));
+        }else if (writeInBuf.buffer().remaining() < len) {
+            flushWriteBuffer(true);
+            writeInBuf = bufferPage.allocate(Math.max(chunkSize, len));
+        }
+        return writeInBuf;
     }
 
     /**
@@ -119,45 +133,16 @@ public final class WriteBuffer {
         VirtualBuffer virtualBuffer = writeInBuf;
         writeInBuf = null;
         try {
-            while (count == items.length) {
-                this.wait();
-                //防止因close诱发内存泄露
-                if (closed) {
-                    virtualBuffer.clean();
-                    return;
+            semaphore.acquire();
+            synchronized (this) {
+                items[putIndex] = virtualBuffer;
+                if (++putIndex == items.length) {
+                    putIndex = 0;
                 }
+                count++;
             }
-
-            items[putIndex] = virtualBuffer;
-            if (++putIndex == items.length) {
-                putIndex = 0;
-            }
-            count++;
         } catch (InterruptedException e1) {
             throw new RuntimeException(e1);
-        }
-    }
-
-    public void write(ByteBuffer buffer) {
-        write(VirtualBuffer.wrap(buffer));
-    }
-
-    public void write(VirtualBuffer virtualBuffer) {
-        try {
-            lock.lock();
-            if (writeInBuf != null && !virtualBuffer.buffer().isDirect() && writeInBuf.buffer().remaining() > virtualBuffer.buffer().remaining()) {
-                writeInBuf.buffer().put(virtualBuffer.buffer());
-                virtualBuffer.clean();
-            } else {
-                if (writeInBuf != null) {
-                    flushWriteBuffer(true);
-                }
-                virtualBuffer.buffer().compact();
-                writeInBuf = virtualBuffer;
-            }
-            flushWriteBuffer(false);
-        }finally {
-            lock.unlock();
         }
     }
 
@@ -170,6 +155,9 @@ public final class WriteBuffer {
         }
         if (this.count > 0 || (writeInBuf != null && writeInBuf.buffer().position() > 0)) {
             consumer.accept(this);
+        }
+        if (lock.isHeldByCurrentThread()) {
+            lock.unlock();
         }
     }
 
@@ -214,9 +202,8 @@ public final class WriteBuffer {
             if (++takeIndex == items.length) {
                 takeIndex = 0;
             }
-            if (count-- == items.length) {
-                this.notifyAll();
-            }
+            count--;
+            semaphore.release();
             return x;
         }
     }
@@ -231,11 +218,17 @@ public final class WriteBuffer {
         if (item != null) {
             return item;
         }
+        if (!lock.isHeldByCurrentThread()) {
+            lock.lock();
+        }
         if (writeInBuf != null && writeInBuf.buffer().position() > 0) {
             // 将暂存器里面的数据更改为读模式，一会将其读出来并发送
             writeInBuf.buffer().flip();
             VirtualBuffer buffer = writeInBuf;
             writeInBuf = null;
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
             return buffer;
         } else {
             return null;

@@ -323,8 +323,8 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public VirtualBuffer getVirtualBuffer() {
-        return byteBuf.newVirtualBuffer();
+    public VirtualBuffer getVirtualBuffer(int len) {
+        return byteBuf.newVirtualBuffer(len);
     }
 
     @Override

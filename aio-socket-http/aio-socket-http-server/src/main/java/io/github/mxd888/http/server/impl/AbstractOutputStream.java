@@ -53,7 +53,7 @@ abstract class AbstractOutputStream extends BufferOutputStream {
 
         boolean hasHeader = hasHeader();
         //输出http状态行、contentType,contentLength、Transfer-Encoding、server等信息
-        virtualBuffer = channelContext.getVirtualBuffer();
+        virtualBuffer = channelContext.getVirtualBuffer(1024);
         ByteBuffer buffer = virtualBuffer.buffer();
         buffer.put(getHeadPart(hasHeader));
         if (hasHeader) {
