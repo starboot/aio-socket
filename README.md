@@ -58,7 +58,9 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 </dependency>
 ~~~
 #### 起步
-我写了demo工程，项目还在快速迭代中，大家尽情期待....
+我写了demo工程，项目在"aio-socket/aio-socket-demo"下有Server和Client启动即可查看百万通信量效果。<br>
+aio-socket未来会向IM方向进行优化，成为一款专为IM定制的通讯内核，其他IOT领域、RPC等暂不考虑 <br>
+aio-socket还在快速迭代中，功能并未完善，大家尽情期待....
 ## 联系方式
 
    官方QQ群号：867691377 
@@ -73,12 +75,8 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
    第一本项目完全开源免费，可以拥有其任何使用权，但不代表可以做非法乱纪的事情，本项目以质朴质简思想开发，意在打造最易读懂源码为主，并不是以高深的设计哲学为主，
    可用作学习或不重要的作业使用，切勿商用，商用出现后果概不负责！！！非常感谢配合
 
-## 附上部分优秀开源项目链接
+## 上层应用开源项目链接
    
-   t-im：由本人开发，基于aio-socket开发的高性能IM通讯框架，官网：  https://gitee.com/mxd_2022/t-im  <br>  
-   WeChat：由本人开发，为t-im 提供基本的UI功能，官网：  https://gitee.com/mxd_2022/we-chat  <br>  
-   t-io：稳如泰山，性能炸裂的Java通讯框架，官网：  https://www.tiocloud.com/tio/  <br>  
-   Hutool：一个小而全的Java工具类库，官网：  https://www.hutool.cn/   <br>  
-   smart-socket：高性能Aio通讯，官网： https://smartboot.gitee.io/book/smart-socket/    <br>  
-   J-IM：高性能IM，官网（暂时打不来，或许作者正在开发中，尽情期待）：  http://www.j-im.cn/ <br>  
+   t-im：基于aio-socket开发的高性能IM通讯框架，官网：  https://gitee.com/mxd_2022/t-im  <br>  
+   WeChat：为t-im 提供基本的UI功能，官网：  https://gitee.com/mxd_2022/we-chat  <br>  
    本项目如有侵犯到任何个人或组织的权益请联系邮箱：1191998028@qq.com （如有侵权请联系删除）
