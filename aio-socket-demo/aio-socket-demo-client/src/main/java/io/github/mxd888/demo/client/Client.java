@@ -16,7 +16,6 @@
 package io.github.mxd888.demo.client;
 
 import io.github.mxd888.demo.common.DemoPacket;
-import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.plugins.ACKPlugin;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.Aio;
