@@ -50,7 +50,7 @@ public class Handler implements AioHandler {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public void encode(Packet packet, ChannelContext channelContext) {
         if (packet instanceof DemoPacket) {
             DemoPacket demoPacket = (DemoPacket) packet;
             // 自定义协议
@@ -58,9 +58,7 @@ public class Handler implements AioHandler {
             ByteBuffer buffer = virtualBuffer.buffer();
             buffer.putInt(demoPacket.getData().getBytes().length);
             buffer.put(demoPacket.getData().getBytes());
-            return writeBuffer;
         }
-        return null;
     }
 
     @Override

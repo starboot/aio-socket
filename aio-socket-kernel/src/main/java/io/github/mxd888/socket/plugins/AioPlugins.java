@@ -19,6 +19,7 @@ import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
 
@@ -93,7 +94,7 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) {
+    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) throws AioDecoderException {
 
         Packet packet = aioHandler.decode(readBuffer, channelContext);
         if (packet != null) {
@@ -105,11 +106,11 @@ public class AioPlugins implements AioHandler, NetMonitor {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
+    public void encode(Packet packet, ChannelContext channelContext) {
         for (Plugin plugin : plugins) {
-            plugin.beforeEncode(packet, channelContext, writeBuffer);
+            plugin.beforeEncode(packet, channelContext);
         }
-        return aioHandler.encode(packet, channelContext, writeBuffer);
+        aioHandler.encode(packet, channelContext);
     }
 
     @Override

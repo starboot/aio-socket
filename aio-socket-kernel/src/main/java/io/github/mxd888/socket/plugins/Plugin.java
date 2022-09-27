@@ -54,9 +54,8 @@ public interface Plugin extends NetMonitor {
      *
      * @param packet         待编码的数据包
      * @param channelContext 用户通道
-     * @param virtualBuffer  编码成功后的虚拟buffer
      */
-    void beforeEncode(Packet packet, ChannelContext channelContext, VirtualBuffer virtualBuffer);
+    void beforeEncode(Packet packet, ChannelContext channelContext);
 
     /**
      * 监听状态机事件

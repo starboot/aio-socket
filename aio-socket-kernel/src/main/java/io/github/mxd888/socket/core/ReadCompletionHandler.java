@@ -28,13 +28,6 @@ import java.nio.channels.CompletionHandler;
  */
 final class ReadCompletionHandler implements CompletionHandler<Integer, TCPChannelContext> {
 
-    /**
-     * 只在本包下可以被调用
-     */
-    ReadCompletionHandler() {
-    }
-
-
     @Override
     public void completed(Integer result, TCPChannelContext channelContext) {
         // 读取完成,result:实际读取的字节数。如果对方关闭连接则result=-1。

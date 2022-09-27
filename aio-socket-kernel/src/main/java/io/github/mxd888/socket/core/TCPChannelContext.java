@@ -18,6 +18,7 @@ package io.github.mxd888.socket.core;
 import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
+import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -27,8 +28,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -107,6 +106,7 @@ public final class TCPChannelContext extends ChannelContext{
         this.writeCompletionHandler = writeCompletionHandler;
         this.aioConfig = config;
 
+        // Java8 函数式编程的无返回函数
         Consumer<WriteBuffer> flushConsumer = var -> {
             if (!semaphore.tryAcquire()) {
                 return;
@@ -118,13 +118,14 @@ public final class TCPChannelContext extends ChannelContext{
                 continueWrite(writeBuffer);
             }
         };
+        // 为当前ChannelContext添加对外输出流
         byteBuf = new WriteBuffer(bufferPage, flushConsumer, getAioConfig().getWriteBufferSize(), getAioConfig().getWriteBufferCapacity());
-        //触发状态机
+        // 触发状态机
         getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }
 
     /**
-     * 初始化Aio TCPChannelContext
+     * 初始化TCPChannelContext
      */
     void initTCPChannelContext(VirtualBuffer readBuffer) {
         this.readBuffer = readBuffer;
@@ -143,18 +144,18 @@ public final class TCPChannelContext extends ChannelContext{
         final ByteBuffer readBuffer = this.readBuffer.buffer();
         final AioHandler handler = getAioConfig().getHandler();
         while (readBuffer.hasRemaining() && status == CHANNEL_STATUS_ENABLED) {
-            Packet dataEntry;
+            Packet dataEntry = null;
             try {
                 dataEntry = handler.decode(this.readBuffer, this);
-            } catch (Exception e) {
+            } catch (AioDecoderException e) {
                 handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, e);
-                throw e;
+                e.printStackTrace();
             }
             if (dataEntry == null) {
                 break;
             }
 
-            //处理消息
+            // 处理消息
             try {
                 Packet packet = handler.handle(this, dataEntry);
                 if (packet != null) {
@@ -191,7 +192,7 @@ public final class TCPChannelContext extends ChannelContext{
             handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, exception);
             throw exception;
         }
-        //再次读
+        // 再次读
         continueRead(this.readBuffer);
     }
 

@@ -126,6 +126,9 @@ public class AioConfig {
      */
     private Packet heartPacket;
 
+    /**
+     * 单台aio-socket最大在线用户量；再启动MonitorPlugin时才生效（通过触发状态机来通知应用层处理）
+     */
     private int maxOnlineNum;
 
     /**

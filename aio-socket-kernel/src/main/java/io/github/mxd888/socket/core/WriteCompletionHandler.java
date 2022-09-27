@@ -26,7 +26,7 @@ import java.nio.channels.CompletionHandler;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class WriteCompletionHandler implements CompletionHandler<Integer, TCPChannelContext> {
+final class WriteCompletionHandler implements CompletionHandler<Integer, TCPChannelContext> {
 
     @Override
     public void completed(Integer result, TCPChannelContext channelContext) {

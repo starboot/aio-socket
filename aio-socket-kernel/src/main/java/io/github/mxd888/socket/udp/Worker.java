@@ -19,7 +19,7 @@ import io.github.mxd888.socket.NetMonitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.exception.AioException;
+import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.AioConfig;
@@ -173,7 +173,7 @@ public final class Worker implements Runnable {
                         Packet request = config.getHandler().decode(readyBuffer, session);
                         //理论上每个UDP包都是一个完整的消息
                         if (request == null) {
-                            config.getHandler().stateEvent(session, StateMachineEnum.DECODE_EXCEPTION, new AioException("decode result is null, buffer size: " + buffer.remaining()));
+                            config.getHandler().stateEvent(session, StateMachineEnum.DECODE_EXCEPTION, new AioDecoderException("decode result is null, buffer size: " + buffer.remaining()));
                             break;
                         } else {
                             config.getHandler().handle(session, request);

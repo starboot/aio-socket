@@ -22,6 +22,8 @@ import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
 import io.github.mxd888.socket.utils.IOUtil;
 import io.github.mxd888.socket.utils.ThreadUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -43,6 +45,8 @@ import java.util.function.Function;
  * @version 2.10.1.v20211002-RELEASE
  */
 public class ServerBootstrap {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerBootstrap.class);
 
     /**
      * 服务器配置类
@@ -137,10 +141,12 @@ public class ServerBootstrap {
                 this.serverSocketChannel.bind(new InetSocketAddress(getConfig().getPort()), getConfig().getBacklog());
             }
             startAcceptThread();
-            System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel started successfully");
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("aio-socket version: {}; server kernel started successfully", AioConfig.VERSION);
+            }
         }catch (IOException e) {
             shutdown();
-            System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel started failed");
+            LOGGER.error("aio-socket version: {}; server kernel started failed", AioConfig.VERSION);
         }
     }
 

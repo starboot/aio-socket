@@ -18,8 +18,8 @@ package io.github.mxd888.socket.intf;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
-import io.github.mxd888.socket.core.TCPChannelContext;
 
 /**
  * 消息解编码处理类，并包含了消息处理，状态机触发回调
@@ -44,16 +44,15 @@ public interface AioHandler {
      * @param channelContext 用户上下文
      * @return               返回Packet消息包
      */
-    Packet decode(final VirtualBuffer readBuffer, ChannelContext channelContext);
+    Packet decode(final VirtualBuffer readBuffer, ChannelContext channelContext) throws AioDecoderException;
 
     /**
      * 编码回调方法
      *
      * @param packet         需要编码消息包
      * @param channelContext 用户上下文
-     * @return               buffer流
      */
-    VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer);
+    void encode(Packet packet, ChannelContext channelContext);
 
     /**
      * 状态机事件,当枚举事件发生时由框架触发该方法

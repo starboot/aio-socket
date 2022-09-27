@@ -72,8 +72,7 @@ public class HttpRequestHandler implements AioHandler {
     }
 
     @Override
-    public VirtualBuffer encode(Packet packet, ChannelContext channelContext, VirtualBuffer writeBuffer) {
-        return null;
+    public void encode(Packet packet, ChannelContext channelContext) {
     }
 
     @Override

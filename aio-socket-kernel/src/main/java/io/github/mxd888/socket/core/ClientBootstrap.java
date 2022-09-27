@@ -21,6 +21,8 @@ import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
 import io.github.mxd888.socket.utils.IOUtil;
 import io.github.mxd888.socket.utils.QuickTimerTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -40,6 +42,8 @@ import java.util.concurrent.TimeUnit;
  * @version 2.10.1.v20211002-RELEASE
  */
 public class ClientBootstrap {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientBootstrap.class);
 
     /**
      * 客户端服务配置。
@@ -128,20 +132,22 @@ public class ClientBootstrap {
             public void completed(TCPChannelContext session, CompletableFuture<TCPChannelContext> future) {
                 if (future.isDone() || future.isCancelled()) {
                     session.close();
-                    System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed because of future is done or cancelled");
+                    LOGGER.error("aio-socket version: {}; client kernel started failed because of future is done or cancelled", AioConfig.VERSION);
                 } else {
                     future.complete(session);
                     if (getConfig().getHeartPacket() != null) {
                         heartMessage();
                     }
-                    System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started successfully");
+                    if (LOGGER.isInfoEnabled()) {
+                        LOGGER.info("aio-socket version: {}; client kernel started successfully", AioConfig.VERSION);
+                    }
                 }
             }
 
             @Override
             public void failed(Throwable exc, CompletableFuture<TCPChannelContext> future) {
                 future.completeExceptionally(exc);
-                System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel started failed");
+                LOGGER.error("aio-socket version: {}; client kernel started failed", AioConfig.VERSION);
             }
         });
         try {
@@ -233,7 +239,9 @@ public class ClientBootstrap {
      */
     private void heartMessage() {
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(()-> {
-            System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel are sending heart");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("aio-socket version: {}; client kernel are sending heartbeat", AioConfig.VERSION);
+            }
             Aio.send(channelContext, getConfig().getHeartPacket());
             heartMessage();
         }, 5, TimeUnit.SECONDS);
