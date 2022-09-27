@@ -15,7 +15,7 @@
  */
 package io.github.mxd888.socket.core;
 
-import io.github.mxd888.socket.NetMonitor;
+import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.StateMachineEnum;
 
 import java.nio.channels.CompletionHandler;
@@ -31,7 +31,7 @@ final class WriteCompletionHandler implements CompletionHandler<Integer, TCPChan
     @Override
     public void completed(Integer result, TCPChannelContext channelContext) {
         try {
-            NetMonitor monitor = channelContext.getAioConfig().getMonitor();
+            Monitor monitor = channelContext.getAioConfig().getMonitor();
             if (monitor != null) {
                 monitor.afterWrite(channelContext, result);
             }

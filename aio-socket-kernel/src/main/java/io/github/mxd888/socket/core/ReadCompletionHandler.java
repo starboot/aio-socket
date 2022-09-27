@@ -15,7 +15,7 @@
  */
 package io.github.mxd888.socket.core;
 
-import io.github.mxd888.socket.NetMonitor;
+import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.StateMachineEnum;
 
 import java.nio.channels.CompletionHandler;
@@ -33,7 +33,7 @@ final class ReadCompletionHandler implements CompletionHandler<Integer, TCPChann
         // 读取完成,result:实际读取的字节数。如果对方关闭连接则result=-1。
         try {
             // 接收到的消息进行预处理
-            NetMonitor monitor = channelContext.getAioConfig().getMonitor();
+            Monitor monitor = channelContext.getAioConfig().getMonitor();
             if (monitor != null) {
                 monitor.afterRead(channelContext, result);
             }

@@ -15,7 +15,7 @@
  */
 package io.github.mxd888.socket.udp;
 
-import io.github.mxd888.socket.NetMonitor;
+import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
@@ -164,7 +164,7 @@ public final class Worker implements Runnable {
                 //解码
                 ChannelContext session = new UDPChannelContext(channel, remote, bufferPool.allocateBufferPage());
                 try {
-                    NetMonitor netMonitor = config.getMonitor();
+                    Monitor netMonitor = config.getMonitor();
                     if (netMonitor != null) {
                         netMonitor.beforeRead(session);
                         netMonitor.afterRead(session, buffer.remaining());

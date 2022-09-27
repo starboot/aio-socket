@@ -16,6 +16,8 @@
 package io.github.mxd888.demo.client;
 
 import io.github.mxd888.demo.common.DemoPacket;
+import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.plugins.ACKPlugin;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.TCPChannelContext;
@@ -24,6 +26,7 @@ import io.github.mxd888.socket.plugins.ReconnectPlugin;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.concurrent.TimeUnit;
 
 
 public class Client {
@@ -52,6 +55,7 @@ public class Client {
         System.setOut(ps);
 
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
+//        demoPacket.setReq("177");   设置同步位
         // 5000
         for (int i = 0; i < 10; i++) {
             int finalI = i;
@@ -68,6 +72,7 @@ public class Client {
                         // 启用插件
                         .setEnablePlugins(true)
                         .getPlugins()
+                        .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
                         .addPlugin(new ReconnectPlugin(clientBootstrap));
 
                 try {

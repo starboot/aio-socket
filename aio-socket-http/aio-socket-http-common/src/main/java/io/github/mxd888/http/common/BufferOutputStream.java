@@ -103,7 +103,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
     public final void flush() throws IOException {
         writeHeader();
         virtualBuffer.buffer().flip();
-        Aio.send(channelContext, virtualBuffer);
+//        Aio.send(channelContext, virtualBuffer);
     }
 
     @Override

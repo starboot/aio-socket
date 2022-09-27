@@ -15,7 +15,7 @@
  */
 package io.github.mxd888.socket.plugins;
 
-import io.github.mxd888.socket.NetMonitor;
+import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
@@ -33,7 +33,7 @@ import java.util.List;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class AioPlugins implements AioHandler, NetMonitor {
+public class AioPlugins implements AioHandler, Monitor {
 
     private AioHandler aioHandler;
 

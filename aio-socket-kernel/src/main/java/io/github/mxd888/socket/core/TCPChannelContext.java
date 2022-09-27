@@ -15,7 +15,7 @@
  */
 package io.github.mxd888.socket.core;
 
-import io.github.mxd888.socket.NetMonitor;
+import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.exception.AioDecoderException;
@@ -202,7 +202,7 @@ public final class TCPChannelContext extends ChannelContext{
      * @param readBuffer 存放读出的数据buffer
      */
     private void continueRead(VirtualBuffer readBuffer) {
-        NetMonitor monitor = getAioConfig().getMonitor();
+        Monitor monitor = getAioConfig().getMonitor();
         if (monitor != null) {
             monitor.beforeRead(this);
         }
@@ -240,7 +240,7 @@ public final class TCPChannelContext extends ChannelContext{
      * @param writeBuffer 存放待输出数据的buffer
      */
     private void continueWrite(VirtualBuffer writeBuffer) {
-        NetMonitor monitor = getAioConfig().getMonitor();
+        Monitor monitor = getAioConfig().getMonitor();
         if (monitor != null) {
             monitor.beforeWrite(this);
         }

@@ -11,7 +11,7 @@ import java.nio.channels.AsynchronousSocketChannel;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public interface NetMonitor {
+public interface Monitor {
 
     /**
      * 监控已接收到的连接

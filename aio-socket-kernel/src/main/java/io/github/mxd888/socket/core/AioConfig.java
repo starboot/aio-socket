@@ -15,7 +15,7 @@
  */
 package io.github.mxd888.socket.core;
 
-import io.github.mxd888.socket.NetMonitor;
+import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -64,7 +64,7 @@ public class AioConfig {
     /**
      * 服务器消息拦截器
      */
-    private NetMonitor monitor;
+    private Monitor monitor;
 
     /**
      * 服务器端口号
@@ -165,11 +165,11 @@ public class AioConfig {
         this.port = port;
     }
 
-    public NetMonitor getMonitor() {
+    public Monitor getMonitor() {
         return monitor;
     }
 
-    public AioConfig setMonitor(NetMonitor monitor) {
+    public AioConfig setMonitor(Monitor monitor) {
         this.monitor = monitor;
         return this;
     }

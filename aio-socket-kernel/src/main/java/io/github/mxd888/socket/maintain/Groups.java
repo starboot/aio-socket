@@ -73,13 +73,13 @@ public class Groups {
         }
         if (channelContext == null) {
             for (TCPChannelContext context : groupUnit.groupList) {
-                Aio.send(context, buffer);
+//                Aio.send(context, buffer);
             }
             return;
         }
         for (TCPChannelContext context : groupUnit.groupList) {
             if (channelContext != context) {
-                Aio.send(context, buffer);
+//                Aio.send(context, buffer);
             }
         }
     }

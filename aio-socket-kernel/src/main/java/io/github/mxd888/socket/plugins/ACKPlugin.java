@@ -69,6 +69,7 @@ public class ACKPlugin extends AbstractPlugin{
         // 编码前对数据进行ACK码计时
         String req = packet.getReq();
         if (req != null && req.length() != 0) {
+            idToPacket.put(req, packet);
             registerACK(req, packet);
         }
     }
@@ -84,7 +85,6 @@ public class ACKPlugin extends AbstractPlugin{
                 if (lastTime == null) {
                     lastTime = System.currentTimeMillis();
                     timePacket.put(key, lastTime);
-                    idToPacket.put(key, packet);
                 }
                 long current = System.currentTimeMillis();
                 //超时未收到消息，关闭连接

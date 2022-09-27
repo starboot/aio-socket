@@ -15,12 +15,10 @@
  */
 package io.github.mxd888.socket.plugins;
 
-import io.github.mxd888.socket.NetMonitor;
+import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.TCPChannelContext;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 /**
  * aio-socket 插件接口
@@ -28,7 +26,7 @@ import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public interface Plugin extends NetMonitor {
+public interface Plugin extends Monitor {
 
     /**
      * 对请求消息进行预处理，并决策是否进行后续的MessageProcessor处理。
