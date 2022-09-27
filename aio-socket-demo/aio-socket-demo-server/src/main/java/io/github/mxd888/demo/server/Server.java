@@ -104,14 +104,12 @@ public class Server {
                     public boolean isHeartMessage(Packet packet) {
                         if (packet instanceof DemoPacket) {
                             DemoPacket packet1 = (DemoPacket) packet;
-                            return packet1.getData().equals("heart message");
+                            return packet1.getData().equals("heartbeat message");
                         }
                         return false;
                     }
                 })
-                .addPlugin(new ACKPlugin(30, TimeUnit.SECONDS, (context, lastTime) -> {
-                    System.out.println("超时了：..." + lastTime);
-                }));
+                .addPlugin(new ACKPlugin(30, TimeUnit.SECONDS, (context, lastTime) -> System.out.println("超时了：..." + lastTime)));
         bootstrap.start();
 
     }

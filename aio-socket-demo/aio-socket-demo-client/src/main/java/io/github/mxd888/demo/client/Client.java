@@ -59,7 +59,7 @@ public class Client {
                 // 127.0.0.1
                 ClientBootstrap clientBootstrap = new ClientBootstrap((args != null && args.length != 0) ? args[0] : "127.0.0.1", (args != null && args.length != 0) ? Integer.parseInt(args[1]) : 8888, new ClientHandler());
                 clientBootstrap.getConfig()
-                        .setHeartPacket(new DemoPacket("heart message"))
+                        .setHeartPacket(new DemoPacket("heartbeat message"))
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 1024)
                         .setWriteBufferCapacity(16)
