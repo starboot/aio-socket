@@ -32,8 +32,11 @@ import java.util.concurrent.Executor;
 public class SendRunnable extends AbstractQueueRunnable<Packet> {
 
     private static final Logger LOGGER	= LoggerFactory.getLogger(SendRunnable.class);
+
     private final ChannelContext channelContext;
+
     private final AioHandler aioConfig;
+
     private FullWaitQueue<Packet> msgQueue = null;
 
     public SendRunnable(ChannelContext channelContext, Executor executor) {

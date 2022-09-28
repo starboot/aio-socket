@@ -32,7 +32,9 @@ import java.util.concurrent.Executor;
 public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
 
     private final ChannelContext channelContext;
+
     private final AioConfig aioConfig;
+
     private FullWaitQueue<Packet> msgQueue = null;
 
     public HandlerRunnable(ChannelContext channelContext, Executor executor) {

@@ -32,50 +32,62 @@ import java.util.concurrent.atomic.LongAdder;
  * @version 2.10.1.v20211002-RELEASE
  */
 public final class MonitorPlugin extends AbstractPlugin implements Runnable {
+
     /**
      * 当前周期内流入字节数
      */
     private final LongAdder inFlow = new LongAdder();
+
     /**
      * 当前周期内流出字节数
      */
     private final LongAdder outFlow = new LongAdder();
+
     /**
      * 当前周期内处理失败消息数
      */
     private final LongAdder processFailNum = new LongAdder();
+
     /**
      * 当前周期内处理消息数
      */
     private final LongAdder processMsgNum = new LongAdder();
+
     /**
      * 当前周期内新建连接数
      */
     private final LongAdder newConnect = new LongAdder();
+
     /**
      * 当前周期内断开连接数
      */
     private final LongAdder disConnect = new LongAdder();
+
     /**
      * 当前周期内执行 read 操作次数
      */
     private final LongAdder readCount = new LongAdder();
+
     /**
      * 当前周期内执行 write 操作次数
      */
     private final LongAdder writeCount = new LongAdder();
+
     /**
      * 任务执行频率
      */
     private final int seconds;
+
     /**
      * 自插件启用起的累计连接总数
      */
     private long totalConnect;
+
     /**
      * 自插件启用起的累计处理消息总数
      */
     private long totalProcessMsgNum = 0;
+
     /**
      * 当前在线状态连接数
      */
