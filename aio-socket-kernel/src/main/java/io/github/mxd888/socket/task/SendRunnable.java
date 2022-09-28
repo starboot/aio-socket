@@ -27,7 +27,10 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.Executor;
 
 /**
- * 发送逻辑执行器
+ * 消息发送逻辑执行器
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class SendRunnable extends AbstractQueueRunnable<Packet> {
 

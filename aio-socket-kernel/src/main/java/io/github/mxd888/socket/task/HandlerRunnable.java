@@ -27,7 +27,10 @@ import io.github.mxd888.socket.utils.queue.FullWaitQueue;
 import java.util.concurrent.Executor;
 
 /**
- * 处理逻辑执行器
+ * 消息处理逻辑执行器
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
 

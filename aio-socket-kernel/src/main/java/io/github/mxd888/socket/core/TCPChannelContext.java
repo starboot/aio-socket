@@ -94,8 +94,14 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private VirtualBuffer writeBuffer;
 
+    /**
+     * 消息处理逻辑执行器
+     */
     private final HandlerRunnable handlerRunnable;
 
+    /**
+     * 消息发送逻辑执行器
+     */
     private final SendRunnable sendRunnable;
 
     /**

@@ -17,6 +17,9 @@ package io.github.mxd888.socket.exception;
 
 /**
  * aio-socket异常处理类
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class AioDecoderException extends Exception{
 
