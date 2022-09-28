@@ -31,7 +31,6 @@ import java.util.function.Consumer;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-
 public final class WriteBuffer {
 
     /**
