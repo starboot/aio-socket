@@ -17,7 +17,6 @@ package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
-import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
@@ -83,11 +82,13 @@ public final class WriteBuffer {
      * @return 虚拟空间
      */
     public VirtualBuffer newVirtualBuffer(int len) {
-        lock.lock();
+        if (!lock.isHeldByCurrentThread()) {
+            lock.lock();
+        }
         if (writeInBuf == null) {
             writeInBuf = bufferPage.allocate(Math.max(chunkSize, len));
         }else if (writeInBuf.buffer().remaining() < len) {
-            flushWriteBuffer(true);
+            flushWriteBuffer();
             writeInBuf = bufferPage.allocate(Math.max(chunkSize, len));
         }
         return writeInBuf;
@@ -95,13 +96,8 @@ public final class WriteBuffer {
 
     /**
      * 把暂存的buffer发送出去
-     *
-     * @param forceFlush 是否立刻发送  强制冲洗，若通道正在被使用则将数据存入items数组
      */
-    private void flushWriteBuffer(boolean forceFlush) {
-        if (!forceFlush && writeInBuf.buffer().hasRemaining()) {
-            return;
-        }
+    private void flushWriteBuffer() {
         consumer.accept(this);
         // 检查是否已经发送出去了
         if (writeInBuf == null || writeInBuf.buffer().position() == 0) {
@@ -121,7 +117,7 @@ public final class WriteBuffer {
     /**
      * 刷新缓冲区，将数据发送出去
      */
-    void flush() {
+    public void flush() {
         if (lock.isHeldByCurrentThread()) {
             lock.unlock();
         }

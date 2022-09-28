@@ -60,9 +60,10 @@ public class Aio {
      * @param channelContext 接收方通道
      * @param packet         数据包
      */
-    public static void send(TCPChannelContext channelContext, Packet packet) {
-        channelContext.getAioConfig().getHandler().encode(packet, channelContext);
-        channelContext.getWriteBuffer().flush();
+    public static void send(ChannelContext channelContext, Packet packet) {
+        if (channelContext.sendRunnable().addMsg(packet)) {
+            channelContext.sendRunnable().execute();
+        }
     }
 
     /**

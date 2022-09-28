@@ -15,6 +15,7 @@
  */
 package io.github.mxd888.socket.core;
 
+import io.github.mxd888.socket.utils.ThreadUtils;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -197,7 +198,7 @@ public class ClientBootstrap {
                         throw new RuntimeException("NetMonitor refuse channel");
                     }
                     //连接成功则构造AIOChannelContext对象
-                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage());
+                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage(), ThreadUtils.getAioExecutor());
                     channelContext.initTCPChannelContext(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
                     handler.completed(channelContext, future);
                 } catch (Exception e) {

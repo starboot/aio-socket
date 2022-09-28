@@ -15,6 +15,7 @@
  */
 package io.github.mxd888.socket.core;
 
+import io.github.mxd888.socket.task.SendRunnable;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 import java.io.IOException;
@@ -184,4 +185,10 @@ public abstract class ChannelContext {
      * @return 配置信息
      */
     public abstract AioConfig getAioConfig();
+
+    /**
+     * 发送器
+     * @return .
+     */
+    public abstract SendRunnable sendRunnable();
 }

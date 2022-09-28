@@ -56,16 +56,15 @@ public class Client {
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
 //        demoPacket.setReq("177");   设置同步位
         // 5000
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             new Thread(() -> {
                 // 127.0.0.1
                 ClientBootstrap clientBootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
                 clientBootstrap.getConfig()
                         .setHeartPacket(new DemoPacket("heartbeat message"))
                         .setReadBufferSize(1024 * 1024)
-                        .setWriteBufferSize(1024 * 4)
-                        .setBufferFactory(() -> new BufferPagePool(50 * 1024 * 1024, 1, false))
-//                        .setEnhanceCore(true)
+                        .setWriteBufferSize(1024 * 10)
+                        .setBufferFactory(() -> new BufferPagePool(5 * 1024 * 1024, 1, true))
                         // 启用插件
                         .setEnablePlugins(true)
                         .getPlugins()
@@ -78,6 +77,9 @@ public class Client {
                     long startTime = System.currentTimeMillis();
                     while (num++ < Integer.MAX_VALUE) {
                         Aio.send(start, demoPacket);
+                        if (num % 1000000 == 0) {
+                            System.out.println("发送" + num/1000000 + "百万");
+                        }
                     }
                     System.out.println("安全消息结束" + (System.currentTimeMillis() - startTime));
                     Thread.sleep(10000);

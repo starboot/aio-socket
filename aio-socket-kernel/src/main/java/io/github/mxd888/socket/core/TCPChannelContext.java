@@ -19,10 +19,13 @@ import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.exception.AioDecoderException;
+import io.github.mxd888.socket.task.HandlerRunnable;
+import io.github.mxd888.socket.task.SendRunnable;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.IOUtil;
+import io.github.mxd888.socket.utils.pool.thread.SynThreadPoolExecutor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -91,6 +94,10 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private VirtualBuffer writeBuffer;
 
+    private final HandlerRunnable handlerRunnable;
+
+    private final SendRunnable sendRunnable;
+
     /**
      * 构造通道上下文对象
      *
@@ -100,11 +107,13 @@ public final class TCPChannelContext extends ChannelContext{
      * @param writeCompletionHandler 写回调
      * @param bufferPage             绑定内存页
      */
-    TCPChannelContext(AsynchronousSocketChannel channel, final AioConfig config, ReadCompletionHandler readCompletionHandler, WriteCompletionHandler writeCompletionHandler, BufferPage bufferPage) {
+    TCPChannelContext(AsynchronousSocketChannel channel, final AioConfig config, ReadCompletionHandler readCompletionHandler, WriteCompletionHandler writeCompletionHandler, BufferPage bufferPage, SynThreadPoolExecutor synThreadPoolExecutor) {
         this.channel = channel;
         this.readCompletionHandler = readCompletionHandler;
         this.writeCompletionHandler = writeCompletionHandler;
         this.aioConfig = config;
+        this.handlerRunnable = new HandlerRunnable(this, synThreadPoolExecutor);
+        this.sendRunnable = new SendRunnable(this, synThreadPoolExecutor);
 
         // Java8 函数式编程的无返回函数
         Consumer<WriteBuffer> flushConsumer = var -> {
@@ -156,13 +165,8 @@ public final class TCPChannelContext extends ChannelContext{
             }
 
             // 处理消息
-            try {
-                Packet packet = handler.handle(this, dataEntry);
-                if (packet != null) {
-                    Aio.send(this, packet);
-                }
-            } catch (Exception e) {
-                handler.stateEvent(this, StateMachineEnum.PROCESS_EXCEPTION, e);
+            if (handlerRunnable.addMsg(dataEntry)) {
+                handlerRunnable.execute();
             }
         }
         if (eof || status == CHANNEL_STATUS_CLOSING) {
@@ -186,7 +190,7 @@ public final class TCPChannelContext extends ChannelContext{
          * 当buffer被读取过，但想继续复用buffer时，可以执行compact把剩余未读取数据往缓冲数据前面移动，compact移动完后，可以再次使用put往该buffer里put数据，此时数据会被写到剩余数据之后。
          */
         readBuffer.compact();
-        //读缓冲区已满
+        // 读缓冲区已满
         if (!readBuffer.hasRemaining()) {
             RuntimeException exception = new RuntimeException("readBuffer overflow");
             handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, exception);
@@ -321,6 +325,11 @@ public final class TCPChannelContext extends ChannelContext{
     @Override
     public AioConfig getAioConfig() {
         return this.aioConfig;
+    }
+
+    @Override
+    public SendRunnable sendRunnable() {
+        return this.sendRunnable;
     }
 
     @Override

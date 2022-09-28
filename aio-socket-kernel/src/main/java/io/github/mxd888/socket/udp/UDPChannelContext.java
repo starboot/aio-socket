@@ -18,6 +18,7 @@ package io.github.mxd888.socket.udp;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.task.SendRunnable;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
@@ -104,5 +105,10 @@ final class UDPChannelContext extends ChannelContext {
     @Override
     public AioConfig getAioConfig() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public SendRunnable sendRunnable() {
+        throw  new UnsupportedOperationException();
     }
 }

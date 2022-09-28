@@ -15,7 +15,6 @@
  */
 package io.github.mxd888.socket.core;
 
-import io.github.mxd888.socket.enhance.EnhanceAsynchronousChannelProvider;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -103,7 +102,7 @@ public class ServerBootstrap {
      */
     public void start() {
         start0(channel -> new TCPChannelContext(channel, getConfig(), this.aioReadCompletionHandler,
-                this.aioWriteCompletionHandler, this.bufferPool.allocateBufferPage()));
+                this.aioWriteCompletionHandler, this.bufferPool.allocateBufferPage(), ThreadUtils.getAioExecutor()));
     }
 
     /**
@@ -119,14 +118,7 @@ public class ServerBootstrap {
                 this.bufferPool = getConfig().getBufferFactory().create();
             }
             this.aioChannelContextFunction = aioContextFunction;
-            AsynchronousChannelProvider provider;
-            if (getConfig().isEnhanceCore()) {
-                // 增强版
-                provider = EnhanceAsynchronousChannelProvider.provider();
-            } else {
-                // 普通版
-                provider = AsynchronousChannelProvider.provider();
-            }
+            AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
             this.aioReadCompletionHandler = new ReadCompletionHandler();
             this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(), 0);
             this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);

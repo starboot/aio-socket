@@ -1,5 +1,9 @@
 package io.github.mxd888.socket.utils;
 
+import io.github.mxd888.socket.utils.pool.thread.AioCallerRunsPolicy;
+import io.github.mxd888.socket.utils.pool.thread.DefaultThreadFactory;
+import io.github.mxd888.socket.utils.pool.thread.SynThreadPoolExecutor;
+
 import java.util.concurrent.*;
 
 /**
@@ -23,7 +27,7 @@ public class ThreadUtils {
     /**
      * 最大内存池线程数
      */
-    public static final int MAX_POOL_SIZE_FOR_GROUP	= Integer.getInteger("AIO_MAX_POOL_SIZE_FOR_GROUP", Math.max(CORE_POOL_SIZE * 16, 256));
+    public static final int MAX_POOL_SIZE_FOR_GROUP	= Integer.getInteger("AIO_MAX_POOL_SIZE_FOR_GROUP", Math.max(CORE_POOL_SIZE * 2, 10));
 
     /**
      * 保持活跃时间
@@ -65,5 +69,29 @@ public class ThreadUtils {
         ThreadPoolExecutor groupExecutor = new ThreadPoolExecutor(threadNum, threadNum, keepAliveTime, timeUnit, workQueue, threadFactory);
         groupExecutor.prestartCoreThread();
         return groupExecutor;
+    }
+
+    private static SynThreadPoolExecutor aioExecutor;
+
+    public static SynThreadPoolExecutor getAioExecutor() {
+        if (aioExecutor != null) {
+            return aioExecutor;
+        }
+
+        synchronized (ThreadUtils.class) {
+            if (aioExecutor != null) {
+                return aioExecutor;
+            }
+
+            LinkedBlockingQueue<Runnable> runnableQueue = new LinkedBlockingQueue<>();
+            //			ArrayBlockingQueue<Runnable> tioQueue = new ArrayBlockingQueue<>(QUEUE_CAPACITY);
+            String threadName = "aio-worker";
+            DefaultThreadFactory defaultThreadFactory = DefaultThreadFactory.getInstance(threadName, Thread.MAX_PRIORITY);
+            ThreadPoolExecutor.CallerRunsPolicy callerRunsPolicy = new AioCallerRunsPolicy();
+            aioExecutor = new SynThreadPoolExecutor(MAX_POOL_SIZE_FOR_GROUP, MAX_POOL_SIZE_FOR_GROUP, KEEP_ALIVE_TIME, runnableQueue, defaultThreadFactory, threadName,
+                    callerRunsPolicy);
+            aioExecutor.prestartCoreThread();
+            return aioExecutor;
+        }
     }
 }

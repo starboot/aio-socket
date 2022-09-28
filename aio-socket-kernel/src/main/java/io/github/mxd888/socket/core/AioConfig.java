@@ -87,11 +87,6 @@ public class AioConfig {
     private BufferFactory bufferFactory = BufferFactory.ENABLE_BUFFER_FACTORY;
 
     /**
-     * 启用AIO内核增强
-     */
-    private boolean enhanceCore = false;
-
-    /**
      * 是否是服务器
      */
     private final boolean isServer;
@@ -126,6 +121,8 @@ public class AioConfig {
      */
     private int maxOnlineNum;
 
+    private int maxWaitNum = 50;
+
     /**
      * 插件
      */
@@ -133,6 +130,14 @@ public class AioConfig {
 
     public AioConfig(boolean isServer) {
         this.isServer = isServer;
+    }
+
+    public int getMaxWaitNum() {
+        return maxWaitNum;
+    }
+
+    public void setMaxWaitNum(int maxWaitNum) {
+        this.maxWaitNum = maxWaitNum;
     }
 
     public int getWriteBufferSize() {
@@ -201,15 +206,6 @@ public class AioConfig {
 
     public AioConfig setBacklog(int backlog) {
         this.backlog = backlog;
-        return this;
-    }
-
-    public boolean isEnhanceCore() {
-        return enhanceCore;
-    }
-
-    public AioConfig setEnhanceCore(boolean enhanceCore) {
-        this.enhanceCore = enhanceCore;
         return this;
     }
 
