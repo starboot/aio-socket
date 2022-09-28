@@ -31,23 +31,22 @@ import java.util.concurrent.Executor;
  */
 public class SendRunnable extends AbstractQueueRunnable<Packet> {
 
-    private static final Logger log	= LoggerFactory.getLogger(SendRunnable.class);
+    private static final Logger LOGGER	= LoggerFactory.getLogger(SendRunnable.class);
     private final ChannelContext channelContext;
-    private final AioHandler tioHandler;
+    private final AioHandler aioConfig;
     private FullWaitQueue<Packet> msgQueue = null;
-
 
     public SendRunnable(ChannelContext channelContext, Executor executor) {
         super(executor);
         this.channelContext = channelContext;
-        this.tioHandler = channelContext.getAioConfig().getHandler();
+        this.aioConfig = channelContext.getAioConfig().getHandler();
         getMsgQueue();
     }
 
     @Override
     public boolean addMsg(Packet packet) {
         if (this.isCanceled()) {
-            log.info("{}, 任务已经取消，{}添加到发送队列失败", channelContext, packet.getReq());
+            LOGGER.info("{}, 任务已经取消，{}添加到发送队列失败", channelContext, packet.getReq());
             return false;
         }
 
@@ -60,7 +59,7 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
      */
     private void getByteBuffer(Packet packet) {
         try {
-            tioHandler.encode(packet, channelContext);
+            aioConfig.encode(packet, channelContext);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -83,15 +82,11 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
         channelContext.getWriteBuffer().flush();
     }
 
-
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + ":" + channelContext.toString();
     }
 
-    /**
-     * @author tanyaowu
-     */
     @Override
     public String logstr() {
         return toString();

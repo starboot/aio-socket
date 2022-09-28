@@ -1,3 +1,18 @@
+/*
+ *    Copyright 2019 The aio-socket Project
+ *
+ *    The aio-socket Project Licenses this file to you under the Apache License,
+ *    Version 2.0 (the "License"); you may not use this file except in compliance
+ *    with the License. You may obtain a copy of the License at:
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package io.github.mxd888.socket.utils.pool.thread;
 
 import org.slf4j.Logger;
@@ -8,27 +23,21 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractSynRunnable implements Runnable {
-    /** The log. */
-    private static final Logger log			= LoggerFactory.getLogger(AbstractSynRunnable.class);
-    /**
-     * 是否已经提交到线程池了
-     */
-    public boolean			executed	= false;
-    protected ReentrantLock runningLock	= new ReentrantLock();
-    public Executor executor;
-    private boolean			isCanceled	= false;
 
-    /**
-     * Instantiates a new abstract syn runnable.
-     */
+    private static final Logger log	= LoggerFactory.getLogger(AbstractSynRunnable.class);
+
+    public boolean executed	= false;
+
+    protected ReentrantLock runningLock	= new ReentrantLock();
+
+    public Executor executor;
+
+    private boolean	isCanceled	= false;
+
     protected AbstractSynRunnable(Executor executor) {
         this.executor = executor;
     }
 
-    /**
-     * 把本任务对象提交到线程池去执行
-     * @author tanyaowu
-     */
     public void execute() {
         executor.execute(this);
     }
@@ -41,8 +50,7 @@ public abstract class AbstractSynRunnable implements Runnable {
 
     @Override
     public final void run() {
-        if (isCanceled()) //任务已经被取消
-        {
+        if (isCanceled()) {
             return;
         }
         boolean tryLock = false;

@@ -23,7 +23,7 @@ import java.util.concurrent.Executor;
 
 public abstract class AbstractQueueRunnable<T> extends AbstractSynRunnable {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractQueueRunnable.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueueRunnable.class);
 
     /**
      * Instantiates a new abstract syn runnable.
@@ -41,7 +41,7 @@ public abstract class AbstractQueueRunnable<T> extends AbstractSynRunnable {
      */
     public boolean addMsg(T t) {
         if (this.isCanceled()) {
-            log.error("任务已经取消");
+            LOGGER.error("任务已经取消");
             return false;
         }
         return getMsgQueue().offer(t);

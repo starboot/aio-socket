@@ -32,42 +32,29 @@ import java.util.concurrent.Executor;
 public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
 
     private final ChannelContext channelContext;
-    private final AioConfig tioConfig;
+    private final AioConfig aioConfig;
     private FullWaitQueue<Packet> msgQueue = null;
 
     public HandlerRunnable(ChannelContext channelContext, Executor executor) {
         super(executor);
         this.channelContext = channelContext;
-        tioConfig = channelContext.getAioConfig();
+        aioConfig = channelContext.getAioConfig();
         getMsgQueue();
     }
 
-    /**
-     * 处理packet
-     * @param packet .
-     *
-     * @author tanyaowu
-     */
     public void handler(Packet packet) {
         try {
             // 处理消息
-            Packet handle = tioConfig.getHandler().handle(channelContext, packet);
+            Packet handle = aioConfig.getHandler().handle(channelContext, packet);
             if (handle != null) {
                 Aio.send(channelContext, handle);
             }
         } catch (Exception e) {
-            tioConfig.getHandler().stateEvent(channelContext, StateMachineEnum.PROCESS_EXCEPTION, e);
+            aioConfig.getHandler().stateEvent(channelContext, StateMachineEnum.PROCESS_EXCEPTION, e);
         }
 
     }
 
-    /**
-//     * @see org.tio.core.SynRunnable.intf.ISynRunnable#runTask()
-     *
-     * @author tanyaowu
-     * 2016年12月5日 下午3:02:49
-     *
-     */
     @Override
     public void runTask() {
         Packet packet;
@@ -91,7 +78,7 @@ public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {
-                    msgQueue = new AioFullWaitQueue<>(tioConfig.getMaxWaitNum(), true);
+                    msgQueue = new AioFullWaitQueue<>(aioConfig.getMaxWaitNum(), true);
                 }
             }
         }

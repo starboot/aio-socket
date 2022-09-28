@@ -1,4 +1,18 @@
-
+/*
+ *    Copyright 2019 The aio-socket Project
+ *
+ *    The aio-socket Project Licenses this file to you under the Apache License,
+ *    Version 2.0 (the "License"); you may not use this file except in compliance
+ *    with the License. You may obtain a copy of the License at:
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package io.github.mxd888.socket.utils.lock;
 
 import java.io.Serializable;
@@ -11,85 +25,43 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 自带读写锁的对象.
- *
- * @author tanyaowu
  */
 public class ObjWithLock<T> implements Serializable {
 
 	private static final long serialVersionUID = -3048283373239453901L;
 
-	private static Logger log = LoggerFactory.getLogger(ObjWithLock.class);
+	private static final Logger log = LoggerFactory.getLogger(ObjWithLock.class);
 
-	/**
-	 * 
-	 */
 	private T obj = null;
 
-	/**
-	 * 
-	 */
 	private ReentrantReadWriteLock lock = null;
 
-	/**
-	 * 
-	 * @param obj
-	 * @author tanyaowu
-	 */
 	public ObjWithLock(T obj) {
 		this(obj, new ReentrantReadWriteLock());
 	}
 
-	/**
-	 * 
-	 * @param obj
-	 * @param lock
-	 * @author tanyaowu
-	 */
 	public ObjWithLock(T obj, ReentrantReadWriteLock lock) {
 		super();
 		this.obj = obj;
 		this.lock = lock;
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @author tanyaowu
-	 */
 	public ReentrantReadWriteLock getLock() {
 		return lock;
 	}
 
-	/**
-	 * 获取写锁
-	 * @return
-	 */
 	public WriteLock writeLock() {
 		return lock.writeLock();
 	}
 
-	/**
-	 * 获取读锁
-	 * @return
-	 */
 	public ReadLock readLock() {
 		return lock.readLock();
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @author tanyaowu
-	 */
 	public T getObj() {
 		return obj;
 	}
 
-	/**
-	 * 
-	 * @param obj
-	 * @author tanyaowu
-	 */
 	public void setObj(T obj) {
 		this.obj = obj;
 	}

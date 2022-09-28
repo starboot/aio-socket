@@ -1,4 +1,18 @@
-
+/*
+ *    Copyright 2019 The aio-socket Project
+ *
+ *    The aio-socket Project Licenses this file to you under the Apache License,
+ *    Version 2.0 (the "License"); you may not use this file except in compliance
+ *    with the License. You may obtain a copy of the License at:
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package io.github.mxd888.socket.utils.lock;
 
 import java.io.Serializable;
@@ -16,30 +30,23 @@ import org.slf4j.LoggerFactory;
  */
 public class LockUtils {
 	private static Logger				log						= LoggerFactory.getLogger(LockUtils.class);
+
 	private static final String			LOCK_TYPE_OBJ			= "OBJ";
+
 	private static final String			LOCK_TYPE_RW			= "RW";
+
 	private static final Object			defaultLockObjForObj	= new Object();
+
 	private static final Object			defaultLockObjForRw		= new Object();
+
 	private static final CaffeineCache LOCAL_LOCKS				= CaffeineCache.register(LockUtils.class.getName() + LOCK_TYPE_OBJ, null, 3600L);
+
 	private static final CaffeineCache	LOCAL_READWRITE_LOCKS	= CaffeineCache.register(LockUtils.class.getName() + LOCK_TYPE_RW, null, 3600L);
 
-	/**
-	 * 获取锁对象，用于synchronized(lockObj)
-	 * @param key
-	 * @return
-	 * @author tanyaowu
-	 */
 	public static Serializable getLockObj(String key) {
 		return getLockObj(key, null);
 	}
 
-	/**
-	 * 获取锁对象，用于synchronized(lockObj)
-	 * @param key
-	 * @param myLock 获取LockObj的锁，可以为null
-	 * @return
-	 * @author tanyaowu
-	 */
 	public static Serializable getLockObj(String key, Object myLock) {
 		Serializable lock = LOCAL_LOCKS.get(key);
 		if (lock == null) {
@@ -60,13 +67,6 @@ public class LockUtils {
 		return lock;
 	}
 
-	/**
-	 * 获取读写锁
-	 * @param key
-	 * @param myLock 获取ReentrantReadWriteLock的锁，可以为null
-	 * @return
-	 * @author tanyaowu
-	 */
 	public static ReentrantReadWriteLock getReentrantReadWriteLock(String key, Object myLock) {
 		ReentrantReadWriteLock lock = (ReentrantReadWriteLock) LOCAL_READWRITE_LOCKS.get(key);
 		if (lock == null) {
@@ -114,7 +114,6 @@ public class LockUtils {
 	 * @param readWaitTimeInSecond 没拿到写锁的线程，等读锁的时间，单位：秒
 	 * @return
 	 * @throws Exception
-	 * @author tanyaowu
 	 */
 	public static void runWriteOrWaitRead(String key, Object myLock, ReadWriteLockHandler readWriteLockHandler, Long readWaitTimeInSecond) throws Exception {
 		ReentrantReadWriteLock rwLock = getReentrantReadWriteLock(key, myLock);

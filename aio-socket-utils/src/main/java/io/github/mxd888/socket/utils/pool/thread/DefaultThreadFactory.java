@@ -1,3 +1,18 @@
+/*
+ *    Copyright 2019 The aio-socket Project
+ *
+ *    The aio-socket Project Licenses this file to you under the Apache License,
+ *    Version 2.0 (the "License"); you may not use this file except in compliance
+ *    with the License. You may obtain a copy of the License at:
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package io.github.mxd888.socket.utils.pool.thread;
 
 import java.util.HashMap;
@@ -61,15 +76,6 @@ public class DefaultThreadFactory implements ThreadFactory {
         return threadPoolName;
     }
 
-    /**
-     * @see java.util.concurrent.ThreadFactory#newThread(java.lang.Runnable)
-     *
-     * @param r
-     * @return
-     * @author tanyaowu
-     * 2016年11月15日 上午9:07:00
-     *
-     */
     @Override
     public Thread newThread(Runnable r) {
         Thread thread = new Thread(r);
