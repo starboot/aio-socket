@@ -58,16 +58,16 @@ public class Client {
         for (int i = 0; i < 5; i++) {
             new Thread(() -> {
                 // 127.0.0.1
-                ClientBootstrap clientBootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
-                clientBootstrap.setBufferFactory(() -> new BufferPagePool(20 * 1024 * 1024, 5, true))
+                ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
+                bootstrap.setBufferFactory(() -> new BufferPagePool(20 * 1024 * 1024, 5, true))
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 512, 256)
                         .addHeartPacket(new DemoPacket("heartbeat message"))
                         .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
-                        .addPlugin(new ReconnectPlugin(clientBootstrap));
+                        .addPlugin(new ReconnectPlugin(bootstrap));
 
                 try {
-                    TCPChannelContext start = clientBootstrap.start();
+                    TCPChannelContext start = bootstrap.start();
                     long num = 0;
                     long startTime = System.currentTimeMillis();
                     while (num++ < Integer.MAX_VALUE) {
@@ -78,7 +78,7 @@ public class Client {
                     }
                     System.out.println("安全消息结束" + (System.currentTimeMillis() - startTime));
                     Thread.sleep(10000);
-                    clientBootstrap.shutdown();
+                    bootstrap.shutdown();
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
