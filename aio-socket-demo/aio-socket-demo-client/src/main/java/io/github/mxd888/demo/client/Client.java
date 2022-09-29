@@ -60,14 +60,10 @@ public class Client {
             new Thread(() -> {
                 // 127.0.0.1
                 ClientBootstrap clientBootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
-                clientBootstrap.getConfig()
-                        .setHeartPacket(new DemoPacket("heartbeat message"))
+                clientBootstrap.setBufferFactory(() -> new BufferPagePool(20 * 1024 * 1024, 5, true))
                         .setReadBufferSize(1024 * 1024)
-                        .setWriteBufferSize(1024 * 10)
-                        .setBufferFactory(() -> new BufferPagePool(5 * 1024 * 1024, 1, true))
-                        // 启用插件
-                        .setEnablePlugins(true)
-                        .getPlugins()
+                        .setWriteBufferSize(1024 * 512, 256)
+                        .addHeartPacket(new DemoPacket("heartbeat message"))
                         .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
                         .addPlugin(new ReconnectPlugin(clientBootstrap));
 

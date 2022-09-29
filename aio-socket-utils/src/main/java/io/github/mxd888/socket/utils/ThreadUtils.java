@@ -102,7 +102,7 @@ public class ThreadUtils {
             String threadName = "aio-worker";
             DefaultThreadFactory defaultThreadFactory = DefaultThreadFactory.getInstance(threadName, Thread.MAX_PRIORITY);
             ThreadPoolExecutor.CallerRunsPolicy callerRunsPolicy = new AioCallerRunsPolicy();
-            aioExecutor = new SynThreadPoolExecutor(MAX_POOL_SIZE_FOR_GROUP, MAX_POOL_SIZE_FOR_GROUP, KEEP_ALIVE_TIME, runnableQueue, defaultThreadFactory, threadName,
+            aioExecutor = new SynThreadPoolExecutor(MAX_POOL_SIZE_FOR_GROUP * 3, MAX_POOL_SIZE_FOR_GROUP * 3, KEEP_ALIVE_TIME, runnableQueue, defaultThreadFactory, threadName,
                     callerRunsPolicy);
             aioExecutor.prestartCoreThread();
             return aioExecutor;

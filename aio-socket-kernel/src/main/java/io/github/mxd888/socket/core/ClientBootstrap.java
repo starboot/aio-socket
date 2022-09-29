@@ -15,7 +15,10 @@
  */
 package io.github.mxd888.socket.core;
 
+import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.utils.ThreadUtils;
+import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -33,6 +36,7 @@ import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -77,6 +81,8 @@ public class ClientBootstrap {
      */
     private final static int connectTimeout = 5000;
 
+    private Packet heartBeat = null;
+
     private boolean isCheck = true;
 
     /**
@@ -94,7 +100,7 @@ public class ClientBootstrap {
     public  ClientBootstrap(String host, int port, AioHandler handler) {
         this.config.setHost(host);
         this.config.setPort(port);
-        this.config.setHandler(handler);
+        this.config.getPlugins().setAioHandler(handler);
     }
 
     /**
@@ -136,7 +142,7 @@ public class ClientBootstrap {
                     LOGGER.error("aio-socket version: {}; client kernel started failed because of future is done or cancelled", AioConfig.VERSION);
                 } else {
                     future.complete(session);
-                    if (getConfig().getHeartPacket() != null) {
+                    if (Objects.nonNull(heartBeat)) {
                         heartMessage();
                     }
                     if (LOGGER.isInfoEnabled()) {
@@ -226,13 +232,9 @@ public class ClientBootstrap {
      * 检查配置项
      */
     private void checkAndResetConfig() {
-        // 检查是否启用插件模块
-        if (getConfig().isEnablePlugins()) {
-            AioPlugins plugins = getConfig().getPlugins();
-            plugins.setAioHandler(getConfig().getHandler());
-            getConfig().setMonitor(plugins)
-                    .setHandler(plugins);
-        }
+        AioPlugins plugins = getConfig().getPlugins();
+        getConfig().setMonitor(plugins)
+                .setHandler(plugins);
     }
 
     /**
@@ -243,7 +245,7 @@ public class ClientBootstrap {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("aio-socket version: {}; client kernel are sending heartbeat", AioConfig.VERSION);
             }
-            Aio.send(channelContext, getConfig().getHeartPacket());
+            Aio.send(channelContext, this.heartBeat);
             heartMessage();
         }, 5, TimeUnit.SECONDS);
     }
@@ -300,7 +302,63 @@ public class ClientBootstrap {
         return this.config;
     }
 
+    /**
+     * 重连访问项
+     *
+     * @param isCheck bool
+     */
     public void setCheck(boolean isCheck) {
         this.isCheck = isCheck;
+    }
+
+    /**
+     * 设置内存池工厂
+     *
+     * @param bufferFactory 内存池工厂
+     * @return this
+     */
+    public ClientBootstrap setBufferFactory(BufferFactory bufferFactory) {
+        getConfig().setBufferFactory(bufferFactory);
+        return this;
+    }
+
+    /**
+     * 设置写缓冲区大小
+     *
+     * @param writeBufferSize 写缓冲区大小
+     * @param maxWaitNum      最大等待队列长度
+     * @return                this
+     */
+    public ClientBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum) {
+        getConfig().setWriteBufferSize(writeBufferSize)
+                .setMaxOnlineNum(maxWaitNum);
+        return this;
+    }
+
+    /**
+     * 设置读缓冲区大小
+     *
+     * @param readBufferSize 读缓冲区大小
+     * @return               this
+     */
+    public ClientBootstrap setReadBufferSize(int readBufferSize) {
+        getConfig().setReadBufferSize(readBufferSize);
+        return this;
+    }
+
+    /**
+     * 注册插件
+     *
+     * @param plugin 插件项
+     * @return       this
+     */
+    public ClientBootstrap addPlugin(Plugin plugin) {
+        getConfig().getPlugins().addPlugin(plugin);
+        return this;
+    }
+
+    public ClientBootstrap addHeartPacket(Packet heartPacket) {
+        this.heartBeat = heartPacket;
+        return this;
     }
 }

@@ -40,7 +40,7 @@ public final class SslPlugin extends AbstractPlugin {
     private final BufferPagePool bufferPagePool;
 
     public SslPlugin(SSLContextFactory factory, Consumer<SSLEngine> consumer) throws Exception {
-        this(factory, consumer, BufferFactory.ENABLE_BUFFER_FACTORY.create());
+        this(factory, consumer, BufferFactory.DISABLED_BUFFER_FACTORY.create());
     }
 
     public SslPlugin(SSLContextFactory factory, Consumer<SSLEngine> consumer, BufferPagePool bufferPagePool) throws Exception {
@@ -50,7 +50,7 @@ public final class SslPlugin extends AbstractPlugin {
     }
 
     public SslPlugin(ClientSSLContextFactory factory) throws Exception {
-        this(factory, BufferFactory.ENABLE_BUFFER_FACTORY.create());
+        this(factory, BufferFactory.DISABLED_BUFFER_FACTORY.create());
     }
 
     public SslPlugin(ClientSSLContextFactory factory, BufferPagePool bufferPagePool) throws Exception {
@@ -58,7 +58,7 @@ public final class SslPlugin extends AbstractPlugin {
     }
 
     public SslPlugin(ServerSSLContextFactory factory, ClientAuth clientAuth) throws Exception {
-        this(factory, clientAuth, BufferFactory.ENABLE_BUFFER_FACTORY.create());
+        this(factory, clientAuth, BufferFactory.DISABLED_BUFFER_FACTORY.create());
     }
 
     public SslPlugin(ServerSSLContextFactory factory, ClientAuth clientAuth, BufferPagePool bufferPagePool) throws Exception {

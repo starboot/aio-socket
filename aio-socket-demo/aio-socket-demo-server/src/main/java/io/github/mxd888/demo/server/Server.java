@@ -82,14 +82,9 @@ public class Server {
     public static void main(String[] args) {
 
         ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
-        bootstrap.getConfig()
-                .setBufferFactory(() -> new BufferPagePool(5 * 1024 * 1024, 5, true))
+        bootstrap.setBufferFactory(() -> new BufferPagePool(20 * 1024 * 1024, 5, true))
                 .setReadBufferSize(1024 * 1024)
-                .setWriteBufferSize(1024 * 10)
-                // 使插件功能生效
-                .setEnablePlugins(true)
-                // 注册服务器统计插件
-                .getPlugins()
+                .setWriteBufferSize(1024 * 4, 512)
                 // 注册流量监控插件
 //                .addPlugin(new StreamMonitorPlugin())
                 .addPlugin(new MonitorPlugin(5))

@@ -16,7 +16,6 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Monitor;
-import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.maintain.ClusterIds;
@@ -84,7 +83,7 @@ public class AioConfig {
     /**
      * 内存池工厂
      */
-    private BufferFactory bufferFactory = BufferFactory.ENABLE_BUFFER_FACTORY;
+    private BufferFactory bufferFactory = BufferFactory.DISABLED_BUFFER_FACTORY;
 
     /**
      * 是否是服务器
@@ -105,16 +104,6 @@ public class AioConfig {
      * 集群服务器：用户ID与集群服务器ID一一对应
      */
     private final ClusterIds clusterIds = new ClusterIds();
-
-    /**
-     * 是否启用插件
-     */
-    private boolean enablePlugins = false;
-
-    /**
-     * 是否启用心跳发送（客户端使用）
-     */
-    private Packet heartPacket;
 
     /**
      * 单台aio-socket最大在线用户量；再启动MonitorPlugin时才生效（通过触发状态机来通知应用层处理）
@@ -226,9 +215,8 @@ public class AioConfig {
         return bufferFactory;
     }
 
-    public AioConfig setBufferFactory(BufferFactory bufferFactory) {
+    public void setBufferFactory(BufferFactory bufferFactory) {
         this.bufferFactory = bufferFactory;
-        return this;
     }
 
     public Groups getGroups() {
@@ -241,24 +229,6 @@ public class AioConfig {
 
     public ClusterIds getClusterIds() {
         return clusterIds;
-    }
-
-    public boolean isEnablePlugins() {
-        return enablePlugins;
-    }
-
-    public AioConfig setEnablePlugins(boolean enablePlugins) {
-        this.enablePlugins = enablePlugins;
-        return this;
-    }
-
-    public Packet getHeartPacket() {
-        return heartPacket;
-    }
-
-    public AioConfig setHeartPacket(Packet heartPacket) {
-        this.heartPacket = heartPacket;
-        return this;
     }
 
     public AioPlugins getPlugins() {

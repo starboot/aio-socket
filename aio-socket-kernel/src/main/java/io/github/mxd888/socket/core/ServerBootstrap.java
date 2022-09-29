@@ -15,6 +15,8 @@
  */
 package io.github.mxd888.socket.core;
 
+import io.github.mxd888.socket.plugins.Plugin;
+import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -89,7 +91,7 @@ public class ServerBootstrap {
 
     public ServerBootstrap(int port, AioHandler handler) {
         this.config.setPort(port);
-        this.config.setHandler(handler);
+        this.config.getPlugins().setAioHandler(handler);
     }
 
     public ServerBootstrap(String host, int port, AioHandler handler) {
@@ -199,13 +201,9 @@ public class ServerBootstrap {
      * 检查配置项
      */
     private void checkAndResetConfig() {
-        // 检查是否启用插件模块
-        if (getConfig().isEnablePlugins()) {
-            AioPlugins plugins = getConfig().getPlugins();
-            plugins.setAioHandler(getConfig().getHandler());
-            getConfig().setMonitor(plugins)
-                    .setHandler(plugins);
-        }
+        AioPlugins plugins = getConfig().getPlugins();
+        getConfig().setMonitor(plugins)
+                .setHandler(plugins);
         if (getConfig().getMaxOnlineNum() == 0) {
             // 默认单台aio-socket内核承载1000人，根据具体情况可以自由设置
             getConfig().setMaxOnlineNum(1000);
@@ -249,6 +247,52 @@ public class ServerBootstrap {
      */
     public AioConfig getConfig() {
         return this.config;
+    }
+
+    /**
+     * 设置内存池工厂
+     *
+     * @param bufferFactory 内存池工厂
+     * @return this
+     */
+    public ServerBootstrap setBufferFactory(BufferFactory bufferFactory) {
+        getConfig().setBufferFactory(bufferFactory);
+        return this;
+    }
+
+    /**
+     * 设置写缓冲区大小
+     *
+     * @param writeBufferSize 写缓冲区大小
+     * @param maxWaitNum      最大等待队列长度
+     * @return                this
+     */
+    public ServerBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum) {
+        getConfig().setWriteBufferSize(writeBufferSize)
+                .setMaxOnlineNum(maxWaitNum);
+        return this;
+    }
+
+    /**
+     * 设置读缓冲区大小
+     *
+     * @param readBufferSize 读缓冲区大小
+     * @return               this
+     */
+    public ServerBootstrap setReadBufferSize(int readBufferSize) {
+        getConfig().setReadBufferSize(readBufferSize);
+        return this;
+    }
+
+    /**
+     * 注册插件
+     *
+     * @param plugin 插件项
+     * @return       this
+     */
+    public ServerBootstrap addPlugin(Plugin plugin) {
+        getConfig().getPlugins().addPlugin(plugin);
+        return this;
     }
 
 }
