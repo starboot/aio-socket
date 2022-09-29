@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
-
 public class Client {
 
     public static void main(String[] args) {
