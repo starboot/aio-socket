@@ -61,7 +61,7 @@ public class Client {
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
                 bootstrap.setBufferFactory(() -> new BufferPagePool(20 * 1024 * 1024, 5, true))
                         .setReadBufferSize(1024 * 1024)
-                        .setWriteBufferSize(1024 * 512, 256)
+                        .setWriteBufferSize(1024 * 4, 512)
                         .addHeartPacket(new DemoPacket("heartbeat message"))
                         .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
                         .addPlugin(new ReconnectPlugin(bootstrap));
