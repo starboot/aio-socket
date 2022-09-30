@@ -55,11 +55,11 @@ public class Client {
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
 //        demoPacket.setReq("177");   设置同步位
         // 5000
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 // 127.0.0.1
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
-                bootstrap.setBufferFactory(() -> new BufferPagePool(20 * 1024 * 1024, 5, true))
+                bootstrap.setBufferFactory(() -> new BufferPagePool(5 * 1024 * 1024, 10, true))
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 4, 512)
                         .addHeartPacket(new DemoPacket("heartbeat message"))

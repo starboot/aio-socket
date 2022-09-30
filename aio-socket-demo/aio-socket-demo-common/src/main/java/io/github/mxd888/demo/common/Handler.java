@@ -18,10 +18,12 @@ package io.github.mxd888.demo.common;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.intf.AioHandler;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class Handler implements AioHandler {
@@ -54,10 +56,13 @@ public class Handler implements AioHandler {
         if (packet instanceof DemoPacket) {
             DemoPacket demoPacket = (DemoPacket) packet;
             // 自定义协议
-            VirtualBuffer virtualBuffer = channelContext.getVirtualBuffer(demoPacket.getData().getBytes().length + 4);
-            ByteBuffer buffer = virtualBuffer.buffer();
-            buffer.putInt(demoPacket.getData().getBytes().length);
-            buffer.put(demoPacket.getData().getBytes());
+            WriteBuffer writeBuffer = channelContext.getWriteBuffer();
+            try {
+                writeBuffer.writeInt(demoPacket.getData().getBytes().length);
+                writeBuffer.write(demoPacket.getData().getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

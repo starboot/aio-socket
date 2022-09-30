@@ -45,7 +45,7 @@ final class UDPChannelContext extends ChannelContext {
                 udpChannel.write(writeBuffer, UDPChannelContext.this);
             }
         };
-        this.byteBuf = new WriteBuffer(bufferPage, consumer, udpChannel.config.getWriteBufferSize());
+        this.byteBuf = new WriteBuffer(bufferPage, consumer, udpChannel.config.getWriteBufferSize(), 16);
         udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }
 
