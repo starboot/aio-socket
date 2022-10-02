@@ -74,11 +74,6 @@ public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
     }
 
     @Override
-    public String logstr() {
-        return toString();
-    }
-
-    @Override
     public FullWaitQueue<Packet> getMsgQueue() {
         if (msgQueue == null) {
             synchronized (this) {

@@ -89,7 +89,4 @@ public abstract class AbstractSynRunnable implements Runnable {
         this.isCanceled = isCanceled;
     }
 
-    public String logstr() {
-        return this.getClass().getName();
-    }
 }
