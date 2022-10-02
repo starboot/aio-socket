@@ -30,7 +30,7 @@ public abstract class AbstractSynRunnable implements Runnable {
 
     protected ReentrantLock runningLock	= new ReentrantLock();
 
-    public Executor executor;
+    public final Executor executor;
 
     private boolean	isCanceled	= false;
 
