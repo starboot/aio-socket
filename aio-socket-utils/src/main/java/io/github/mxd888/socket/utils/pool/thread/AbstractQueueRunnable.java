@@ -41,7 +41,7 @@ public abstract class AbstractQueueRunnable<T> extends AbstractSynRunnable {
      */
     public boolean addMsg(T t) {
         if (this.isCanceled()) {
-            LOGGER.error("任务已经取消");
+            LOGGER.error("作业已经被取消");
             return false;
         }
         return getMsgQueue().offer(t);

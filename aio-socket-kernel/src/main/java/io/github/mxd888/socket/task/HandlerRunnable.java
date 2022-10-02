@@ -49,7 +49,6 @@ public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
 
     public void handler(Packet packet) {
         try {
-            // 处理消息
             Packet handle = aioConfig.getHandler().handle(channelContext, packet);
             if (handle != null) {
                 Aio.send(channelContext, handle);
