@@ -55,11 +55,10 @@ public class AioFullWaitQueue<T> implements FullWaitQueue<T> {
      */
     @Override
     public T poll() {
-        if (isEmpty()) {
-            return null;
-        }
         T poll = queue.poll();
-        capacity.release();
+        if (poll != null) {
+            capacity.release();
+        }
         return poll;
     }
 

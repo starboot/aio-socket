@@ -61,6 +61,10 @@ public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
 
     @Override
     public void runTask() {
+        if (msgQueue.isEmpty()) {
+            return;
+        }
+
         Packet packet;
         while ((packet = msgQueue.poll()) != null) {
             handler(packet);
