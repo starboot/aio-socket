@@ -51,6 +51,7 @@ public class UDPBootstrap {
      * 开启一个UDP通道，端口号随机
      *
      * @return UDP通道
+     * @throws IOException 开启异常
      */
     public UDPChannel open() throws IOException {
         return open(0);
@@ -60,6 +61,7 @@ public class UDPBootstrap {
      * 开启一个UDP通道
      *
      * @param port 指定绑定端口号,为0则随机指定
+     * @throws IOException 开启异常
      */
     public UDPChannel open(int port) throws IOException {
         return open(null, port);
@@ -70,6 +72,7 @@ public class UDPBootstrap {
      *
      * @param host 绑定本机地址
      * @param port 指定绑定端口号,为0则随机指定
+     * @throws IOException 开启异常
      */
     public UDPChannel open(String host, int port) throws IOException {
         if (bufferPool == null) {
