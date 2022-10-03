@@ -40,9 +40,10 @@ public interface AioHandler {
     /**
      * 解码回调方法
      *
-     * @param readBuffer     读到的buffer流
-     * @param channelContext 用户上下文
-     * @return               返回Packet消息包
+     * @param readBuffer            读到的buffer流
+     * @param channelContext        用户上下文
+     * @return                      返回Packet消息包
+     * @throws AioDecoderException  解码异常
      */
     Packet decode(final VirtualBuffer readBuffer, ChannelContext channelContext) throws AioDecoderException;
 
