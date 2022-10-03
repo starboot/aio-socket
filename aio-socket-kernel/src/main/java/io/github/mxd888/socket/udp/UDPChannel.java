@@ -75,7 +75,7 @@ public final class UDPChannel {
         if (writeSemaphore.tryAcquire() && responseTasks.isEmpty() && send(virtualBuffer.buffer(), session) > 0) {
             virtualBuffer.clean();
             writeSemaphore.release();
-//            session.writeBuffer().flush();
+            session.getWriteBuffer().flush();
             return;
         }
         responseTasks.offer(new ResponseUnit(session, virtualBuffer));
@@ -109,7 +109,7 @@ public final class UDPChannel {
             }
             if (send(responseUnit.response.buffer(), responseUnit.session) > 0) {
                 responseUnit.response.clean();
-//                responseUnit.session.writeBuffer().flush();
+                responseUnit.session.getWriteBuffer().flush();
             } else {
                 failResponseUnit = responseUnit;
                 LOGGER.warn("send fail,will retry...");
@@ -122,7 +122,7 @@ public final class UDPChannel {
         if (config.getMonitor() != null) {
             config.getMonitor().beforeWrite(session);
         }
-        int size = 0;
+        int size;
         try {
             size = channel.send(byteBuffer, session.getRemoteAddress());
         } catch (IOException e) {

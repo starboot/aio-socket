@@ -42,7 +42,7 @@ final class UDPChannelContext extends ChannelContext {
         Consumer<WriteBuffer> consumer = var -> {
             VirtualBuffer writeBuffer = var.poll();
             if (writeBuffer != null) {
-                udpChannel.write(writeBuffer, UDPChannelContext.this);
+                this.udpChannel.write(writeBuffer, this);
             }
         };
         this.byteBuf = new WriteBuffer(bufferPage, consumer, udpChannel.config.getWriteBufferSize(), 16);

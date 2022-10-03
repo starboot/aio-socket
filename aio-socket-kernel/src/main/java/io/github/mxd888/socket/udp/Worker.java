@@ -181,9 +181,9 @@ public final class Worker implements Runnable {
                     } while (buffer.hasRemaining());
                 } catch (Throwable e) {
                     e.printStackTrace();
-//                    config.getHandler().stateEvent(session, StateMachineEnum.DECODE_EXCEPTION, e);
+                    config.getHandler().stateEvent(session, StateMachineEnum.DECODE_EXCEPTION, e);
                 } finally {
-//                    session.writeBuffer().flush();
+                    session.getWriteBuffer().flush();
                     readyBuffer.clean();
                 }
             };

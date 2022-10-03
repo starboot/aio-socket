@@ -15,6 +15,8 @@
  */
 package io.github.mxd888.socket.udp;
 
+import io.github.mxd888.socket.core.ServerBootstrap;
+import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.AioConfig;
@@ -123,29 +125,6 @@ public class UDPBootstrap {
         return this;
     }
 
-
-    /**
-     * 设置线程大小
-     *
-     * @param num 线程数
-     */
-    public final UDPBootstrap setThreadNum(int num) {
-//        this.config.setThreadNum(num);
-        return this;
-    }
-
-
-    /**
-     * 是否启用控制台Banner打印
-     *
-     * @param bannerEnabled true:启用，false:禁用
-     * @return 当前AioQuickServer对象
-     */
-    public final UDPBootstrap setBannerEnabled(boolean bannerEnabled) {
-//        config.setBannerEnabled(bannerEnabled);
-        return this;
-    }
-
     /**
      * 设置内存池。
      * 通过该方法设置的内存池，在AioQuickServer执行shutdown时不会触发内存池的释放。
@@ -173,6 +152,17 @@ public class UDPBootstrap {
     public final UDPBootstrap setBufferFactory(BufferFactory bufferFactory) {
         this.config.setBufferFactory(bufferFactory);
         this.bufferPool = null;
+        return this;
+    }
+
+    /**
+     * 注册插件
+     *
+     * @param plugin 插件项
+     * @return       this
+     */
+    public final UDPBootstrap addPlugin(Plugin plugin) {
+        this.config.getPlugins().addPlugin(plugin);
         return this;
     }
 }

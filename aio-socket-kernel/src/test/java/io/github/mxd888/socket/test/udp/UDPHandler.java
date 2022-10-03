@@ -1,0 +1,49 @@
+package io.github.mxd888.socket.test.udp;
+
+import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+public class UDPHandler implements AioHandler {
+    @Override
+    public Packet handle(ChannelContext channelContext, Packet packet) {
+        return null;
+    }
+
+    @Override
+    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) {
+        ByteBuffer buffer = readBuffer.buffer();
+        int remaining = buffer.remaining();
+        if (remaining < Integer.BYTES) {
+            return null;
+        }
+        buffer.mark();
+        int length = buffer.getInt();
+        if (length > buffer.remaining()) {
+            buffer.reset();
+            return null;
+        }
+        byte[] b = new byte[length];
+        buffer.get(b);
+        Packet packet = new Packet();
+        packet.setResp(new String(b, StandardCharsets.UTF_8));
+        return packet;
+    }
+
+    @Override
+    public void encode(Packet packet, ChannelContext channelContext) {
+        WriteBuffer writeBuffer = channelContext.getWriteBuffer();
+        try {
+            writeBuffer.writeInt(packet.getResp().getBytes().length);
+            writeBuffer.write(packet.getResp().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
