@@ -86,8 +86,6 @@ public class UDPBootstrap {
             innerWorker = true;
             worker = new Worker(bufferPool, 5);
         }
-
-
         DatagramChannel channel = DatagramChannel.open();
         channel.configureBlocking(false);
         if (port > 0) {
@@ -95,14 +93,6 @@ public class UDPBootstrap {
             channel.socket().bind(inetSocketAddress);
         }
         return new UDPChannel(channel, worker, config, bufferPool.allocateBufferPage());
-    }
-
-    private synchronized void initWorker() throws IOException {
-        if (worker != null) {
-            return;
-        }
-
-
     }
 
     public void shutdown() {
@@ -121,21 +111,6 @@ public class UDPBootstrap {
      */
     public final UDPBootstrap setReadBufferSize(int size) {
         this.config.setReadBufferSize(size);
-        return this;
-    }
-
-    /**
-     * 设置内存池。
-     * 通过该方法设置的内存池，在AioQuickServer执行shutdown时不会触发内存池的释放。
-     * 该方法适用于多个AioQuickServer、AioQuickClient共享内存池的场景。
-     * <b>在启用内存池的情况下会有更好的性能表现</b>
-     *
-     * @param bufferPool 内存池对象
-     * @return 当前AioQuickServer对象
-     */
-    public final UDPBootstrap setBufferPagePool(BufferPagePool bufferPool) {
-        this.bufferPool = bufferPool;
-        this.config.setBufferFactory(BufferFactory.DISABLED_BUFFER_FACTORY);
         return this;
     }
 

@@ -13,7 +13,7 @@ public class UDPServer {
         UDPBootstrap bootstrap = new UDPBootstrap(new ServerUDPHandler());
         bootstrap
                 .addPlugin(new MonitorPlugin(5))
-                .setBufferPagePool(new BufferPagePool(1024 * 1024 * 16, Runtime.getRuntime().availableProcessors(), true))
+                .setBufferFactory(() -> new BufferPagePool(1024 * 1024 * 16, Runtime.getRuntime().availableProcessors(), true))
                 .setReadBufferSize(1024).open(8888);
     }
 }

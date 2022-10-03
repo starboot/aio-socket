@@ -165,9 +165,9 @@ public final class UDPChannel {
         if (failResponseUnit != null) {
             failResponseUnit.response.clean();
         }
-        if (worker != null) {
-            worker.shutdown();
-        }
+//        if (worker != null) {
+//            worker.shutdown();
+//        }
     }
 
     BufferPage getBufferPage() {
