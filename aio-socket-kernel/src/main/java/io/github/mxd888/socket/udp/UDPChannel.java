@@ -35,20 +35,27 @@ import java.util.concurrent.Semaphore;
 public final class UDPChannel {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UDPChannel.class);
+
     private final BufferPage bufferPage;
 
     /**
      * 待输出消息
      */
     private ConcurrentLinkedQueue<ResponseUnit> responseTasks;
+
     private final Semaphore writeSemaphore = new Semaphore(1);
+
     private Worker worker;
+
     final AioConfig config;
+
     /**
      * 真实的UDP通道
      */
     private final DatagramChannel channel;
+
     private SelectionKey selectionKey;
+
     //发送失败的
     private ResponseUnit failResponseUnit;
 

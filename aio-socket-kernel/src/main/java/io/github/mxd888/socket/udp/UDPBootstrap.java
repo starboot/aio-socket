@@ -29,7 +29,7 @@ public class UDPBootstrap {
 
     private BufferPagePool bufferPool;
 
-    private BufferPagePool innerBufferPool = null;
+    private BufferPagePool innerBufferPool;
 
     private final AioConfig config = new AioConfig(true);
 
@@ -89,6 +89,9 @@ public class UDPBootstrap {
         return new UDPChannel(channel, worker, config, bufferPool.allocateBufferPage());
     }
 
+    /**
+     * 关闭UDP服务
+     */
     public void shutdown() {
         if (innerWorker) {
             worker.shutdown();
@@ -111,11 +114,11 @@ public class UDPBootstrap {
     /**
      * 设置内存池的构造工厂。
      * 通过工厂形式生成的内存池会强绑定到当前UdpBootstrap对象，
-     * 在UdpBootstrap执行shutdown时会释放内存池。
+     * 在UDPBootstrap执行shutdown时会释放内存池。
      * <b>在启用内存池的情况下会有更好的性能表现</b>
      *
      * @param bufferFactory 内存池工厂
-     * @return 当前AioQuickServer对象
+     * @return              当前AioQuickServer对象
      */
     public final UDPBootstrap setBufferFactory(BufferFactory bufferFactory) {
         this.config.setBufferFactory(bufferFactory);
