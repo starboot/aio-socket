@@ -27,19 +27,15 @@ import java.nio.channels.DatagramChannel;
 
 public class UDPBootstrap {
 
-    /**
-     * 内存池
-     */
     private BufferPagePool bufferPool;
+
     private BufferPagePool innerBufferPool = null;
-    /**
-     * 服务配置
-     */
+
     private final AioConfig config = new AioConfig(true);
 
     private Worker worker;
-    private boolean innerWorker = false;
 
+    private boolean innerWorker = false;
 
     public UDPBootstrap(AioHandler handler, Worker worker) {
         this(handler);
@@ -76,12 +72,10 @@ public class UDPBootstrap {
      * @param port 指定绑定端口号,为0则随机指定
      */
     public UDPChannel open(String host, int port) throws IOException {
-        //初始化内存池
         if (bufferPool == null) {
             this.bufferPool = config.getBufferFactory().create();
             this.innerBufferPool = bufferPool;
         }
-        // 初始化工作线程
         if (worker == null) {
             innerWorker = true;
             worker = new Worker(bufferPool, 5);
