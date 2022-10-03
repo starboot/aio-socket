@@ -17,7 +17,6 @@ public class UDPClient {
         BufferPagePool bufferPagePool = new BufferPagePool(1024 * 1024 * 16, Runtime.getRuntime().availableProcessors(), true);
 
         Worker worker = new Worker(bufferPagePool, Runtime.getRuntime().availableProcessors());
-
         int c = 5;
         CountDownLatch count = new CountDownLatch(c);
         byte[] bytes = "hello aio-socket".getBytes();
