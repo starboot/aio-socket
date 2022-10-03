@@ -29,13 +29,13 @@ public class CaffeineUtils {
 	}
 
 	/**
-	 * @param cacheName
+	 * @param cacheName			缓存name
 	 * @param timeToLiveSeconds 设置写缓存后过期时间（单位：秒）
 	 * @param timeToIdleSeconds 设置读缓存后过期时间（单位：秒）
-	 * @param initialCapacity
-	 * @param maximumSize
-	 * @param recordStats
-	 * @return
+	 * @param initialCapacity	初始化容量
+	 * @param maximumSize		最大值
+	 * @param recordStats		记录状态
+	 * @return					.
 	 */
 	public static <K, V> LoadingCache<K, V> createLoadingCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, Integer initialCapacity, Integer maximumSize,
 	        boolean recordStats) {
@@ -43,14 +43,14 @@ public class CaffeineUtils {
 	}
 
 	/**
-	 * @param cacheName
+	 * @param cacheName			缓存name
 	 * @param timeToLiveSeconds 设置写缓存后过期时间（单位：秒）
 	 * @param timeToIdleSeconds 设置读缓存后过期时间（单位：秒）
-	 * @param initialCapacity
-	 * @param maximumSize
-	 * @param recordStats
-	 * @param removalListener
-	 * @return
+	 * @param initialCapacity	初始化容量
+	 * @param maximumSize		最大值
+	 * @param recordStats		记录状态
+	 * @param removalListener	移除监听
+	 * @return					.
 	 */
 	public static <K, V> LoadingCache<K, V> createLoadingCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, Integer initialCapacity, Integer maximumSize,
 	        boolean recordStats, RemovalListener<K, V> removalListener) {
