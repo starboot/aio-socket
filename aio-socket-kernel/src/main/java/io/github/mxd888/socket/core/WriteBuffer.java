@@ -81,9 +81,9 @@ public final class WriteBuffer extends OutputStream {
     private boolean closed = false;
 
     /**
-     * 同步资源锁
+     * 辅助数组
      */
-    private final ReentrantLock lock = new ReentrantLock();
+    private byte[] bytes;
 
     public WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
         this.bufferPage = bufferPage;
@@ -101,7 +101,6 @@ public final class WriteBuffer extends OutputStream {
         return bufferPage.allocate(size);
     }
 
-    // ******************************************************************************
     @Override
     public void write(int b) {
         writeByte((byte) b);
@@ -111,7 +110,6 @@ public final class WriteBuffer extends OutputStream {
         byte[] bytes = initCacheBytes();
         bytes[0] = (byte) ((v >>> 8) & 0xFF);
         bytes[1] = (byte) (v & 0xFF);
-        lock.lock();
         write(bytes, 0, 2);
     }
 
@@ -124,12 +122,11 @@ public final class WriteBuffer extends OutputStream {
     }
 
     public void writeInt(int v) throws IOException {
-        final byte[] bytes = initCacheBytes();
+        byte[] bytes = initCacheBytes();
         bytes[0] = (byte) ((v >>> 24) & 0xFF);
         bytes[1] = (byte) ((v >>> 16) & 0xFF);
         bytes[2] = (byte) ((v >>> 8) & 0xFF);
         bytes[3] = (byte) (v & 0xFF);
-//        lock.lock();
         write(bytes, 0, 4);
     }
 
@@ -149,7 +146,6 @@ public final class WriteBuffer extends OutputStream {
         bytes[5] = (byte) ((v >>> 16) & 0xFF);
         bytes[6] = (byte) ((v >>> 8) & 0xFF);
         bytes[7] = (byte) (v & 0xFF);
-        lock.lock();
         write(bytes, 0, 8);
     }
 
@@ -161,7 +157,6 @@ public final class WriteBuffer extends OutputStream {
      * 即服务器处于死锁状态
      */
     public synchronized void write(byte[] b, int off, int len) throws IOException {
-        // 执行作业
         if (writeInBuf == null) {
             writeInBuf = bufferPage.allocate(Math.max(chunkSize, len));
         }
@@ -184,40 +179,18 @@ public final class WriteBuffer extends OutputStream {
 
     }
 
-    /**
-     * 写入内容并刷新缓冲区。在执行的write操作可无需调用该方法，业务执行完毕后框架本身会自动触发flush。
-     * 调用该方法后数据会及时的输出到对端，如果再循环体中通过该方法往某个通道中写入数据将无法获得最佳性能表现，
-     *
-     * @param b 待输出数据
-     * @throws IOException 如果发生 I/O 错误
-     */
-    public void writeAndFlush(byte[] b) throws IOException {
-        if (b == null) {
-            throw new NullPointerException();
-        }
-        writeAndFlush(b, 0, b.length);
-    }
-
-    /**
-     * @param b   待输出数据
-     * @param off b的起始位点
-     * @param len 从b中输出的数据长度
-     * @throws IOException 如果发生 I/O 错误
-     * @see WriteBuffer#writeAndFlush(byte[])
-     */
-    public void writeAndFlush(byte[] b, int off, int len) throws IOException {
-        lock.lock();
-        write(b, off, len);
-        flush();
-    }
-
-    /**
-     * 初始化8字节的缓存数值
-     */
     private byte[] initCacheBytes() {
-        return new byte[8];
+        if (bytes != null) {
+            return bytes;
+        }
+        synchronized (WriteBuffer.class) {
+            if (bytes != null) {
+                return bytes;
+            }
+            bytes = new byte[8];
+            return bytes;
+        }
     }
-    // ******************************************************************************
 
     /**
      * 把暂存的buffer发送出去
@@ -262,9 +235,6 @@ public final class WriteBuffer extends OutputStream {
      * 刷新缓冲区，将数据发送出去
      */
     public void flush() {
-//        if (lock.isHeldByCurrentThread()) {
-//            lock.unlock();
-//        }
         if (closed) {
             throw new RuntimeException("OutputStream has closed");
         }

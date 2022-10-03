@@ -3,6 +3,7 @@ package io.github.mxd888.http.common;
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.GzipUtils;
+import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.TCPChannelContext;
@@ -88,21 +89,22 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
         check();
         System.out.println("write(ByteBuffer buffer)");
         writeHeader();
-//        virtualBuffer = channelContext.getByteBuf();
+        WriteBuffer writeBuffer = channelContext.getWriteBuffer();
         if (chunked) {
             byte[] start = getBytes(Integer.toHexString(buffer.remaining()) + "\r\n");
-            virtualBuffer.buffer().put(start);
-            virtualBuffer.buffer().put(buffer);
-            virtualBuffer.buffer().put(Constant.CRLF_BYTES);
+            writeBuffer.write(start);
+            writeBuffer.write(buffer.array());
+            writeBuffer.write(Constant.CRLF_BYTES);
         } else {
-            virtualBuffer.buffer().put(buffer);
+            writeBuffer.write(buffer.array());
         }
     }
 
     @Override
     public final void flush() throws IOException {
         writeHeader();
-        virtualBuffer.buffer().flip();
+//        virtualBuffer.buffer().flip();
+        channelContext.getWriteBuffer().flush();
 //        Aio.send(channelContext, virtualBuffer);
     }
 

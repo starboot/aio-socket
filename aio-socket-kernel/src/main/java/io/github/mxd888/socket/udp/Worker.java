@@ -74,7 +74,7 @@ public final class Worker implements Runnable {
 
             @Override
             public Thread newThread(Runnable r) {
-                return new Thread(r, "smart-socket:udp-" + Worker.this.hashCode() + "-" + (++i));
+                return new Thread(r, "aio-socket:udp-" + Worker.this.hashCode() + "-" + (++i));
             }
         });
         for (int i = 0; i < threadNum; i++) {
