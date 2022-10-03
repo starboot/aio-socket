@@ -134,9 +134,6 @@ public final class UDPChannel {
         return size;
     }
 
-    /**
-     * 建立与远程服务的连接会话,通过AioSession可进行数据传输
-     */
     public UDPChannelContext connect(SocketAddress remote) {
         return new UDPChannelContext(this, remote, bufferPage);
     }
@@ -145,9 +142,6 @@ public final class UDPChannel {
         return connect(new InetSocketAddress(host, port));
     }
 
-    /**
-     * 关闭当前连接
-     */
     public void close() {
         LOGGER.info("close channel...");
         if (selectionKey != null) {

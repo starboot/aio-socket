@@ -45,14 +45,11 @@ final class UDPChannelContext extends ChannelContext {
                 this.udpChannel.write(writeBuffer, this);
             }
         };
-        this.byteBuf = new WriteBuffer(bufferPage, consumer, udpChannel.config.getWriteBufferSize(), 16);
-        udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
+        this.byteBuf = new WriteBuffer(bufferPage, consumer, this.udpChannel.config.getWriteBufferSize(), 16);
+        this.udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }
 
-    public void awaitRead() {
-        throw new UnsupportedOperationException();
-    }
-
+    @Override
     public void signalRead() {
         throw new UnsupportedOperationException();
     }
@@ -72,26 +69,21 @@ final class UDPChannelContext extends ChannelContext {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * 为确保消息尽可能发送，UDP不支持立即close
-     *
-     * @param immediate true:立即关闭,false:响应消息发送完后关闭
-     */
     @Override
     public void close(boolean immediate) {
-//        byteBuf.flush();
+        this.udpChannel.close();
+        this.byteBuf.close();
     }
 
     @Override
     public String getId() {
-        return "";
+        throw new UnsupportedOperationException("UDPChannelContext don't support get id");
     }
 
     @Override
     public void setId(String id) {
-        throw new  UnsupportedOperationException("UDP content unsuppert set id");
+        throw new UnsupportedOperationException("UDPChannelContext don't support set id");
     }
-
 
     @Override
     public InetSocketAddress getLocalAddress() throws IOException {
@@ -104,11 +96,11 @@ final class UDPChannelContext extends ChannelContext {
 
     @Override
     public AioConfig getAioConfig() {
-        throw new UnsupportedOperationException();
+        return this.udpChannel.config;
     }
 
     @Override
     public SendRunnable sendRunnable() {
-        throw  new UnsupportedOperationException();
+        throw  new UnsupportedOperationException("UDPChannelContext don't support use sendRunnable");
     }
 }

@@ -48,7 +48,8 @@ public class UDPBootstrap {
     }
 
     public UDPBootstrap(AioHandler handler) {
-        config.setHandler(handler);
+        config.getPlugins().setAioHandler(handler);
+        config.setHandler(config.getPlugins());
     }
 
     /**
