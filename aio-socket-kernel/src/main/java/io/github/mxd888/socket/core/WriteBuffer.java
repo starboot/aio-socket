@@ -21,7 +21,6 @@ import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 /**
@@ -149,13 +148,18 @@ public final class WriteBuffer extends OutputStream {
         write(bytes, 0, 8);
     }
 
-    @Override
-    /*
+    /**
      * 高并发的难处理之处（极易发生死锁），当传入int后离开write方法，但没有传输完成所以就没有flush（即，没有释放锁）；
      * 因为离开了write方法，所以另一个线程可以进来了，它进来后由于没有获得锁所以处于等待中，
      * 而由于之前的还没传输完所以它有来传输，由于write方法被锁住所以进不来
      * 即服务器处于死锁状态
+     * @param b                 待输出的byte数组
+     * @param off               相对位置
+     * @param len               有效长度
+     * @throws IOException      IO异常
      */
+    @SuppressWarnings("all")
+    @Override
     public synchronized void write(byte[] b, int off, int len) throws IOException {
         if (writeInBuf == null) {
             writeInBuf = bufferPage.allocate(Math.max(chunkSize, len));

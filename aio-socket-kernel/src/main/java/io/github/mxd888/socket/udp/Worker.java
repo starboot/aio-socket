@@ -35,19 +35,23 @@ import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 public final class Worker implements Runnable {
+
     private final static int MAX_READ_TIMES = 16;
-    private static final Runnable SELECTOR_CHANNEL = () -> {
-    };
-    private static final Runnable SHUTDOWN_CHANNEL = () -> {
-    };
+
+    private static final Runnable SELECTOR_CHANNEL = () -> { };
+
+    private static final Runnable SHUTDOWN_CHANNEL = () -> { };
+
     /**
      * 当前Worker绑定的Selector
      */
     private final Selector selector;
+
     /**
      * 内存池
      */
     private final BufferPagePool bufferPool;
+
     private final BlockingQueue<Runnable> requestQueue = new ArrayBlockingQueue<>(256);
 
     /**
@@ -56,6 +60,7 @@ public final class Worker implements Runnable {
     private final ConcurrentLinkedQueue<Consumer<Selector>> registers = new ConcurrentLinkedQueue<>();
 
     private VirtualBuffer standbyBuffer;
+
     private final ExecutorService executorService;
 
     public Worker(BufferPagePool bufferPool, int threadNum) throws IOException {
@@ -72,8 +77,12 @@ public final class Worker implements Runnable {
                 new LinkedBlockingQueue<>(), new ThreadFactory() {
             int i = 0;
 
+            @SuppressWarnings("all")
             @Override
             public Thread newThread(Runnable r) {
+                if (r == null) {
+                    throw new RuntimeException();
+                }
                 return new Thread(r, "aio-socket:udp-" + Worker.this.hashCode() + "-" + (++i));
             }
         });

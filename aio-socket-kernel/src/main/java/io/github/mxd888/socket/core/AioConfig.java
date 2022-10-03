@@ -167,9 +167,8 @@ public class AioConfig {
         return readBufferSize;
     }
 
-    public AioConfig setReadBufferSize(int readBufferSize) {
+    public void setReadBufferSize(int readBufferSize) {
         this.readBufferSize = readBufferSize;
-        return this;
     }
 
     public Map<SocketOption<Object>, Object> getSocketOptions() {

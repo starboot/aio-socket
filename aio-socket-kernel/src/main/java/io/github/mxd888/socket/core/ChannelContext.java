@@ -165,6 +165,7 @@ public abstract class ChannelContext {
      * @param <T> 泛型
      * @return 值
      */
+    @SuppressWarnings("all")
     public <T> T getAttr(String s, T t) {
         return (T) attr.get(s);
     }
