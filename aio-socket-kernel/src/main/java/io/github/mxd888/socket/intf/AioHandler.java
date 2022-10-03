@@ -34,6 +34,7 @@ public interface AioHandler {
      *
      * @param channelContext 用户上下文
      * @param packet         消息包
+     * @return               返回Packet消息包
      */
     Packet handle(ChannelContext channelContext, Packet packet);
 

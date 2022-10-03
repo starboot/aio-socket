@@ -67,7 +67,7 @@ public class SocketOptionPlugin extends AbstractPlugin {
     /**
      * 设置Socket的TCP参数配置。
      * <p>
-     * AIO客户端的有效可选范围为：<br/>
+     * AIO客户端的有效可选范围为：
      * 1. StandardSocketOptions.SO_SNDBUF <br/>
      * 2. StandardSocketOptions.SO_RCVBUF<br/>
      * 3. StandardSocketOptions.SO_KEEPALIVE<br/>
