@@ -61,6 +61,7 @@ public class UDPBootstrap {
      * 开启一个UDP通道
      *
      * @param port 指定绑定端口号,为0则随机指定
+     * @return     UDPChannel通道
      * @throws IOException 开启异常
      */
     public UDPChannel open(int port) throws IOException {
@@ -72,6 +73,7 @@ public class UDPBootstrap {
      *
      * @param host 绑定本机地址
      * @param port 指定绑定端口号,为0则随机指定
+     * @return      UDPChannel通道
      * @throws IOException 开启异常
      */
     public UDPChannel open(String host, int port) throws IOException {
@@ -106,8 +108,9 @@ public class UDPBootstrap {
 
     /**
      * 设置读缓存区大小
-     *
+     * @return  this
      * @param size 单位：byte
+     *
      */
     public final UDPBootstrap setReadBufferSize(int size) {
         this.config.setReadBufferSize(size);
