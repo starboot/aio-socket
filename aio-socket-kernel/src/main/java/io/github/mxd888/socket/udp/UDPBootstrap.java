@@ -15,7 +15,6 @@
  */
 package io.github.mxd888.socket.udp;
 
-import io.github.mxd888.socket.core.ServerBootstrap;
 import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
@@ -105,7 +104,6 @@ public class UDPBootstrap {
 
 
     }
-
 
     public void shutdown() {
         if (innerWorker) {

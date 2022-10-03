@@ -39,8 +39,10 @@ public class UDPClient {
                         Thread.sleep(10);
                     }
                     count.countDown();
+                    // 关闭会话
                     session.close();
                     System.out.println("发送完毕");
+//                    bootstrap.shutdown();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
