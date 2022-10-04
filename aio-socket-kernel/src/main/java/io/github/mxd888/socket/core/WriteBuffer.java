@@ -93,7 +93,7 @@ public final class WriteBuffer extends OutputStream {
 
     /**
      * 获取一个虚拟空间用于编码操作
-     *
+     * @size 大小
      * @return 虚拟空间
      */
     public VirtualBuffer newVirtualBuffer(int size) {
