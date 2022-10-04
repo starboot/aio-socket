@@ -17,10 +17,6 @@ package io.github.mxd888.socket.utils.cache.redis;
 
 import java.util.Objects;
 
-/**
- * @author tanyaowu
- * 2017年8月14日 下午1:40:14
- */
 public class ExpireVo {
 
 	private String cacheName;
@@ -34,7 +30,6 @@ public class ExpireVo {
 		this.cacheName = cacheName;
 		this.key = key;
 		this.timeToIdleSeconds = timeToIdleSeconds;
-		//		this.expirable = expirable;
 	}
 
 	@Override

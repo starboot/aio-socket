@@ -21,10 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
-/**
- * @author tanyaowu 
- * 2018年10月21日 下午3:45:26
- */
 public abstract class AbsCache implements ICache {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(AbsCache.class);
@@ -35,10 +31,6 @@ public abstract class AbsCache implements ICache {
 
 	private Long timeToIdleSeconds;
 
-	/**
-	 * 
-	 * @author tanyaowu
-	 */
 	public AbsCache(String cacheName) {
 		if (StrUtil.isBlank(cacheName)) {
 			throw new RuntimeException("cacheName不允许为空");
@@ -55,16 +47,10 @@ public abstract class AbsCache implements ICache {
 		this.setTimeToIdleSeconds(timeToIdleSeconds);
 	}
 
-	/**
-	 * @return the cacheName
-	 */
 	public String getCacheName() {
 		return cacheName;
 	}
 
-	/**
-	 * @param cacheName the cacheName to set
-	 */
 	public void setCacheName(String cacheName) {
 		this.cacheName = cacheName;
 	}
@@ -85,12 +71,6 @@ public abstract class AbsCache implements ICache {
 		this.timeToIdleSeconds = timeToIdleSeconds;
 	}
 
-	/**
-	 * 根据key获取value
-	 * @param key
-	 * @return
-	 * @author tanyaowu
-	 */
 	public Serializable get(String key) {
 		Serializable obj = _get(key);
 		if (obj instanceof NullClass) {
@@ -99,16 +79,9 @@ public abstract class AbsCache implements ICache {
 		return obj;
 	}
 
-	/**
-	 * 根据key获取value
-	 * @param key
-	 * @param clazz
-	 * @return
-	 * @author: tanyaowu
-	 */
 	@SuppressWarnings("unchecked")
 	public <T> T get(String key, Class<T> clazz) {
-		return (T)get(key);
+		return (T) get(key);
 	}
 
 	public abstract Serializable _get(String key);

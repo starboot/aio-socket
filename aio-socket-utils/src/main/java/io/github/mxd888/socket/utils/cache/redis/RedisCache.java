@@ -29,14 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**
- *
- * @author tanyaowu
- * 2017年8月10日 下午1:35:01
- */
 public class RedisCache extends AbsCache {
-	private static Logger					log	= LoggerFactory.getLogger(RedisCache.class);
-	private static Map<String, RedisCache>	map	= new HashMap<>();
+	private static final Logger					log	= LoggerFactory.getLogger(RedisCache.class);
+	private static final Map<String, RedisCache>	map	= new HashMap<>();
 
 	public static final String SPLIT_FOR_CACHENAME = ":";
 
@@ -56,14 +51,6 @@ public class RedisCache extends AbsCache {
 		return cacheName + SPLIT_FOR_CACHENAME;
 	}
 
-	/**
-	 * timeToLiveSeconds和timeToIdleSeconds不允许同时为null
-	 * @param cacheName
-	 * @param timeToLiveSeconds
-	 * @param timeToIdleSeconds
-	 * @return
-	 * @author tanyaowu
-	 */
 	public static RedisCache register(RedissonClient redisson, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		RedisExpireUpdateTask.start();
 
@@ -83,13 +70,13 @@ public class RedisCache extends AbsCache {
 		return redisCache;
 	}
 
-	private RedissonClient redisson = null;
+	private final RedissonClient redisson;
 
-	private Long timeToLiveSeconds = null;
+	private final Long timeToLiveSeconds;
 
-	private Long timeToIdleSeconds = null;
+	private final Long timeToIdleSeconds;
 
-	private Long timeout = null;
+	private final Long timeout;
 
 	private RedisCache(RedissonClient redisson, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		super(cacheName);
@@ -106,7 +93,6 @@ public class RedisCache extends AbsCache {
 
 		RKeys keys = redisson.getKeys();
 
-		//		keys.deleteByPattern(keyPrefix(cacheName) + "*");
 		keys.deleteByPatternAsync(keyPrefix(cacheName) + "*");
 
 		long end = SystemTimer.currTime;
@@ -127,7 +113,7 @@ public class RedisCache extends AbsCache {
 		Serializable ret = bucket.get();
 		if (timeToIdleSeconds != null) {
 			if (ret != null) {
-				//				bucket.expire(timeout, TimeUnit.SECONDS);
+				// bucket.expire(timeout, TimeUnit.SECONDS);
 				RedisExpireUpdateTask.add(cacheName, key, timeout);
 			}
 		}
@@ -209,8 +195,4 @@ public class RedisCache extends AbsCache {
 		return remainTimeToLive;
 	}
 
-	//	@Override
-	//	public void update(String key, Serializable value) {
-	//		
-	//	}
 }

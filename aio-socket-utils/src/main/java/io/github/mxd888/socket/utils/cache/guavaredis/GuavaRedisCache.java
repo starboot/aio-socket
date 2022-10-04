@@ -130,20 +130,12 @@ public class GuavaRedisCache extends AbsCache {
 
 	RedisCache redisCache;
 
-	/**
-	 * @param guavaCache
-	 * @author tanyaowu
-	 */
 	public GuavaRedisCache(String cacheName, GuavaCache guavaCache, RedisCache redisCache) {
 		super(cacheName);
 		this.guavaCache = guavaCache;
 		this.redisCache = redisCache;
 	}
 
-	/**
-	 *
-	 * @author tanyaowu
-	 */
 	@Override
 	public void clear() {
 		guavaCache.clear();
@@ -153,11 +145,6 @@ public class GuavaRedisCache extends AbsCache {
 		topic.publish(cacheChangedVo);
 	}
 
-	/**
-	 * @param key
-	 * @return
-	 * @author tanyaowu
-	 */
 	@Override
 	public Serializable _get(String key) {
 		if (StrUtil.isBlank(key)) {
@@ -170,7 +157,8 @@ public class GuavaRedisCache extends AbsCache {
 			if (ret != null) {
 				guavaCache.put(key, ret);
 			}
-		} else {//在本地就取到数据了，那么需要在redis那定时更新一下过期时间
+		} else {
+			// 在本地就取到数据了，那么需要在redis那定时更新一下过期时间
 			Long timeToIdleSeconds = redisCache.getTimeToIdleSeconds();
 			if (timeToIdleSeconds != null) {
 				RedisExpireUpdateTask.add(cacheName, key, timeToIdleSeconds);
@@ -179,20 +167,11 @@ public class GuavaRedisCache extends AbsCache {
 		return ret;
 	}
 
-	/**
-	 * @return
-	 * @author tanyaowu
-	 */
 	@Override
 	public Iterable<String> keys() {
 		return redisCache.keys();
 	}
 
-	/**
-	 * @param key
-	 * @param value
-	 * @author tanyaowu
-	 */
 	@Override
 	public void put(String key, Serializable value) {
 		guavaCache.put(key, value);
@@ -206,16 +185,8 @@ public class GuavaRedisCache extends AbsCache {
 	public void putTemporary(String key, Serializable value) {
 		guavaCache.putTemporary(key, value);
 		redisCache.putTemporary(key, value);
-
-		//
-		//		CacheChangedVo cacheChangedVo = new CacheChangedVo(cacheName, key, CacheChangeType.PUT);
-		//		topic.publish(cacheChangedVo);
 	}
 
-	/**
-	 * @param key
-	 * @author tanyaowu
-	 */
 	@Override
 	public void remove(String key) {
 		if (StrUtil.isBlank(key)) {

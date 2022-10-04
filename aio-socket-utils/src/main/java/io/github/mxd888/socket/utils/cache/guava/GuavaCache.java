@@ -45,14 +45,6 @@ public class GuavaCache extends AbsCache {
 		return guavaCache;
 	}
 
-	/**
-	 * timeToLiveSeconds和timeToIdleSeconds不允许同时为null
-	 * @param cacheName
-	 * @param timeToLiveSeconds
-	 * @param timeToIdleSeconds
-	 * @return
-	 * @author tanyaowu
-	 */
 	public static GuavaCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		GuavaCache guavaCache = register(cacheName, timeToLiveSeconds, timeToIdleSeconds, null);
 		return guavaCache;
@@ -86,11 +78,9 @@ public class GuavaCache extends AbsCache {
 		return guavaCache;
 	}
 
-	//
+	private final LoadingCache<String, Serializable> loadingCache;
 
-	private LoadingCache<String, Serializable> loadingCache = null;
-
-	private LoadingCache<String, Serializable> temporaryLoadingCache = null;
+	private final LoadingCache<String, Serializable> temporaryLoadingCache;
 
 	private GuavaCache(String cacheName, LoadingCache<String, Serializable> loadingCache, LoadingCache<String, Serializable> temporaryLoadingCache) {
 		super(cacheName);
@@ -148,20 +138,10 @@ public class GuavaCache extends AbsCache {
 		temporaryLoadingCache.invalidate(key);
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @author: tanyaowu
-	 */
 	public ConcurrentMap<String, Serializable> asMap() {
 		return loadingCache.asMap();
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @author: tanyaowu
-	 */
 	public long size() {
 		return loadingCache.size();
 	}

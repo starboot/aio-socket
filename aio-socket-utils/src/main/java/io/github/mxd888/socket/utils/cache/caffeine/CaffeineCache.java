@@ -48,14 +48,6 @@ public class CaffeineCache extends AbsCache {
 		return getCache(cacheName, false);
 	}
 
-	/**
-	 * timeToLiveSeconds和timeToIdleSeconds不允许同时为null
-	 * @param cacheName
-	 * @param timeToLiveSeconds
-	 * @param timeToIdleSeconds
-	 * @return
-	 * @author tanyaowu
-	 */
 	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		CaffeineCache CaffeineCache = register(cacheName, timeToLiveSeconds, timeToIdleSeconds, null);
 		return CaffeineCache;
@@ -88,11 +80,9 @@ public class CaffeineCache extends AbsCache {
 		return caffeineCache;
 	}
 
-	//
+	private final LoadingCache<String, Serializable> loadingCache;
 
-	private LoadingCache<String, Serializable> loadingCache = null;
-
-	private LoadingCache<String, Serializable> temporaryLoadingCache = null;
+	private final LoadingCache<String, Serializable> temporaryLoadingCache;
 
 	private CaffeineCache(String cacheName, LoadingCache<String, Serializable> loadingCache, LoadingCache<String, Serializable> temporaryLoadingCache) {
 		super(cacheName);
@@ -150,22 +140,12 @@ public class CaffeineCache extends AbsCache {
 		temporaryLoadingCache.invalidate(key);
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @author: tanyaowu
-	 */
 	public ConcurrentMap<String, Serializable> asMap() {
 		return loadingCache.asMap();
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @author: tanyaowu
-	 */
 	public long size() {
-		return loadingCache.estimatedSize();//.size();
+		return loadingCache.estimatedSize();
 	}
 
 	@Override

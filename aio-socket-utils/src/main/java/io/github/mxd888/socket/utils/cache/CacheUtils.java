@@ -24,13 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
-/**
- * cache使用的一些工具方法，简化业务代码
- * @author tanyaowu
- *
- */
 public abstract class CacheUtils {
-	private static Logger		log							= LoggerFactory.getLogger(CacheUtils.class);
+	private static final Logger		log							= LoggerFactory.getLogger(CacheUtils.class);
 	private static final String	PREFIX_TIMETOLIVESECONDS	= CacheUtils.class.getName() + "_live";
 	private static final String	PREFIX_TIMETOIDLESECONDS	= CacheUtils.class.getName() + "_idle";
 	private static final Object	LOCK_FOR_GETCACHE			= new Object();
@@ -40,12 +35,6 @@ public abstract class CacheUtils {
 
 	/**
 	 * 根据cacheKey从缓存中获取对象，如果缓存中没有该key对象，则用firsthandCreater获取对象，并将对象用cacheKey存于cache中
-	 * @param timeToLiveSeconds
-	 * @param timeToIdleSeconds
-	 * @param cacheKey
-	 * @param firsthandCreater
-	 * @return
-	 * @author tanyaowu
 	 */
 	public static <T extends Serializable> T get(Long timeToLiveSeconds, Long timeToIdleSeconds, String cacheKey, FirsthandCreater<T> firsthandCreater) {
 		return get(timeToLiveSeconds, timeToIdleSeconds, cacheKey, false, firsthandCreater);
@@ -59,9 +48,6 @@ public abstract class CacheUtils {
 	 * @param cacheKey 请业务侧保证cacheKey的唯一性，建议的做法是由prefix + key组成，譬如"user.124578"，其中user就是prefix，124578就是key
 	 * @param putTempToCacheIfNull 当FirsthandCreater获取不到对象时，是否使用临时对象，以防缓存攻击。true:可以防止缓存null攻击
 	 * @param firsthandCreater
-	 * 
-	 * @return
-	 * @author tanyaowu
 	 */
 	public static <T extends Serializable> T get(Long timeToLiveSeconds, Long timeToIdleSeconds, String cacheKey, boolean putTempToCacheIfNull,
 	        FirsthandCreater<T> firsthandCreater) {
@@ -74,8 +60,6 @@ public abstract class CacheUtils {
 	 * @param cache
 	 * @param cacheKey
 	 * @param firsthandCreater
-	 * @return
-	 * @author tanyaowu
 	 */
 	public static <T extends Serializable> T get(ICache cache, String cacheKey, FirsthandCreater<T> firsthandCreater) {
 		return get(cache, cacheKey, false, firsthandCreater);
@@ -100,8 +84,6 @@ public abstract class CacheUtils {
 	 * @param cacheKey
 	 * @param putTempToCacheIfNull 当FirsthandCreater获取不到对象时，是否使用临时对象，以防缓存攻击。true:可以防止缓存null攻击
 	 * @param firsthandCreater
-	 * @return
-	 * @author tanyaowu
 	 */
 	public static <T extends Serializable> T get(ICache cache, String cacheKey, boolean putTempToCacheIfNull, FirsthandCreater<T> firsthandCreater) {
 		return get(cache, cacheKey, putTempToCacheIfNull, firsthandCreater, 60L);
@@ -115,7 +97,6 @@ public abstract class CacheUtils {
 	 * @param putTempToCacheIfNull
 	 * @param firsthandCreater
 	 * @param readTimeoutWithSeconds 获取读锁的超时时间
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends Serializable> T get(ICache cache, String cacheKey, boolean putTempToCacheIfNull, FirsthandCreater<T> firsthandCreater, Long readTimeoutWithSeconds) {
@@ -163,8 +144,6 @@ public abstract class CacheUtils {
 	 * 根据参数获取或创建CaffeineCache对象
 	 * @param timeToLiveSeconds
 	 * @param timeToIdleSeconds
-	 * @return
-	 * @author tanyaowu
 	 */
 	public static CaffeineCache getCaffeineCache(Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		String cacheName = getCacheName(timeToLiveSeconds, timeToIdleSeconds);

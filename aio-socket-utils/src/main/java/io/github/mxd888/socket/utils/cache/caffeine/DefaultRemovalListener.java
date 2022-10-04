@@ -24,7 +24,7 @@ public class DefaultRemovalListener<K, V> implements RemovalListener<K, V> {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultRemovalListener.class);
 
-	private String cacheName;
+	private final String cacheName;
 
 	public DefaultRemovalListener(String cacheName) {
 		this.cacheName = cacheName;

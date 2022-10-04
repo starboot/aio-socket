@@ -18,5 +18,4 @@ package io.github.mxd888.socket.utils.lock;
 public interface WriteLockHandler<T> {
 
 	void handler(T t);
-
 }

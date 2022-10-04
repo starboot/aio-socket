@@ -136,19 +136,12 @@ public class CaffeineRedisCache extends AbsCache {
 		return caffeineRedisCache;
 	}
 
-	/**
-	 * @author tanyaowu
-	 */
 	public CaffeineRedisCache(String cacheName, CaffeineCache caffeineCache, RedisCache redisCache) {
 		super(cacheName);
 		this.localCache = caffeineCache;
 		this.distCache = redisCache;
 	}
 
-	/**
-	 *
-	 * @author tanyaowu
-	 */
 	@Override
 	public void clear() {
 		localCache.clear();
@@ -158,11 +151,6 @@ public class CaffeineRedisCache extends AbsCache {
 		topic.publish(cacheChangedVo);
 	}
 
-	/**
-	 * @param key
-	 * @return
-	 * @author tanyaowu
-	 */
 	@Override
 	public Serializable _get(String key) {
 		if (StrUtil.isBlank(key)) {
@@ -192,7 +180,8 @@ public class CaffeineRedisCache extends AbsCache {
 				log.error(e.toString(), e);
 			}
 			ret = localCache.get(key);//(Serializable) readWriteRet.writeRet;
-		} else {//在本地就取到数据了，那么需要在redis那定时更新一下过期时间
+		} else {
+			// 在本地就取到数据了，那么需要在redis那定时更新一下过期时间
 			Long timeToIdleSeconds = distCache.getTimeToIdleSeconds();
 			if (timeToIdleSeconds != null) {
 				RedisExpireUpdateTask.add(cacheName, key, timeToIdleSeconds);
@@ -201,20 +190,11 @@ public class CaffeineRedisCache extends AbsCache {
 		return ret;
 	}
 
-	/**
-	 * @return
-	 * @author tanyaowu
-	 */
 	@Override
 	public Iterable<String> keys() {
 		return distCache.keys();
 	}
 
-	/**
-	 * @param key
-	 * @param value
-	 * @author tanyaowu
-	 */
 	@Override
 	public void put(String key, Serializable value) {
 		localCache.put(key, value);
@@ -228,16 +208,8 @@ public class CaffeineRedisCache extends AbsCache {
 	public void putTemporary(String key, Serializable value) {
 		localCache.putTemporary(key, value);
 		distCache.putTemporary(key, value);
-
-		//
-		//		CacheChangedVo cacheChangedVo = new CacheChangedVo(cacheName, key, CacheChangeType.PUT);
-		//		topic.publish(cacheChangedVo);
 	}
 
-	/**
-	 * @param key
-	 * @author tanyaowu
-	 */
 	@Override
 	public void remove(String key) {
 		if (StrUtil.isBlank(key)) {
