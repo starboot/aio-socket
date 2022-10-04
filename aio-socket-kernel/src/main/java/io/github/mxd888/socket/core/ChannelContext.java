@@ -61,7 +61,7 @@ public abstract class ChannelContext {
 
     /**
      * 获取一个虚拟buffer用于存放数据
-     *
+     * @param len 长度
      * @return 内存池虚拟buffer
      */
     public abstract VirtualBuffer getVirtualBuffer(int len);
