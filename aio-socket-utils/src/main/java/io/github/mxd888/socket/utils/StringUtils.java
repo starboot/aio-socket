@@ -23,20 +23,11 @@ package io.github.mxd888.socket.utils;
  */
 public class StringUtils {
 
-    /**
-     * 秘钥Key
-     */
     public static final String SECRET_KEY = "_SecretKey_";
     private final static char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
             'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     private static final int TWO = 2;
 
-    /**
-     * 将字节转换成16进制显示
-     *
-     * @param b byte
-     * @return String
-     */
     public static String toHex(byte b) {
         final char[] buf = new char[TWO];
         for (int i = 0; i < buf.length; i++) {
@@ -46,11 +37,6 @@ public class StringUtils {
         return new String(buf);
     }
 
-    /**
-     * 以16进制 打印字节数组
-     *
-     * @param bytes byte[]
-     */
     public static String toHexString(final byte[] bytes) {
         final StringBuilder buffer = new StringBuilder(bytes.length);
         buffer.append("\r\n\t\t   0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f\r\n");
@@ -87,14 +73,6 @@ public class StringUtils {
         return buffer.toString();
     }
 
-    /**
-     * 过滤掉字节数组中0x0 - 0x1F的控制字符，生成字符串
-     *
-     * @param bytes  byte[]
-     * @param offset int
-     * @param count  int
-     * @return String
-     */
     private static String filterString(final byte[] bytes, final int offset, final int count) {
         final byte[] buffer = new byte[count];
         System.arraycopy(bytes, offset, buffer, 0, count);
@@ -106,12 +84,6 @@ public class StringUtils {
         return new String(buffer);
     }
 
-    /**
-     * 将hexStr格式化成length长度16进制数，并在后边加上h
-     *
-     * @param hexStr String
-     * @return String
-     */
     private static String fixHexString(final String hexStr, final int length) {
         if (hexStr == null || hexStr.length() == 0) {
             return "00000000h";
