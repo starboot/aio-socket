@@ -22,7 +22,7 @@ import java.util.concurrent.Semaphore;
 public abstract class BufferOutputStream extends OutputStream implements Reset {
     private static final Map<String, byte[]> HEADER_NAME_EXT_MAP = new ConcurrentHashMap<>();
     protected final TCPChannelContext channelContext;
-    protected WriteBuffer writeBuffer;
+    protected final WriteBuffer writeBuffer;
     protected boolean committed = false;
     protected boolean chunked = false;
     protected boolean gzip = false;
@@ -34,7 +34,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
 
     public BufferOutputStream(TCPChannelContext channelContext) {
         this.channelContext = channelContext;
-        writeBuffer = channelContext.getWriteBuffer();
+        this.writeBuffer = channelContext.getWriteBuffer();
     }
 
     @Override
@@ -66,7 +66,6 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
         } else {
             writeBuffer.write(b, off, len);
         }
-        flush();
     }
 
     /**

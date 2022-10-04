@@ -70,8 +70,20 @@ public class HttpMessageProcessor {
         if (future.isDone()) {
             finishResponse(abstractRequest);
         } else {
-            System.out.println("into -> io.github.mxd888.http.server.impl.HttpMessageProcessor");
-            future.thenRun(() -> abstractRequest.getResponse().close());
+            Thread thread = Thread.currentThread();
+            future.thenRun(() -> {
+                try {
+                    finishResponse(abstractRequest);
+                    if (thread != Thread.currentThread()) {
+                        context.getWriteBuffer().flush();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    abstractRequest.getResponse().close();
+                } finally {
+                    context.signalRead();
+                }
+            });
         }
     }
 
@@ -110,8 +122,40 @@ public class HttpMessageProcessor {
                 finishResponse(abstractRequest);
             }
         } else {
+//            session.awaitRead();
+            Thread thread = Thread.currentThread();
             AbstractResponse response = abstractRequest.getResponse();
-            future.thenRun(response::close);
+            future.thenRun(() -> {
+                try {
+                    if (keepConnection(abstractRequest, keepAlive)) {
+                        finishResponse(abstractRequest);
+                        if (thread != Thread.currentThread()) {
+                            context.getWriteBuffer().flush();
+                        }
+                    }
+                } catch (HttpException e) {
+                    e.printStackTrace();
+
+                    response.setHttpStatus(HttpStatus.valueOf(e.getHttpCode()));
+                    try {
+                        response.write(e.getDesc().getBytes());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    response.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+                    try {
+                        response.getOutputStream().write(e.fillInStackTrace().toString().getBytes());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    response.close();
+                } finally {
+                    context.signalRead();
+                }
+            });
         }
     }
 
