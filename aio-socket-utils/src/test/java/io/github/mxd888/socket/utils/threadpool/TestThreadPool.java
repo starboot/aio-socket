@@ -10,7 +10,14 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 线程池测试
+ * 线程池测试：
+ *      ThreadPoolExecutor: 性能较高，但执行无序
+ *      SynThreadPoolExecutor： 先来先执行线程池，性能微差（因为每次执行任务涉及到从队列取任务）
+ *
+ * 硬件参数：PC(CPU: Intel(R) Core(TM) i7-9700 @ 3.00GHz; Memory: 16GB; 无固态; 机械盘: TOSHIBA DT01ACA200 联想硬盘)
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class TestThreadPool {
 
