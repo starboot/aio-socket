@@ -34,6 +34,10 @@ public abstract class AbstractQueueRunnable<T> extends AbstractSynRunnable {
         super(executor);
     }
 
+    protected AbstractQueueRunnable(Executor executor, int maxExecuteNum) {
+        super(executor, maxExecuteNum);
+    }
+
     /**
      * 添加消息
      *

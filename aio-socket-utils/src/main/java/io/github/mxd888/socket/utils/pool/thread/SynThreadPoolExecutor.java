@@ -54,7 +54,7 @@ public class SynThreadPoolExecutor extends ThreadPoolExecutor {
     }
 
     /**
-     *
+     * 执行前检查是否为同步任务
      * @param runnable  任务
      * @return          检查状态
      */

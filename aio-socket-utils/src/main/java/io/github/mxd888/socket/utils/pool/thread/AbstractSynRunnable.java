@@ -24,7 +24,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractSynRunnable implements Runnable {
 
-    private static final Logger log	= LoggerFactory.getLogger(AbstractSynRunnable.class);
+    private static final Logger LOGGER	= LoggerFactory.getLogger(AbstractSynRunnable.class);
 
     public boolean executed	= false;
 
@@ -34,8 +34,15 @@ public abstract class AbstractSynRunnable implements Runnable {
 
     private boolean	isCanceled	= false;
 
+    private final int maxExecuteNum;
+
     protected AbstractSynRunnable(Executor executor) {
+        this(executor, 100);
+    }
+
+    protected AbstractSynRunnable(Executor executor, int maxExecuteNum) {
         this.executor = executor;
+        this.maxExecuteNum = maxExecuteNum;
     }
 
     public void execute() {
@@ -57,18 +64,18 @@ public abstract class AbstractSynRunnable implements Runnable {
         try {
             tryLock = runningLock.tryLock(1L, TimeUnit.SECONDS);
         } catch (InterruptedException e1) {
-            log.error(e1.toString(), e1);
+            LOGGER.error(e1.toString(), e1);
         }
         if (tryLock) {
             try {
                 int loopCount = 0;
                 runTask();
-                while (isNeededExecute() && loopCount++ < 100) {
+                while (isNeededExecute() && loopCount++ < maxExecuteNum) {
                     runTask();
                 }
 
             } catch (Throwable e) {
-                log.error(e.toString(), e);
+                LOGGER.error(e.toString(), e);
             } finally {
                 executed = false;
                 runningLock.unlock();
