@@ -10,11 +10,9 @@ import io.github.mxd888.http.common.enums.HttpStatus;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.server.HttpRequest;
 import io.github.mxd888.http.server.HttpServerConfiguration;
-import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 
@@ -53,9 +51,7 @@ abstract class AbstractOutputStream extends BufferOutputStream {
 
         boolean hasHeader = hasHeader();
         //输出http状态行、contentType,contentLength、Transfer-Encoding、server等信息
-        virtualBuffer = channelContext.getVirtualBuffer(1024);
-        ByteBuffer buffer = virtualBuffer.buffer();
-        buffer.put(getHeadPart(hasHeader));
+        writeBuffer.write(getHeadPart(hasHeader));
         if (hasHeader) {
             //输出Header部分
             writeHeaders();
@@ -77,17 +73,16 @@ abstract class AbstractOutputStream extends BufferOutputStream {
     }
 
     private void writeHeaders() throws IOException {
-        ByteBuffer buffer = virtualBuffer.buffer();
         for (Map.Entry<String, HeaderValue> entry : response.getHeaders().entrySet()) {
             HeaderValue headerValue = entry.getValue();
             while (headerValue != null) {
-                buffer.put(getHeaderNameBytes(entry.getKey()));
-                buffer.put(getBytes(headerValue.getValue()));
-                buffer.put(Constant.CRLF_BYTES);
+                writeBuffer.write(getHeaderNameBytes(entry.getKey()));
+                writeBuffer.write(getBytes(headerValue.getValue()));
+                writeBuffer.write(Constant.CRLF_BYTES);
                 headerValue = headerValue.getNextValue();
             }
         }
-        buffer.put(Constant.CRLF_BYTES);
+        writeBuffer.write(Constant.CRLF_BYTES);
     }
 
     @Override

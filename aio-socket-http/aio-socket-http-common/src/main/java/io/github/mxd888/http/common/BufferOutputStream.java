@@ -4,8 +4,6 @@ import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.GzipUtils;
 import io.github.mxd888.socket.core.WriteBuffer;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
-import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.io.IOException;
@@ -24,7 +22,7 @@ import java.util.concurrent.Semaphore;
 public abstract class BufferOutputStream extends OutputStream implements Reset {
     private static final Map<String, byte[]> HEADER_NAME_EXT_MAP = new ConcurrentHashMap<>();
     protected final TCPChannelContext channelContext;
-    protected VirtualBuffer virtualBuffer = null;
+    protected WriteBuffer writeBuffer;
     protected boolean committed = false;
     protected boolean chunked = false;
     protected boolean gzip = false;
@@ -36,6 +34,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
 
     public BufferOutputStream(TCPChannelContext channelContext) {
         this.channelContext = channelContext;
+        writeBuffer = channelContext.getWriteBuffer();
     }
 
     @Override
@@ -61,14 +60,11 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
                 len = b.length;
             }
             byte[] start = getBytes(Integer.toHexString(len) + "\r\n");
-            virtualBuffer.buffer().put(start);
-            virtualBuffer.buffer().put(b, off, len);
-            virtualBuffer.buffer().put(Constant.CRLF_BYTES);
+            writeBuffer.write(start);
+            writeBuffer.write(b, off, len);
+            writeBuffer.write(Constant.CRLF_BYTES);
         } else {
-            if (virtualBuffer.buffer().remaining() == 0) {
-                virtualBuffer = channelContext.getVirtualBuffer(1024);
-            }
-            virtualBuffer.buffer().put(b, off, len);
+            writeBuffer.write(b, off, len);
         }
         flush();
     }
@@ -81,15 +77,13 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
      * @param len
      */
     public final void directWrite(byte[] b, int off, int len) throws IOException {
-//        virtualBuffer = channelContext.getByteBuf();
-        virtualBuffer.buffer().put(b, off, len);
+        writeBuffer.write(b, off, len);
     }
 
     public final void write(ByteBuffer buffer) throws IOException {
         check();
         System.out.println("write(ByteBuffer buffer)");
         writeHeader();
-        WriteBuffer writeBuffer = channelContext.getWriteBuffer();
         if (chunked) {
             byte[] start = getBytes(Integer.toHexString(buffer.remaining()) + "\r\n");
             writeBuffer.write(start);
@@ -103,9 +97,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
     @Override
     public final void flush() throws IOException {
         writeHeader();
-//        virtualBuffer.buffer().flip();
-        channelContext.getWriteBuffer().flush();
-//        Aio.send(channelContext, virtualBuffer);
+        writeBuffer.flush();
     }
 
     @Override
@@ -116,8 +108,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
         writeHeader();
 
         if (chunked) {
-            virtualBuffer = channelContext.getVirtualBuffer(1024);
-            virtualBuffer.buffer().put(Constant.CHUNKED_END_BYTES);
+            writeBuffer.write(Constant.CHUNKED_END_BYTES);
         }
         closed = true;
     }
