@@ -20,6 +20,9 @@ import java.util.concurrent.atomic.LongAdder;
  *      约：500万/second
  *
  * 硬件指标：PC(CPU: Intel(R) Core(TM) i7-9700 @ 3.00GHz; Memory: 16GB; 无固态; 机械盘: TOSHIBA DT01ACA200 联想硬盘)
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
  */
 public class AioFullWaitQueueTest {
 
