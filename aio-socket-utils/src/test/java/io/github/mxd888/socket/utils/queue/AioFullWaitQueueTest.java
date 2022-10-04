@@ -15,11 +15,11 @@ import java.util.concurrent.atomic.LongAdder;
  *      总消息：    消息存放者 * 1百万
  *
  * 作者MDong 测试结果：
- *      执行时间：9249(milliseconds)
+ *      执行时间：1638 微秒
  *      存取消息数量：10000000
- *      约：100万/second
+ *      约：500万/second
  *
- * 硬件指标：PC(CPU: Intel(R) Core(TM) i7-9700 @ 3.00GHz; Memory: 16GB; 无固态; 机械盘: TOSHIBA DT01ACA200 LENOVO)
+ * 硬件指标：PC(CPU: Intel(R) Core(TM) i7-9700 @ 3.00GHz; Memory: 16GB; 无固态; 机械盘: TOSHIBA DT01ACA200 联想硬盘)
  */
 public class AioFullWaitQueueTest {
 
@@ -36,7 +36,7 @@ public class AioFullWaitQueueTest {
     private static final CountDownLatch l = new CountDownLatch(MsgTotalNum);
 
     public static void main(String[] args) throws InterruptedException {
-        FullWaitQueue<String> aioFullWaitQueue = new AioFullWaitQueue<>(2, false);
+        FullWaitQueue<String> aioFullWaitQueue = new AioFullWaitQueue<>(512, false);
         ThreadPoolExecutor groupExecutor = ThreadUtils.getGroupExecutor(11);
         AddQueue addQueue = new AddQueue("add aio-socket", aioFullWaitQueue);
         PollQueue pollQueue = new PollQueue(aioFullWaitQueue);
