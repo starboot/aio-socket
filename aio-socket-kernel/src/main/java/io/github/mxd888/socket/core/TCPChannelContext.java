@@ -364,7 +364,7 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public <T> T getAttr(String s, T t) {
+    public <T> T getAttr(String s, Class<T> t) {
         return super.getAttr(s, t);
     }
 
