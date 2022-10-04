@@ -40,7 +40,7 @@ public class AioFullWaitQueueTest {
 
     public static void main(String[] args) throws InterruptedException {
         FullWaitQueue<String> aioFullWaitQueue = new AioFullWaitQueue<>(512, false);
-        ThreadPoolExecutor groupExecutor = ThreadUtils.getGroupExecutor(11);
+        ThreadPoolExecutor groupExecutor = ThreadUtils.getGroupExecutor(offerThreadNum + processThreadNum);
         AddQueue addQueue = new AddQueue("add aio-socket", aioFullWaitQueue);
         PollQueue pollQueue = new PollQueue(aioFullWaitQueue);
         // 计时开始
