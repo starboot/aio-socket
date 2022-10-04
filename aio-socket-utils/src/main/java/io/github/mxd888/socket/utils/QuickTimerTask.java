@@ -44,15 +44,9 @@ public abstract class QuickTimerTask implements Runnable {
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(command, initialDelay, period, TimeUnit.MILLISECONDS);
     }
 
-    /**
-     * 获取定时任务的延迟启动时间
-     */
     protected long getDelay() {
         return 0;
     }
 
-    /**
-     * 获取定时任务的执行频率
-     */
     protected abstract long getPeriod();
 }
