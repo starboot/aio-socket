@@ -25,6 +25,21 @@ import io.github.mxd888.socket.plugins.MonitorPlugin;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * -----5seconds ----
+ * inflow:		694.9893951416016(MB)
+ * outflow:	    693.4167137145996(MB)
+ * process fail:	0
+ * process count:	36353900
+ * process total:	82485416
+ * read count:	695	write count:	213120
+ * connect count:	0
+ * disconnect count:	0
+ * online count:	10
+ * connected total:	10
+ * Requests/sec:	7270780.0
+ * Transfer/sec:	138.9978790283203(MB)
+ */
 public class Server {
 
     public static void main(String[] args) {
