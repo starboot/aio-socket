@@ -43,7 +43,7 @@ public class ThreadUtils {
     /**
      * 最大内存池线程数
      */
-    public static final int MAX_POOL_SIZE_FOR_GROUP	= Integer.getInteger("AIO_MAX_POOL_SIZE_FOR_GROUP", Math.max(CORE_POOL_SIZE * 2, 10));
+    public static final int MAX_POOL_SIZE_FOR_GROUP	= Integer.getInteger("AIO_MAX_POOL_SIZE_FOR_GROUP", Math.max(CORE_POOL_SIZE * 5, 10));
 
     /**
      * 保持活跃时间
