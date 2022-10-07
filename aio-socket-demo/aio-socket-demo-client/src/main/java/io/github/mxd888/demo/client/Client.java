@@ -17,6 +17,7 @@ package io.github.mxd888.demo.client;
 
 import io.github.mxd888.demo.common.DemoPacket;
 import io.github.mxd888.socket.plugins.ACKPlugin;
+import io.github.mxd888.socket.plugins.MonitorPlugin;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.TCPChannelContext;
@@ -63,6 +64,7 @@ public class Client {
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 4, 512)
                         .addHeartPacket(new DemoPacket("heartbeat message"))
+                        .addPlugin(new MonitorPlugin(5))
                         .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
                         .addPlugin(new ReconnectPlugin(bootstrap));
 
