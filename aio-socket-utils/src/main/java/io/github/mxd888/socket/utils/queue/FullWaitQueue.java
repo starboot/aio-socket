@@ -41,6 +41,4 @@ public interface FullWaitQueue<T> {
     int size();
 
     boolean isEmpty();
-
-    boolean getProducerModel();
 }

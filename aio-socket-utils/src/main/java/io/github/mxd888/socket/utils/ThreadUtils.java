@@ -19,7 +19,6 @@ import io.github.mxd888.socket.utils.pool.thread.AioCallerRunsPolicy;
 import io.github.mxd888.socket.utils.pool.thread.DefaultThreadFactory;
 import io.github.mxd888.socket.utils.pool.thread.SynThreadPoolExecutor;
 
-import java.util.UUID;
 import java.util.concurrent.*;
 
 /**
@@ -31,19 +30,14 @@ import java.util.concurrent.*;
 public class ThreadUtils {
 
     /**
-     * 电脑处理器数量
+     * aio-socket ThreadPool
      */
-    public static final int	AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
+    private static ExecutorService aioExecutor;
 
     /**
-     * 核心池大小
+     * Java8 ThreadPool
      */
-    public static final int CORE_POOL_SIZE = AVAILABLE_PROCESSORS;
-
-    /**
-     * 最大内存池线程数
-     */
-    public static final int MAX_POOL_SIZE_FOR_GROUP	= Integer.getInteger("AIO_MAX_POOL_SIZE_FOR_GROUP", Math.max(CORE_POOL_SIZE * 5, 10));
+    private static ExecutorService executorService;
 
     /**
      * 保持活跃时间
@@ -51,50 +45,109 @@ public class ThreadUtils {
     public static final long KEEP_ALIVE_TIME = 0L;
 
     /**
+     * ThreadName
+     */
+    private static final String defaultThreadName = "aio-worker";
+
+    /**
+     * 电脑处理器数量
+     */
+    public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
+
+    /**
+     * 核心池大小
+     */
+    public static final int CORE_POOL_SIZE = AVAILABLE_PROCESSORS;
+
+    /**
+     * boss 最大内存池线程数
+     */
+    public static final int MAX_POOL_SIZE_FOR_JAVA = Math.max(CORE_POOL_SIZE * 5, 10);
+
+    /**
+     * worker 最大内存池线程数
+     */
+    public static final int MAX_POOL_SIZE_FOR_AIO = MAX_POOL_SIZE_FOR_JAVA * 3;
+
+    /**
      * 构造线程池执行器
+     * 用户调用getGroupExecutor()所返回的线程池是aio-socket框架在启动的时候已经创建完毕的;
+     * 若用户想创建新的、独立的ExecutorService请调用其他带有参数的方法
+     * 推荐使用getGroupExecutor()，和框架共用线程池会节省服务器资源
      *
      * @return ExecutorService 线程池执行器
      */
-    public static ThreadPoolExecutor getGroupExecutor() {
-        return getGroupExecutor(MAX_POOL_SIZE_FOR_GROUP);
+    public static ExecutorService getGroupExecutor() {
+        if (executorService != null) {
+            return executorService;
+        }
+        synchronized (ThreadUtils.class) {
+            if (executorService != null) {
+                return executorService;
+            }
+            executorService = getGroupExecutor(MAX_POOL_SIZE_FOR_JAVA);
+        }
+        return executorService;
     }
 
-    public static ThreadPoolExecutor getGroupExecutor(int threadNum) {
-        return getGroupExecutor(threadNum, KEEP_ALIVE_TIME, TimeUnit.SECONDS);
+    public static ExecutorService getGroupExecutor(int corePoolSize) {
+        return getGroupExecutor(corePoolSize, corePoolSize);
     }
 
-    public static ThreadPoolExecutor getGroupExecutor(int threadNum,
-                                                      long keepAliveTime,
-                                                      TimeUnit timeUnit) {
+    public static ExecutorService getGroupExecutor(int corePoolSize, int maxPoolSize) {
+        return getGroupExecutor(corePoolSize, maxPoolSize, KEEP_ALIVE_TIME, TimeUnit.SECONDS);
+    }
+
+    public static ExecutorService getGroupExecutor(int corePoolSize,
+                                                   int maxPoolSize,
+                                                   long keepAliveTime,
+                                                   TimeUnit timeUnit) {
         LinkedBlockingQueue<Runnable> linkedBlockingQueue = new LinkedBlockingQueue<>();
-        return getGroupExecutor(threadNum, keepAliveTime, timeUnit, linkedBlockingQueue);
+        return getGroupExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit, linkedBlockingQueue);
     }
 
-    public static ThreadPoolExecutor getGroupExecutor(int threadNum,
-                                                      long keepAliveTime,
-                                                      TimeUnit timeUnit,
-                                                      BlockingQueue<Runnable> workQueue) {
-        return getGroupExecutor(threadNum, keepAliveTime, timeUnit, workQueue, Executors.defaultThreadFactory());
+    public static ExecutorService getGroupExecutor(int corePoolSize,
+                                                   int maxPoolSize,
+                                                   long keepAliveTime,
+                                                   TimeUnit timeUnit,
+                                                   BlockingQueue<Runnable> workQueue) {
+        return getGroupExecutor(corePoolSize, maxPoolSize, keepAliveTime,
+                timeUnit, workQueue, Executors.defaultThreadFactory());
     }
 
-    public static ThreadPoolExecutor getGroupExecutor(int threadNum,
-                                                      long keepAliveTime,
-                                                      TimeUnit timeUnit,
-                                                      BlockingQueue<Runnable> workQueue,
-                                                      ThreadFactory threadFactory) {
-        ThreadPoolExecutor groupExecutor = new ThreadPoolExecutor(threadNum, threadNum, keepAliveTime, timeUnit, workQueue, threadFactory);
+    public static ExecutorService getGroupExecutor(int corePoolSize,
+                                                   int maxPoolSize,
+                                                   long keepAliveTime,
+                                                   TimeUnit timeUnit,
+                                                   BlockingQueue<Runnable> workQueue,
+                                                   ThreadFactory threadFactory) {
+        return getGroupExecutor(corePoolSize, maxPoolSize, keepAliveTime,
+                timeUnit, workQueue, threadFactory, new AioCallerRunsPolicy());
+    }
+
+    public static ExecutorService getGroupExecutor(int corePoolSize,
+                                                   int maxPoolSize,
+                                                   long keepAliveTime,
+                                                   TimeUnit timeUnit,
+                                                   BlockingQueue<Runnable> workQueue,
+                                                   ThreadFactory threadFactory,
+                                                   RejectedExecutionHandler rejectedExecutionHandler) {
+        ThreadPoolExecutor groupExecutor =
+                new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime,
+                        timeUnit, workQueue, threadFactory, rejectedExecutionHandler);
         groupExecutor.prestartCoreThread();
         return groupExecutor;
     }
 
-    private static SynThreadPoolExecutor aioExecutor;
-
     /**
-     * aio-socket-kernel 框架使用的先来先服务线程池
+     * aio-socket-kernel 框架使用的先来先服务线程池;
+     * 用户调用getAioExecutor()所返回的线程池是aio-socket框架在启动的时候已经创建完毕的;
+     * 若用户想创建新的、独立的AioExecutor请调用其他带有参数的方法
+     * 推荐使用getAioExecutor()，和框架共用线程池会节省服务器资源
      *
-     * @return           内核线程池
+     * @return 内核线程池
      */
-    public static SynThreadPoolExecutor getAioExecutor() {
+    public static ExecutorService getAioExecutor() {
         if (aioExecutor != null) {
             return aioExecutor;
         }
@@ -102,44 +155,62 @@ public class ThreadUtils {
             if (aioExecutor != null) {
                 return aioExecutor;
             }
-            LinkedBlockingQueue<Runnable> runnableQueue = new LinkedBlockingQueue<>();
-            String threadName = "aio-worker";
-            DefaultThreadFactory defaultThreadFactory = DefaultThreadFactory.getInstance(threadName, Thread.MAX_PRIORITY);
-            ThreadPoolExecutor.CallerRunsPolicy callerRunsPolicy = new AioCallerRunsPolicy();
-            aioExecutor = getAioExecutor(MAX_POOL_SIZE_FOR_GROUP * 3, MAX_POOL_SIZE_FOR_GROUP * 3, KEEP_ALIVE_TIME, runnableQueue, defaultThreadFactory, callerRunsPolicy, threadName);
-            aioExecutor.prestartCoreThread();
+            aioExecutor = getAioExecutor(MAX_POOL_SIZE_FOR_AIO);
             return aioExecutor;
         }
     }
 
-    /**
-     * 留给其他用户调用的先来先服务线程池
-     *
-     * @param corePoolSize      核心线程数
-     * @param maximumPoolSize   最大线程数
-     * @param keepAliveTime     存活时间
-     * @return                  同步线程池
-     */
-    public static SynThreadPoolExecutor getAioExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime) {
-        return getAioExecutor(corePoolSize, maximumPoolSize, keepAliveTime, new LinkedBlockingQueue<>());
+    public static ExecutorService getAioExecutor(int corePoolSize) {
+        return getAioExecutor(corePoolSize, corePoolSize);
     }
 
-    public static SynThreadPoolExecutor getAioExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, BlockingQueue<Runnable> runnableQueue) {
-        return getAioExecutor(corePoolSize, maximumPoolSize, keepAliveTime, runnableQueue, Executors.defaultThreadFactory());
+    public static ExecutorService getAioExecutor(int corePoolSize,
+                                                 int maxPoolSize) {
+        return getAioExecutor(corePoolSize, maxPoolSize, KEEP_ALIVE_TIME, TimeUnit.SECONDS);
     }
 
-    public static SynThreadPoolExecutor getAioExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, BlockingQueue<Runnable> runnableQueue, ThreadFactory threadFactory) {
-        return getAioExecutor(corePoolSize, maximumPoolSize, keepAliveTime, runnableQueue, threadFactory, new AioCallerRunsPolicy());
+    public static ExecutorService getAioExecutor(int corePoolSize,
+                                                 int maxPoolSize,
+                                                 long keepAliveTime,
+                                                 TimeUnit timeUnit) {
+        return getAioExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit,
+                new LinkedBlockingQueue<>());
     }
 
-    public static SynThreadPoolExecutor getAioExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, BlockingQueue<Runnable> runnableQueue, ThreadFactory threadFactory, RejectedExecutionHandler rejectedExecutionHandler) {
-        return getAioExecutor(corePoolSize, maximumPoolSize, keepAliveTime, runnableQueue, threadFactory, rejectedExecutionHandler, "aio-worker-" + UUID.randomUUID());
+    public static ExecutorService getAioExecutor(int corePoolSize,
+                                                 int maxPoolSize,
+                                                 long keepAliveTime,
+                                                 TimeUnit timeUnit,
+                                                 BlockingQueue<Runnable> runnableQueue) {
+        return getAioExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit,
+                runnableQueue, DefaultThreadFactory.getInstance(defaultThreadName, Thread.MAX_PRIORITY));
     }
 
-    public static SynThreadPoolExecutor getAioExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, BlockingQueue<Runnable> runnableQueue, ThreadFactory threadFactory, RejectedExecutionHandler rejectedExecutionHandler, String name) {
-        SynThreadPoolExecutor poolExecutor = new SynThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, runnableQueue, threadFactory, name, rejectedExecutionHandler);
+    public static ExecutorService getAioExecutor(int corePoolSize,
+                                                 int maxPoolSize,
+                                                 long keepAliveTime,
+                                                 TimeUnit timeUnit,
+                                                 BlockingQueue<Runnable> runnableQueue,
+                                                 ThreadFactory threadFactory) {
+        return getAioExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit,
+                runnableQueue, threadFactory, new AioCallerRunsPolicy());
+    }
+
+    public static ExecutorService getAioExecutor(int corePoolSize,
+                                                 int maxPoolSize,
+                                                 long keepAliveTime,
+                                                 TimeUnit timeUnit,
+                                                 BlockingQueue<Runnable> runnableQueue,
+                                                 ThreadFactory threadFactory,
+                                                 RejectedExecutionHandler rejectedExecutionHandler) {
+        SynThreadPoolExecutor poolExecutor =
+                new SynThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit,
+                        runnableQueue, threadFactory, rejectedExecutionHandler);
         poolExecutor.prestartCoreThread();
         return poolExecutor;
+    }
+
+    private ThreadUtils() {
     }
 
 }

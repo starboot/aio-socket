@@ -31,11 +31,8 @@ public class AioFullWaitQueue<T> implements FullWaitQueue<T> {
 
     private final Integer total;
 
-    private final boolean useSingleProducer;
-
-    public AioFullWaitQueue(Integer capacity, boolean useSingleProducer) {
+    public AioFullWaitQueue(Integer capacity) {
         this.capacity = new Semaphore(capacity);
-        this.useSingleProducer = useSingleProducer;
         this.total = capacity;
     }
 
@@ -81,8 +78,4 @@ public class AioFullWaitQueue<T> implements FullWaitQueue<T> {
         return queue.isEmpty();
     }
 
-    @Override
-    public boolean getProducerModel() {
-        return useSingleProducer;
-    }
 }

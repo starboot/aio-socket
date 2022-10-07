@@ -2,11 +2,10 @@ package io.github.mxd888.socket.utils.queue;
 
 import io.github.mxd888.socket.utils.ThreadUtils;
 import io.github.mxd888.socket.utils.pool.thread.AbstractQueueRunnable;
-import io.github.mxd888.socket.utils.pool.thread.SynThreadPoolExecutor;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.LongAdder;
 
 /**
@@ -76,7 +75,7 @@ public class AioFullWaitQueueTest {
         int capacity = 512;
 
         // 建立aio-socket满等待队列
-        FullWaitQueue<String> aioFullWaitQueue = new AioFullWaitQueue<>(capacity, false);
+        FullWaitQueue<String> aioFullWaitQueue = new AioFullWaitQueue<>(capacity);
 
         // 测试(aio-socket 线程池 + aio-socket 满等待队列)性能
         testAioExecutor(aioFullWaitQueue, message);
@@ -85,8 +84,9 @@ public class AioFullWaitQueueTest {
 //        testGroupExecutor(aioFullWaitQueue, message);
     }
 
-    private static void testGroupExecutor(FullWaitQueue<String> aioFullWaitQueue, String message) throws InterruptedException {
-        ThreadPoolExecutor groupExecutor = ThreadUtils.getGroupExecutor(offerThreadNum + processThreadNum);
+    private static void testGroupExecutor(FullWaitQueue<String> aioFullWaitQueue, String message)
+            throws InterruptedException {
+        ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(offerThreadNum + processThreadNum);
         AddQueue addQueue = new AddQueue(message, aioFullWaitQueue);
         PollQueue pollQueue = new PollQueue(aioFullWaitQueue);
         // 计时开始
@@ -108,8 +108,9 @@ public class AioFullWaitQueueTest {
         groupExecutor.shutdown();
     }
 
-    private static void testAioExecutor(FullWaitQueue<String> aioFullWaitQueue, String message) throws InterruptedException {
-        SynThreadPoolExecutor aioExecutor = ThreadUtils.getAioExecutor();
+    private static void testAioExecutor(FullWaitQueue<String> aioFullWaitQueue, String message)
+            throws InterruptedException {
+        ExecutorService aioExecutor = ThreadUtils.getAioExecutor();
         SynPollQueue synPollQueue = new SynPollQueue(aioFullWaitQueue, aioExecutor);
         // 计时开始
         long start = System.currentTimeMillis();

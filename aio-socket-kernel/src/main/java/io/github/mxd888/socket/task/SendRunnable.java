@@ -38,14 +38,14 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
 
     private final ChannelContext channelContext;
 
-    private final AioHandler aioConfig;
+    private final AioHandler aioHandler;
 
     private FullWaitQueue<Packet> msgQueue = null;
 
     public SendRunnable(ChannelContext channelContext, Executor executor) {
         super(executor);
         this.channelContext = channelContext;
-        this.aioConfig = channelContext.getAioConfig().getHandler();
+        this.aioHandler = channelContext.getAioConfig().getHandler();
         getMsgQueue();
     }
 
@@ -65,7 +65,7 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
      */
     private void getByteBuffer(Packet packet) {
         try {
-            aioConfig.encode(packet, channelContext);
+            aioHandler.encode(packet, channelContext);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -98,7 +98,7 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {
-                    msgQueue = new AioFullWaitQueue<>(channelContext.getAioConfig().getMaxWaitNum(), false);
+                    msgQueue = new AioFullWaitQueue<>(channelContext.getAioConfig().getMaxWaitNum());
                 }
             }
         }

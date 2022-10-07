@@ -25,12 +25,12 @@ import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.IOUtil;
-import io.github.mxd888.socket.utils.pool.thread.SynThreadPoolExecutor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -113,7 +113,7 @@ public final class TCPChannelContext extends ChannelContext{
      * @param writeCompletionHandler 写回调
      * @param bufferPage             绑定内存页
      */
-    TCPChannelContext(AsynchronousSocketChannel channel, final AioConfig config, ReadCompletionHandler readCompletionHandler, WriteCompletionHandler writeCompletionHandler, BufferPage bufferPage, SynThreadPoolExecutor synThreadPoolExecutor) {
+    TCPChannelContext(AsynchronousSocketChannel channel, final AioConfig config, ReadCompletionHandler readCompletionHandler, WriteCompletionHandler writeCompletionHandler, BufferPage bufferPage, ExecutorService synThreadPoolExecutor) {
         this.channel = channel;
         this.readCompletionHandler = readCompletionHandler;
         this.writeCompletionHandler = writeCompletionHandler;

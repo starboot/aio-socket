@@ -22,41 +22,29 @@ import java.util.concurrent.*;
  */
 public class SynThreadPoolExecutor extends ThreadPoolExecutor {
 
-    private String name;
-
     /**
-     *
-     * @param corePoolSize      核心池大小
-     * @param maximumPoolSize   池最大值
-     * @param keepAliveTime     单位: 秒
-     * @param runnableQueue     阻塞队列
-     * @param threadFactory     线程工厂
-     * @param name              线程池名字
+     * @param corePoolSize             核心池大小
+     * @param maximumPoolSize          池最大值
+     * @param keepAliveTime            单位: 秒
+     * @param runnableQueue            阻塞队列
+     * @param threadFactory            线程工厂
+     * @param rejectedExecutionHandler 拒绝策略
      */
-    public SynThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, BlockingQueue<Runnable> runnableQueue, ThreadFactory threadFactory, String name) {
-        super(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, runnableQueue, threadFactory);
-        this.name = name;
-    }
-
-    /**
-     *
-     * @param corePoolSize              核心池大小
-     * @param maximumPoolSize           池最大值
-     * @param keepAliveTime             单位: 秒
-     * @param runnableQueue             阻塞队列
-     * @param threadFactory             线程工厂
-     * @param name                      线程池名字
-     * @param rejectedExecutionHandler  拒绝策略
-     */
-    public SynThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, BlockingQueue<Runnable> runnableQueue, ThreadFactory threadFactory, String name, RejectedExecutionHandler rejectedExecutionHandler) {
-        super(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, runnableQueue, threadFactory, rejectedExecutionHandler);
-        this.name = name;
+    public SynThreadPoolExecutor(int corePoolSize,
+                                 int maximumPoolSize,
+                                 long keepAliveTime,
+                                 TimeUnit timeUnit,
+                                 BlockingQueue<Runnable> runnableQueue,
+                                 ThreadFactory threadFactory,
+                                 RejectedExecutionHandler rejectedExecutionHandler) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, runnableQueue, threadFactory, rejectedExecutionHandler);
     }
 
     /**
      * 执行前检查是否为同步任务
-     * @param runnable  任务
-     * @return          检查状态
+     *
+     * @param runnable 任务
+     * @return 检查状态
      */
     private boolean checkBeforeExecute(Runnable runnable) {
         if (runnable instanceof AbstractSynRunnable) {
@@ -108,24 +96,6 @@ public class SynThreadPoolExecutor extends ThreadPoolExecutor {
             super.execute(runnable);
         }
 
-    }
-
-    /**
-     * Gets the name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the name.
-     *
-     * @param name the new name
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override

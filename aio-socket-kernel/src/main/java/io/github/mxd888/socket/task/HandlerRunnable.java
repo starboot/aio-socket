@@ -81,7 +81,7 @@ public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {
-                    msgQueue = new AioFullWaitQueue<>(aioConfig.getMaxWaitNum(), true);
+                    msgQueue = new AioFullWaitQueue<>(aioConfig.getMaxWaitNum());
                 }
             }
         }
