@@ -20,7 +20,6 @@ import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
-import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.intf.AioHandler;
 
 import java.io.IOException;

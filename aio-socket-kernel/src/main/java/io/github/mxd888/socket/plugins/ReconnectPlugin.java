@@ -18,7 +18,6 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.TCPChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 

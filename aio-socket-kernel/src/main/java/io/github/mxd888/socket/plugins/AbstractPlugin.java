@@ -18,8 +18,6 @@ package io.github.mxd888.socket.plugins;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.TCPChannelContext;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 
 import java.nio.channels.AsynchronousSocketChannel;
 

@@ -113,7 +113,7 @@ public class ClientBootstrap {
      *
      * @see ClientBootstrap#start(AsynchronousChannelGroup)
      */
-    public final TCPChannelContext start() throws IOException {
+    public final ChannelContext start() throws IOException {
         this.asynchronousChannelGroup = AsynchronousChannelGroup.withFixedThreadPool(2, Thread::new);
         return start(this.asynchronousChannelGroup);
     }
@@ -129,14 +129,14 @@ public class ClientBootstrap {
      *
      * @see AsynchronousSocketChannel#connect(SocketAddress)
      */
-    public TCPChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
+    public ChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
         if (isCheck) {
             checkAndResetConfig();
         }
-        CompletableFuture<TCPChannelContext> future = new CompletableFuture<>();
-        start(asynchronousChannelGroup, future, new CompletionHandler<TCPChannelContext, CompletableFuture<TCPChannelContext>>() {
+        CompletableFuture<ChannelContext> future = new CompletableFuture<>();
+        start(asynchronousChannelGroup, future, new CompletionHandler<ChannelContext, CompletableFuture<ChannelContext>>() {
             @Override
-            public void completed(TCPChannelContext session, CompletableFuture<TCPChannelContext> future) {
+            public void completed(ChannelContext session, CompletableFuture<ChannelContext> future) {
                 if (future.isDone() || future.isCancelled()) {
                     session.close();
                     LOGGER.error("aio-socket version: {}; client kernel started failed because of future is done or cancelled", AioConfig.VERSION);
@@ -152,7 +152,7 @@ public class ClientBootstrap {
             }
 
             @Override
-            public void failed(Throwable exc, CompletableFuture<TCPChannelContext> future) {
+            public void failed(Throwable exc, CompletableFuture<ChannelContext> future) {
                 future.completeExceptionally(exc);
                 LOGGER.error("aio-socket version: {}; client kernel started failed", AioConfig.VERSION);
             }
@@ -178,8 +178,8 @@ public class ClientBootstrap {
      * @param handler                   异步回调
      * @throws IOException              .
      */
-    private void start(AsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<TCPChannelContext> future,
-                          CompletionHandler<TCPChannelContext, ? super CompletableFuture<TCPChannelContext>> handler) throws IOException {
+    private void start(AsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
+                          CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
         AsynchronousSocketChannel socketChannel = AsynchronousSocketChannel.open(asynchronousChannelGroup);
         if (this.bufferPool == null) {
             this.bufferPool = getConfig().getBufferFactory().create();
@@ -255,7 +255,7 @@ public class ClientBootstrap {
      *
      * @return ChannelContext
      */
-    public TCPChannelContext getChannelContext() {
+    public ChannelContext getChannelContext() {
         return this.channelContext;
     }
 

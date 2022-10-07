@@ -19,7 +19,6 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.util.Objects;
 

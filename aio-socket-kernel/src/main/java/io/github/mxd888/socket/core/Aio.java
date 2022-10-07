@@ -16,7 +16,6 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.maintain.Groups;
 
 /**
@@ -35,7 +34,7 @@ public class Aio {
      * @param id             用户ID
      * @param channelContext 用户通道
      */
-    public static void bindID(String id, TCPChannelContext channelContext) {
+    public static void bindID(String id, ChannelContext channelContext) {
         // 绑定ID
         AioConfig config = channelContext.getAioConfig();
         config.getIds().join(id, channelContext);
@@ -48,7 +47,7 @@ public class Aio {
      * @param groupId        群组ID
      * @param channelContext 用户通道
      */
-    public static void bindGroup(String groupId, TCPChannelContext channelContext) {
+    public static void bindGroup(String groupId, ChannelContext channelContext) {
         // 绑定群组
         Groups groups = channelContext.getAioConfig().getGroups();
         groups.join(groupId, channelContext);
@@ -73,16 +72,16 @@ public class Aio {
      * @param packet         消息包
      * @param channelContext 发送者上下文
      */
-    public static void sendGroup(String groupId, Packet packet, TCPChannelContext channelContext) {
+    public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext) {
         channelContext.getAioConfig().getHandler().encode(packet, channelContext);
 //        channelContext.getAioConfig().getGroups().writeToGroup(groupId, buffer, channelContext);
     }
 
-    public static void removeUserFromAllGroup(TCPChannelContext channelContext) {
+    public static void removeUserFromAllGroup(ChannelContext channelContext) {
         channelContext.getAioConfig().getGroups().remove(channelContext);
     }
 
-    public static void removeUserFromGroup(TCPChannelContext channelContext, String groupId) {
+    public static void removeUserFromGroup(ChannelContext channelContext, String groupId) {
         channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
     }
 
@@ -91,7 +90,7 @@ public class Aio {
      *
      * @param channelContext 通道上下文
      */
-    public static void close(TCPChannelContext channelContext) {
+    public static void close(ChannelContext channelContext) {
         removeUserFromAllGroup(channelContext);
         channelContext.getAioConfig().getIds().remove(channelContext.getId());
         channelContext.close();

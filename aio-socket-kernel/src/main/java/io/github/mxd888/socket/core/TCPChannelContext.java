@@ -113,7 +113,12 @@ public final class TCPChannelContext extends ChannelContext{
      * @param writeCompletionHandler 写回调
      * @param bufferPage             绑定内存页
      */
-    TCPChannelContext(AsynchronousSocketChannel channel, final AioConfig config, ReadCompletionHandler readCompletionHandler, WriteCompletionHandler writeCompletionHandler, BufferPage bufferPage, ExecutorService synThreadPoolExecutor) {
+    TCPChannelContext(AsynchronousSocketChannel channel,
+                      final AioConfig config,
+                      ReadCompletionHandler readCompletionHandler,
+                      WriteCompletionHandler writeCompletionHandler,
+                      BufferPage bufferPage,
+                      ExecutorService synThreadPoolExecutor) {
         this.channel = channel;
         this.readCompletionHandler = readCompletionHandler;
         this.writeCompletionHandler = writeCompletionHandler;
@@ -187,13 +192,16 @@ public final class TCPChannelContext extends ChannelContext{
          *
          * 相同点：调用完compact和clear方法之后的buffer对象一般都是继续往该buffer中写入数据的
          * 不同点：
-         * （1）clear是把position=0，limit=capacity等，也就是说，除了内部数组，其他属性都还原到buffer创建时的初始值，而内部数组的数据虽然没赋为null，
+         * （1）clear是把position=0，limit=capacity等，也就是说，除了内部数组，
+         *     其他属性都还原到buffer创建时的初始值，而内部数组的数据虽然没赋为null，
          *     但只要不在clear之后误用buffer.get就不会有问题，正确用法是使用buffer.put从头开始写入数据;
-         * （2）而capacity是把buffer中内部数组剩余未读取的数据复制到该数组从索引为0开始，然后position设置为复制剩余数据后的最后一位元素的索引+1，
-         *     limit设置为capacity，此时在0~position之间是未读数据，而position~limit之间是buffer的剩余空间，可以put数据。
+         * （2）而capacity是把buffer中内部数组剩余未读取的数据复制到该数组从索引为0开始，
+         *     然后position设置为复制剩余数据后的最后一位元素的索引+1，limit设置为capacity，
+         *     此时在0~position之间是未读数据，而position~limit之间是buffer的剩余空间，可以put数据。
          *
          * 使用场景：
-         * 当buffer被读取过，但想继续复用buffer时，可以执行compact把剩余未读取数据往缓冲数据前面移动，compact移动完后，可以再次使用put往该buffer里put数据，此时数据会被写到剩余数据之后。
+         * 当buffer被读取过，但想继续复用buffer时，可以执行compact把剩余未读取数据往缓冲数据前面移动。
+         * compact移动完后，可以再次使用put往该buffer里put数据，此时数据会被写到剩余数据之后。
          */
         readBuffer.compact();
         // 读缓冲区已满
@@ -269,7 +277,7 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private void assertChannel() throws IOException {
         if (status == CHANNEL_STATUS_CLOSED || channel == null) {
-            throw new IOException("session is closed");
+            throw new IOException("ChannelContext is closed");
         }
     }
 

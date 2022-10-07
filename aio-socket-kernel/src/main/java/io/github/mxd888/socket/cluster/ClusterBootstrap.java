@@ -3,7 +3,7 @@ package io.github.mxd888.socket.cluster;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.AioConfig;
-import io.github.mxd888.socket.core.TCPChannelContext;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
 import io.github.mxd888.socket.utils.cache.redis.RedisCache;
 import org.redisson.Redisson;
@@ -47,7 +47,7 @@ public class ClusterBootstrap {
             String[] split = s.split(":");
             System.out.println(Arrays.toString(split));
             ClientBootstrap clientBootstrap = new ClientBootstrap(split[0], Integer.parseInt(split[1]), config.getHandler());
-            TCPChannelContext start = clientBootstrap.start();
+            ChannelContext start = clientBootstrap.start();
             Packet packet = new Packet();
             packet.setToId(split[0]);
             // 写入自己的IP
