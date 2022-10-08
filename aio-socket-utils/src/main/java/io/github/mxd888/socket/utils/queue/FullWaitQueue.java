@@ -29,11 +29,8 @@ public interface FullWaitQueue<T> {
      */
     boolean offer(T t);
 
-    /**
-     * 出队
-     *
-     * @return the head of this queue, or {@code null} if this queue is empty
-     */
+    T peek();
+
     T poll();
 
     void clear();
@@ -41,4 +38,6 @@ public interface FullWaitQueue<T> {
     int size();
 
     boolean isEmpty();
+
+    boolean isFull();
 }

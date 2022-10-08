@@ -46,6 +46,11 @@ public class AioFullWaitQueue<T> implements FullWaitQueue<T> {
         return queue.offer(t);
     }
 
+    @Override
+    public T peek() {
+        return queue.peek();
+    }
+
     /**
      * 拿的时候不需要判空，直接拿，完事看拿到的是不是空
      * @return t 单元
@@ -76,6 +81,11 @@ public class AioFullWaitQueue<T> implements FullWaitQueue<T> {
     @Override
     public boolean isEmpty() {
         return queue.isEmpty();
+    }
+
+    @Override
+    public boolean isFull() {
+        return capacity.availablePermits() == 0;
     }
 
 }

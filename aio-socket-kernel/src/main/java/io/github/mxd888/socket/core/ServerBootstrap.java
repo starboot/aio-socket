@@ -21,7 +21,7 @@ import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
-import io.github.mxd888.socket.utils.IOUtil;
+import io.github.mxd888.socket.utils.AIOUtil;
 import io.github.mxd888.socket.utils.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -185,12 +185,12 @@ public class ServerBootstrap {
                 context = this.aioChannelContextFunction.apply(acceptChannel);
                 context.initTCPChannelContext(this.readBufferFactory.createBuffer(this.bufferPool.allocateBufferPage()));
             } else {
-                IOUtil.close(channel);
+                AIOUtil.close(channel);
             }
         } catch (Exception e) {
             e.printStackTrace();
             if (context == null) {
-                IOUtil.close(channel);
+                AIOUtil.close(channel);
             } else {
                 context.close(true);
             }

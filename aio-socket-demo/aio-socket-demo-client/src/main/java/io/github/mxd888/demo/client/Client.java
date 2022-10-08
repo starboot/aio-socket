@@ -64,7 +64,7 @@ public class Client {
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 4, 512)
                         .addHeartPacket(new DemoPacket("heartbeat message"))
-                        .addPlugin(new MonitorPlugin(5))
+//                        .addPlugin(new MonitorPlugin(5))
                         .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
                         .addPlugin(new ReconnectPlugin(bootstrap));
 

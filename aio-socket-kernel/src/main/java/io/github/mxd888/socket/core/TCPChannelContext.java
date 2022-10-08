@@ -24,7 +24,7 @@ import io.github.mxd888.socket.task.SendRunnable;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
-import io.github.mxd888.socket.utils.IOUtil;
+import io.github.mxd888.socket.utils.AIOUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -166,7 +166,12 @@ public final class TCPChannelContext extends ChannelContext{
         while (readBuffer.hasRemaining() && status == CHANNEL_STATUS_ENABLED) {
             Packet dataEntry = null;
             try {
-                dataEntry = handler.decode(this.readBuffer, this);
+                if (getOldByteBuffer().isEmpty()) {
+                    dataEntry = handler.decode(this.readBuffer, this);
+                }else {
+                    getOldByteBuffer().offer(this.readBuffer);
+                    dataEntry = handler.decode(getOldByteBuffer().peek(), this);
+                }
             } catch (AioDecoderException e) {
                 handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, e);
                 e.printStackTrace();
@@ -188,9 +193,15 @@ public final class TCPChannelContext extends ChannelContext{
         }
         readBuffer.compact();
         if (!readBuffer.hasRemaining()) {
-            RuntimeException exception = new RuntimeException("readBuffer overflow");
-            handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, exception);
-            throw exception;
+            if (getOldByteBuffer().isFull()) {
+                RuntimeException exception = new RuntimeException("readBuffer queue has overflow");
+                handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, exception);
+                throw exception;
+            }
+            // 空间太小，申请一份空间继续读
+            this.readBuffer.buffer().flip();
+            getOldByteBuffer().offer(this.readBuffer);
+            this.readBuffer = getVirtualBuffer(getAioConfig().getReadBufferSize());
         }
         continueRead(this.readBuffer);
     }
@@ -282,7 +293,7 @@ public final class TCPChannelContext extends ChannelContext{
                     writeBuffer = null;
                 }
             } finally {
-                IOUtil.close(channel);
+                AIOUtil.close(channel);
                 getAioConfig().getHandler().stateEvent(this, StateMachineEnum.CHANNEL_CLOSED, null);
             }
         } else if ((writeBuffer == null || !writeBuffer.buffer().hasRemaining()) && byteBuf.isEmpty()) {

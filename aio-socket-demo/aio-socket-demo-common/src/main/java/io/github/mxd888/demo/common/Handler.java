@@ -19,6 +19,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
+import io.github.mxd888.socket.utils.AIOUtil;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
 
@@ -41,14 +42,15 @@ public class Handler implements AioHandler {
         }
         buffer.mark();
         int length = buffer.getInt();
-        if (length > buffer.remaining()) {
+        byte[] b = AIOUtil.getBytesFromByteBuffer(length, virtualBuffer, channelContext);
+        if (b == null) {
             buffer.reset();
             return null;
         }
-        byte[] b = new byte[length];
-        buffer.get(b);
         return new DemoPacket(new String(b));
     }
+
+
 
     @Override
     public void encode(Packet packet, ChannelContext channelContext) {

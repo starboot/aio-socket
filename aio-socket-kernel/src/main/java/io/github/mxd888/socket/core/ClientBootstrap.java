@@ -23,7 +23,7 @@ import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
-import io.github.mxd888.socket.utils.IOUtil;
+import io.github.mxd888.socket.utils.AIOUtil;
 import io.github.mxd888.socket.utils.QuickTimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -220,7 +220,7 @@ public class ClientBootstrap {
                     e.printStackTrace();
                 } finally {
                     if (socketChannel != null) {
-                        IOUtil.close(socketChannel);
+                        AIOUtil.close(socketChannel);
                     }
                     shutdownNow();
                 }

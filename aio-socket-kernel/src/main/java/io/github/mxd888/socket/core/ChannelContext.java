@@ -17,11 +17,16 @@ package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.task.SendRunnable;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
+import io.github.mxd888.socket.utils.queue.FullWaitQueue;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,6 +63,21 @@ public abstract class ChannelContext {
      * 自定义属性Map
      */
     private final Map<String, Object> attr = new HashMap<>();
+
+    private FullWaitQueue<VirtualBuffer> oldByteBufferQueue;
+
+    public FullWaitQueue<VirtualBuffer> getOldByteBuffer() {
+        if (oldByteBufferQueue != null) {
+            return oldByteBufferQueue;
+        }
+        synchronized (ChannelContext.class) {
+            if (oldByteBufferQueue != null) {
+                return oldByteBufferQueue;
+            }
+            oldByteBufferQueue = new AioFullWaitQueue<>(10);
+        }
+        return oldByteBufferQueue;
+    }
 
     /**
      * 获取一个虚拟buffer用于存放数据
