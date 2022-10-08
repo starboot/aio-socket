@@ -50,8 +50,6 @@ public class Handler implements AioHandler {
         return new DemoPacket(new String(b));
     }
 
-
-
     @Override
     public void encode(Packet packet, ChannelContext channelContext) {
         if (packet instanceof DemoPacket) {
