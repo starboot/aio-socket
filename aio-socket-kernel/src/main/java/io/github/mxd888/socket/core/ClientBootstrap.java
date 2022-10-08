@@ -38,6 +38,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -51,9 +52,24 @@ public class ClientBootstrap {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientBootstrap.class);
 
     /**
-     * 客户端服务配置。
+     * 客户端线程数为2就够用了
      */
-    private final AioConfig config = new AioConfig(false);
+    private final int threadNum = 2;
+
+    /**
+     * 重连插件使用
+     */
+    private boolean isCheck = true;
+
+    /**
+     * 心跳包
+     */
+    private Packet heartBeat = null;
+
+    /**
+     * 绑定本地地址
+     */
+    private SocketAddress localAddress;
 
     /**
      * 网络连接的会话对象
@@ -66,24 +82,25 @@ public class ClientBootstrap {
     private BufferPagePool bufferPool = null;
 
     /**
-     * IO事件处理线程组。
-     * 作为客户端，该AsynchronousChannelGroup只需保证2个长度的线程池大小即可满足通信读写所需。
+     * aio-socket 内置执行器
      */
-    private AsynchronousChannelGroup asynchronousChannelGroup;
-
-    /**
-     * 绑定本地地址
-     */
-    private SocketAddress localAddress;
+    private ExecutorService aioExecutorService;
 
     /**
      * 连接超时时间
      */
     private final static int connectTimeout = 5000;
 
-    private Packet heartBeat = null;
+    /**
+     * IO事件处理线程组。
+     * 作为客户端，该AsynchronousChannelGroup只需保证2个长度的线程池大小即可满足通信读写所需。
+     */
+    private AsynchronousChannelGroup asynchronousChannelGroup;
 
-    private boolean isCheck = true;
+    /**
+     * 客户端服务配置。
+     */
+    private final AioConfig config = new AioConfig(false);
 
     /**
      * 构造虚拟缓冲区工厂
@@ -100,21 +117,22 @@ public class ClientBootstrap {
     public  ClientBootstrap(String host, int port, AioHandler handler) {
         this.config.setHost(host);
         this.config.setPort(port);
+        this.aioExecutorService = ThreadUtils.getAioExecutor(threadNum);
         this.config.getPlugins().setAioHandler(handler);
     }
 
     /**
      * 启动客户端。
-     * 本方法会构建线程数为2的{@code asynchronousChannelGroup}
-     * 并通过调用{@link ClientBootstrap#start(AsynchronousChannelGroup)}启动服务。
+     * 本方法会构建线程数为threadNum的{@code asynchronousChannelGroup}
+     * 并通过调用{@link io.github.mxd888.socket.core.ClientBootstrap#start(AsynchronousChannelGroup)}启动服务。
      *
      * @return                   建立连接后的会话对象
      * @throws IOException       IOException
      *
-     * @see ClientBootstrap#start(AsynchronousChannelGroup)
+     * @see io.github.mxd888.socket.core.ClientBootstrap#start(AsynchronousChannelGroup)
      */
     public final ChannelContext start() throws IOException {
-        this.asynchronousChannelGroup = AsynchronousChannelGroup.withFixedThreadPool(2, Thread::new);
+        this.asynchronousChannelGroup = AsynchronousChannelGroup.withFixedThreadPool(threadNum, Thread::new);
         return start(this.asynchronousChannelGroup);
     }
 
@@ -176,7 +194,7 @@ public class ClientBootstrap {
      * @param asynchronousChannelGroup  通信线程资源组
      * @param future                    可传入回调方法中的附件对象
      * @param handler                   异步回调
-     * @throws IOException              .
+     * @throws IOException              网络IO异常
      */
     private void start(AsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
                           CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
@@ -204,7 +222,7 @@ public class ClientBootstrap {
                         throw new RuntimeException("NetMonitor refuse channel");
                     }
                     //连接成功则构造AIOChannelContext对象
-                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage(), ThreadUtils.getAioExecutor(2));
+                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage(), aioExecutorService);
                     channelContext.initTCPChannelContext(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
                     handler.completed(channelContext, future);
                 } catch (Exception e) {
@@ -251,15 +269,6 @@ public class ClientBootstrap {
     }
 
     /**
-     * 获取连接上下文
-     *
-     * @return ChannelContext
-     */
-    public ChannelContext getChannelContext() {
-        return this.channelContext;
-    }
-
-    /**
      * 停止客户端服务.
      * 调用该方法会触发AioSession的close方法
      * 并且如果当前客户端若是通过执行{@link ClientBootstrap#start()}方法构建的
@@ -286,10 +295,13 @@ public class ClientBootstrap {
             this.channelContext.close(flag);
             this.channelContext = null;
         }
-        //仅Client内部创建的ChannelGroup需要shutdown
         if (this.asynchronousChannelGroup != null) {
             this.asynchronousChannelGroup.shutdown();
             this.asynchronousChannelGroup = null;
+        }
+        if (aioExecutorService != null) {
+            this.aioExecutorService.shutdown();
+            this.aioExecutorService = null;
         }
     }
 
@@ -359,6 +371,11 @@ public class ClientBootstrap {
 
     public ClientBootstrap addHeartPacket(Packet heartPacket) {
         this.heartBeat = heartPacket;
+        return this;
+    }
+
+    public ClientBootstrap setLocalSocketAddress(int port) {
+        this.localAddress = new InetSocketAddress(port);
         return this;
     }
 }
