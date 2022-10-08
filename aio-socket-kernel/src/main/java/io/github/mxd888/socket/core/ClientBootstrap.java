@@ -204,7 +204,7 @@ public class ClientBootstrap {
                         throw new RuntimeException("NetMonitor refuse channel");
                     }
                     //连接成功则构造AIOChannelContext对象
-                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage(), ThreadUtils.getAioExecutor());
+                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage(), ThreadUtils.getAioExecutor(2));
                     channelContext.initTCPChannelContext(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
                     handler.completed(channelContext, future);
                 } catch (Exception e) {
