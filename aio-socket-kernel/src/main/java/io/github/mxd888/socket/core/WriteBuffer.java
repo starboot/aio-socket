@@ -84,6 +84,14 @@ public final class WriteBuffer {
      */
     private byte[] bytes;
 
+    /**
+     * 输出流对象
+     *
+     * @param memoryBlock 所在内存块
+     * @param consumer    调用底层IO通讯
+     * @param chunkSize   输出流大小（单位字节）
+     * @param capacity    最大带输出队列容量
+     */
     WriteBuffer(MemoryBlock memoryBlock, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
         this.memoryBlock = memoryBlock;
         this.consumer = consumer;
@@ -93,6 +101,7 @@ public final class WriteBuffer {
 
     /**
      * 获取一个虚拟空间用于编码操作
+     *
      * @param size 大小
      * @return 虚拟空间
      */
