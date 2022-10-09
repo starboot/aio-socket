@@ -146,12 +146,12 @@ public class ClientBootstrap {
         CompletableFuture<ChannelContext> future = new CompletableFuture<>();
         start(asynchronousChannelGroup, future, new CompletionHandler<ChannelContext, CompletableFuture<ChannelContext>>() {
             @Override
-            public void completed(ChannelContext session, CompletableFuture<ChannelContext> future) {
+            public void completed(ChannelContext channelContext, CompletableFuture<ChannelContext> future) {
                 if (future.isDone() || future.isCancelled()) {
-                    session.close();
+                    channelContext.close();
                     LOGGER.error("aio-socket version: {}; client kernel started failed because of future is done or cancelled", AioConfig.VERSION);
                 } else {
-                    future.complete(session);
+                    future.complete(channelContext);
                     if (Objects.nonNull(heartBeat)) {
                         heartMessage();
                     }

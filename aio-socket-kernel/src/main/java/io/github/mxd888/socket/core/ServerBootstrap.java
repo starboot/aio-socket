@@ -139,13 +139,13 @@ public class ServerBootstrap {
     private void start0(Function<AsynchronousSocketChannel, TCPChannelContext> aioContextFunction) {
         try {
             checkAndResetConfig();
+            this.aioChannelContextFunction = aioContextFunction;
+            this.aioReadCompletionHandler = new ReadCompletionHandler();
             this.aioWriteCompletionHandler = new WriteCompletionHandler();
             if (this.memoryPool == null) {
                 this.memoryPool = getConfig().getMemoryPoolFactory().create();
             }
-            this.aioChannelContextFunction = aioContextFunction;
             AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
-            this.aioReadCompletionHandler = new ReadCompletionHandler();
             this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(this.bossExecutorService, 0);
             this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
             if (getConfig().getSocketOptions() != null) {
