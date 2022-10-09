@@ -139,7 +139,7 @@ public class ClientBootstrap {
      *
      * @see AsynchronousSocketChannel#connect(SocketAddress)
      */
-    public ChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
+    private ChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
         if (isCheck) {
             checkAndResetConfig();
         }
