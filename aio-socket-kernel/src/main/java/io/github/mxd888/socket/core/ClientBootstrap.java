@@ -17,7 +17,6 @@ package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.plugins.Plugin;
-import io.github.mxd888.socket.utils.ThreadUtils;
 import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
@@ -38,7 +37,6 @@ import java.nio.channels.CompletionHandler;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -52,9 +50,9 @@ public class ClientBootstrap {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientBootstrap.class);
 
     /**
-     * 客户端线程数为2就够用了
+     * 客户端线程数默认为2;就够用了
      */
-    private final int threadNum = 2;
+    private int threadNum = 2;
 
     /**
      * 重连插件使用
@@ -80,11 +78,6 @@ public class ClientBootstrap {
      * 内存池
      */
     private BufferPagePool bufferPool = null;
-
-    /**
-     * aio-socket 内置执行器
-     */
-    private ExecutorService aioExecutorService;
 
     /**
      * 连接超时时间
@@ -117,7 +110,6 @@ public class ClientBootstrap {
     public  ClientBootstrap(String host, int port, AioHandler handler) {
         this.config.setHost(host);
         this.config.setPort(port);
-        this.aioExecutorService = ThreadUtils.getAioExecutor(threadNum);
         this.config.getPlugins().setAioHandler(handler);
     }
 
@@ -222,7 +214,7 @@ public class ClientBootstrap {
                         throw new RuntimeException("NetMonitor refuse channel");
                     }
                     //连接成功则构造AIOChannelContext对象
-                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage(), aioExecutorService);
+                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage());
                     channelContext.initTCPChannelContext(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
                     handler.completed(channelContext, future);
                 } catch (Exception e) {
@@ -299,10 +291,16 @@ public class ClientBootstrap {
             this.asynchronousChannelGroup.shutdown();
             this.asynchronousChannelGroup = null;
         }
-        if (aioExecutorService != null) {
-            this.aioExecutorService.shutdown();
-            this.aioExecutorService = null;
-        }
+    }
+
+    /**
+     * 设置线程数
+     * @param threadNum 线程数
+     * @return          this
+     */
+    public ClientBootstrap setThreadNum(int threadNum) {
+        this.threadNum = threadNum;
+        return this;
     }
 
     /**
@@ -374,6 +372,11 @@ public class ClientBootstrap {
         return this;
     }
 
+    /**
+     * 绑定指定端口
+     * @param port 端口号
+     * @return      this
+     */
     public ClientBootstrap setLocalSocketAddress(int port) {
         this.localAddress = new InetSocketAddress(port);
         return this;

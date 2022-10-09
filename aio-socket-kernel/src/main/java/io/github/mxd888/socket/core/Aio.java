@@ -60,9 +60,7 @@ public class Aio {
      * @param packet         数据包
      */
     public static void send(ChannelContext channelContext, Packet packet) {
-        if (channelContext.sendRunnable().addMsg(packet)) {
-            channelContext.sendRunnable().execute();
-        }
+        channelContext.sendPacket(packet);
     }
 
     /**

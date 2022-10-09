@@ -15,6 +15,7 @@
  */
 package io.github.mxd888.socket.udp;
 
+import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
@@ -100,7 +101,7 @@ final class UDPChannelContext extends ChannelContext {
     }
 
     @Override
-    public SendRunnable sendRunnable() {
+    public void sendPacket(Packet packet) {
         throw  new UnsupportedOperationException("UDPChannelContext don't support use sendRunnable");
     }
 }

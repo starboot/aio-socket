@@ -97,12 +97,20 @@ public final class TCPChannelContext extends ChannelContext{
     /**
      * 消息处理逻辑执行器
      */
-    private final HandlerRunnable handlerRunnable;
+    private HandlerRunnable handlerRunnable;
 
     /**
      * 消息发送逻辑执行器
      */
-    private final SendRunnable sendRunnable;
+    private SendRunnable sendRunnable;
+
+    TCPChannelContext(AsynchronousSocketChannel channel,
+                      final AioConfig config,
+                      ReadCompletionHandler readCompletionHandler,
+                      WriteCompletionHandler writeCompletionHandler,
+                      BufferPage bufferPage) {
+        this(channel, config, readCompletionHandler, writeCompletionHandler, bufferPage, null);
+    }
 
     /**
      * 构造通道上下文对象
@@ -118,13 +126,12 @@ public final class TCPChannelContext extends ChannelContext{
                       ReadCompletionHandler readCompletionHandler,
                       WriteCompletionHandler writeCompletionHandler,
                       BufferPage bufferPage,
-                      ExecutorService synThreadPoolExecutor) {
+                      ExecutorService aioThreadPoolExecutor) {
         this.channel = channel;
         this.readCompletionHandler = readCompletionHandler;
         this.writeCompletionHandler = writeCompletionHandler;
         this.aioConfig = config;
-        this.handlerRunnable = new HandlerRunnable(this, synThreadPoolExecutor);
-        this.sendRunnable = new SendRunnable(this, synThreadPoolExecutor);
+        setAioExecutor(aioThreadPoolExecutor);
 
         // Java8 函数式编程的无返回函数
         Consumer<WriteBuffer> flushConsumer = var -> {
@@ -179,9 +186,7 @@ public final class TCPChannelContext extends ChannelContext{
             if (packet == null) {
                 break;
             }
-            if (handlerRunnable.addMsg(packet)) {
-                handlerRunnable.execute();
-            }
+            aioHandler(packet);
         }
         if (eof || status == CHANNEL_STATUS_CLOSING) {
             close(false);
@@ -277,6 +282,30 @@ public final class TCPChannelContext extends ChannelContext{
         }
     }
 
+    /**
+     * 设置aio-socket线程池
+     * @param aioThreadPoolExecutor 线程池
+     */
+    private void setAioExecutor(ExecutorService aioThreadPoolExecutor) {
+        if (aioThreadPoolExecutor != null) {
+            this.handlerRunnable = new HandlerRunnable(this, aioThreadPoolExecutor);
+            this.sendRunnable = new SendRunnable(this, aioThreadPoolExecutor);
+        }
+    }
+
+    private void aioHandler(Packet packet) {
+        if (handlerRunnable != null) {
+            if (handlerRunnable.addMsg(packet)) {
+                handlerRunnable.execute();
+            }
+        }else {
+            Packet handle = getAioConfig().getHandler().handle(this, packet);
+            if (handle != null) {
+                sendPacket(handle);
+            }
+        }
+    }
+
     @Override
     public final void close() {
         close(false);
@@ -308,8 +337,6 @@ public final class TCPChannelContext extends ChannelContext{
         }
     }
 
-
-
     @Override
     public final InetSocketAddress getLocalAddress() throws IOException {
         assertChannel();
@@ -338,8 +365,16 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public SendRunnable sendRunnable() {
-        return this.sendRunnable;
+    public void sendPacket(Packet packet) {
+        if (this.sendRunnable != null) {
+            this.sendRunnable.addMsg(packet);
+            this.sendRunnable.execute();
+        }else {
+            synchronized (this) {
+                getAioConfig().getHandler().encode(packet, this);
+                getWriteBuffer().flush();
+            }
+        }
     }
 
     @Override

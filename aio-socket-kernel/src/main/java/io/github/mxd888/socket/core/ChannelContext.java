@@ -15,6 +15,7 @@
  */
 package io.github.mxd888.socket.core;
 
+import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.task.SendRunnable;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
@@ -206,7 +207,6 @@ public abstract class ChannelContext {
 
     /**
      * 发送器
-     * @return .
      */
-    public abstract SendRunnable sendRunnable();
+    public abstract void sendPacket(Packet packet);
 }
