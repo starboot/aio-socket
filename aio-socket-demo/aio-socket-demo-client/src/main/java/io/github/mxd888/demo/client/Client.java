@@ -59,9 +59,9 @@ public class Client {
             new Thread(() -> {
                 // 127.0.0.1
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
-                bootstrap.setBufferFactory(() -> new MemoryPool(5 * 1024 * 1024, 10, true))
+                bootstrap.setBufferFactory(() -> new MemoryPool(32 * 1024 * 1024, 10, true))
                         .setReadBufferSize(1024 * 1024)
-                        .setWriteBufferSize(1024 * 4, 512)
+                        .setWriteBufferSize(1024 * 1024, 512)
                         .addHeartPacket(new DemoPacket("heartbeat message"))
 //                        .addPlugin(new MonitorPlugin(5))
                         .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
@@ -73,9 +73,6 @@ public class Client {
                     long startTime = System.currentTimeMillis();
                     while (num++ < Integer.MAX_VALUE) {
                         Aio.send(start, demoPacket);
-                        if (num % 1000000 == 0) {
-                            System.out.println("发送" + num/1000000 + "百万");
-                        }
                     }
                     System.out.println("安全消息结束" + (System.currentTimeMillis() - startTime));
                     Thread.sleep(10000);
