@@ -78,6 +78,11 @@ public abstract class ChannelContext {
      */
     private FullWaitQueue<VirtualBuffer> oldByteBufferQueue;
 
+    /**
+     * 读取当前ChannelContext未解码的虚拟buffer
+     *
+     * @return aio-socket自制满等待队列
+     */
     public FullWaitQueue<VirtualBuffer> getOldByteBuffer() {
         if (oldByteBufferQueue != null) {
             return oldByteBufferQueue;
@@ -91,6 +96,14 @@ public abstract class ChannelContext {
         return oldByteBufferQueue;
     }
 
+    /**
+     * 设置通道上下文的输出流
+     *
+     * @param bufferPage 输出流所在内存页
+     * @param consumer   消费函数
+     * @param chunkSize  输出流大小（单位字节）
+     * @param capacity   待输出数组的大小
+     */
     protected void setWriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
         if (byteBuf == null) {
             byteBuf = new WriteBuffer(bufferPage, consumer, chunkSize, capacity);
