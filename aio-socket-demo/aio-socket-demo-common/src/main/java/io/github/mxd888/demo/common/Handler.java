@@ -84,6 +84,12 @@ public class Handler implements AioHandler {
             case CHANNEL_CLOSED:
                 System.out.println("TCPChannelContext 已经关闭");
                 break;
+            case INPUT_EXCEPTION:
+                System.out.println("INPUT_EXCEPTION 异常");
+                break;
+            case OUTPUT_EXCEPTION:
+                System.out.println("OUTPUT_EXCEPTION 异常");
+                break;
         }
     }
 }
