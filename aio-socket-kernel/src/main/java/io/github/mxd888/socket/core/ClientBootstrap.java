@@ -255,7 +255,7 @@ public class ClientBootstrap {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("aio-socket version: {}; client kernel are sending heartbeat", AioConfig.VERSION);
             }
-            Aio.send(channelContext, this.heartBeat);
+            this.channelContext.sendPacket(this.heartBeat);
             heartMessage();
         }, 5, TimeUnit.SECONDS);
     }
