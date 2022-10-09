@@ -63,7 +63,7 @@ public class ServerBootstrap {
     /**
      * 内存池
      */
-    private MemoryPool bufferPool;
+    private MemoryPool memoryPool;
 
     /**
      * 内核IO线程池
@@ -108,7 +108,7 @@ public class ServerBootstrap {
     /**
      * 虚拟内存工厂，这里为读操作获取虚拟内存
      */
-    private final MemoryUnitFactory readBufferFactory = bufferPage -> bufferPage.allocate(getConfig().getReadBufferSize());
+    private final MemoryUnitFactory readMemoryUnitFactory = memoryBlock -> memoryBlock.allocate(getConfig().getReadBufferSize());
 
     /**
      * ServerBootstrap
@@ -128,7 +128,7 @@ public class ServerBootstrap {
     public void start() {
         startExecutorService();
         start0(channel -> new TCPChannelContext(channel, getConfig(), this.aioReadCompletionHandler,
-                this.aioWriteCompletionHandler, this.bufferPool.allocateBufferPage(), this.workerExecutorService));
+                this.aioWriteCompletionHandler, this.memoryPool.allocateBufferPage(), this.workerExecutorService));
     }
 
     /**
@@ -140,8 +140,8 @@ public class ServerBootstrap {
         try {
             checkAndResetConfig();
             this.aioWriteCompletionHandler = new WriteCompletionHandler();
-            if (this.bufferPool == null) {
-                this.bufferPool = getConfig().getMemoryPoolFactory().create();
+            if (this.memoryPool == null) {
+                this.memoryPool = getConfig().getMemoryPoolFactory().create();
             }
             this.aioChannelContextFunction = aioContextFunction;
             AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
@@ -207,7 +207,7 @@ public class ServerBootstrap {
             if (acceptChannel != null) {
                 acceptChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
                 context = this.aioChannelContextFunction.apply(acceptChannel);
-                context.initTCPChannelContext(this.readBufferFactory.createBuffer(this.bufferPool.allocateBufferPage()));
+                context.initTCPChannelContext(this.readMemoryUnitFactory.createBuffer(this.memoryPool.allocateBufferPage()));
             } else {
                 AIOUtil.close(channel);
             }
@@ -277,8 +277,8 @@ public class ServerBootstrap {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (this.bufferPool != null) {
-            this.bufferPool.release();
+        if (this.memoryPool != null) {
+            this.memoryPool.release();
         }
     }
 

@@ -55,16 +55,16 @@ public final class MemoryPool {
     /**
      * 构造内存池
      *
-     * @param pageSize 内存页大小
-     * @param pageNum  内存页个数
-     * @param isDirect 是否使用直接缓冲区
+     * @param memoryBlockSize 内存页大小
+     * @param memoryBlockNum  内存页个数
+     * @param isDirect        是否使用直接缓冲区
      */
-    public MemoryPool(final int pageSize, final int pageNum, final boolean isDirect) {
-        memoryBlocks = new MemoryBlock[pageNum];
-        for (int i = 0; i < pageNum; i++) {
-            memoryBlocks[i] = new MemoryBlock(pageSize, isDirect);
+    public MemoryPool(final int memoryBlockSize, final int memoryBlockNum, final boolean isDirect) {
+        memoryBlocks = new MemoryBlock[memoryBlockNum];
+        for (int i = 0; i < memoryBlockNum; i++) {
+            memoryBlocks[i] = new MemoryBlock(memoryBlockSize, isDirect);
         }
-        if (pageNum == 0 || pageSize == 0) {
+        if (memoryBlockNum == 0 || memoryBlockSize == 0) {
             future.cancel(false);
         }
     }

@@ -77,7 +77,7 @@ public class ClientBootstrap {
     /**
      * 内存池
      */
-    private MemoryPool bufferPool = null;
+    private MemoryPool memoryPool = null;
 
     /**
      * 连接超时时间
@@ -98,7 +98,7 @@ public class ClientBootstrap {
     /**
      * 构造虚拟缓冲区工厂
      */
-    private final MemoryUnitFactory readBufferFactory = bufferPage -> bufferPage.allocate(this.config.getReadBufferSize());
+    private final MemoryUnitFactory readMemoryUnitFactory = memoryBlock -> memoryBlock.allocate(this.config.getReadBufferSize());
 
     /**
      * 当前构造方法设置了启动Aio客户端的必要参数，基本实现开箱即用。
@@ -191,8 +191,8 @@ public class ClientBootstrap {
     private void start(AsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
                           CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
         AsynchronousSocketChannel socketChannel = AsynchronousSocketChannel.open(asynchronousChannelGroup);
-        if (this.bufferPool == null) {
-            this.bufferPool = getConfig().getMemoryPoolFactory().create();
+        if (this.memoryPool == null) {
+            this.memoryPool = getConfig().getMemoryPoolFactory().create();
         }
         if (this.config.getSocketOptions() != null) {
             for (Map.Entry<SocketOption<Object>, Object> entry : this.config.getSocketOptions().entrySet()) {
@@ -214,8 +214,8 @@ public class ClientBootstrap {
                         throw new RuntimeException("NetMonitor refuse channel");
                     }
                     //连接成功则构造AIOChannelContext对象
-                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), bufferPool.allocateBufferPage());
-                    channelContext.initTCPChannelContext(readBufferFactory.createBuffer(bufferPool.allocateBufferPage()));
+                    channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), memoryPool.allocateBufferPage());
+                    channelContext.initTCPChannelContext(readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage()));
                     handler.completed(channelContext, future);
                 } catch (Exception e) {
                     failed(e, socketChannel);
