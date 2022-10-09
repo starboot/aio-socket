@@ -30,11 +30,6 @@ import java.util.concurrent.*;
 public class ThreadUtils {
 
     /**
-     * Java8 ThreadPool
-     */
-    private static ExecutorService executorService;
-
-    /**
      * 保持活跃时间
      */
     public static final long KEEP_ALIVE_TIME = 0L;
@@ -73,16 +68,7 @@ public class ThreadUtils {
      * @return ExecutorService 线程池执行器
      */
     public static ExecutorService getGroupExecutor() {
-        if (executorService != null) {
-            return executorService;
-        }
-        synchronized (ThreadUtils.class) {
-            if (executorService != null) {
-                return executorService;
-            }
-            executorService = getGroupExecutor(MAX_POOL_SIZE_FOR_BOSS);
-        }
-        return executorService;
+        return getGroupExecutor(MAX_POOL_SIZE_FOR_BOSS);
     }
 
     public static ExecutorService getGroupExecutor(int corePoolSize) {

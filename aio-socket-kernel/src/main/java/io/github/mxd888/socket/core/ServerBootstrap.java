@@ -36,6 +36,7 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -50,14 +51,29 @@ public class ServerBootstrap {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerBootstrap.class);
 
     /**
-     * 服务器配置类
+     * 内核IO线程池线程数量
      */
-    private final AioConfig config = new AioConfig(true);
+    private int bossThreadNum;
+
+    /**
+     * 作业任务线程池线程数量
+     */
+    private int workerThreadNum;
 
     /**
      * 内存池
      */
     private BufferPagePool bufferPool;
+
+    /**
+     * 内核IO线程池
+     */
+    private ExecutorService bossExecutorService;
+
+    /**
+     * 作业池线程（aio-socket定制线程池）
+     */
+    private ExecutorService workerExecutorService;
 
     /**
      * 读完成处理类
@@ -70,9 +86,9 @@ public class ServerBootstrap {
     private WriteCompletionHandler aioWriteCompletionHandler;
 
     /**
-     * socketChannel 和 ChannelContext联系
+     * AIO 通道组
      */
-    private Function<AsynchronousSocketChannel, TCPChannelContext> aioChannelContextFunction;
+    private AsynchronousChannelGroup asynchronousChannelGroup;
 
     /**
      * AIO Server 通道
@@ -80,31 +96,39 @@ public class ServerBootstrap {
     private AsynchronousServerSocketChannel serverSocketChannel;
 
     /**
-     * AIO 通道组
+     * 服务器配置类
      */
-    private AsynchronousChannelGroup asynchronousChannelGroup;
+    private final AioConfig config = new AioConfig(true);
+
+    /**
+     * socketChannel 和 ChannelContext联系
+     */
+    private Function<AsynchronousSocketChannel, TCPChannelContext> aioChannelContextFunction;
 
     /**
      * 虚拟内存工厂，这里为读操作获取虚拟内存
      */
     private final VirtualBufferFactory readBufferFactory = bufferPage -> bufferPage.allocate(getConfig().getReadBufferSize());
 
-    public ServerBootstrap(int port, AioHandler handler) {
+    /**
+     * ServerBootstrap
+     * @param host    内网地址
+     * @param port    端口
+     * @param handler 任务处理器
+     */
+    public ServerBootstrap(String host, int port, AioHandler handler) {
+        this.config.setHost(host);
         this.config.setPort(port);
         this.config.getPlugins().setAioHandler(handler);
-    }
-
-    public ServerBootstrap(String host, int port, AioHandler handler) {
-        this(port, handler);
-        this.config.setHost(host);
     }
 
     /**
      * 启动AIO Socket Server
      */
     public void start() {
+        startExecutorService();
         start0(channel -> new TCPChannelContext(channel, getConfig(), this.aioReadCompletionHandler,
-                this.aioWriteCompletionHandler, this.bufferPool.allocateBufferPage(), ThreadUtils.getAioExecutor()));
+                this.aioWriteCompletionHandler, this.bufferPool.allocateBufferPage(), this.workerExecutorService));
     }
 
     /**
@@ -122,7 +146,7 @@ public class ServerBootstrap {
             this.aioChannelContextFunction = aioContextFunction;
             AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
             this.aioReadCompletionHandler = new ReadCompletionHandler();
-            this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(), 0);
+            this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(this.bossExecutorService, 0);
             this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
             if (getConfig().getSocketOptions() != null) {
                 for (Map.Entry<SocketOption<Object>, Object> entry : getConfig().getSocketOptions().entrySet()) {
@@ -211,6 +235,22 @@ public class ServerBootstrap {
     }
 
     /**
+     * 启动内核线程池
+     */
+    private void startExecutorService() {
+        if (this.bossThreadNum > 0) {
+            this.bossExecutorService = ThreadUtils.getGroupExecutor(this.bossThreadNum);
+        }else {
+            this.bossExecutorService = ThreadUtils.getGroupExecutor();
+        }
+        if (this.workerThreadNum > 0) {
+            this.workerExecutorService = ThreadUtils.getAioExecutor(this.workerThreadNum);
+        }else {
+            this.workerExecutorService = ThreadUtils.getAioExecutor();
+        }
+    }
+
+    /**
      * 停止服务端
      */
     public void shutdown() {
@@ -222,7 +262,6 @@ public class ServerBootstrap {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         if (!this.asynchronousChannelGroup.isTerminated()) {
             try {
                 this.asynchronousChannelGroup.shutdownNow();
@@ -232,6 +271,9 @@ public class ServerBootstrap {
         }
         try {
             this.asynchronousChannelGroup.awaitTermination(3, TimeUnit.SECONDS);
+            if (!this.workerExecutorService.isTerminated()) {
+                this.workerExecutorService.shutdown();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -247,6 +289,29 @@ public class ServerBootstrap {
      */
     public AioConfig getConfig() {
         return this.config;
+    }
+
+    /**
+     * 获取作业线程池，通常使用了aio-socket后便不用在建立新的线程池，
+     * 直接使用aio-socket的作业线程池即可
+     *
+     * @return 作业线程池
+     */
+    public ExecutorService getWorkerExecutorService() {
+        return this.workerExecutorService;
+    }
+
+    /**
+     * 设置线程池线程数量
+     *
+     * @param bossThreadNum   内核IO线程数量
+     * @param workerThreadNum 普通作业线程数量
+     * @return                this
+     */
+    public ServerBootstrap setThreadNum(int bossThreadNum, int workerThreadNum) {
+        this.bossThreadNum = bossThreadNum;
+        this.workerThreadNum = workerThreadNum;
+        return this;
     }
 
     /**
