@@ -54,15 +54,15 @@ public class AIOUtil {
         }
         // 大包消息处理，检查队列数据是否足够
         final int readBufferSize = channelContext.getAioConfig().getReadBufferSize();
-        if (len < channelContext.getOldByteBuffer().size() * readBufferSize) {
+        if (len + Integer.BYTES <= channelContext.getOldByteBuffer().size() * readBufferSize) {
             // 队列数据够，则读数据
             byte[] bytes = new byte[len];
-            int i = 0;
+            int index = 0;
             VirtualBuffer oldBuffer;
-            while ((oldBuffer = channelContext.getOldByteBuffer().poll()) != null && i <= len) {
-                int relatable = Math.min(len - i, oldBuffer.buffer().remaining());
-                oldBuffer.buffer().get(bytes, i, relatable);
-                i += relatable;
+            while ((oldBuffer = channelContext.getOldByteBuffer().poll()) != null && index <= len) {
+                int relatable = Math.min(len - index, oldBuffer.buffer().remaining());
+                oldBuffer.buffer().get(bytes, index, relatable);
+                index += relatable;
                 if (channelContext.getReadBuffer() != oldBuffer) {
                     oldBuffer.clean();
                 }

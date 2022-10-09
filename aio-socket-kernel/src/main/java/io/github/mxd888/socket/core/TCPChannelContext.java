@@ -164,22 +164,22 @@ public final class TCPChannelContext extends ChannelContext{
         final ByteBuffer readBuffer = this.readBuffer.buffer();
         final AioHandler handler = getAioConfig().getHandler();
         while (readBuffer.hasRemaining() && status == CHANNEL_STATUS_ENABLED) {
-            Packet dataEntry = null;
+            Packet packet = null;
             try {
                 if (getOldByteBuffer().isEmpty()) {
-                    dataEntry = handler.decode(this.readBuffer, this);
+                    packet = handler.decode(this.readBuffer, this);
                 }else {
                     getOldByteBuffer().offer(this.readBuffer);
-                    dataEntry = handler.decode(getOldByteBuffer().peek(), this);
+                    packet = handler.decode(getOldByteBuffer().peek(), this);
                 }
             } catch (AioDecoderException e) {
                 handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, e);
                 e.printStackTrace();
             }
-            if (dataEntry == null) {
+            if (packet == null) {
                 break;
             }
-            if (handlerRunnable.addMsg(dataEntry)) {
+            if (handlerRunnable.addMsg(packet)) {
                 handlerRunnable.execute();
             }
         }
@@ -191,17 +191,21 @@ public final class TCPChannelContext extends ChannelContext{
         if (status == CHANNEL_STATUS_CLOSED) {
             return;
         }
-        readBuffer.compact();
-        if (!readBuffer.hasRemaining()) {
+        if (readBuffer.capacity() == readBuffer.remaining()) {
+            // buffer 满了
             if (getOldByteBuffer().isFull()) {
                 RuntimeException exception = new RuntimeException("readBuffer queue has overflow");
                 handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, exception);
                 throw exception;
             }
-            // 空间太小，申请一份空间继续读
-            this.readBuffer.buffer().flip();
-            getOldByteBuffer().offer(this.readBuffer);
+            if (getOldByteBuffer().isEmpty()) {
+                // 空间太小，申请一份空间继续读
+                getOldByteBuffer().offer(this.readBuffer);
+            }
             this.readBuffer = getVirtualBuffer(getAioConfig().getReadBufferSize());
+            this.readBuffer.buffer().clear();
+        }else {
+            readBuffer.compact();
         }
         continueRead(this.readBuffer);
     }
