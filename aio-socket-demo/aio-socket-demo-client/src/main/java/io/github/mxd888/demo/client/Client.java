@@ -18,8 +18,7 @@ package io.github.mxd888.demo.client;
 import io.github.mxd888.demo.common.DemoPacket;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.plugins.ACKPlugin;
-import io.github.mxd888.socket.plugins.MonitorPlugin;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ClientBootstrap;
 import io.github.mxd888.socket.plugins.ReconnectPlugin;
@@ -60,7 +59,7 @@ public class Client {
             new Thread(() -> {
                 // 127.0.0.1
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
-                bootstrap.setBufferFactory(() -> new BufferPagePool(5 * 1024 * 1024, 10, true))
+                bootstrap.setBufferFactory(() -> new MemoryPool(5 * 1024 * 1024, 10, true))
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 4, 512)
                         .addHeartPacket(new DemoPacket("heartbeat message"))

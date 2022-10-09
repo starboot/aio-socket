@@ -5,7 +5,7 @@ import io.github.mxd888.socket.plugins.MonitorPlugin;
 import io.github.mxd888.socket.udp.UDPBootstrap;
 import io.github.mxd888.socket.udp.UDPChannel;
 import io.github.mxd888.socket.udp.Worker;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
@@ -14,9 +14,9 @@ public class UDPClient {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        BufferPagePool bufferPagePool = new BufferPagePool(1024 * 1024 * 16, Runtime.getRuntime().availableProcessors(), true);
+        MemoryPool memoryPool = new MemoryPool(1024 * 1024 * 16, Runtime.getRuntime().availableProcessors(), true);
 
-        Worker worker = new Worker(bufferPagePool, Runtime.getRuntime().availableProcessors());
+        Worker worker = new Worker(memoryPool, Runtime.getRuntime().availableProcessors());
         int c = 5;
         CountDownLatch count = new CountDownLatch(c);
         byte[] bytes = "hello aio-socket".getBytes();
@@ -26,7 +26,7 @@ public class UDPClient {
                     UDPBootstrap bootstrap = new UDPBootstrap(new ClientUDPHandler(), worker);
                     bootstrap
                             .addPlugin(new MonitorPlugin(5))
-                            .setBufferFactory(() -> bufferPagePool)
+                            .setBufferFactory(() -> memoryPool)
                             .setReadBufferSize(1024);
                     UDPChannel channel = bootstrap.open();
                     ChannelContext session = channel.connect("localhost", 8888);

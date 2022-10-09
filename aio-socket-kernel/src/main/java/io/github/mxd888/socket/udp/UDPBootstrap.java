@@ -16,8 +16,8 @@
 package io.github.mxd888.socket.udp;
 
 import io.github.mxd888.socket.plugins.Plugin;
-import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.intf.AioHandler;
 
@@ -27,9 +27,9 @@ import java.nio.channels.DatagramChannel;
 
 public class UDPBootstrap {
 
-    private BufferPagePool bufferPool;
+    private MemoryPool bufferPool;
 
-    private BufferPagePool innerBufferPool;
+    private MemoryPool innerBufferPool;
 
     private final AioConfig config = new AioConfig(true);
 
@@ -78,7 +78,7 @@ public class UDPBootstrap {
      */
     public UDPChannel open(String host, int port) throws IOException {
         if (bufferPool == null) {
-            this.bufferPool = config.getBufferFactory().create();
+            this.bufferPool = config.getMemoryPoolFactory().create();
             this.innerBufferPool = bufferPool;
         }
         if (worker == null) {
@@ -123,11 +123,11 @@ public class UDPBootstrap {
      * 在UDPBootstrap执行shutdown时会释放内存池。
      * <b>在启用内存池的情况下会有更好的性能表现</b>
      *
-     * @param bufferFactory 内存池工厂
+     * @param memoryPoolFactory 内存池工厂
      * @return              当前AioQuickServer对象
      */
-    public final UDPBootstrap setBufferFactory(BufferFactory bufferFactory) {
-        this.config.setBufferFactory(bufferFactory);
+    public final UDPBootstrap setBufferFactory(MemoryPoolFactory memoryPoolFactory) {
+        this.config.setMemoryPoolFactory(memoryPoolFactory);
         this.bufferPool = null;
         return this;
     }

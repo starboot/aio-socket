@@ -20,7 +20,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.exception.AioDecoderException;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.intf.AioHandler;
 
 import java.nio.channels.AsynchronousSocketChannel;
@@ -94,7 +94,7 @@ public class AioPlugins implements AioHandler, Monitor {
     }
 
     @Override
-    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) throws AioDecoderException {
+    public Packet decode(MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException {
 
         Packet packet = aioHandler.decode(readBuffer, channelContext);
         if (packet != null) {

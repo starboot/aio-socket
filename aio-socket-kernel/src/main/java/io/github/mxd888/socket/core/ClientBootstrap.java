@@ -17,9 +17,9 @@ package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.plugins.Plugin;
-import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnitFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
 import io.github.mxd888.socket.utils.AIOUtil;
@@ -77,7 +77,7 @@ public class ClientBootstrap {
     /**
      * 内存池
      */
-    private BufferPagePool bufferPool = null;
+    private MemoryPool bufferPool = null;
 
     /**
      * 连接超时时间
@@ -98,7 +98,7 @@ public class ClientBootstrap {
     /**
      * 构造虚拟缓冲区工厂
      */
-    private final VirtualBufferFactory readBufferFactory = bufferPage -> bufferPage.allocate(this.config.getReadBufferSize());
+    private final MemoryUnitFactory readBufferFactory = bufferPage -> bufferPage.allocate(this.config.getReadBufferSize());
 
     /**
      * 当前构造方法设置了启动Aio客户端的必要参数，基本实现开箱即用。
@@ -192,7 +192,7 @@ public class ClientBootstrap {
                           CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
         AsynchronousSocketChannel socketChannel = AsynchronousSocketChannel.open(asynchronousChannelGroup);
         if (this.bufferPool == null) {
-            this.bufferPool = getConfig().getBufferFactory().create();
+            this.bufferPool = getConfig().getMemoryPoolFactory().create();
         }
         if (this.config.getSocketOptions() != null) {
             for (Map.Entry<SocketOption<Object>, Object> entry : this.config.getSocketOptions().entrySet()) {
@@ -324,11 +324,11 @@ public class ClientBootstrap {
     /**
      * 设置内存池工厂
      *
-     * @param bufferFactory 内存池工厂
+     * @param memoryPoolFactory 内存池工厂
      * @return this
      */
-    public ClientBootstrap setBufferFactory(BufferFactory bufferFactory) {
-        getConfig().setBufferFactory(bufferFactory);
+    public ClientBootstrap setBufferFactory(MemoryPoolFactory memoryPoolFactory) {
+        getConfig().setMemoryPoolFactory(memoryPoolFactory);
         return this;
     }
 

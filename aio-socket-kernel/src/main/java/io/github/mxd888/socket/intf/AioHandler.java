@@ -19,7 +19,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.exception.AioDecoderException;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 /**
  * 消息解编码处理类，并包含了消息处理，状态机触发回调
@@ -46,7 +46,7 @@ public interface AioHandler {
      * @return                      返回Packet消息包
      * @throws AioDecoderException  解码异常
      */
-    Packet decode(final VirtualBuffer readBuffer, ChannelContext channelContext) throws AioDecoderException;
+    Packet decode(final MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException;
 
     /**
      * 编码回调方法

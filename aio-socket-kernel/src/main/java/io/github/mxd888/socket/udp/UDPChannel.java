@@ -15,8 +15,8 @@
  */
 package io.github.mxd888.socket.udp;
 
-import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.core.AioConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public final class UDPChannel {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UDPChannel.class);
 
-    private final BufferPage bufferPage;
+    private final MemoryBlock memoryBlock;
 
     /**
      * 待输出消息
@@ -59,14 +59,14 @@ public final class UDPChannel {
     //发送失败的
     private ResponseUnit failResponseUnit;
 
-    UDPChannel(final DatagramChannel channel, AioConfig config, BufferPage bufferPage) {
+    UDPChannel(final DatagramChannel channel, AioConfig config, MemoryBlock memoryBlock) {
         this.channel = channel;
-        this.bufferPage = bufferPage;
+        this.memoryBlock = memoryBlock;
         this.config = config;
     }
 
-    UDPChannel(final DatagramChannel channel, Worker worker, AioConfig config, BufferPage bufferPage) {
-        this(channel, config, bufferPage);
+    UDPChannel(final DatagramChannel channel, Worker worker, AioConfig config, MemoryBlock memoryBlock) {
+        this(channel, config, memoryBlock);
         responseTasks = new ConcurrentLinkedQueue<>();
         this.worker = worker;
         worker.addRegister(selector -> {
@@ -78,14 +78,14 @@ public final class UDPChannel {
         });
     }
 
-    void write(VirtualBuffer virtualBuffer, UDPChannelContext session) {
-        if (writeSemaphore.tryAcquire() && responseTasks.isEmpty() && send(virtualBuffer.buffer(), session) > 0) {
-            virtualBuffer.clean();
+    void write(MemoryUnit memoryUnit, UDPChannelContext session) {
+        if (writeSemaphore.tryAcquire() && responseTasks.isEmpty() && send(memoryUnit.buffer(), session) > 0) {
+            memoryUnit.clean();
             writeSemaphore.release();
             session.getWriteBuffer().flush();
             return;
         }
-        responseTasks.offer(new ResponseUnit(session, virtualBuffer));
+        responseTasks.offer(new ResponseUnit(session, memoryUnit));
         if (selectionKey == null) {
             worker.addRegister(selector -> selectionKey.interestOps(selectionKey.interestOps() | SelectionKey.OP_WRITE));
         } else {
@@ -142,7 +142,7 @@ public final class UDPChannel {
     }
 
     public UDPChannelContext connect(SocketAddress remote) {
-        return new UDPChannelContext(this, remote, bufferPage);
+        return new UDPChannelContext(this, remote, memoryBlock);
     }
 
     public UDPChannelContext connect(String host, int port) {
@@ -177,8 +177,8 @@ public final class UDPChannel {
 //        }
     }
 
-    BufferPage getBufferPage() {
-        return bufferPage;
+    MemoryBlock getMemoryBlock() {
+        return memoryBlock;
     }
 
 
@@ -194,9 +194,9 @@ public final class UDPChannel {
         /**
          * 待输出数据
          */
-        private final VirtualBuffer response;
+        private final MemoryUnit response;
 
-        public ResponseUnit(UDPChannelContext session, VirtualBuffer response) {
+        public ResponseUnit(UDPChannelContext session, MemoryUnit response) {
             this.session = session;
             this.response = response;
         }

@@ -6,7 +6,7 @@ import io.github.mxd888.http.common.enums.HttpMethodEnum;
 import io.github.mxd888.http.common.enums.HttpProtocolEnum;
 import io.github.mxd888.http.server.impl.HttpMessageProcessor;
 import io.github.mxd888.http.server.impl.HttpRequestHandler;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.ServerBootstrap;
 
 import java.io.IOException;
@@ -93,7 +93,7 @@ public class HttpBootstrap {
      */
     public void start() {
         initByteCache();
-        BufferPagePool readBufferPool = new BufferPagePool(configuration.getReadPageSize(), 1, false);
+        MemoryPool readBufferPool = new MemoryPool(configuration.getReadPageSize(), 1, false);
         configuration.getPlugins().forEach(requestPlugin -> server.getConfig().getPlugins().addPlugin(requestPlugin));
 
         server = new ServerBootstrap(configuration.getHost(), port, new HttpRequestHandler(configuration, processor));

@@ -16,7 +16,7 @@
 package io.github.mxd888.socket.maintain;
 
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class Groups {
         }
     }
 
-    public void writeToGroup(String group, VirtualBuffer buffer, ChannelContext channelContext) {
+    public void writeToGroup(String group, MemoryUnit buffer, ChannelContext channelContext) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
             return;

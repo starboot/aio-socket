@@ -15,8 +15,8 @@
  */
 package io.github.mxd888.socket.core;
 
-import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,12 +37,12 @@ public final class WriteBuffer extends OutputStream {
     /**
      * 存储已就绪待输出的数据
      */
-    private final VirtualBuffer[] items;
+    private final MemoryUnit[] items;
 
     /**
      * 为当前 WriteBuffer 提供数据存放功能的缓存页 用于申请内存空间
      */
-    private final BufferPage bufferPage;
+    private final MemoryBlock memoryBlock;
 
     /**
      * 缓冲区数据刷新Function，执行发送的具体逻辑函数
@@ -72,7 +72,7 @@ public final class WriteBuffer extends OutputStream {
     /**
      * 暂存当前业务正在输出的数据,输出完毕后会存放到items中
      */
-    private VirtualBuffer writeInBuf;
+    private MemoryUnit writeInBuf;
 
     /**
      * 当前WriteBuffer是否已关闭
@@ -84,10 +84,10 @@ public final class WriteBuffer extends OutputStream {
      */
     private byte[] bytes;
 
-    WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
-        this.bufferPage = bufferPage;
+    WriteBuffer(MemoryBlock memoryBlock, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
+        this.memoryBlock = memoryBlock;
         this.consumer = consumer;
-        this.items = new VirtualBuffer[capacity];
+        this.items = new MemoryUnit[capacity];
         this.chunkSize = chunkSize;
     }
 
@@ -96,8 +96,8 @@ public final class WriteBuffer extends OutputStream {
      * @param size 大小
      * @return 虚拟空间
      */
-    public VirtualBuffer newVirtualBuffer(int size) {
-        return bufferPage.allocate(size);
+    public MemoryUnit newVirtualBuffer(int size) {
+        return memoryBlock.allocate(size);
     }
 
     @Override
@@ -114,7 +114,7 @@ public final class WriteBuffer extends OutputStream {
 
     public synchronized void writeByte(byte b) {
         if (writeInBuf == null) {
-            writeInBuf = bufferPage.allocate(chunkSize);
+            writeInBuf = memoryBlock.allocate(chunkSize);
         }
         writeInBuf.buffer().put(b);
         flushWriteBuffer(false);
@@ -162,7 +162,7 @@ public final class WriteBuffer extends OutputStream {
     @Override
     public synchronized void write(byte[] b, int off, int len) throws IOException {
         if (writeInBuf == null) {
-            writeInBuf = bufferPage.allocate(Math.max(chunkSize, len));
+            writeInBuf = memoryBlock.allocate(Math.max(chunkSize, len));
         }
         ByteBuffer writeBuffer = writeInBuf.buffer();
         if (closed) {
@@ -212,19 +212,19 @@ public final class WriteBuffer extends OutputStream {
         }
         // 有人在发送，这个消息进入等待队列  writeInBuf修改为读模式
         writeInBuf.buffer().flip();
-        VirtualBuffer virtualBuffer = writeInBuf;
+        MemoryUnit memoryUnit = writeInBuf;
         writeInBuf = null;
         try {
             while (count == items.length) {
                 this.wait();
                 //防止因close诱发内存泄露
                 if (closed) {
-                    virtualBuffer.clean();
+                    memoryUnit.clean();
                     return;
                 }
             }
 
-            items[putIndex] = virtualBuffer;
+            items[putIndex] = memoryUnit;
             if (++putIndex == items.length) {
                 putIndex = 0;
             }
@@ -258,7 +258,7 @@ public final class WriteBuffer extends OutputStream {
             writeInBuf.clean();
             writeInBuf = null;
         }
-        VirtualBuffer byteBuf;
+        MemoryUnit byteBuf;
         while ((byteBuf = poll()) != null) {
             byteBuf.clean();
         }
@@ -279,12 +279,12 @@ public final class WriteBuffer extends OutputStream {
      *
      * @return VirtualBuffer类型的消息
      */
-    VirtualBuffer pollItem() {
+    MemoryUnit pollItem() {
         if (count == 0) {
             return null;
         }
         synchronized (this) {
-            VirtualBuffer x = items[takeIndex];
+            MemoryUnit x = items[takeIndex];
             items[takeIndex] = null;
             if (++takeIndex == items.length) {
                 takeIndex = 0;
@@ -301,15 +301,15 @@ public final class WriteBuffer extends OutputStream {
      *
      * @return 待输出的VirtualBuffer
      */
-    public synchronized VirtualBuffer poll() {
-        VirtualBuffer item = pollItem();
+    public synchronized MemoryUnit poll() {
+        MemoryUnit item = pollItem();
         if (item != null) {
             return item;
         }
         if (writeInBuf != null && writeInBuf.buffer().position() > 0) {
             // 将暂存器里面的数据更改为读模式，一会将其读出来并发送
             writeInBuf.buffer().flip();
-            VirtualBuffer buffer = writeInBuf;
+            MemoryUnit buffer = writeInBuf;
             writeInBuf = null;
             return buffer;
         } else {

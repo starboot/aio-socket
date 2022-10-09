@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.socket.utils.pool.buffer;
+package io.github.mxd888.socket.utils.pool.memory;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.Semaphore;
@@ -24,12 +24,12 @@ import java.util.concurrent.Semaphore;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public final class VirtualBuffer {
+public final class MemoryUnit {
 
     /**
      * 当前虚拟buffer的归属内存页 用来申请物理空间
      */
-    private final BufferPage bufferPage;
+    private final MemoryBlock memoryBlock;
 
     /**
      * 通过ByteBuffer.slice()隐射出来的虚拟ByteBuffer
@@ -56,8 +56,8 @@ public final class VirtualBuffer {
      */
     private int capacity;
 
-    VirtualBuffer(BufferPage bufferPage, ByteBuffer buffer, int parentPosition, int parentLimit) {
-        this.bufferPage = bufferPage;
+    MemoryUnit(MemoryBlock memoryBlock, ByteBuffer buffer, int parentPosition, int parentLimit) {
+        this.memoryBlock = memoryBlock;
         this.buffer = buffer;
         this.parentPosition = parentPosition;
         this.parentLimit = parentLimit;
@@ -70,8 +70,8 @@ public final class VirtualBuffer {
      * @param buffer 需要转换的原始buffer
      * @return       虚拟内存类型的数据
      */
-    public static VirtualBuffer wrap(ByteBuffer buffer) {
-        return new VirtualBuffer(null, buffer, 0, 0);
+    public static MemoryUnit wrap(ByteBuffer buffer) {
+        return new MemoryUnit(null, buffer, 0, 0);
     }
 
     int getParentPosition() {
@@ -132,8 +132,8 @@ public final class VirtualBuffer {
      */
     public void clean() {
         if (clean.tryAcquire()) {
-            if (bufferPage != null) {
-                bufferPage.clean(this);
+            if (memoryBlock != null) {
+                memoryBlock.clean(this);
             }
         } else {
             throw new UnsupportedOperationException("buffer has cleaned");

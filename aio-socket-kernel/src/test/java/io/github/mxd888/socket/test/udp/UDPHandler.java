@@ -4,7 +4,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -17,7 +17,7 @@ public class UDPHandler implements AioHandler {
     }
 
     @Override
-    public Packet decode(VirtualBuffer readBuffer, ChannelContext channelContext) {
+    public Packet decode(MemoryUnit readBuffer, ChannelContext channelContext) {
         ByteBuffer buffer = readBuffer.buffer();
         int remaining = buffer.remaining();
         if (remaining < Integer.BYTES) {

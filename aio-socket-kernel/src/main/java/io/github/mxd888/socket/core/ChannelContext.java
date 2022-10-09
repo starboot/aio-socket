@@ -16,8 +16,8 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
 import io.github.mxd888.socket.utils.queue.FullWaitQueue;
 
@@ -76,14 +76,14 @@ public abstract class ChannelContext {
     /**
      * 存放当前ChannelContext未解码的虚拟buffer
      */
-    private FullWaitQueue<VirtualBuffer> oldByteBufferQueue;
+    private FullWaitQueue<MemoryUnit> oldByteBufferQueue;
 
     /**
      * 读取当前ChannelContext未解码的虚拟buffer
      *
      * @return aio-socket自制满等待队列
      */
-    public FullWaitQueue<VirtualBuffer> getOldByteBuffer() {
+    public FullWaitQueue<MemoryUnit> getOldByteBuffer() {
         if (oldByteBufferQueue != null) {
             return oldByteBufferQueue;
         }
@@ -99,14 +99,14 @@ public abstract class ChannelContext {
     /**
      * 设置通道上下文的输出流
      *
-     * @param bufferPage 输出流所在内存页
+     * @param memoryBlock 输出流所在内存页
      * @param consumer   消费函数
      * @param chunkSize  输出流大小（单位字节）
      * @param capacity   待输出数组的大小
      */
-    protected void setWriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
+    protected void setWriteBuffer(MemoryBlock memoryBlock, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
         if (byteBuf == null) {
-            byteBuf = new WriteBuffer(bufferPage, consumer, chunkSize, capacity);
+            byteBuf = new WriteBuffer(memoryBlock, consumer, chunkSize, capacity);
         }
     }
 
@@ -115,7 +115,7 @@ public abstract class ChannelContext {
      * @param len 长度
      * @return 内存池虚拟buffer
      */
-    public VirtualBuffer getVirtualBuffer(int len) {
+    public MemoryUnit getVirtualBuffer(int len) {
         return byteBuf.newVirtualBuffer(len);
     }
 
@@ -133,7 +133,7 @@ public abstract class ChannelContext {
      *
      * @return 读虚拟buffer
      */
-    public abstract VirtualBuffer getReadBuffer();
+    public abstract MemoryUnit getReadBuffer();
 
     /**
      * 关闭连接

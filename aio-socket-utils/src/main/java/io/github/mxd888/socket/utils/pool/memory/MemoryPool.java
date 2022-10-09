@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.socket.utils.pool.buffer;
+package io.github.mxd888.socket.utils.pool.memory;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public final class BufferPagePool {
+public final class MemoryPool {
 
     /**
      * 守护线程在空闲时期回收内存资源
@@ -45,7 +45,7 @@ public final class BufferPagePool {
     /**
      * 内存页组
      */
-    private BufferPage[] bufferPages;
+    private MemoryBlock[] memoryBlocks;
 
     /**
      * 定义内存页池可用状态
@@ -59,10 +59,10 @@ public final class BufferPagePool {
      * @param pageNum  内存页个数
      * @param isDirect 是否使用直接缓冲区
      */
-    public BufferPagePool(final int pageSize, final int pageNum, final boolean isDirect) {
-        bufferPages = new BufferPage[pageNum];
+    public MemoryPool(final int pageSize, final int pageNum, final boolean isDirect) {
+        memoryBlocks = new MemoryBlock[pageNum];
         for (int i = 0; i < pageNum; i++) {
-            bufferPages[i] = new BufferPage(pageSize, isDirect);
+            memoryBlocks[i] = new MemoryBlock(pageSize, isDirect);
         }
         if (pageNum == 0 || pageSize == 0) {
             future.cancel(false);
@@ -74,10 +74,10 @@ public final class BufferPagePool {
      *
      * @return 缓存页对象
      */
-    public BufferPage allocateBufferPage() {
+    public MemoryBlock allocateBufferPage() {
         assertEnabled();
         //轮训游标，均衡分配内存页
-        return bufferPages[(cursor.getAndIncrement() & Integer.MAX_VALUE) % bufferPages.length];
+        return memoryBlocks[(cursor.getAndIncrement() & Integer.MAX_VALUE) % memoryBlocks.length];
     }
 
     /**
@@ -103,15 +103,15 @@ public final class BufferPagePool {
         @Override
         public void run() {
             if (enabled) {
-                for (BufferPage bufferPage : bufferPages) {
-                    bufferPage.tryClean();
+                for (MemoryBlock memoryBlock : memoryBlocks) {
+                    memoryBlock.tryClean();
                 }
             } else {
-                if (bufferPages != null) {
-                    for (BufferPage page : bufferPages) {
+                if (memoryBlocks != null) {
+                    for (MemoryBlock page : memoryBlocks) {
                         page.release();
                     }
-                    bufferPages = null;
+                    memoryBlocks = null;
                 }
                 future.cancel(false);
             }

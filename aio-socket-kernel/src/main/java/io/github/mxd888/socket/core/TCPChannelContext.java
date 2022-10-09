@@ -21,8 +21,8 @@ import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.task.HandlerRunnable;
 import io.github.mxd888.socket.task.SendRunnable;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.AIOUtil;
 
@@ -77,12 +77,12 @@ public final class TCPChannelContext extends ChannelContext{
     /**
      * 存放刚读到的数据
      */
-    private VirtualBuffer readBuffer;
+    private MemoryUnit readBuffer;
 
     /**
      * 存放待发送的完整比特流
      */
-    private VirtualBuffer writeBuffer;
+    private MemoryUnit writeBuffer;
 
     /**
      * 消息处理逻辑执行器
@@ -98,8 +98,8 @@ public final class TCPChannelContext extends ChannelContext{
                       final AioConfig config,
                       ReadCompletionHandler readCompletionHandler,
                       WriteCompletionHandler writeCompletionHandler,
-                      BufferPage bufferPage) {
-        this(channel, config, readCompletionHandler, writeCompletionHandler, bufferPage, null);
+                      MemoryBlock memoryBlock) {
+        this(channel, config, readCompletionHandler, writeCompletionHandler, memoryBlock, null);
     }
 
     /**
@@ -109,13 +109,13 @@ public final class TCPChannelContext extends ChannelContext{
      * @param config                 配置项
      * @param readCompletionHandler  读回调
      * @param writeCompletionHandler 写回调
-     * @param bufferPage             绑定内存页
+     * @param memoryBlock             绑定内存页
      */
     TCPChannelContext(AsynchronousSocketChannel channel,
                       final AioConfig config,
                       ReadCompletionHandler readCompletionHandler,
                       WriteCompletionHandler writeCompletionHandler,
-                      BufferPage bufferPage,
+                      MemoryBlock memoryBlock,
                       ExecutorService aioThreadPoolExecutor) {
         this.channel = channel;
         this.readCompletionHandler = readCompletionHandler;
@@ -136,7 +136,7 @@ public final class TCPChannelContext extends ChannelContext{
             }
         };
         // 为当前ChannelContext添加对外输出流
-        setWriteBuffer(bufferPage, flushConsumer, getAioConfig().getWriteBufferSize(), 16);
+        setWriteBuffer(memoryBlock, flushConsumer, getAioConfig().getWriteBufferSize(), 16);
         // 触发状态机
         getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }
@@ -144,7 +144,7 @@ public final class TCPChannelContext extends ChannelContext{
     /**
      * 初始化TCPChannelContext
      */
-    void initTCPChannelContext(VirtualBuffer readBuffer) {
+    void initTCPChannelContext(MemoryUnit readBuffer) {
         this.readBuffer = readBuffer;
         this.readBuffer.buffer().flip();
         signalRead();
@@ -210,7 +210,7 @@ public final class TCPChannelContext extends ChannelContext{
      *
      * @param readBuffer 存放读出的数据buffer
      */
-    private void continueRead(VirtualBuffer readBuffer) {
+    private void continueRead(MemoryUnit readBuffer) {
         Monitor monitor = getAioConfig().getMonitor();
         if (monitor != null) {
             monitor.beforeRead(this);
@@ -248,7 +248,7 @@ public final class TCPChannelContext extends ChannelContext{
      *
      * @param writeBuffer 存放待输出数据的buffer
      */
-    private void continueWrite(VirtualBuffer writeBuffer) {
+    private void continueWrite(MemoryUnit writeBuffer) {
         Monitor monitor = getAioConfig().getMonitor();
         if (monitor != null) {
             monitor.beforeWrite(this);
@@ -353,7 +353,7 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public VirtualBuffer getReadBuffer() {
+    public MemoryUnit getReadBuffer() {
         return this.readBuffer;
     }
 

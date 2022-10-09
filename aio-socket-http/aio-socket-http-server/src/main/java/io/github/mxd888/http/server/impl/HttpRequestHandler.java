@@ -6,8 +6,7 @@ import io.github.mxd888.http.server.decode.HttpMethodDecoder;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
-import io.github.mxd888.socket.core.TCPChannelContext;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.intf.AioHandler;
 
 /**
@@ -41,7 +40,7 @@ public class HttpRequestHandler implements AioHandler {
     }
 
     @Override
-    public Packet decode(final VirtualBuffer readBuffer, ChannelContext channelContext) {
+    public Packet decode(final MemoryUnit readBuffer, ChannelContext channelContext) {
         if (readBuffer.buffer().remaining() == 0) {
             return null;
         }

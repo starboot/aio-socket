@@ -20,8 +20,8 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.exception.AioDecoderException;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.core.AioConfig;
 
 import java.io.IOException;
@@ -50,7 +50,7 @@ public final class Worker implements Runnable {
     /**
      * 内存池
      */
-    private final BufferPagePool bufferPool;
+    private final MemoryPool bufferPool;
 
     private final BlockingQueue<Runnable> requestQueue = new ArrayBlockingQueue<>(256);
 
@@ -59,11 +59,11 @@ public final class Worker implements Runnable {
      */
     private final ConcurrentLinkedQueue<Consumer<Selector>> registers = new ConcurrentLinkedQueue<>();
 
-    private VirtualBuffer standbyBuffer;
+    private MemoryUnit standbyBuffer;
 
     private final ExecutorService executorService;
 
-    public Worker(BufferPagePool bufferPool, int threadNum) throws IOException {
+    public Worker(MemoryPool bufferPool, int threadNum) throws IOException {
         this.bufferPool = bufferPool;
         this.selector = Selector.open();
         try {
@@ -158,7 +158,7 @@ public final class Worker implements Runnable {
         AioConfig config = channel.config;
         while (count-- > 0) {
             if (standbyBuffer == null) {
-                standbyBuffer = channel.getBufferPage().allocate(config.getReadBufferSize());
+                standbyBuffer = channel.getMemoryBlock().allocate(config.getReadBufferSize());
             }
             ByteBuffer buffer = standbyBuffer.buffer();
             SocketAddress remote = channel.getChannel().receive(buffer);
@@ -166,8 +166,8 @@ public final class Worker implements Runnable {
                 buffer.clear();
                 return true;
             }
-            VirtualBuffer readyBuffer = standbyBuffer;
-            standbyBuffer = channel.getBufferPage().allocate(config.getReadBufferSize());
+            MemoryUnit readyBuffer = standbyBuffer;
+            standbyBuffer = channel.getMemoryBlock().allocate(config.getReadBufferSize());
             buffer.flip();
             Runnable runnable = () -> {
                 //解码

@@ -20,7 +20,7 @@ import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.utils.AIOUtil;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.intf.AioHandler;
 
 import java.io.IOException;
@@ -34,15 +34,15 @@ public class Handler implements AioHandler {
     }
 
     @Override
-    public Packet decode(VirtualBuffer virtualBuffer, ChannelContext channelContext) {
-        ByteBuffer buffer = virtualBuffer.buffer();
+    public Packet decode(MemoryUnit memoryUnit, ChannelContext channelContext) {
+        ByteBuffer buffer = memoryUnit.buffer();
         int remaining = buffer.remaining();
         if (remaining < Integer.BYTES) {
             return null;
         }
         buffer.mark();
         int length = buffer.getInt();
-        byte[] b = AIOUtil.getBytesFromByteBuffer(length, virtualBuffer, channelContext);
+        byte[] b = AIOUtil.getBytesFromByteBuffer(length, memoryUnit, channelContext);
         if (b == null) {
             buffer.reset();
             return null;

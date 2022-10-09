@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.socket.utils.pool.buffer;
+package io.github.mxd888.socket.utils.pool.memory;
 
 import sun.nio.ch.DirectBuffer;
 
@@ -28,7 +28,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public final class BufferPage {
+public final class MemoryBlock {
 
     /**
      * 条件锁
@@ -43,12 +43,12 @@ public final class BufferPage {
     /**
      * 待回收的虚拟Buffer
      */
-    private final ConcurrentLinkedQueue<VirtualBuffer> cleanBuffers = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<MemoryUnit> cleanBuffers = new ConcurrentLinkedQueue<>();
 
     /**
      * 当前空闲的虚拟Buffer
      */
-    private final List<VirtualBuffer> availableBuffers;
+    private final List<MemoryUnit> availableBuffers;
 
     /**
      * 内存页是否处于空闲状态
@@ -61,10 +61,10 @@ public final class BufferPage {
      * @param size   缓存页大小
      * @param direct 是否使用堆外内存
      */
-    BufferPage(int size, boolean direct) {
+    MemoryBlock(int size, boolean direct) {
         availableBuffers = new LinkedList<>();
         this.buffer = allocate0(size, direct);
-        availableBuffers.add(new VirtualBuffer(this, null, buffer.position(), buffer.limit()));
+        availableBuffers.add(new MemoryUnit(this, null, buffer.position(), buffer.limit()));
     }
 
     /**
@@ -84,9 +84,9 @@ public final class BufferPage {
      * @param size 申请大小
      * @return     虚拟内存对象
      */
-    public VirtualBuffer allocate(final int size) {
-        VirtualBuffer virtualBuffer = allocate0(size);
-        return virtualBuffer == null ? new VirtualBuffer(null, allocate0(size, false), 0, 0) : virtualBuffer;
+    public MemoryUnit allocate(final int size) {
+        MemoryUnit memoryUnit = allocate0(size);
+        return memoryUnit == null ? new MemoryUnit(null, allocate0(size, false), 0, 0) : memoryUnit;
     }
 
     /**
@@ -95,9 +95,9 @@ public final class BufferPage {
      * @param size 申请大小
      * @return     虚拟内存对象
      */
-    private VirtualBuffer allocate0(final int size) {
+    private MemoryUnit allocate0(final int size) {
         idle = false;
-        VirtualBuffer cleanBuffer = cleanBuffers.poll();
+        MemoryUnit cleanBuffer = cleanBuffers.poll();
         if (cleanBuffer != null && cleanBuffer.getCapacity() >= size) {
             cleanBuffer.buffer().clear();
             cleanBuffer.buffer(cleanBuffer.buffer());
@@ -119,7 +119,7 @@ public final class BufferPage {
             }
 
             int count = availableBuffers.size();
-            VirtualBuffer bufferChunk = null;
+            MemoryUnit bufferChunk = null;
             //仅剩一个可用内存块的时候使用快速匹配算法
             if (count == 1) {
                 bufferChunk = fastAllocate(size);
@@ -138,9 +138,9 @@ public final class BufferPage {
      * @param size 申请内存大小
      * @return     申请到的内存块, 若空间不足则范围null
      */
-    private VirtualBuffer fastAllocate(int size) {
-        VirtualBuffer freeChunk = availableBuffers.get(0);
-        VirtualBuffer bufferChunk = allocate(size, freeChunk);
+    private MemoryUnit fastAllocate(int size) {
+        MemoryUnit freeChunk = availableBuffers.get(0);
+        MemoryUnit bufferChunk = allocate(size, freeChunk);
         if (freeChunk == bufferChunk) {
             availableBuffers.clear();
         }
@@ -153,11 +153,11 @@ public final class BufferPage {
      * @param size 申请内存大小
      * @return     申请到的内存块, 若空间不足则范围null
      */
-    private VirtualBuffer slowAllocate(int size) {
-        Iterator<VirtualBuffer> iterator = availableBuffers.listIterator(0);
-        VirtualBuffer bufferChunk;
+    private MemoryUnit slowAllocate(int size) {
+        Iterator<MemoryUnit> iterator = availableBuffers.listIterator(0);
+        MemoryUnit bufferChunk;
         while (iterator.hasNext()) {
-            VirtualBuffer freeChunk = iterator.next();
+            MemoryUnit freeChunk = iterator.next();
             bufferChunk = allocate(size, freeChunk);
             if (freeChunk == bufferChunk) {
                 iterator.remove();
@@ -176,12 +176,12 @@ public final class BufferPage {
      * @param freeChunk 可用于申请的内存块
      * @return          申请到的内存块, 若空间不足则范围null
      */
-    private VirtualBuffer allocate(int size, VirtualBuffer freeChunk) {
+    private MemoryUnit allocate(int size, MemoryUnit freeChunk) {
         final int capacity = freeChunk.getCapacity();
         if (capacity < size) {
             return null;
         }
-        VirtualBuffer bufferChunk;
+        MemoryUnit bufferChunk;
         if (capacity == size) {
             buffer.limit(freeChunk.getParentLimit());
             buffer.position(freeChunk.getParentPosition());
@@ -190,7 +190,7 @@ public final class BufferPage {
         } else {
             buffer.limit(freeChunk.getParentPosition() + size);
             buffer.position(freeChunk.getParentPosition());
-            bufferChunk = new VirtualBuffer(this, buffer.slice(), buffer.position(), buffer.limit());
+            bufferChunk = new MemoryUnit(this, buffer.slice(), buffer.position(), buffer.limit());
             freeChunk.setParentPosition(buffer.limit());
         }
         if (bufferChunk.buffer().remaining() != size) {
@@ -205,7 +205,7 @@ public final class BufferPage {
      *
      * @param cleanBuffer 待回收的虚拟内存
      */
-    void clean(VirtualBuffer cleanBuffer) {
+    void clean(MemoryUnit cleanBuffer) {
         cleanBuffers.offer(cleanBuffer);
     }
 
@@ -218,7 +218,7 @@ public final class BufferPage {
             idle = true;
         } else if (!cleanBuffers.isEmpty() && lock.tryLock()) {
             try {
-                VirtualBuffer cleanBuffer;
+                MemoryUnit cleanBuffer;
                 while ((cleanBuffer = cleanBuffers.poll()) != null) {
                     clean0(cleanBuffer);
                 }
@@ -233,10 +233,10 @@ public final class BufferPage {
      *
      * @param cleanBuffer 虚拟缓冲区
      */
-    private void clean0(VirtualBuffer cleanBuffer) {
-        ListIterator<VirtualBuffer> iterator = availableBuffers.listIterator(0);
+    private void clean0(MemoryUnit cleanBuffer) {
+        ListIterator<MemoryUnit> iterator = availableBuffers.listIterator(0);
         while (iterator.hasNext()) {
-            VirtualBuffer freeBuffer = iterator.next();
+            MemoryUnit freeBuffer = iterator.next();
             //cleanBuffer在freeBuffer之前并且形成连续块
             if (freeBuffer.getParentPosition() == cleanBuffer.getParentLimit()) {
                 freeBuffer.setParentPosition(cleanBuffer.getParentPosition());
@@ -247,7 +247,7 @@ public final class BufferPage {
                 freeBuffer.setParentLimit(cleanBuffer.getParentLimit());
                 //判断后一个是否连续
                 if (iterator.hasNext()) {
-                    VirtualBuffer next = iterator.next();
+                    MemoryUnit next = iterator.next();
                     if (next.getParentPosition() == freeBuffer.getParentLimit()) {
                         freeBuffer.setParentLimit(next.getParentLimit());
                         iterator.remove();

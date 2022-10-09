@@ -17,7 +17,7 @@ package io.github.mxd888.demo.server;
 
 import io.github.mxd888.demo.common.DemoPacket;
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.ServerBootstrap;
 import io.github.mxd888.socket.plugins.ACKPlugin;
 import io.github.mxd888.socket.plugins.HeartPlugin;
@@ -45,7 +45,7 @@ public class Server {
     public static void main(String[] args) {
 
         ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
-        bootstrap.setBufferFactory(() -> new BufferPagePool(10 * 1024 * 1024, 10, true))
+        bootstrap.setBufferFactory(() -> new MemoryPool(10 * 1024 * 1024, 10, true))
                 .setReadBufferSize(1024 * 1024)
                 .setWriteBufferSize(1024 * 4, 512)
                 // 注册流量监控插件

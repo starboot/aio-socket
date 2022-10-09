@@ -19,9 +19,9 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
+import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
 import io.github.mxd888.socket.core.WriteBuffer;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -34,16 +34,16 @@ final class UDPChannelContext extends ChannelContext {
 
     private final SocketAddress remote;
 
-    UDPChannelContext(final UDPChannel udpChannel, final SocketAddress remote, BufferPage bufferPage) {
+    UDPChannelContext(final UDPChannel udpChannel, final SocketAddress remote, MemoryBlock memoryBlock) {
         this.udpChannel = udpChannel;
         this.remote = remote;
         Consumer<WriteBuffer> consumer = var -> {
-            VirtualBuffer writeBuffer = var.poll();
+            MemoryUnit writeBuffer = var.poll();
             if (writeBuffer != null) {
                 this.udpChannel.write(writeBuffer, this);
             }
         };
-        setWriteBuffer(bufferPage, consumer, this.udpChannel.config.getWriteBufferSize(), 20);
+        setWriteBuffer(memoryBlock, consumer, this.udpChannel.config.getWriteBufferSize(), 20);
         this.udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }
 
@@ -53,7 +53,7 @@ final class UDPChannelContext extends ChannelContext {
     }
 
     @Override
-    public VirtualBuffer getReadBuffer() {
+    public MemoryUnit getReadBuffer() {
         throw new UnsupportedOperationException();
     }
 

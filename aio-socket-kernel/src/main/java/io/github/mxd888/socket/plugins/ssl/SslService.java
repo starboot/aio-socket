@@ -16,7 +16,7 @@
 package io.github.mxd888.socket.plugins.ssl;
 
 
-import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
+import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
 
 import javax.net.ssl.*;
 import java.nio.ByteBuffer;
@@ -59,7 +59,7 @@ public final class SslService {
         this.consumer = consumer;
     }
 
-    HandshakeModel createSSLEngine(AsynchronousSocketChannel socketChannel, BufferPage bufferPage) {
+    HandshakeModel createSSLEngine(AsynchronousSocketChannel socketChannel, MemoryBlock memoryBlock) {
         try {
             HandshakeModel handshakeModel = new HandshakeModel();
             SSLEngine sslEngine = sslContext.createSSLEngine();
@@ -69,11 +69,11 @@ public final class SslService {
             consumer.accept(sslEngine);
 
             handshakeModel.setSslEngine(sslEngine);
-            handshakeModel.setAppWriteBuffer(bufferPage.allocate(session.getApplicationBufferSize()));
-            handshakeModel.setNetWriteBuffer(bufferPage.allocate(session.getPacketBufferSize()));
+            handshakeModel.setAppWriteBuffer(memoryBlock.allocate(session.getApplicationBufferSize()));
+            handshakeModel.setNetWriteBuffer(memoryBlock.allocate(session.getPacketBufferSize()));
             handshakeModel.getNetWriteBuffer().buffer().flip();
-            handshakeModel.setAppReadBuffer(bufferPage.allocate(session.getApplicationBufferSize()));
-            handshakeModel.setNetReadBuffer(bufferPage.allocate(session.getPacketBufferSize()));
+            handshakeModel.setAppReadBuffer(memoryBlock.allocate(session.getApplicationBufferSize()));
+            handshakeModel.setNetReadBuffer(memoryBlock.allocate(session.getPacketBufferSize()));
             sslEngine.beginHandshake();
 
             handshakeModel.setSocketChannel(socketChannel);

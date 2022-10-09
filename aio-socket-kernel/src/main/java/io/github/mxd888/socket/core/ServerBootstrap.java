@@ -16,9 +16,9 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.plugins.Plugin;
-import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
-import io.github.mxd888.socket.utils.pool.buffer.BufferPagePool;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBufferFactory;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnitFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
 import io.github.mxd888.socket.utils.AIOUtil;
@@ -63,7 +63,7 @@ public class ServerBootstrap {
     /**
      * 内存池
      */
-    private BufferPagePool bufferPool;
+    private MemoryPool bufferPool;
 
     /**
      * 内核IO线程池
@@ -108,7 +108,7 @@ public class ServerBootstrap {
     /**
      * 虚拟内存工厂，这里为读操作获取虚拟内存
      */
-    private final VirtualBufferFactory readBufferFactory = bufferPage -> bufferPage.allocate(getConfig().getReadBufferSize());
+    private final MemoryUnitFactory readBufferFactory = bufferPage -> bufferPage.allocate(getConfig().getReadBufferSize());
 
     /**
      * ServerBootstrap
@@ -141,7 +141,7 @@ public class ServerBootstrap {
             checkAndResetConfig();
             this.aioWriteCompletionHandler = new WriteCompletionHandler();
             if (this.bufferPool == null) {
-                this.bufferPool = getConfig().getBufferFactory().create();
+                this.bufferPool = getConfig().getMemoryPoolFactory().create();
             }
             this.aioChannelContextFunction = aioContextFunction;
             AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
@@ -317,11 +317,11 @@ public class ServerBootstrap {
     /**
      * 设置内存池工厂
      *
-     * @param bufferFactory 内存池工厂
+     * @param memoryPoolFactory 内存池工厂
      * @return this
      */
-    public ServerBootstrap setBufferFactory(BufferFactory bufferFactory) {
-        getConfig().setBufferFactory(bufferFactory);
+    public ServerBootstrap setBufferFactory(MemoryPoolFactory memoryPoolFactory) {
+        getConfig().setMemoryPoolFactory(memoryPoolFactory);
         return this;
     }
 

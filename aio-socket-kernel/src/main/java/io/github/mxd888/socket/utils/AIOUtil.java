@@ -16,7 +16,7 @@
 package io.github.mxd888.socket.utils;
 
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -40,7 +40,7 @@ public class AIOUtil {
      * @param channelContext 用户通道上下文信息
      * @return               byte数组
      */
-    public static byte[] getBytesFromByteBuffer(int len, VirtualBuffer buffer, ChannelContext channelContext) {
+    public static byte[] getBytesFromByteBuffer(int len, MemoryUnit buffer, ChannelContext channelContext) {
         // 小包消息处理
         if (channelContext.getOldByteBuffer().isEmpty()) {
             // 数据够用，直接读
@@ -58,7 +58,7 @@ public class AIOUtil {
             // 队列数据够，则读数据
             byte[] bytes = new byte[len];
             int index = 0;
-            VirtualBuffer oldBuffer;
+            MemoryUnit oldBuffer;
             while ((oldBuffer = channelContext.getOldByteBuffer().poll()) != null && index <= len) {
                 int relatable = Math.min(len - index, oldBuffer.buffer().remaining());
                 oldBuffer.buffer().get(bytes, index, relatable);

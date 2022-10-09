@@ -16,7 +16,7 @@
 package io.github.mxd888.socket.plugins.ssl;
 
 
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import javax.net.ssl.SSLEngine;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -29,11 +29,11 @@ class HandshakeModel {
 
     private AsynchronousSocketChannel socketChannel;
     private SSLEngine sslEngine;
-    private VirtualBuffer appWriteBuffer;
-    private VirtualBuffer netWriteBuffer;
-    private VirtualBuffer appReadBuffer;
+    private MemoryUnit appWriteBuffer;
+    private MemoryUnit netWriteBuffer;
+    private MemoryUnit appReadBuffer;
 
-    private VirtualBuffer netReadBuffer;
+    private MemoryUnit netReadBuffer;
     private HandshakeCallback handshakeCallback;
     private boolean eof;
     private boolean finished;
@@ -46,35 +46,35 @@ class HandshakeModel {
         this.socketChannel = socketChannel;
     }
 
-    public VirtualBuffer getAppWriteBuffer() {
+    public MemoryUnit getAppWriteBuffer() {
         return appWriteBuffer;
     }
 
-    public void setAppWriteBuffer(VirtualBuffer appWriteBuffer) {
+    public void setAppWriteBuffer(MemoryUnit appWriteBuffer) {
         this.appWriteBuffer = appWriteBuffer;
     }
 
-    public VirtualBuffer getNetWriteBuffer() {
+    public MemoryUnit getNetWriteBuffer() {
         return netWriteBuffer;
     }
 
-    public void setNetWriteBuffer(VirtualBuffer netWriteBuffer) {
+    public void setNetWriteBuffer(MemoryUnit netWriteBuffer) {
         this.netWriteBuffer = netWriteBuffer;
     }
 
-    public VirtualBuffer getAppReadBuffer() {
+    public MemoryUnit getAppReadBuffer() {
         return appReadBuffer;
     }
 
-    public void setAppReadBuffer(VirtualBuffer appReadBuffer) {
+    public void setAppReadBuffer(MemoryUnit appReadBuffer) {
         this.appReadBuffer = appReadBuffer;
     }
 
-    public VirtualBuffer getNetReadBuffer() {
+    public MemoryUnit getNetReadBuffer() {
         return netReadBuffer;
     }
 
-    public void setNetReadBuffer(VirtualBuffer netReadBuffer) {
+    public void setNetReadBuffer(MemoryUnit netReadBuffer) {
         this.netReadBuffer = netReadBuffer;
     }
 

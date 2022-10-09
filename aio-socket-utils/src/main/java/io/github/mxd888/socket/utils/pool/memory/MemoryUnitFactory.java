@@ -13,25 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.socket.utils.pool.buffer;
+package io.github.mxd888.socket.utils.pool.memory;
 
 /**
- * 内存池工厂
+ * 创建虚拟ByteBuffer缓冲区的工厂
  *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public interface BufferFactory {
+public interface MemoryUnitFactory {
 
     /**
-     * 禁用状态的内存池
-     */
-    BufferFactory DISABLED_BUFFER_FACTORY = () -> new BufferPagePool(0, 1, false);
-
-    /**
-     * 创建内存池
+     * 在制定内存页内申请虚拟内存
      *
-     * @return 生成的内存池对象
+     * @param memoryBlock  指定内存页
+     * @return            虚拟内存
      */
-    BufferPagePool create();
+    MemoryUnit createBuffer(MemoryBlock memoryBlock);
+
 }

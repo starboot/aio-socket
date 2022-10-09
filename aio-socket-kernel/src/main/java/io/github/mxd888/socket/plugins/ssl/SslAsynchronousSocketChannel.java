@@ -15,8 +15,8 @@
  */
 package io.github.mxd888.socket.plugins.ssl;
 
-import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
-import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
+import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.plugins.channels.AsynchronousSocketChannelProxy;
 
 import javax.net.ssl.SSLEngine;
@@ -35,9 +35,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class SslAsynchronousSocketChannel extends AsynchronousSocketChannelProxy {
 
-    private final VirtualBuffer netWriteBuffer;
-    private final VirtualBuffer netReadBuffer;
-    private final VirtualBuffer appReadBuffer;
+    private final MemoryUnit netWriteBuffer;
+    private final MemoryUnit netReadBuffer;
+    private final MemoryUnit appReadBuffer;
     private SSLEngine sslEngine;
     /**
      * 完成握手置null
@@ -54,9 +54,9 @@ public class SslAsynchronousSocketChannel extends AsynchronousSocketChannelProxy
      */
     private int adaptiveWriteSize = -1;
 
-    public SslAsynchronousSocketChannel(AsynchronousSocketChannel asynchronousSocketChannel, SslService sslService, BufferPage bufferPage) {
+    public SslAsynchronousSocketChannel(AsynchronousSocketChannel asynchronousSocketChannel, SslService sslService, MemoryBlock memoryBlock) {
         super(asynchronousSocketChannel);
-        this.handshakeModel = sslService.createSSLEngine(asynchronousSocketChannel, bufferPage);
+        this.handshakeModel = sslService.createSSLEngine(asynchronousSocketChannel, memoryBlock);
         this.sslService = sslService;
         this.sslEngine = handshakeModel.getSslEngine();
         this.netWriteBuffer = handshakeModel.getNetWriteBuffer();

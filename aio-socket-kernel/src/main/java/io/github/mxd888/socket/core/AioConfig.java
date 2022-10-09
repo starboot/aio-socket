@@ -16,7 +16,7 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Monitor;
-import io.github.mxd888.socket.utils.pool.buffer.BufferFactory;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.maintain.ClusterIds;
 import io.github.mxd888.socket.maintain.Groups;
@@ -83,7 +83,7 @@ public class AioConfig {
     /**
      * 内存池工厂
      */
-    private BufferFactory bufferFactory = BufferFactory.DISABLED_BUFFER_FACTORY;
+    private MemoryPoolFactory memoryPoolFactory = MemoryPoolFactory.DISABLED_BUFFER_FACTORY;
 
     /**
      * 是否是服务器
@@ -210,12 +210,12 @@ public class AioConfig {
         return this;
     }
 
-    public BufferFactory getBufferFactory() {
-        return bufferFactory;
+    public MemoryPoolFactory getMemoryPoolFactory() {
+        return memoryPoolFactory;
     }
 
-    public void setBufferFactory(BufferFactory bufferFactory) {
-        this.bufferFactory = bufferFactory;
+    public void setMemoryPoolFactory(MemoryPoolFactory memoryPoolFactory) {
+        this.memoryPoolFactory = memoryPoolFactory;
     }
 
     public Groups getGroups() {
