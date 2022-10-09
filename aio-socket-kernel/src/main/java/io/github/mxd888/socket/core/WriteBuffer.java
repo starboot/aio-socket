@@ -242,7 +242,11 @@ public final class WriteBuffer extends OutputStream {
         if (closed) {
             throw new RuntimeException("OutputStream has closed");
         }
-        if (this.count > 0 || (writeInBuf != null && writeInBuf.buffer().position() > 0)) {
+        if (this.count > 0) {
+            consumer.accept(this);
+            return;
+        }
+        if (writeInBuf != null && writeInBuf.buffer().position() > 0) {
             consumer.accept(this);
         }
     }
