@@ -320,7 +320,7 @@ public class ServerBootstrap {
      * @param memoryPoolFactory 内存池工厂
      * @return this
      */
-    public ServerBootstrap setBufferFactory(MemoryPoolFactory memoryPoolFactory) {
+    public ServerBootstrap setMemoryPoolFactory(MemoryPoolFactory memoryPoolFactory) {
         getConfig().setMemoryPoolFactory(memoryPoolFactory);
         return this;
     }

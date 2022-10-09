@@ -45,7 +45,7 @@ public class Server {
     public static void main(String[] args) {
 
         ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
-        bootstrap.setBufferFactory(() -> new MemoryPool(10 * 1024 * 1024, 10, true))
+        bootstrap.setMemoryPoolFactory(() -> new MemoryPool(10 * 1024 * 1024, 10, true))
                 .setReadBufferSize(1024 * 1024)
                 .setWriteBufferSize(1024 * 4, 512)
                 // 注册流量监控插件
