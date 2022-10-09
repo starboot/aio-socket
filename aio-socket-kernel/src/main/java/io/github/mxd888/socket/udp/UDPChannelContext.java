@@ -101,7 +101,7 @@ final class UDPChannelContext extends ChannelContext {
     }
 
     @Override
-    public void sendPacket(Packet packet) {
+    protected void sendPacket(Packet packet) {
         throw  new UnsupportedOperationException("UDPChannelContext don't support use sendRunnable");
     }
 }

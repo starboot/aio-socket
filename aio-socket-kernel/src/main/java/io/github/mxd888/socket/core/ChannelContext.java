@@ -208,5 +208,5 @@ public abstract class ChannelContext {
     /**
      * 发送器
      */
-    public abstract void sendPacket(Packet packet);
+    protected abstract void sendPacket(Packet packet);
 }

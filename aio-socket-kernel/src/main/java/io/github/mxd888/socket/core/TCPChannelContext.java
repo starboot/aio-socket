@@ -365,7 +365,7 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public void sendPacket(Packet packet) {
+    protected void sendPacket(Packet packet) {
         if (this.sendRunnable != null) {
             this.sendRunnable.addMsg(packet);
             this.sendRunnable.execute();
