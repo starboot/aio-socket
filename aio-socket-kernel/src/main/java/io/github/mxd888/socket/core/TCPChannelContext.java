@@ -45,19 +45,9 @@ import java.util.function.Consumer;
 public final class TCPChannelContext extends ChannelContext{
 
     /**
-     * 用户绑定ID
-     */
-    private String id;
-
-    /**
      * 底层通信channel对象
      */
     private final AsynchronousSocketChannel channel;
-
-    /**
-     * 输出流，用于往输出buffer里面输入数据的对象
-     */
-    private final WriteBuffer byteBuf;
 
     /**
      * 输出信号量,防止并发write导致异常
@@ -146,7 +136,7 @@ public final class TCPChannelContext extends ChannelContext{
             }
         };
         // 为当前ChannelContext添加对外输出流
-        byteBuf = new WriteBuffer(bufferPage, flushConsumer, getAioConfig().getWriteBufferSize(), 16);
+        setWriteBuffer(bufferPage, flushConsumer, getAioConfig().getWriteBufferSize(), 16);
         // 触发状态机
         getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }
@@ -307,11 +297,6 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public final void close() {
-        close(false);
-    }
-
-    @Override
     public synchronized void close(boolean immediate) {
         if (status == CHANNEL_STATUS_CLOSED) {
             return;
@@ -350,16 +335,6 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
     public AioConfig getAioConfig() {
         return this.aioConfig;
     }
@@ -378,37 +353,8 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    public VirtualBuffer getVirtualBuffer(int len) {
-        return byteBuf.newVirtualBuffer(len);
-    }
-
-    @Override
-    public WriteBuffer getWriteBuffer() {
-        return byteBuf;
-    }
-
-    @Override
     public VirtualBuffer getReadBuffer() {
-        return readBuffer;
+        return this.readBuffer;
     }
 
-    @Override
-    public Object getAttachment() {
-        return super.getAttachment();
-    }
-
-    @Override
-    public void setAttachment(Object attachment) {
-        super.setAttachment(attachment);
-    }
-
-    @Override
-    public <T> T getAttr(String s, Class<T> t) {
-        return super.getAttr(s, t);
-    }
-
-    @Override
-    public void attr(String s, Object o) {
-        super.attr(s, o);
-    }
 }

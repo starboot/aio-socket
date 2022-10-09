@@ -16,7 +16,7 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.task.SendRunnable;
+import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
 import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
 import io.github.mxd888.socket.utils.queue.FullWaitQueue;
@@ -26,11 +26,22 @@ import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 抽象通道上下文
  */
 public abstract class ChannelContext {
+
+    /**
+     * 用户绑定ID
+     */
+    private String id;
+
+    /**
+     * 输出流，用于往输出buffer里面输入数据的对象
+     */
+    protected WriteBuffer byteBuf;
 
     /**
      * ChannelContext状态:已关闭
@@ -62,6 +73,9 @@ public abstract class ChannelContext {
      */
     private final Map<String, Object> attr = new HashMap<>();
 
+    /**
+     * 存放当前ChannelContext未解码的虚拟buffer
+     */
     private FullWaitQueue<VirtualBuffer> oldByteBufferQueue;
 
     public FullWaitQueue<VirtualBuffer> getOldByteBuffer() {
@@ -77,19 +91,29 @@ public abstract class ChannelContext {
         return oldByteBufferQueue;
     }
 
+    protected void setWriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
+        if (byteBuf == null) {
+            byteBuf = new WriteBuffer(bufferPage, consumer, chunkSize, capacity);
+        }
+    }
+
     /**
      * 获取一个虚拟buffer用于存放数据
      * @param len 长度
      * @return 内存池虚拟buffer
      */
-    public abstract VirtualBuffer getVirtualBuffer(int len);
+    public VirtualBuffer getVirtualBuffer(int len) {
+        return byteBuf.newVirtualBuffer(len);
+    }
 
     /**
      * 获取通道输出流
      *
      * @return IO输出流
      */
-    public abstract WriteBuffer getWriteBuffer();
+    public WriteBuffer getWriteBuffer() {
+        return byteBuf;
+    }
 
     /**
      * 获取读buffer，不要轻易用
@@ -117,14 +141,18 @@ public abstract class ChannelContext {
      *
      * @return 通道上下文唯一ID
      */
-    public abstract String getId();
+    public String getId() {
+        return id;
+    }
 
     /**
      * 通道上下文绑定唯一ID
      *
      * @param id ID内容
      */
-    public abstract void setId(String id);
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * 读取通道

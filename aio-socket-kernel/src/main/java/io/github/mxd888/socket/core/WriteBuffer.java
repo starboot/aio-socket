@@ -84,7 +84,7 @@ public final class WriteBuffer extends OutputStream {
      */
     private byte[] bytes;
 
-    public WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
+    WriteBuffer(BufferPage bufferPage, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
         this.bufferPage = bufferPage;
         this.consumer = consumer;
         this.items = new VirtualBuffer[capacity];

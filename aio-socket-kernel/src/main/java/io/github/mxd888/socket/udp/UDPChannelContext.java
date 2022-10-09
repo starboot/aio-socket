@@ -19,7 +19,6 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.task.SendRunnable;
 import io.github.mxd888.socket.utils.pool.buffer.BufferPage;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.utils.pool.buffer.VirtualBuffer;
@@ -35,8 +34,6 @@ final class UDPChannelContext extends ChannelContext {
 
     private final SocketAddress remote;
 
-    private final WriteBuffer byteBuf;
-
     UDPChannelContext(final UDPChannel udpChannel, final SocketAddress remote, BufferPage bufferPage) {
         this.udpChannel = udpChannel;
         this.remote = remote;
@@ -46,23 +43,13 @@ final class UDPChannelContext extends ChannelContext {
                 this.udpChannel.write(writeBuffer, this);
             }
         };
-        this.byteBuf = new WriteBuffer(bufferPage, consumer, this.udpChannel.config.getWriteBufferSize(), 16);
+        setWriteBuffer(bufferPage, consumer, this.udpChannel.config.getWriteBufferSize(), 20);
         this.udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
     }
 
     @Override
     public void signalRead() {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public VirtualBuffer getVirtualBuffer(int len) {
-        return byteBuf.newVirtualBuffer(len);
-    }
-
-    @Override
-    public WriteBuffer getWriteBuffer() {
-        return byteBuf;
     }
 
     @Override
@@ -74,16 +61,6 @@ final class UDPChannelContext extends ChannelContext {
     public void close(boolean immediate) {
         this.udpChannel.close();
         this.byteBuf.close();
-    }
-
-    @Override
-    public String getId() {
-        throw new UnsupportedOperationException("UDPChannelContext don't support get id");
-    }
-
-    @Override
-    public void setId(String id) {
-        throw new UnsupportedOperationException("UDPChannelContext don't support set id");
     }
 
     @Override
