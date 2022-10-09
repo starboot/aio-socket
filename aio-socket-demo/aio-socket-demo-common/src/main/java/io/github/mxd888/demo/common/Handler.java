@@ -81,6 +81,9 @@ public class Handler implements AioHandler {
             case REJECT_ACCEPT:
                 System.out.println("超过负载，拒绝连接");
                 break;
+            case CHANNEL_CLOSED:
+                System.out.println("TCPChannelContext 已经关闭");
+                break;
         }
     }
 }

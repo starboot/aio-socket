@@ -304,7 +304,7 @@ public final class TCPChannelContext extends ChannelContext{
         status = immediate ? CHANNEL_STATUS_CLOSED : CHANNEL_STATUS_CLOSING;
         if (immediate) {
             try {
-                byteBuf.close();
+                this.byteBuf.close();
                 readBuffer.clean();
                 if (writeBuffer != null) {
                     writeBuffer.clean();
