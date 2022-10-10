@@ -27,6 +27,29 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * OUTPUT_EXCEPTION 异常
+ * OUTPUT_EXCEPTION 异常
+ * TCPChannelContext 已经关闭
+ * INPUT_EXCEPTION 异常
+ * java.io.IOException: writeBuffer has closed
+ * 	at io.github.mxd888.socket.core.WriteBuffer.write(WriteBuffer.java:181)
+ * 	at io.github.mxd888.socket.core.WriteBuffer.writeInt(WriteBuffer.java:137)
+ * 	at io.github.mxd888.demo.common.Handler.encode(Handler.java:60)
+ * 	at io.github.mxd888.socket.plugins.AioPlugins.encode(AioPlugins.java:113)
+ * 	at io.github.mxd888.socket.core.TCPChannelContext.sendPacket(TCPChannelContext.java:349)
+ * 	at io.github.mxd888.socket.core.Aio.send(Aio.java:63)
+ * 	at io.github.mxd888.demo.client.Client.lambda$main$2(Client.java:75)
+ * 	at java.lang.Thread.run(Thread.java:748)
+ * Exception in thread "Thread-5" java.lang.RuntimeException: OutputStream has closed
+ * 	at io.github.mxd888.socket.core.WriteBuffer.flush(WriteBuffer.java:253)
+ * 	at io.github.mxd888.socket.core.TCPChannelContext.sendPacket(TCPChannelContext.java:350)
+ * 	at io.github.mxd888.socket.core.Aio.send(Aio.java:63)
+ * 	at io.github.mxd888.demo.client.Client.lambda$main$2(Client.java:75)
+ * 	at java.lang.Thread.run(Thread.java:748)
+ *
+ * Process finished with exit code -1
+ */
 public class Client {
 
     public static void main(String[] args) {

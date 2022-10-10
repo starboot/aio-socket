@@ -341,7 +341,7 @@ public class ClientBootstrap {
      */
     public ClientBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum) {
         getConfig().setWriteBufferSize(writeBufferSize)
-                .setMaxOnlineNum(maxWaitNum);
+                .setMaxWaitNum(maxWaitNum);
         return this;
     }
 
