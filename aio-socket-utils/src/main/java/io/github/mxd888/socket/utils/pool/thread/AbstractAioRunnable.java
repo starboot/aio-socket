@@ -22,9 +22,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class AbstractSynRunnable implements Runnable {
+public abstract class AbstractAioRunnable implements Runnable {
 
-    private static final Logger LOGGER	= LoggerFactory.getLogger(AbstractSynRunnable.class);
+    private static final Logger LOGGER	= LoggerFactory.getLogger(AbstractAioRunnable.class);
 
     public boolean executed	= false;
 
@@ -36,11 +36,11 @@ public abstract class AbstractSynRunnable implements Runnable {
 
     private final int maxExecuteNum;
 
-    protected AbstractSynRunnable(Executor executor) {
+    protected AbstractAioRunnable(Executor executor) {
         this(executor, 100);
     }
 
-    protected AbstractSynRunnable(Executor executor, int maxExecuteNum) {
+    protected AbstractAioRunnable(Executor executor, int maxExecuteNum) {
         this.executor = executor;
         this.maxExecuteNum = maxExecuteNum;
     }

@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 /**
  * 并发同步线程池
  */
-public class SynThreadPoolExecutor extends ThreadPoolExecutor {
+public class AioThreadPoolExecutor extends ThreadPoolExecutor {
 
     /**
      * @param corePoolSize             核心池大小
@@ -30,7 +30,7 @@ public class SynThreadPoolExecutor extends ThreadPoolExecutor {
      * @param threadFactory            线程工厂
      * @param rejectedExecutionHandler 拒绝策略
      */
-    public SynThreadPoolExecutor(int corePoolSize,
+    public AioThreadPoolExecutor(int corePoolSize,
                                  int maximumPoolSize,
                                  long keepAliveTime,
                                  TimeUnit timeUnit,
@@ -47,8 +47,8 @@ public class SynThreadPoolExecutor extends ThreadPoolExecutor {
      * @return 检查状态
      */
     private boolean checkBeforeExecute(Runnable runnable) {
-        if (runnable instanceof AbstractSynRunnable) {
-            AbstractSynRunnable synRunnable = (AbstractSynRunnable) runnable;
+        if (runnable instanceof AbstractAioRunnable) {
+            AbstractAioRunnable synRunnable = (AbstractAioRunnable) runnable;
             if (synRunnable.executed) {
                 return false;
             }
@@ -74,8 +74,8 @@ public class SynThreadPoolExecutor extends ThreadPoolExecutor {
 
     @Override
     public void execute(Runnable runnable) {
-        if (runnable instanceof AbstractSynRunnable) {
-            AbstractSynRunnable synRunnable = (AbstractSynRunnable) runnable;
+        if (runnable instanceof AbstractAioRunnable) {
+            AbstractAioRunnable synRunnable = (AbstractAioRunnable) runnable;
             if (synRunnable.executed) {
                 return;
             }

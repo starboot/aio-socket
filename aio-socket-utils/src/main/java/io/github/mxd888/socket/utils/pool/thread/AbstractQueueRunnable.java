@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executor;
 
-public abstract class AbstractQueueRunnable<T> extends AbstractSynRunnable {
+public abstract class AbstractQueueRunnable<T> extends AbstractAioRunnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueueRunnable.class);
 

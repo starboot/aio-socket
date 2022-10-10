@@ -17,7 +17,7 @@ package io.github.mxd888.socket.utils;
 
 import io.github.mxd888.socket.utils.pool.thread.AioCallerRunsPolicy;
 import io.github.mxd888.socket.utils.pool.thread.DefaultThreadFactory;
-import io.github.mxd888.socket.utils.pool.thread.SynThreadPoolExecutor;
+import io.github.mxd888.socket.utils.pool.thread.AioThreadPoolExecutor;
 
 import java.util.concurrent.*;
 
@@ -167,8 +167,8 @@ public class ThreadUtils {
                                                  BlockingQueue<Runnable> runnableQueue,
                                                  ThreadFactory threadFactory,
                                                  RejectedExecutionHandler rejectedExecutionHandler) {
-        SynThreadPoolExecutor poolExecutor =
-                new SynThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit,
+        AioThreadPoolExecutor poolExecutor =
+                new AioThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit,
                         runnableQueue, threadFactory, rejectedExecutionHandler);
         poolExecutor.prestartCoreThread();
         return poolExecutor;

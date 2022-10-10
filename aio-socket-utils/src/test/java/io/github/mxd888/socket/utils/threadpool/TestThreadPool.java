@@ -34,7 +34,7 @@ public class TestThreadPool {
      */
     private static void testSynThreadPoolExecutor() {
         ExecutorService aioExecutor = ThreadUtils.getAioExecutor();
-        testSynRunnable testSynRunnable = new testSynRunnable(aioExecutor);
+        testAioRunnable testSynRunnable = new testAioRunnable(aioExecutor);
         for (int i = 0; i < 100; i++) {
             testSynRunnable.addMsg("我是" + i +"号");
             testSynRunnable.execute();
@@ -66,11 +66,11 @@ public class TestThreadPool {
         }
     }
 
-    static class testSynRunnable extends AbstractQueueRunnable<String> {
+    static class testAioRunnable extends AbstractQueueRunnable<String> {
 
         private FullWaitQueue<String> msgQueue = null;
 
-        protected testSynRunnable(Executor executor) {
+        protected testAioRunnable(Executor executor) {
             super(executor);
         }
 

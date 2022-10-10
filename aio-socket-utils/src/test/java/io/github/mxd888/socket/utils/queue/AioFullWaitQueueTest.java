@@ -111,12 +111,12 @@ public class AioFullWaitQueueTest {
     private static void testAioExecutor(FullWaitQueue<String> aioFullWaitQueue, String message)
             throws InterruptedException {
         ExecutorService aioExecutor = ThreadUtils.getAioExecutor();
-        SynPollQueue synPollQueue = new SynPollQueue(aioFullWaitQueue, aioExecutor);
+        AioPollQueue synPollQueue = new AioPollQueue(aioFullWaitQueue, aioExecutor);
         // 计时开始
         long start = System.currentTimeMillis();
         // 启动消息提供者
         for (int i = 0; i < offerThreadNum; i++) {
-            new SynAddQueue(message, aioExecutor, synPollQueue).execute();
+            new AioAddQueue(message, aioExecutor, synPollQueue).execute();
         }
         // 启动消息消费者
         // 消费者有生产者自动唤醒
@@ -179,13 +179,13 @@ public class AioFullWaitQueueTest {
     /**
      * 同步生产者Java对象
      */
-    static class SynAddQueue extends AbstractQueueRunnable<String>{
+    static class AioAddQueue extends AbstractQueueRunnable<String>{
 
         String s;
 
         AbstractQueueRunnable<String> aioQueue;
 
-        public SynAddQueue(String s, Executor executor, AbstractQueueRunnable<String> pollQueue) {
+        public AioAddQueue(String s, Executor executor, AbstractQueueRunnable<String> pollQueue) {
             super(executor);
             this.s = s;
             this.aioQueue = pollQueue;
@@ -208,11 +208,11 @@ public class AioFullWaitQueueTest {
     /**
      * 同步消费者Java对象
      */
-    static class SynPollQueue extends AbstractQueueRunnable<String> {
+    static class AioPollQueue extends AbstractQueueRunnable<String> {
 
         FullWaitQueue<String> queue;
 
-        public SynPollQueue(FullWaitQueue<String> queue, Executor executor) {
+        public AioPollQueue(FullWaitQueue<String> queue, Executor executor) {
             super(executor);
             this.queue = queue;
         }
