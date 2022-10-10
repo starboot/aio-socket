@@ -63,6 +63,15 @@ public class Aio {
         channelContext.sendPacket(packet);
     }
 
+    public static void sendToID(String channelContextId, Packet packet, AioConfig config) {
+        ChannelContext Id = Aio.getChannelContextById(channelContextId, config);
+        Aio.send(Id, packet);
+    }
+
+    public static ChannelContext getChannelContextById(String channelContextId, AioConfig config) {
+        return config.getIds().get(channelContextId);
+    }
+
     /**
      * 群发
      *
@@ -71,8 +80,7 @@ public class Aio {
      * @param channelContext 发送者上下文
      */
     public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext) {
-        channelContext.getAioConfig().getHandler().encode(packet, channelContext);
-//        channelContext.getAioConfig().getGroups().writeToGroup(groupId, buffer, channelContext);
+        channelContext.getAioConfig().getGroups().writeToGroup(groupId, packet, channelContext);
     }
 
     public static void removeUserFromAllGroup(ChannelContext channelContext) {

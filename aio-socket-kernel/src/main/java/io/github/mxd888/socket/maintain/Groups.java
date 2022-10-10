@@ -15,8 +15,9 @@
  */
 package io.github.mxd888.socket.maintain;
 
+import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -65,20 +66,20 @@ public class Groups {
         }
     }
 
-    public void writeToGroup(String group, MemoryUnit buffer, ChannelContext channelContext) {
+    public void writeToGroup(String group, Packet packet, ChannelContext channelContext) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
             return;
         }
         if (channelContext == null) {
             for (ChannelContext context : groupUnit.groupList) {
-//                Aio.send(context, buffer);
+                Aio.send(context, packet);
             }
             return;
         }
         for (ChannelContext context : groupUnit.groupList) {
             if (channelContext != context) {
-//                Aio.send(context, buffer);
+                Aio.send(context, packet);
             }
         }
     }
