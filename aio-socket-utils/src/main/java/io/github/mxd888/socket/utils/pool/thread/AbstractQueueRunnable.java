@@ -15,7 +15,7 @@
  */
 package io.github.mxd888.socket.utils.pool.thread;
 
-import io.github.mxd888.socket.utils.queue.FullWaitQueue;
+import io.github.mxd888.socket.utils.queue.AioQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,5 +69,5 @@ public abstract class AbstractQueueRunnable<T> extends AbstractAioRunnable {
      * 获取消息队列
      * @return 消息队列
      */
-    public abstract FullWaitQueue<T> getMsgQueue();
+    public abstract AioQueue<T> getMsgQueue();
 }

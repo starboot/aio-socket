@@ -20,7 +20,7 @@ package io.github.mxd888.socket.utils.queue;
  *
  * @param <T> 单元类型
  */
-public interface FullWaitQueue<T> {
+public interface AioQueue<T> {
 
     /**
      * 入队

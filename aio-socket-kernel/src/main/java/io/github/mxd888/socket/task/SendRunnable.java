@@ -20,7 +20,7 @@ import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.pool.thread.AbstractQueueRunnable;
 import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
-import io.github.mxd888.socket.utils.queue.FullWaitQueue;
+import io.github.mxd888.socket.utils.queue.AioQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
 
     private final AioHandler aioHandler;
 
-    private FullWaitQueue<Packet> msgQueue = null;
+    private AioQueue<Packet> msgQueue = null;
 
     public SendRunnable(ChannelContext channelContext, Executor executor) {
         super(executor);
@@ -94,7 +94,7 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
     }
 
     @Override
-    public FullWaitQueue<Packet> getMsgQueue() {
+    public AioQueue<Packet> getMsgQueue() {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {

@@ -52,7 +52,7 @@ public class ThreadUtils {
     /**
      * boss 最大内存池线程数
      */
-    public static final int MAX_POOL_SIZE_FOR_BOSS = Math.max(CORE_POOL_SIZE * 2, 8);
+    public static final int MAX_POOL_SIZE_FOR_BOSS = Math.max(CORE_POOL_SIZE * 2, 10);
 
     /**
      * worker 最大内存池线程数

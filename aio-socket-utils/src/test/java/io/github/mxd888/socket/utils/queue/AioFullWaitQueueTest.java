@@ -75,20 +75,20 @@ public class AioFullWaitQueueTest {
         int capacity = 512;
 
         // 建立aio-socket满等待队列
-        FullWaitQueue<String> aioFullWaitQueue = new AioFullWaitQueue<>(capacity);
+        AioQueue<String> aioAioQueue = new AioFullWaitQueue<>(capacity);
 
         // 测试(aio-socket 线程池 + aio-socket 满等待队列)性能
-        testAioExecutor(aioFullWaitQueue, message);
+        testAioExecutor(aioAioQueue, message);
 
         // 测试(Java8 自带线程池 + aio-socket 满等待队列)性能
 //        testGroupExecutor(aioFullWaitQueue, message);
     }
 
-    private static void testGroupExecutor(FullWaitQueue<String> aioFullWaitQueue, String message)
+    private static void testGroupExecutor(AioQueue<String> aioAioQueue, String message)
             throws InterruptedException {
         ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(offerThreadNum + processThreadNum);
-        AddQueue addQueue = new AddQueue(message, aioFullWaitQueue);
-        PollQueue pollQueue = new PollQueue(aioFullWaitQueue);
+        AddQueue addQueue = new AddQueue(message, aioAioQueue);
+        PollQueue pollQueue = new PollQueue(aioAioQueue);
         // 计时开始
         long start = System.currentTimeMillis();
         // 启动消息提供者
@@ -108,10 +108,10 @@ public class AioFullWaitQueueTest {
         groupExecutor.shutdown();
     }
 
-    private static void testAioExecutor(FullWaitQueue<String> aioFullWaitQueue, String message)
+    private static void testAioExecutor(AioQueue<String> aioAioQueue, String message)
             throws InterruptedException {
         ExecutorService aioExecutor = ThreadUtils.getAioExecutor();
-        AioPollQueue synPollQueue = new AioPollQueue(aioFullWaitQueue, aioExecutor);
+        AioPollQueue synPollQueue = new AioPollQueue(aioAioQueue, aioExecutor);
         // 计时开始
         long start = System.currentTimeMillis();
         // 启动消息提供者
@@ -136,9 +136,9 @@ public class AioFullWaitQueueTest {
 
         String s;
 
-        FullWaitQueue<String> queue;
+        AioQueue<String> queue;
 
-        public AddQueue(String s, FullWaitQueue<String> queue) {
+        public AddQueue(String s, AioQueue<String> queue) {
             this.s = s;
             this.queue = queue;
         }
@@ -156,9 +156,9 @@ public class AioFullWaitQueueTest {
      */
     static class PollQueue implements Runnable {
 
-        FullWaitQueue<String> queue;
+        AioQueue<String> queue;
 
-        public PollQueue(FullWaitQueue<String> queue) {
+        public PollQueue(AioQueue<String> queue) {
             this.queue = queue;
         }
 
@@ -192,7 +192,7 @@ public class AioFullWaitQueueTest {
         }
 
         @Override
-        public FullWaitQueue<String> getMsgQueue() {
+        public AioQueue<String> getMsgQueue() {
             return null;
         }
 
@@ -210,15 +210,15 @@ public class AioFullWaitQueueTest {
      */
     static class AioPollQueue extends AbstractQueueRunnable<String> {
 
-        FullWaitQueue<String> queue;
+        AioQueue<String> queue;
 
-        public AioPollQueue(FullWaitQueue<String> queue, Executor executor) {
+        public AioPollQueue(AioQueue<String> queue, Executor executor) {
             super(executor);
             this.queue = queue;
         }
 
         @Override
-        public FullWaitQueue<String> getMsgQueue() {
+        public AioQueue<String> getMsgQueue() {
             return queue;
         }
 

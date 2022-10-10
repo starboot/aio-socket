@@ -3,7 +3,7 @@ package io.github.mxd888.socket.utils.threadpool;
 import io.github.mxd888.socket.utils.ThreadUtils;
 import io.github.mxd888.socket.utils.pool.thread.AbstractQueueRunnable;
 import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
-import io.github.mxd888.socket.utils.queue.FullWaitQueue;
+import io.github.mxd888.socket.utils.queue.AioQueue;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -68,14 +68,14 @@ public class TestThreadPool {
 
     static class testAioRunnable extends AbstractQueueRunnable<String> {
 
-        private FullWaitQueue<String> msgQueue = null;
+        private AioQueue<String> msgQueue = null;
 
         protected testAioRunnable(Executor executor) {
             super(executor);
         }
 
         @Override
-        public FullWaitQueue<String> getMsgQueue() {
+        public AioQueue<String> getMsgQueue() {
             if (msgQueue == null) {
                 synchronized (this) {
                     if (msgQueue == null) {

@@ -19,7 +19,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
-import io.github.mxd888.socket.utils.queue.FullWaitQueue;
+import io.github.mxd888.socket.utils.queue.AioQueue;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -76,14 +76,14 @@ public abstract class ChannelContext {
     /**
      * 存放当前ChannelContext未解码的虚拟buffer
      */
-    private FullWaitQueue<MemoryUnit> oldByteBufferQueue;
+    private AioQueue<MemoryUnit> oldByteBufferQueue;
 
     /**
      * 读取当前ChannelContext未解码的虚拟buffer
      *
      * @return aio-socket自制满等待队列
      */
-    public FullWaitQueue<MemoryUnit> getOldByteBuffer() {
+    public AioQueue<MemoryUnit> getOldByteBuffer() {
         if (oldByteBufferQueue != null) {
             return oldByteBufferQueue;
         }

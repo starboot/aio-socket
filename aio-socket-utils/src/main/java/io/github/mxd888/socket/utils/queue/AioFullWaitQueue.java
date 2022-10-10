@@ -23,7 +23,7 @@ import java.util.concurrent.Semaphore;
  *
  * @param <T> 单元类型
  */
-public class AioFullWaitQueue<T> implements FullWaitQueue<T> {
+public class AioFullWaitQueue<T> implements AioQueue<T> {
 
     private final ConcurrentLinkedQueue<T> queue = new ConcurrentLinkedQueue<>();
 
