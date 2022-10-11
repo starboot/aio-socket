@@ -49,6 +49,11 @@ public class Groups {
         groupUnit.groupList.add(context);
     }
 
+    /**
+     * 从指定群组中移除用户
+     * @param group    群组ID
+     * @param context  被移除的ChannelContext
+     */
     public final synchronized void remove(String group, ChannelContext context) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
@@ -60,12 +65,24 @@ public class Groups {
         }
     }
 
+    /**
+     * 从所有群组中移除用户
+     *
+     * @param context 被移除的ChannelContext
+     */
     public final void remove(ChannelContext context) {
         for (String group : channelGroup.keySet()) {
             remove(group, context);
         }
     }
 
+    /**
+     * 群发
+     *
+     * @param group          群组ID
+     * @param packet         消息包
+     * @param channelContext 发送者channelContext
+     */
     public void writeToGroup(String group, Packet packet, ChannelContext channelContext) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {

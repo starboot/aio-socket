@@ -40,6 +40,11 @@ public class Ids {
         channelIds.put(userId, context);
     }
 
+    /**
+     * 移除指定ID
+     *
+     * @param userId 用户ID
+     */
     public final void remove(String userId) {
         ChannelContext context = channelIds.get(userId);
         if (context == null) {
@@ -48,6 +53,12 @@ public class Ids {
         channelIds.remove(userId);
     }
 
+    /**
+     * 根据ID获取ChannelContext
+     *
+     * @param userId 用户ID
+     * @return ChannelContext上下文信息
+     */
     public ChannelContext get(String userId) {
         return channelIds.get(userId);
     }
