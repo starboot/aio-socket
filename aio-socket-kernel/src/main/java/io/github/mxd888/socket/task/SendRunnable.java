@@ -19,7 +19,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.pool.thread.AbstractQueueRunnable;
-import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
+import io.github.mxd888.socket.utils.queue.AioFullNotifyQueue;
 import io.github.mxd888.socket.utils.queue.AioQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,9 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
      */
     private void getByteBuffer(Packet packet) {
         try {
-            aioHandler.encode(packet, channelContext);
+            synchronized (this.channelContext) {
+                aioHandler.encode(packet, channelContext);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -98,7 +100,7 @@ public class SendRunnable extends AbstractQueueRunnable<Packet> {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {
-                    msgQueue = new AioFullWaitQueue<>(channelContext.getAioConfig().getMaxWaitNum());
+                    msgQueue = new AioFullNotifyQueue<>(channelContext.getAioConfig().getMaxWaitNum());
                 }
             }
         }

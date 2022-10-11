@@ -6,6 +6,8 @@ public class TestAtomic {
 
     private static final AtomicInteger takeIndex = new AtomicInteger(-1);
 
+    private final int i = 0;
+
     public static void main(String[] args) {
 
         // takeIndex.intValue()  == takeIndex.get()
@@ -21,6 +23,14 @@ public class TestAtomic {
         System.out.println(takeIndex.compareAndSet(8, 3));
         System.out.println(takeIndex.getAndIncrement());
         System.out.println(takeIndex.get());
+
+        TestAtomic atomic = null;
+
+        if (atomic != null && (8 / atomic.i) > 1) {
+            System.out.println("执行完毕");
+        }else {
+            System.out.println("不执行");
+        }
 
     }
 }

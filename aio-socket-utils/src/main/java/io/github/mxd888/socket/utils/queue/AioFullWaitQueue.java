@@ -25,9 +25,9 @@ import java.util.concurrent.Semaphore;
  */
 public class AioFullWaitQueue<T> implements AioQueue<T> {
 
-    private final ConcurrentLinkedQueue<T> queue = new ConcurrentLinkedQueue<>();
+    protected final ConcurrentLinkedQueue<T> queue = new ConcurrentLinkedQueue<>();
 
-    private final Semaphore capacity;
+    protected final Semaphore capacity;
 
     private final Integer total;
 

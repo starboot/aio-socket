@@ -81,7 +81,7 @@ public class HttpMessageProcessor {
                     e.printStackTrace();
                     abstractRequest.getResponse().close();
                 } finally {
-                    context.signalRead();
+                    context.signalRead(false);
                 }
             });
         }
@@ -153,7 +153,7 @@ public class HttpMessageProcessor {
                     }
                     response.close();
                 } finally {
-                    context.signalRead();
+                    context.signalRead(false);
                 }
             });
         }

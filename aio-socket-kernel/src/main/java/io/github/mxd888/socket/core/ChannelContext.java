@@ -170,7 +170,7 @@ public abstract class ChannelContext {
     /**
      * 读取通道
      */
-    public abstract void signalRead();
+    public abstract void signalRead(boolean flip);
 
     /**
      * 获取当前会话的本地连接地址

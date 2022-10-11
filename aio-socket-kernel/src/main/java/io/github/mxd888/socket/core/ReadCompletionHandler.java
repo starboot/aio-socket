@@ -31,6 +31,9 @@ final class ReadCompletionHandler implements CompletionHandler<Integer, TCPChann
     @Override
     public void completed(Integer result, TCPChannelContext channelContext) {
         // 读取完成,result:实际读取的字节数。如果对方关闭连接则result=-1。
+        if (channelContext.runDecodeRunnable(result)) {
+            return;
+        }
         try {
             // 接收到的消息进行预处理
             Monitor monitor = channelContext.getAioConfig().getMonitor();
@@ -38,8 +41,7 @@ final class ReadCompletionHandler implements CompletionHandler<Integer, TCPChann
                 monitor.afterRead(channelContext, result);
             }
             //触发读回调
-            channelContext.flipRead(result == -1);
-            channelContext.signalRead();
+            channelContext.signalRead(result == -1);
         } catch (Exception e) {
             failed(e, channelContext);
         }

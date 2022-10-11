@@ -21,7 +21,7 @@ import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.pool.thread.AbstractQueueRunnable;
-import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
+import io.github.mxd888.socket.utils.queue.AioFullNotifyQueue;
 import io.github.mxd888.socket.utils.queue.AioQueue;
 
 import java.util.concurrent.Executor;
@@ -81,7 +81,7 @@ public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {
-                    msgQueue = new AioFullWaitQueue<>(aioConfig.getMaxWaitNum());
+                    msgQueue = new AioFullNotifyQueue<>(aioConfig.getMaxWaitNum());
                 }
             }
         }

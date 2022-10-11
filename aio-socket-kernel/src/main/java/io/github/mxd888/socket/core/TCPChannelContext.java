@@ -19,6 +19,7 @@ import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.exception.AioDecoderException;
+import io.github.mxd888.socket.task.DecodeRunnable;
 import io.github.mxd888.socket.task.HandlerRunnable;
 import io.github.mxd888.socket.task.SendRunnable;
 import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
@@ -94,6 +95,8 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private SendRunnable sendRunnable;
 
+    private DecodeRunnable decodeRunnable;
+
     TCPChannelContext(AsynchronousSocketChannel channel,
                       final AioConfig config,
                       ReadCompletionHandler readCompletionHandler,
@@ -147,14 +150,15 @@ public final class TCPChannelContext extends ChannelContext{
     void initTCPChannelContext(MemoryUnit readBuffer) {
         this.readBuffer = readBuffer;
         this.readBuffer.buffer().flip();
-        signalRead();
+        signalRead(false);
     }
 
     /**
      * 触发通道的读回调操作
      */
     @Override
-    public void signalRead() {
+    public void signalRead(boolean isFlip) {
+        flipRead(isFlip);
         if (status == CHANNEL_STATUS_CLOSED) {
             return;
         }
@@ -256,7 +260,7 @@ public final class TCPChannelContext extends ChannelContext{
         channel.write(writeBuffer.buffer(), 0L, TimeUnit.MILLISECONDS, this, writeCompletionHandler);
     }
 
-    void flipRead(boolean eof) {
+    private void flipRead(boolean eof) {
         this.eof = eof;
         this.readBuffer.buffer().flip();
     }
@@ -280,19 +284,31 @@ public final class TCPChannelContext extends ChannelContext{
         if (aioThreadPoolExecutor != null) {
             this.handlerRunnable = new HandlerRunnable(this, aioThreadPoolExecutor);
             this.sendRunnable = new SendRunnable(this, aioThreadPoolExecutor);
+            this.decodeRunnable = new DecodeRunnable(this, aioThreadPoolExecutor);
         }
     }
 
     private void aioHandler(Packet packet) {
-        if (handlerRunnable != null) {
-            if (handlerRunnable.addMsg(packet)) {
-                handlerRunnable.execute();
-            }
+        Packet handle = getAioConfig().getHandler().handle(this, packet);
+        if (handle != null) {
+            sendPacket(handle);
+        }
+//        if (handlerRunnable != null && handlerRunnable.addMsg(packet)) {
+//            handlerRunnable.execute();
+//        }else {
+//            Packet handle = getAioConfig().getHandler().handle(this, packet);
+//            if (handle != null) {
+//                sendPacket(handle);
+//            }
+//        }
+    }
+
+    protected boolean runDecodeRunnable(Integer integer) {
+        if (this.decodeRunnable != null && this.decodeRunnable.addMsg(integer)) {
+            this.decodeRunnable.execute();
+            return true;
         }else {
-            Packet handle = getAioConfig().getHandler().handle(this, packet);
-            if (handle != null) {
-                sendPacket(handle);
-            }
+            return false;
         }
     }
 
@@ -341,14 +357,13 @@ public final class TCPChannelContext extends ChannelContext{
 
     @Override
     protected void sendPacket(Packet packet) {
-        if (this.sendRunnable != null) {
-            this.sendRunnable.addMsg(packet);
+        if (this.sendRunnable != null && this.sendRunnable.addMsg(packet)) {
             this.sendRunnable.execute();
         }else {
             synchronized (this) {
                 getAioConfig().getHandler().encode(packet, this);
-                getWriteBuffer().flush();
             }
+            getWriteBuffer().flush();
         }
     }
 

@@ -48,7 +48,7 @@ final class UDPChannelContext extends ChannelContext {
     }
 
     @Override
-    public void signalRead() {
+    public void signalRead(boolean flip) {
         throw new UnsupportedOperationException();
     }
 
