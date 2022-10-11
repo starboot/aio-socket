@@ -10,6 +10,12 @@ import io.github.mxd888.socket.utils.queue.AioQueue;
 
 import java.util.concurrent.Executor;
 
+/**
+ * 消息解码逻辑执行器
+ *
+ * @author MDong
+ * @version 2.10.1.v20211002-RELEASE
+ */
 public class DecodeRunnable extends AbstractQueueRunnable<Integer> {
 
     private final ChannelContext channelContext;
