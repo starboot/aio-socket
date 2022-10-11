@@ -112,6 +112,8 @@ public class AioConfig {
 
     private int maxWaitNum = 50;
 
+    private boolean multilevelModel = false;
+
     /**
      * 插件
      */
@@ -240,5 +242,16 @@ public class AioConfig {
 
     public void setMaxOnlineNum(int maxOnlineNum) {
         this.maxOnlineNum = maxOnlineNum;
+    }
+
+    public boolean isMultilevelModel() {
+        return multilevelModel;
+    }
+
+    public void setMultilevelModel(boolean multilevelModel) {
+        if (!isServer) {
+            throw new UnsupportedOperationException("ClientBootstrap does not support Setting MultilevelModel");
+        }
+        this.multilevelModel = multilevelModel;
     }
 }

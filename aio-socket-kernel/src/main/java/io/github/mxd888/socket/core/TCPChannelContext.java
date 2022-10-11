@@ -289,18 +289,14 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     private void aioHandler(Packet packet) {
-        Packet handle = getAioConfig().getHandler().handle(this, packet);
-        if (handle != null) {
-            sendPacket(handle);
+        if (getAioConfig().isMultilevelModel() && handlerRunnable != null && handlerRunnable.addMsg(packet)) {
+            handlerRunnable.execute();
+        }else {
+            Packet handle = getAioConfig().getHandler().handle(this, packet);
+            if (handle != null) {
+                sendPacket(handle);
+            }
         }
-//        if (handlerRunnable != null && handlerRunnable.addMsg(packet)) {
-//            handlerRunnable.execute();
-//        }else {
-//            Packet handle = getAioConfig().getHandler().handle(this, packet);
-//            if (handle != null) {
-//                sendPacket(handle);
-//            }
-//        }
     }
 
     protected boolean runDecodeRunnable(Integer integer) {
