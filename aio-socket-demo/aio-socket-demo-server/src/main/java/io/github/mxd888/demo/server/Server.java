@@ -27,18 +27,18 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * -----5seconds ----
- * inflow:		694.9893951416016(MB)
- * outflow:	    693.4167137145996(MB)
+ * inflow:		751.988525390625(MB)
+ * outflow:	    751.5911026000977(MB)
  * process fail:	0
- * process count:	36353900
- * process total:	82485416
- * read count:	695	write count:	213120
+ * process count:	39405082
+ * process total:	156391430
+ * read count:	752	write count:	192410
  * connect count:	0
  * disconnect count:	0
  * online count:	10
  * connected total:	10
- * Requests/sec:	7270780.0
- * Transfer/sec:	138.9978790283203(MB)
+ * Requests/sec:	7881016.4
+ * Transfer/sec:	150.397705078125(MB)
  */
 public class Server {
 
