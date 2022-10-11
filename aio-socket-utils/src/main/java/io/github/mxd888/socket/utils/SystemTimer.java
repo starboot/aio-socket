@@ -61,13 +61,13 @@ public class SystemTimer {
 		}
 	});
 
-	private static final long PERIOD = Long.parseLong(System.getProperty("tio.system.timer.period", "10"));
+	private static final long PERIOD = Long.parseLong(System.getProperty("aio.system.timer.period", "10"));
 
 	public static volatile long currTime = System.currentTimeMillis();
 
 	static {
 		EXECUTOR.scheduleAtFixedRate(new TimerTask(), PERIOD, PERIOD, TimeUnit.MILLISECONDS);
-		Runtime.getRuntime().addShutdownHook(new Thread("TioSystemTimer-Shutdown") {
+		Runtime.getRuntime().addShutdownHook(new Thread("AioSystemTimer-Shutdown") {
 			@Override
 			public void run() {
 				EXECUTOR.shutdown();

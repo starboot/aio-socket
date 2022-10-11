@@ -24,20 +24,49 @@ public interface AioQueue<T> {
 
     /**
      * 入队
+     *
      * @param t 入队单元
      * @return 入队状态
      */
     boolean offer(T t);
 
+    /**
+     * 出队但不删除头元素
+     *
+     * @return 头元素
+     */
     T peek();
 
+    /**
+     * 出队删除头元素
+     *
+     * @return 头元素
+     */
     T poll();
 
+    /**
+     * 清空队列
+     */
     void clear();
 
+    /**
+     * 队列大小
+     *
+     * @return 队列大小
+     */
     int size();
 
+    /**
+     * 队列是否为空
+     *
+     * @return 布尔
+     */
     boolean isEmpty();
 
+    /**
+     * 是否满队列了
+     *
+     * @return 布尔
+     */
     boolean isFull();
 }
