@@ -51,18 +51,18 @@ public class Server {
                 // 注册流量监控插件
 //                .addPlugin(new StreamMonitorPlugin())
                 .addPlugin(new MonitorPlugin(5))
-                .addPlugin(new HeartPlugin(30, TimeUnit.SECONDS) {
-                    @Override
-                    public boolean isHeartMessage(Packet packet) {
-                        if (packet instanceof DemoPacket) {
-                            DemoPacket packet1 = (DemoPacket) packet;
-                            return packet1.getData().equals("heartbeat message");
-                        }
-                        return false;
-                    }
-                })
-                .addPlugin(new ACKPlugin(30, TimeUnit.SECONDS, (context, lastTime) -> System.out.println("超时了：..." + lastTime)));
-        bootstrap.start();
+//                .addPlugin(new HeartPlugin(30, TimeUnit.SECONDS) {
+//                    @Override
+//                    public boolean isHeartMessage(Packet packet) {
+//                        if (packet instanceof DemoPacket) {
+//                            DemoPacket packet1 = (DemoPacket) packet;
+//                            return packet1.getData().equals("heartbeat message");
+//                        }
+//                        return false;
+//                    }
+//                })
+//                .addPlugin(new ACKPlugin(30, TimeUnit.SECONDS, (context, lastTime) -> System.out.println("超时了：..." + lastTime)))
+                .start();
 
     }
 }

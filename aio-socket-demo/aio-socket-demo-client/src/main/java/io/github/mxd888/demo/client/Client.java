@@ -18,6 +18,7 @@ package io.github.mxd888.demo.client;
 import io.github.mxd888.demo.common.DemoPacket;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.plugins.ACKPlugin;
+import io.github.mxd888.socket.utils.ThreadUtils;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ClientBootstrap;
@@ -25,6 +26,8 @@ import io.github.mxd888.socket.plugins.ReconnectPlugin;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.channels.AsynchronousChannelGroup;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -52,7 +55,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Client {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
 //        byte b = (byte) 0x7f;
 //        System.out.println(b);
@@ -77,6 +80,8 @@ public class Client {
 
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
 //        demoPacket.setReq("177");   设置同步位
+        ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors());
+        AsynchronousChannelGroup asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(groupExecutor);
         // 5000
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
@@ -85,13 +90,14 @@ public class Client {
                 bootstrap.setBufferFactory(() -> new MemoryPool(32 * 1024 * 1024, 10, true))
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 1024, 512)
-                        .addHeartPacket(new DemoPacket("heartbeat message"))
+//                        .addHeartPacket(new DemoPacket("heartbeat message"))
 //                        .addPlugin(new MonitorPlugin(5))
-                        .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
-                        .addPlugin(new ReconnectPlugin(bootstrap));
+//                        .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
+//                        .addPlugin(new ReconnectPlugin(bootstrap))
+                ;
 
                 try {
-                    ChannelContext start = bootstrap.start();
+                    ChannelContext start = bootstrap.start(asynchronousChannelGroup);
                     long num = 0;
                     long startTime = System.currentTimeMillis();
                     while (num++ < Integer.MAX_VALUE) {
