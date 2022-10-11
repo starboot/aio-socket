@@ -95,6 +95,9 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private SendRunnable sendRunnable;
 
+    /**
+     * 消息解码逻辑执行器
+     */
     private DecodeRunnable decodeRunnable;
 
     TCPChannelContext(AsynchronousSocketChannel channel,
@@ -288,6 +291,10 @@ public final class TCPChannelContext extends ChannelContext{
         }
     }
 
+    /**
+     * 调用处理器
+     * @param packet 消息包
+     */
     private void aioHandler(Packet packet) {
         if (getAioConfig().isMultilevelModel() && handlerRunnable != null && handlerRunnable.addMsg(packet)) {
             handlerRunnable.execute();
@@ -299,6 +306,11 @@ public final class TCPChannelContext extends ChannelContext{
         }
     }
 
+    /**
+     * 调用解码处理器
+     * @param integer 读结果
+     * @return        如果不存在解码处理器则返回false
+     */
     protected boolean runDecodeRunnable(Integer integer) {
         if (this.decodeRunnable != null && this.decodeRunnable.addMsg(integer)) {
             this.decodeRunnable.execute();

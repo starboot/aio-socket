@@ -169,6 +169,7 @@ public abstract class ChannelContext {
 
     /**
      * 读取通道
+     * @param flip 是否flip
      */
     public abstract void signalRead(boolean flip);
 

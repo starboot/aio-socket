@@ -109,10 +109,19 @@ public final class WriteBuffer {
         return memoryBlock.allocate(size);
     }
 
+    /**
+     * 输出int
+     * @param b int数值
+     */
     public void write(int b) {
         writeByte((byte) b);
     }
 
+    /**
+     * 输出short
+     * @param v short数值
+     * @throws IOException 写异常
+     */
     public void writeShort(short v) throws IOException {
         byte[] bytes = initCacheBytes();
         bytes[0] = (byte) ((v >>> 8) & 0xFF);
@@ -120,6 +129,10 @@ public final class WriteBuffer {
         write(bytes, 0, 2);
     }
 
+    /**
+     * 写byte
+     * @param b byte数值
+     */
     public synchronized void writeByte(byte b) {
         if (writeInBuf == null) {
             writeInBuf = memoryBlock.allocate(chunkSize);
@@ -128,6 +141,11 @@ public final class WriteBuffer {
         flushWriteBuffer(false);
     }
 
+    /**
+     * 写Int
+     * @param v int数值
+     * @throws IOException 写异常
+     */
     public void writeInt(int v) throws IOException {
         byte[] bytes = initCacheBytes();
         bytes[0] = (byte) ((v >>> 24) & 0xFF);
