@@ -16,7 +16,10 @@
 package io.github.mxd888.socket.test.core;
 
 import io.github.mxd888.socket.core.ServerBootstrap;
+import io.github.mxd888.socket.plugins.ACKPlugin;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
+
+import java.util.concurrent.TimeUnit;
 
 public class Server {
 
@@ -26,6 +29,7 @@ public class Server {
         bootstrap.setMemoryPoolFactory(() -> new MemoryPool(2 * 1024 * 1024, 2, true))
                 .setReadBufferSize(1024 * 2)
                 .setWriteBufferSize(1024 * 2, 512)
+                .addPlugin(new ACKPlugin(3, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
                 .start();
 
     }

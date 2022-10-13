@@ -68,6 +68,7 @@ public class ACKPlugin extends AbstractPlugin{
         String req = packet.getReq();
         if (req != null && req.length() != 0) {
             idToPacket.put(req, packet);
+            timePacket.put(req, System.currentTimeMillis());
             registerACK(req, packet);
         }
     }
@@ -88,6 +89,7 @@ public class ACKPlugin extends AbstractPlugin{
                 //超时未收到消息，关闭连接
                 if (timeout > 0 && (current - lastTime) > timeout) {
                     timeoutCallback.callback(packet, lastTime);
+                    return;
                 }
                 registerACK(key, packet);
             }

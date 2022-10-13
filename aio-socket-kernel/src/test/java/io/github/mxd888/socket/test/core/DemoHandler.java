@@ -25,6 +25,7 @@ import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 public class DemoHandler implements AioHandler {
 
@@ -41,13 +42,29 @@ public class DemoHandler implements AioHandler {
             return null;
         }
         buffer.mark();
+
         int length = buffer.getInt();
         byte[] b = AIOUtil.getBytesFromByteBuffer(length, memoryUnit, channelContext);
         if (b == null) {
             buffer.reset();
             return null;
         }
-        return new DemoPacket(new String(b));
+        int length1 = buffer.getInt();
+        byte[] b1 = AIOUtil.getBytesFromByteBuffer(length1, memoryUnit, channelContext);
+        if (b1 == null) {
+            buffer.reset();
+            return null;
+        }
+        int length2 = buffer.getInt();
+        byte[] b2 = AIOUtil.getBytesFromByteBuffer(length2, memoryUnit, channelContext);
+        if (b2 == null) {
+            buffer.reset();
+            return null;
+        }
+        DemoPacket demoPacket = new DemoPacket(new String(b2, StandardCharsets.UTF_8));
+        demoPacket.setReq(new String(b, StandardCharsets.UTF_8));
+        demoPacket.setResp(new String(b1, StandardCharsets.UTF_8));
+        return demoPacket;
     }
 
     @Override
@@ -57,6 +74,20 @@ public class DemoHandler implements AioHandler {
             // 自定义协议
             WriteBuffer writeBuffer = channelContext.getWriteBuffer();
             try {
+                if (packet.getReq() != null) {
+                    writeBuffer.writeInt(packet.getReq().getBytes().length);
+                    writeBuffer.write(packet.getReq().getBytes());
+                }else {
+                    writeBuffer.writeInt("111".getBytes().length);
+                    writeBuffer.write("111".getBytes());
+                }
+                if (packet.getResp() != null) {
+                    writeBuffer.writeInt(packet.getResp().getBytes().length);
+                    writeBuffer.write(packet.getResp().getBytes());
+                }else {
+                    writeBuffer.writeInt("111".getBytes().length);
+                    writeBuffer.write("111".getBytes());
+                }
                 writeBuffer.writeInt(demoPacket.getData().getBytes().length);
                 writeBuffer.write(demoPacket.getData().getBytes());
             } catch (IOException e) {
