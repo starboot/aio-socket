@@ -32,7 +32,7 @@ import java.util.concurrent.Executor;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
+public class HandlerTask extends AbstractQueueRunnable<Packet> {
 
     private final ChannelContext channelContext;
 
@@ -40,7 +40,7 @@ public class HandlerRunnable extends AbstractQueueRunnable<Packet> {
 
     private AioQueue<Packet> msgQueue = null;
 
-    public HandlerRunnable(ChannelContext channelContext, Executor executor) {
+    public HandlerTask(ChannelContext channelContext, Executor executor) {
         super(executor);
         this.channelContext = channelContext;
         aioConfig = channelContext.getAioConfig();

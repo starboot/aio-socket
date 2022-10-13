@@ -19,9 +19,9 @@ import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.exception.AioDecoderException;
-import io.github.mxd888.socket.task.DecodeRunnable;
-import io.github.mxd888.socket.task.HandlerRunnable;
-import io.github.mxd888.socket.task.SendRunnable;
+import io.github.mxd888.socket.task.DecodeTask;
+import io.github.mxd888.socket.task.HandlerTask;
+import io.github.mxd888.socket.task.SendTask;
 import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.intf.AioHandler;
@@ -88,17 +88,17 @@ public final class TCPChannelContext extends ChannelContext{
     /**
      * 消息处理逻辑执行器
      */
-    private HandlerRunnable handlerRunnable;
+    private HandlerTask handlerTask;
 
     /**
      * 消息发送逻辑执行器
      */
-    private SendRunnable sendRunnable;
+    private SendTask sendTask;
 
     /**
      * 消息解码逻辑执行器
      */
-    private DecodeRunnable decodeRunnable;
+    private DecodeTask decodeTask;
 
     TCPChannelContext(AsynchronousSocketChannel channel,
                       final AioConfig config,
@@ -285,9 +285,9 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private void setAioExecutor(ExecutorService aioThreadPoolExecutor) {
         if (aioThreadPoolExecutor != null) {
-            this.handlerRunnable = new HandlerRunnable(this, aioThreadPoolExecutor);
-            this.sendRunnable = new SendRunnable(this, aioThreadPoolExecutor);
-            this.decodeRunnable = new DecodeRunnable(this, aioThreadPoolExecutor);
+            this.handlerTask = new HandlerTask(this, aioThreadPoolExecutor);
+            this.sendTask = new SendTask(this, aioThreadPoolExecutor);
+            this.decodeTask = new DecodeTask(this, aioThreadPoolExecutor);
         }
     }
 
@@ -296,8 +296,8 @@ public final class TCPChannelContext extends ChannelContext{
      * @param packet 消息包
      */
     private void aioHandler(Packet packet) {
-        if (getAioConfig().isMultilevelModel() && handlerRunnable != null && handlerRunnable.addMsg(packet)) {
-            handlerRunnable.execute();
+        if (getAioConfig().isMultilevelModel() && handlerTask != null && handlerTask.addMsg(packet)) {
+            handlerTask.execute();
         }else {
             Packet handle = getAioConfig().getHandler().handle(this, packet);
             if (handle != null) {
@@ -312,8 +312,8 @@ public final class TCPChannelContext extends ChannelContext{
      * @return        如果不存在解码处理器则返回false
      */
     protected boolean runDecodeRunnable(Integer integer) {
-        if (this.decodeRunnable != null && this.decodeRunnable.addMsg(integer)) {
-            this.decodeRunnable.execute();
+        if (this.decodeTask != null && this.decodeTask.addMsg(integer)) {
+            this.decodeTask.execute();
             return true;
         }else {
             return false;
@@ -365,8 +365,8 @@ public final class TCPChannelContext extends ChannelContext{
 
     @Override
     protected void sendPacket(Packet packet) {
-        if (this.sendRunnable != null && this.sendRunnable.addMsg(packet)) {
-            this.sendRunnable.execute();
+        if (this.sendTask != null && this.sendTask.addMsg(packet)) {
+            this.sendTask.execute();
         }else {
             synchronized (this) {
                 getAioConfig().getHandler().encode(packet, this);

@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class DecodeRunnable extends AbstractQueueRunnable<Integer> {
+public class DecodeTask extends AbstractQueueRunnable<Integer> {
 
     private final ChannelContext channelContext;
 
@@ -24,14 +24,14 @@ public class DecodeRunnable extends AbstractQueueRunnable<Integer> {
 
     private AioQueue<Integer> msgQueue = null;
 
-    public DecodeRunnable(ChannelContext channelContext, Executor executor) {
+    public DecodeTask(ChannelContext channelContext, Executor executor) {
         super(executor);
         this.channelContext = channelContext;
         this.aioConfig = channelContext.getAioConfig();
         getMsgQueue();
     }
 
-    protected DecodeRunnable(ChannelContext channelContext, Executor executor, int maxExecuteNum) {
+    public DecodeTask(ChannelContext channelContext, Executor executor, int maxExecuteNum) {
         super(executor, maxExecuteNum);
         this.channelContext = channelContext;
         this.aioConfig = channelContext.getAioConfig();
