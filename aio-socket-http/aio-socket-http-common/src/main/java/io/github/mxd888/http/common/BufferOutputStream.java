@@ -42,14 +42,6 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * 输出Http响应
-     *
-     * @param b
-     * @param off
-     * @param len
-     * @throws IOException
-     */
     public final void write(byte[] b, int off, int len) throws IOException {
         check();
         writeHeader();
@@ -68,13 +60,6 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
         }
     }
 
-    /**
-     * 直接输出，不执行编码
-     *
-     * @param b
-     * @param off
-     * @param len
-     */
     public final void directWrite(byte[] b, int off, int len) throws IOException {
         writeBuffer.write(b, off, len);
     }
