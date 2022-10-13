@@ -23,6 +23,7 @@ import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ClientBootstrap;
 import io.github.mxd888.socket.plugins.ReconnectPlugin;
+import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -82,12 +83,13 @@ public class Client {
 //        demoPacket.setReq("177");   设置同步位
         ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors());
         AsynchronousChannelGroup asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(groupExecutor);
+        MemoryPoolFactory poolFactory = () -> new MemoryPool(32 * 1024 * 1024, 10, true);
         // 5000
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 // 127.0.0.1
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
-                bootstrap.setBufferFactory(() -> new MemoryPool(32 * 1024 * 1024, 10, true))
+                bootstrap.setBufferFactory(poolFactory)
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 1024, 512)
 //                        .addHeartPacket(new DemoPacket("heartbeat message"))
