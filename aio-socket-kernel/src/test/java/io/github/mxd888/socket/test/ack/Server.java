@@ -13,29 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.socket.test.core;
+package io.github.mxd888.socket.test.ack;
 
-import io.github.mxd888.socket.core.Aio;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.ClientBootstrap;
+import io.github.mxd888.socket.core.ServerBootstrap;
+import io.github.mxd888.socket.plugins.ACKPlugin;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
-public class Client {
+public class Server {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
 
-        DemoPacket demoPacket = new DemoPacket("hello aio-socket");
-        ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
-        ChannelContext channelContext = bootstrap.setBufferFactory(() -> new MemoryPool(1024 * 1024, 1, true))
+        ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
+        bootstrap.setMemoryPoolFactory(() -> new MemoryPool(2 * 1024 * 1024, 2, true))
                 .setReadBufferSize(1024 * 2)
                 .setWriteBufferSize(1024 * 2, 512)
+                .addPlugin(new ACKPlugin(3, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
                 .start();
-        // 发送消息
-        Aio.send(channelContext, demoPacket);
-        Thread.sleep(1000);
-        // 关机
-        bootstrap.shutdown();
+
     }
 }

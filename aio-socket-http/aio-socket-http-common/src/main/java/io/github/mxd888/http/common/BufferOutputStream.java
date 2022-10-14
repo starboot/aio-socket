@@ -46,6 +46,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
         check();
         writeHeader();
         if (chunked) {
+            System.out.println("chunked:" + chunked);
             if (gzip) {
                 b = GzipUtils.compress(b, off, len);
                 off = 0;
@@ -55,8 +56,11 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
             writeBuffer.write(start);
             writeBuffer.write(b, off, len);
             writeBuffer.write(Constant.CRLF_BYTES);
+            writeBuffer.flush();
         } else {
+            System.out.println("不chunked");
             writeBuffer.write(b, off, len);
+            writeBuffer.flush();
         }
     }
 
@@ -80,6 +84,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
 
     @Override
     public final void flush() throws IOException {
+        System.out.println("直接flush");
         writeHeader();
         writeBuffer.flush();
     }

@@ -22,8 +22,6 @@ public class ServerHandler extends DemoHandler {
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {
         if (packet instanceof DemoPacket) {
-            packet.setResp("22");
-            packet.setReq(null);
             return packet;
         }
         return null;

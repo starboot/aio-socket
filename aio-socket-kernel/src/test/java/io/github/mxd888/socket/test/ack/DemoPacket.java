@@ -13,19 +13,23 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.socket.test.core;
+package io.github.mxd888.socket.test.ack;
 
-import io.github.mxd888.socket.core.ServerBootstrap;
-import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
+import io.github.mxd888.socket.Packet;
 
-public class Server {
+public class DemoPacket extends Packet {
 
-    public static void main(String[] args) {
+    private String data;
 
-        ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
-        bootstrap.setMemoryPoolFactory(() -> new MemoryPool(2 * 1024 * 1024, 2, true))
-                .setReadBufferSize(1024 * 2)
-                .setWriteBufferSize(1024 * 2, 512)
-                .start();
+    public DemoPacket(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }
