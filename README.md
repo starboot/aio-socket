@@ -1,6 +1,6 @@
-<div style="text-align:center">
-	<img style="text-align:center" alt="logo" src="https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-logo.png">
-</div>
+<p style="text-align:center">
+	<img alt="logo" src="https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-logo.png">
+</p>
 <h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket 2.10.1.v20211002-RELEASE</h2>
 <h4 align="center">一款强大且轻量的面向网络层通讯框架</h4>
 <p align="center">
