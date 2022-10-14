@@ -1,4 +1,4 @@
-<p align="center">
+<p >
 	<img alt="logo" src="https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-logo.png">
 </p>
 <h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket 2.10.1.v20211002-RELEASE</h2>
@@ -7,11 +7,11 @@
 	<a href="https://gitee.com/mxd_2022/aio-socket/stargazers"><img
             src="https://gitee.com/mxd_2022/aio-socket/badge/star.svg?theme=dark"/></a>
 	<a href="https://gitee.com/mxd_2022/aio-socket"><img 
-	        src="https://img.shields.io/badge/aio--socket-2.10.1.v20211002--RELEASE-yellowgreen" /></a>
+	        src="https://img.shields.io/badge/aio--socket-2.10.1.v20211002--RELEASE-yellowgreen"  alt=""/></a>
     <a href="https://www.apache.org/licenses/LICENSE-2.0"><img 
-            src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg"/></a>
+            src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg" alt=""/></a>
     <a target="_blank" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html"><img 
-    src="https://img.shields.io/badge/JDK-8+-green.svg" /></a>
+    src="https://img.shields.io/badge/JDK-8+-green.svg"  alt=""/></a>
 </p>
 
 ## aio-socket 简介
@@ -67,7 +67,7 @@ aio-socket还在快速迭代中，功能并未完善，大家尽情期待....
    <a target="_blank"  href="https://jq.qq.com/?_wv=1027&k=Gd6P6BcT">
    <img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="t-im" title="t-im"></a><br>
 
-## 进群前先gitee上star ★
+## 进群前先在github或gitee上star ★
    请看完再进群，进群是为了相互交流技术，共同学习进步，设置进群问题是防止有某云服务器销售人员，或其他乱发广告的进入；
 
 ## 重要说明 ☆☆☆
