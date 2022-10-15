@@ -7,6 +7,8 @@ import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.enums.HeaderValueEnum;
 import io.github.mxd888.http.common.enums.HttpStatus;
 import io.github.mxd888.http.server.HttpResponse;
+import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.core.Aio;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.Vector;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-class AbstractResponse implements HttpResponse, Reset {
+class AbstractResponse extends Packet implements HttpResponse, Reset {
     /**
      * 输入流
      */
@@ -207,7 +209,23 @@ class AbstractResponse implements HttpResponse, Reset {
 
 
     public final void write(byte[] buffer) throws IOException {
-        outputStream.write(buffer);
+        this.write(buffer, 0, buffer.length);
+    }
+
+    protected byte[] writeByte;
+
+    public final void write(byte[] buffer, int off, int len) throws IOException {
+        if (off == 0 && len == buffer.length) {
+            writeByte = buffer;
+        }else {
+            int i = 0;
+            for (int j = off; j < len; j++) {
+                writeByte[i++] = buffer[j];
+            }
+        }
+        Aio.send(outputStream.getChannelContext(), this);
+
+//        outputStream.write(buffer);
     }
 
     @Override

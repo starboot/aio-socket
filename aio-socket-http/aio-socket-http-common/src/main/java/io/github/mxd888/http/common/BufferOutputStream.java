@@ -3,8 +3,8 @@ package io.github.mxd888.http.common;
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.GzipUtils;
+import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
-import io.github.mxd888.socket.core.TCPChannelContext;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,7 +21,7 @@ import java.util.concurrent.Semaphore;
  */
 public abstract class BufferOutputStream extends OutputStream implements Reset {
     private static final Map<String, byte[]> HEADER_NAME_EXT_MAP = new ConcurrentHashMap<>();
-    protected final TCPChannelContext channelContext;
+    protected final ChannelContext channelContext;
     protected final WriteBuffer writeBuffer;
     protected boolean committed = false;
     protected boolean chunked = false;
@@ -32,9 +32,14 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
      */
     private boolean closed = false;
 
-    public BufferOutputStream(TCPChannelContext channelContext) {
+    public ChannelContext getChannelContext() {
+        return channelContext;
+    }
+
+    public BufferOutputStream(ChannelContext channelContext) {
         this.channelContext = channelContext;
         this.writeBuffer = channelContext.getWriteBuffer();
+        this.channelContext.attr("BufferOutputStream", this);
     }
 
     @Override

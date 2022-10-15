@@ -1,5 +1,6 @@
 package io.github.mxd888.http.server.impl;
 
+import io.github.mxd888.http.common.BufferOutputStream;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.decode.Decoder;
 import io.github.mxd888.http.server.decode.HttpMethodDecoder;
@@ -8,6 +9,10 @@ import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.intf.AioHandler;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.function.BiConsumer;
 
 /**
  *
@@ -33,8 +38,14 @@ public class HttpRequestHandler implements AioHandler {
     public Packet handle(ChannelContext channelContext, Packet packet) {
         if (packet instanceof Request) {
             Request packet1 = (Request) packet;
-//            System.out.println(packet1.getProtocol() + "--" + packet1.getParameters() + "--" + packet1.getMethod() + "--" + packet1.getContentType() +
-//                    "--" + packet1.getHeaderNames() + "--"  + packet1.getHeader("Upgrade"));
+            System.out.println(packet1.getProtocol() + "--" + packet1.getMethod() + "--" + packet1.getContentType() +
+                    "--" + packet1.getHeaderNames() + "--"  + packet1.getHeader("Upgrade"));
+            packet1.getParameters().forEach(new BiConsumer<String, String[]>() {
+                @Override
+                public void accept(String s, String[] strings) {
+                    System.out.println(s + "---" + Arrays.toString(strings));
+                }
+            });
             processor.process0(channelContext, (Request) packet);
         }else {
             System.out.println("在io.github.mxd888.http.server.impl.HttpRequestHandler的handle方法里出现http处理错误");
@@ -65,8 +76,6 @@ public class HttpRequestHandler implements AioHandler {
         decodeChain = decodeChain.decode(readBuffer.buffer(), channelContext, request);
         attachment.setDecoder(decodeChain);
         if (decodeChain == BODY_READY_DECODER) {
-//                System.out.println(request.getProtocol() + "-" + request.getParameters() + "-" + request.getMethod() + "-" + request.getContentType() +
-//                        "-" + request.getHeaderNames() + "-" + request.getHeader("Upgrade") + "-" + request.getRequestType());
             return request;
         }
         if (readBuffer.buffer().remaining() == readBuffer.buffer().capacity()) {
@@ -77,6 +86,16 @@ public class HttpRequestHandler implements AioHandler {
 
     @Override
     public void encode(Packet packet, ChannelContext channelContext) {
+        System.out.println("编码");
+        if (packet instanceof AbstractResponse) {
+            AbstractResponse packet1 = (AbstractResponse) packet;
+            BufferOutputStream bufferOutputStream = channelContext.getAttr("BufferOutputStream", BufferOutputStream.class);
+            try {
+                bufferOutputStream.write(packet1.writeByte);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
