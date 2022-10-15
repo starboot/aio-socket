@@ -1,9 +1,13 @@
 <p align="center">
 	<img alt="logo" src="https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-logo.png">
+	<img alt="OSCS Status" src="https://www.oscs1024.com/platform/badge/mxd888/aio-socket.svg?size=large">
 </p>
 <h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket 2.10.1.v20211002-RELEASE</h2>
 <h4 align="center">一款强大且轻量的面向网络层通讯框架</h4>
 <p align="center">
+    <a href="https://www.oscs1024.com/project/oscs/mxd888/aio-socket?ref=badge_small"><img 
+            src="https://www.oscs1024.com/platform/badge/mxd888/aio-socket.svg?size=small" 
+            alt="OSCS Status"/></a>
 	<a href="https://gitee.com/mxd_2022/aio-socket/stargazers"><img
             src="https://gitee.com/mxd_2022/aio-socket/badge/star.svg?theme=dark"/></a>
 	<a href="https://gitee.com/mxd_2022/aio-socket"><img 
@@ -37,7 +41,6 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 
 ## 软件架构
 给大家画个架构图🎉 （我太笨了用了免费软件却去不掉它自带的水印）
-
 ![Image text](https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-frame.jpg)
 <h5 align="center">单机服务器架构图</h5>
 
