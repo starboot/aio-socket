@@ -19,6 +19,7 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnitFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
@@ -38,6 +39,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * AIO Client 启动类
@@ -194,6 +196,7 @@ public class ClientBootstrap {
         if (this.memoryPool == null) {
             this.memoryPool = getConfig().getMemoryPoolFactory().create();
         }
+        Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
         if (this.config.getSocketOptions() != null) {
             for (Map.Entry<SocketOption<Object>, Object> entry : this.config.getSocketOptions().entrySet()) {
                 socketChannel.setOption(entry.getKey(), entry.getValue());
@@ -215,7 +218,7 @@ public class ClientBootstrap {
                     }
                     //连接成功则构造AIOChannelContext对象
                     channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), memoryPool.allocateBufferPage());
-                    channelContext.initTCPChannelContext(readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage()));
+                    channelContext.initTCPChannelContext(supplier);
                     handler.completed(channelContext, future);
                 } catch (Exception e) {
                     failed(e, socketChannel);

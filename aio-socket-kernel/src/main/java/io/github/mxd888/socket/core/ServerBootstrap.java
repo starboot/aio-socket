@@ -18,6 +18,7 @@ package io.github.mxd888.socket.core;
 import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnitFactory;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.AioPlugins;
@@ -39,6 +40,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * AIO Server 启动类
@@ -198,6 +200,7 @@ public class ServerBootstrap {
      */
     private void initChannelContext(AsynchronousSocketChannel channel) {
         //连接成功则构造ChannelContext对象
+        Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
         TCPChannelContext context = null;
         AsynchronousSocketChannel acceptChannel = channel;
         try {
@@ -207,7 +210,7 @@ public class ServerBootstrap {
             if (acceptChannel != null) {
                 acceptChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
                 context = this.aioChannelContextFunction.apply(acceptChannel);
-                context.initTCPChannelContext(this.readMemoryUnitFactory.createBuffer(this.memoryPool.allocateBufferPage()));
+                context.initTCPChannelContext(supplier);
             } else {
                 AIOUtil.close(channel);
             }

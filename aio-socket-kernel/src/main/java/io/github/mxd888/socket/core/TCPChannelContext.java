@@ -35,6 +35,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * 通道上下文信息类
@@ -150,8 +151,8 @@ public final class TCPChannelContext extends ChannelContext{
     /**
      * 初始化TCPChannelContext
      */
-    void initTCPChannelContext(MemoryUnit readBuffer) {
-        this.readBuffer = readBuffer;
+    void initTCPChannelContext(Supplier<MemoryUnit> supplier) {
+        this.readBuffer = supplier.get();
         this.readBuffer.buffer().flip();
         signalRead(false);
     }

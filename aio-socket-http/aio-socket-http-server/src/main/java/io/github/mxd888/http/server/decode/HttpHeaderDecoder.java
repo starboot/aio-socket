@@ -54,7 +54,7 @@ class HttpHeaderDecoder extends AbstractDecoder {
         if (name == null) {
             return this;
         }
-//        System.out.println("headerName: " + name);
+//        System.out.println("headerName: " + name.getAttach());
         request.setHeaderTemp(name);
         return headerValueDecoder.decode(byteBuffer, channelContext, request);
     }
@@ -72,7 +72,7 @@ class HttpHeaderDecoder extends AbstractDecoder {
                 }
                 return this;
             }
-//            System.out.println("value: " + value);
+//            System.out.println("value: " + value.getStringValue());
             request.setHeadValue(value.getStringValue());
             return lfDecoder.decode(byteBuffer, channelContext, request);
         }

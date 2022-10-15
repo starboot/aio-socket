@@ -162,7 +162,7 @@ public final class Request extends Packet implements HttpRequest, Reset {
 
     public final void setHeadValue(String value) {
         if (headerTemp.getAttach() != null) {
-            ServerHandler replaceServerHandler = headerTemp.getAttach().apply(value);
+            ServerHandler<?, ?> replaceServerHandler = headerTemp.getAttach().apply(value);
             if (replaceServerHandler != null) {
                 setServerHandler(replaceServerHandler);
             }
@@ -200,6 +200,8 @@ public final class Request extends Packet implements HttpRequest, Reset {
     }
 
     public void setServerHandler(ServerHandler serverHandler) {
+//        System.out.println("----3");
+//        System.out.println(serverHandler);
         this.serverHandler = serverHandler;
     }
 
