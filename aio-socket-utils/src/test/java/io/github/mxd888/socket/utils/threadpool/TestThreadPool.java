@@ -36,7 +36,7 @@ public class TestThreadPool {
         ExecutorService aioExecutor = ThreadUtils.getAioExecutor();
         testAioRunnable testSynRunnable = new testAioRunnable(aioExecutor);
         for (int i = 0; i < 100; i++) {
-            testSynRunnable.addMsg("我是" + i +"号");
+            testSynRunnable.addTask("我是" + i +"号");
             testSynRunnable.execute();
         }
     }

@@ -199,7 +199,7 @@ public class AioFullWaitQueueTest {
         @Override
         public void runTask() {
             for (int i = 0; i < ONE_MILLION; i++) {
-                aioQueue.addMsg(s);
+                aioQueue.addTask(s);
                 aioQueue.execute();
             }
         }

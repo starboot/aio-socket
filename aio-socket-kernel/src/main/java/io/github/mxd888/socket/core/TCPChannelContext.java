@@ -297,7 +297,7 @@ public final class TCPChannelContext extends ChannelContext{
      * @param packet 消息包
      */
     private void aioHandler(Packet packet) {
-        if (getAioConfig().isMultilevelModel() && handlerTask != null && handlerTask.addMsg(packet)) {
+        if (getAioConfig().isMultilevelModel() && handlerTask != null && handlerTask.addTask(packet)) {
             handlerTask.execute();
         }else {
             Packet handle = getAioConfig().getHandler().handle(this, packet);
@@ -313,7 +313,7 @@ public final class TCPChannelContext extends ChannelContext{
      * @return        如果不存在解码处理器则返回false
      */
     protected boolean runDecodeRunnable(Integer integer) {
-        if (this.decodeTask != null && this.decodeTask.addMsg(integer)) {
+        if (this.decodeTask != null && this.decodeTask.addTask(integer)) {
             this.decodeTask.execute();
             return true;
         }else {
@@ -366,7 +366,7 @@ public final class TCPChannelContext extends ChannelContext{
 
     @Override
     protected void sendPacket(Packet packet) {
-        if (this.sendTask != null && this.sendTask.addMsg(packet)) {
+        if (this.sendTask != null && this.sendTask.addTask(packet)) {
             this.sendTask.execute();
         }else {
             synchronized (this) {

@@ -50,7 +50,7 @@ public class SendTask extends AbstractQueueRunnable<Packet<?>> {
     }
 
     @Override
-    public boolean addMsg(Packet packet) {
+    public boolean addTask(Packet packet) {
         if (this.isCanceled()) {
             LOGGER.info("{}, 任务已经取消，{}添加到发送队列失败", channelContext, packet.getReq());
             return false;

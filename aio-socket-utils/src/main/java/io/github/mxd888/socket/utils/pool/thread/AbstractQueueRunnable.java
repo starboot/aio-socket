@@ -43,7 +43,7 @@ public abstract class AbstractQueueRunnable<T> extends AbstractAioRunnable {
      *
      * @return 添加状态
      */
-    public boolean addMsg(T t) {
+    public boolean addTask(T t) {
         if (this.isCanceled()) {
             LOGGER.error("task has been cancel");
             return false;
@@ -54,7 +54,7 @@ public abstract class AbstractQueueRunnable<T> extends AbstractAioRunnable {
     /**
      * 清空处理的队列消息
      */
-    public void clearMsgQueue() {
+    public void clearTaskQueue() {
         if (getTaskQueue() != null) {
             getTaskQueue().clear();
         }
