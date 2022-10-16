@@ -17,6 +17,10 @@
             <groupId>io.github.mxd888.socket</groupId>
             <artifactId>aio-socket-http-server</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.mxd888.socket</groupId>
+            <artifactId>aio-socket-codec</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

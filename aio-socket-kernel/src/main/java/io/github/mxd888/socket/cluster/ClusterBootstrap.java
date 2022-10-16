@@ -48,14 +48,14 @@ public class ClusterBootstrap {
             System.out.println(Arrays.toString(split));
             ClientBootstrap clientBootstrap = new ClientBootstrap(split[0], Integer.parseInt(split[1]), config.getHandler());
             ChannelContext start = clientBootstrap.start();
-            Packet packet = new Packet();
-            packet.setToId(split[0]);
-            // 写入自己的IP
-            packet.setFromId(this.config.getHost());
-            // 设置内核集群消息标识位
-            packet.setEntity(new ClusterEntity(true));
-            // 向其他服务器注册自己
-            Aio.send(start, packet);
+//            Packet packet = new Packet();
+//            packet.setToId(split[0]);
+//            // 写入自己的IP
+//            packet.setFromId(this.config.getHost());
+//            // 设置内核集群消息标识位
+//            packet.setEntity(new ClusterEntity(true));
+//            // 向其他服务器注册自己
+//            Aio.send(start, packet);
             // 绑定通道ID
             start.setId(split[0]);
             // 绑定到集群服务器组

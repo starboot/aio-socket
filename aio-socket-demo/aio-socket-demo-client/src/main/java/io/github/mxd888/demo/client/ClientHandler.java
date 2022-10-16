@@ -15,15 +15,14 @@
  */
 package io.github.mxd888.demo.client;
 
-import io.github.mxd888.demo.common.Handler;
 import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.codec.string.StringHandler;
 import io.github.mxd888.socket.core.ChannelContext;
 
-
-public class ClientHandler extends Handler {
+public class ClientHandler extends StringHandler {
 
     @Override
-    public Packet handle(ChannelContext channelContext, Packet packet) {
+    public Packet<String> handle(ChannelContext channelContext, Packet<String> packet) {
         return null;
     }
 }

@@ -27,7 +27,7 @@ import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public interface AioHandler {
+public interface AioHandler<T> {
 
     /**
      * 消息处理回调方法
@@ -36,7 +36,7 @@ public interface AioHandler {
      * @param packet         消息包
      * @return               返回Packet消息包
      */
-    Packet handle(ChannelContext channelContext, Packet packet);
+    Packet<T> handle(ChannelContext channelContext, Packet<T> packet);
 
     /**
      * 解码回调方法
@@ -46,7 +46,7 @@ public interface AioHandler {
      * @return                      返回Packet消息包
      * @throws AioDecoderException  解码异常
      */
-    Packet decode(final MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException;
+    Packet<T> decode(final MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException;
 
     /**
      * 编码回调方法
@@ -54,7 +54,7 @@ public interface AioHandler {
      * @param packet         需要编码消息包
      * @param channelContext 用户上下文
      */
-    void encode(Packet packet, ChannelContext channelContext);
+    void encode(Packet<T> packet, ChannelContext channelContext);
 
     /**
      * 状态机事件,当枚举事件发生时由框架触发该方法

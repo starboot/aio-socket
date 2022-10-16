@@ -157,9 +157,10 @@
 
     <modules>
         <module>../aio-socket-kernel</module>
-        <module>../aio-socket-http/aio-socket-http-parent</module>
+        <module>../aio-socket-codec-http/aio-socket-http-parent</module>
         <module>../aio-socket-codec</module>
         <module>../aio-socket-utils</module>
+        <module>../aio-socket-codec-mqtt</module>
     </modules>
 
     <build>
