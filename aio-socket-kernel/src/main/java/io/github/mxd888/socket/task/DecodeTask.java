@@ -28,18 +28,18 @@ public class DecodeTask extends AbstractQueueRunnable<Integer> {
         super(executor);
         this.channelContext = channelContext;
         this.aioConfig = channelContext.getAioConfig();
-        getMsgQueue();
+        getTaskQueue();
     }
 
     public DecodeTask(ChannelContext channelContext, Executor executor, int maxExecuteNum) {
         super(executor, maxExecuteNum);
         this.channelContext = channelContext;
         this.aioConfig = channelContext.getAioConfig();
-        getMsgQueue();
+        getTaskQueue();
     }
 
     @Override
-    public AioQueue<Integer> getMsgQueue() {
+    public AioQueue<Integer> getTaskQueue() {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {

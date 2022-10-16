@@ -44,7 +44,7 @@ public class HandlerTask extends AbstractQueueRunnable<Packet> {
         super(executor);
         this.channelContext = channelContext;
         aioConfig = channelContext.getAioConfig();
-        getMsgQueue();
+        getTaskQueue();
     }
 
     public void handler(Packet packet) {
@@ -77,7 +77,7 @@ public class HandlerTask extends AbstractQueueRunnable<Packet> {
     }
 
     @Override
-    public AioQueue<Packet> getMsgQueue() {
+    public AioQueue<Packet> getTaskQueue() {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {

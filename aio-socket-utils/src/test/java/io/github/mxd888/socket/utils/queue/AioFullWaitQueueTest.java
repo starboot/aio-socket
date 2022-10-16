@@ -192,7 +192,7 @@ public class AioFullWaitQueueTest {
         }
 
         @Override
-        public AioQueue<String> getMsgQueue() {
+        public AioQueue<String> getTaskQueue() {
             return null;
         }
 
@@ -218,7 +218,7 @@ public class AioFullWaitQueueTest {
         }
 
         @Override
-        public AioQueue<String> getMsgQueue() {
+        public AioQueue<String> getTaskQueue() {
             return queue;
         }
 

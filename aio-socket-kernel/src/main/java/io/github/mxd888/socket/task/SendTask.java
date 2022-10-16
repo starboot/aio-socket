@@ -32,7 +32,7 @@ import java.util.concurrent.Executor;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class SendTask extends AbstractQueueRunnable<Packet> {
+public class SendTask extends AbstractQueueRunnable<Packet<?>> {
 
     private static final Logger LOGGER	= LoggerFactory.getLogger(SendTask.class);
 
@@ -40,13 +40,13 @@ public class SendTask extends AbstractQueueRunnable<Packet> {
 
     private final AioHandler aioHandler;
 
-    private AioQueue<Packet> msgQueue = null;
+    private AioQueue<Packet<?>> msgQueue = null;
 
     public SendTask(ChannelContext channelContext, Executor executor) {
         super(executor);
         this.channelContext = channelContext;
         this.aioHandler = channelContext.getAioConfig().getHandler();
-        getMsgQueue();
+        getTaskQueue();
     }
 
     @Override
@@ -96,7 +96,7 @@ public class SendTask extends AbstractQueueRunnable<Packet> {
     }
 
     @Override
-    public AioQueue<Packet> getMsgQueue() {
+    public AioQueue<Packet<?>> getTaskQueue() {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {

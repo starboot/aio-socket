@@ -75,7 +75,7 @@ public class TestThreadPool {
         }
 
         @Override
-        public AioQueue<String> getMsgQueue() {
+        public AioQueue<String> getTaskQueue() {
             if (msgQueue == null) {
                 synchronized (this) {
                     if (msgQueue == null) {

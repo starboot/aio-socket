@@ -48,26 +48,26 @@ public abstract class AbstractQueueRunnable<T> extends AbstractAioRunnable {
             LOGGER.error("task has been cancel");
             return false;
         }
-        return getMsgQueue().offer(t);
+        return getTaskQueue().offer(t);
     }
 
     /**
      * 清空处理的队列消息
      */
     public void clearMsgQueue() {
-        if (getMsgQueue() != null) {
-            getMsgQueue().clear();
+        if (getTaskQueue() != null) {
+            getTaskQueue().clear();
         }
     }
 
     @Override
     public boolean isNeededExecute() {
-        return  (getMsgQueue() != null && !getMsgQueue().isEmpty()) && !this.isCanceled();
+        return  (getTaskQueue() != null && !getTaskQueue().isEmpty()) && !this.isCanceled();
     }
 
     /**
      * 获取消息队列
      * @return 消息队列
      */
-    public abstract AioQueue<T> getMsgQueue();
+    public abstract AioQueue<T> getTaskQueue();
 }
