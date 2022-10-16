@@ -60,8 +60,7 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 </dependency>
 ~~~
 #### 起步
-我写了demo工程，项目在"aio-socket/aio-socket-demo"下有Server和Client启动即可查看百万通信量效果。<br>
-aio-socket未来会向IM方向进行优化，成为一款专为IM定制的通讯内核，其他IOT领域、RPC等暂不考虑 <br>
+https://mxd888.github.io <br>
 aio-socket还在快速迭代中，功能并未完善，大家尽情期待....
 ## 联系方式
 
