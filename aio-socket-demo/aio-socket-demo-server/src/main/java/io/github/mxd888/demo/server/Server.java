@@ -15,7 +15,6 @@
  */
 package io.github.mxd888.demo.server;
 
-import io.github.mxd888.demo.common.DemoPacket;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.ServerBootstrap;
