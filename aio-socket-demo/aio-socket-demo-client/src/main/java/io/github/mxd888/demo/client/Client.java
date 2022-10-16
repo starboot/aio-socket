@@ -55,27 +55,6 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
-//        byte b = (byte) 0x7f;
-//        System.out.println(b);
-
-        PrintStream ps = new PrintStream(System.out){
-            @Override
-            public void println(String x) {
-                if(filterLog(x)){
-                    return;
-                }
-                super.println(x);
-            }
-            @Override
-            public void print(String s) {
-                if(filterLog(s)){
-                    return;
-                }
-                super.print(s);
-            }
-        };
-        System.setOut(ps);
-
         Packet<String> demoPacket = new Packet<>("hello aio-socket");
 //        demoPacket.setReq("177");   设置同步位
         ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors());
@@ -111,10 +90,6 @@ public class Client {
 
             }).start();
         }
-    }
-
-    private static boolean filterLog(String x){
-        return x.contains("aio-socket version: 2.10.1.v20211002-RELEASE;");
     }
 
 }
