@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>aio-socket-parent</artifactId>
+        <groupId>io.github.mxd888.socket</groupId>
+        <version>3.8.6.v20221002-RELEASE</version>
+        <relativePath>../aio-socket-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>aio-socket-all</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.mxd888.socket</groupId>
+            <artifactId>aio-socket-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.mxd888.socket</groupId>
+            <artifactId>aio-socket-kernel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.mxd888.socket</groupId>
+            <artifactId>aio-socket-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.mxd888.socket</groupId>
+            <artifactId>aio-socket-codec-mqtt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.mxd888.socket</groupId>
+            <artifactId>aio-socket-http-common</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

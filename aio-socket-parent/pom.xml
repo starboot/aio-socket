@@ -106,6 +106,11 @@
                 <version>${aio-socket.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.github.mxd888.socket</groupId>
+                <artifactId>aio-socket-codec-mqtt</artifactId>
+                <version>${aio-socket.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
@@ -161,6 +166,7 @@
         <module>../aio-socket-codec</module>
         <module>../aio-socket-utils</module>
         <module>../aio-socket-codec-mqtt</module>
+        <module>../aio-socket-all</module>
     </modules>
 
     <build>
