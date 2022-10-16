@@ -192,7 +192,7 @@ public final class Worker implements Runnable {
                     e.printStackTrace();
                     config.getHandler().stateEvent(session, StateMachineEnum.DECODE_EXCEPTION, e);
                 } finally {
-                    session.getWriteBuffer().flush();
+//                    session.getWriteBuffer().flush();
                     readyBuffer.clean();
                 }
             };

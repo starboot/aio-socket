@@ -86,12 +86,16 @@ public class HttpRequestHandler implements AioHandler {
 
     @Override
     public void encode(Packet packet, ChannelContext channelContext) {
-        System.out.println("编码");
         if (packet instanceof AbstractResponse) {
             AbstractResponse packet1 = (AbstractResponse) packet;
             BufferOutputStream bufferOutputStream = channelContext.getAttr("BufferOutputStream", BufferOutputStream.class);
             try {
-                bufferOutputStream.write(packet1.writeByte);
+                if (packet1.writeByte != null) {
+                    bufferOutputStream.write(packet1.writeByte);
+                }else {
+                    // 无消息体只写头
+                    bufferOutputStream.flush();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

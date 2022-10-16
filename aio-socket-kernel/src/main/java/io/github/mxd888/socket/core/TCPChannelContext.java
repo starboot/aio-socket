@@ -286,8 +286,9 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private void setAioExecutor(ExecutorService aioThreadPoolExecutor) {
         if (aioThreadPoolExecutor != null) {
+            Consumer<Boolean> consumer = b -> byteBuf.flush();
             this.handlerTask = new HandlerTask(this, aioThreadPoolExecutor);
-            this.sendTask = new SendTask(this, aioThreadPoolExecutor);
+            this.sendTask = new SendTask(this, aioThreadPoolExecutor, consumer);
             this.decodeTask = new DecodeTask(this, aioThreadPoolExecutor);
         }
     }
@@ -302,7 +303,7 @@ public final class TCPChannelContext extends ChannelContext{
         }else {
             Packet handle = getAioConfig().getHandler().handle(this, packet);
             if (handle != null) {
-                sendPacket(handle);
+                sendPacket(handle, false);
             }
         }
     }
@@ -365,8 +366,8 @@ public final class TCPChannelContext extends ChannelContext{
     }
 
     @Override
-    protected void sendPacket(Packet packet) {
-        if (this.sendTask != null && this.sendTask.addTask(packet)) {
+    protected void sendPacket(Packet packet, boolean isBlock) {
+        if (!isBlock && this.sendTask != null && this.sendTask.addTask(packet)) {
             this.sendTask.execute();
         }else {
             synchronized (this) {

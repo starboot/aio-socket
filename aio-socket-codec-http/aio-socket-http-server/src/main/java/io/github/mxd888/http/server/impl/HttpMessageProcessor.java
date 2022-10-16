@@ -75,7 +75,8 @@ public class HttpMessageProcessor {
                 try {
                     finishResponse(abstractRequest);
                     if (thread != Thread.currentThread()) {
-                        context.getWriteBuffer().flush();
+                        // 处理出现异常了，直接关掉就行
+//                        context.getWriteBuffer().flush();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -130,7 +131,8 @@ public class HttpMessageProcessor {
                     if (keepConnection(abstractRequest, keepAlive)) {
                         finishResponse(abstractRequest);
                         if (thread != Thread.currentThread()) {
-                            context.getWriteBuffer().flush();
+                            // 关闭
+//                            context.getWriteBuffer().flush();
                         }
                     }
                 } catch (HttpException e) {

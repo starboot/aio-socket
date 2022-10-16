@@ -14,7 +14,7 @@ public class ServerUDPHandler extends UDPHandler {
         try {
             channelContext.getWriteBuffer().writeInt(16);
             channelContext.getWriteBuffer().write("hello aio-socket".getBytes());
-            channelContext.getWriteBuffer().flush();
+//            channelContext.getWriteBuffer().flush();
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -209,6 +209,11 @@ class AbstractResponse extends Packet implements HttpResponse, Reset {
 
 
     public final void write(byte[] buffer) throws IOException {
+        if (buffer == null) {
+            writeByte = null;
+            Aio.bSend(outputStream.getChannelContext(), this);
+            return;
+        }
         this.write(buffer, 0, buffer.length);
     }
 
@@ -223,9 +228,7 @@ class AbstractResponse extends Packet implements HttpResponse, Reset {
                 writeByte[i++] = buffer[j];
             }
         }
-        Aio.send(outputStream.getChannelContext(), this);
-
-//        outputStream.write(buffer);
+        Aio.bSend(outputStream.getChannelContext(), this);
     }
 
     @Override

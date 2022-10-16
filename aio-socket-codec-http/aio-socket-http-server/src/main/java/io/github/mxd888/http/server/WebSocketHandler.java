@@ -36,8 +36,9 @@ public abstract class WebSocketHandler implements ServerHandler<WebSocketRequest
         response.setHeader(HeaderNameEnum.UPGRADE.getName(), HeaderValueEnum.WEBSOCKET.getName());
         response.setHeader(HeaderNameEnum.CONNECTION.getName(), HeaderValueEnum.UPGRADE.getName());
         response.setHeader(HeaderNameEnum.Sec_WebSocket_Accept.getName(), accept);
-        OutputStream outputStream = response.getOutputStream();
-        outputStream.flush();
+//        OutputStream outputStream = response.getOutputStream();
+//        outputStream.flush();
+        response.write(null);
     }
 
     @Override

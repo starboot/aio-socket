@@ -34,7 +34,7 @@ public class UDPClient {
                         synchronized (session.getWriteBuffer()) {
                             session.getWriteBuffer().writeInt(bytes.length);
                             session.getWriteBuffer().write(bytes);
-                            session.getWriteBuffer().flush();
+//                            session.getWriteBuffer().flush();
                         }
                         Thread.sleep(10);
                     }

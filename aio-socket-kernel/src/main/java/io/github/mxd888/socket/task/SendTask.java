@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 /**
  * 消息发送逻辑执行器
@@ -40,10 +41,13 @@ public class SendTask extends AbstractQueueRunnable<Packet<?>> {
 
     private final AioHandler aioHandler;
 
+    private final Consumer<Boolean> consumer;
+
     private AioQueue<Packet<?>> msgQueue = null;
 
-    public SendTask(ChannelContext channelContext, Executor executor) {
+    public SendTask(ChannelContext channelContext, Executor executor, Consumer<Boolean> consumer) {
         super(executor);
+        this.consumer = consumer;
         this.channelContext = channelContext;
         this.aioHandler = channelContext.getAioConfig().getHandler();
         getTaskQueue();
@@ -87,7 +91,7 @@ public class SendTask extends AbstractQueueRunnable<Packet<?>> {
             return;
         }
         // 发送
-        channelContext.getWriteBuffer().flush();
+        consumer.accept(true);
     }
 
     @Override

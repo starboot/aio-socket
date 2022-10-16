@@ -60,7 +60,11 @@ public class Aio {
      * @param packet         数据包
      */
     public static void send(ChannelContext channelContext, Packet packet) {
-        channelContext.sendPacket(packet);
+        channelContext.sendPacket(packet, false);
+    }
+
+    public static void bSend(ChannelContext channelContext, Packet packet) {
+        channelContext.sendPacket(packet, true);
     }
 
     public static void sendToID(String channelContextId, Packet packet, AioConfig config) {

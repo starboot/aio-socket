@@ -250,5 +250,5 @@ public abstract class ChannelContext {
     /**
      * 发送器
      */
-    protected abstract void sendPacket(Packet packet);
+    protected abstract void sendPacket(Packet packet, boolean isBlock);
 }

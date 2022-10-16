@@ -61,11 +61,9 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
             writeBuffer.write(start);
             writeBuffer.write(b, off, len);
             writeBuffer.write(Constant.CRLF_BYTES);
-            writeBuffer.flush();
         } else {
             System.out.println("不chunked");
             writeBuffer.write(b, off, len);
-            writeBuffer.flush();
         }
     }
 
@@ -89,8 +87,8 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
 
     @Override
     public final void flush() throws IOException {
-        System.out.println("直接flush");
         writeHeader();
+        System.out.println("直接输出");
         writeBuffer.flush();
     }
 
@@ -105,6 +103,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
             writeBuffer.write(Constant.CHUNKED_END_BYTES);
         }
         closed = true;
+        // 在这里输出一下
     }
 
     protected final byte[] getHeaderNameBytes(String name) {

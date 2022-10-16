@@ -94,7 +94,8 @@ public class WebSocketResponseImpl extends AbstractResponse implements WebSocket
             } else {
                 System.arraycopy(bytes, offset, writBytes, 2, length);
             }
-            this.getOutputStream().write(writBytes, 0, length < Constant.WS_PLAY_LOAD_126 ? 2 + length : 4 + length);
+            this.write(writBytes, 0, length < Constant.WS_PLAY_LOAD_126 ? 2 + length : 4 + length);
+//            this.getOutputStream().write(writBytes, 0, length < Constant.WS_PLAY_LOAD_126 ? 2 + length : 4 + length);
             offset += length;
         }
     }
