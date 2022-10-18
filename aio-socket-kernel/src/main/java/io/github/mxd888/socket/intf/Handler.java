@@ -16,7 +16,6 @@
 package io.github.mxd888.socket.intf;
 
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
