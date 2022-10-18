@@ -25,11 +25,6 @@ public abstract class AbstractQueueRunnable<T> extends AbstractAioRunnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueueRunnable.class);
 
-    /**
-     * Instantiates a new abstract syn runnable.
-     *
-     * @param executor 并发安全线程池
-     */
     protected AbstractQueueRunnable(Executor executor) {
         super(executor);
     }
@@ -41,7 +36,7 @@ public abstract class AbstractQueueRunnable<T> extends AbstractAioRunnable {
     /**
      * 添加消息
      *
-     * @return 添加状态
+     * @return 添加任务
      */
     public boolean addTask(T t) {
         if (this.isCanceled()) {
@@ -67,6 +62,7 @@ public abstract class AbstractQueueRunnable<T> extends AbstractAioRunnable {
 
     /**
      * 获取消息队列
+     *
      * @return 消息队列
      */
     public abstract AioQueue<T> getTaskQueue();

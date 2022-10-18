@@ -18,6 +18,7 @@ package io.github.mxd888.socket.udp;
 import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
+import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
@@ -185,7 +186,10 @@ public final class Worker implements Runnable {
                             config.getHandler().stateEvent(session, StateMachineEnum.DECODE_EXCEPTION, new AioDecoderException("decode result is null, buffer size: " + buffer.remaining()));
                             break;
                         } else {
-                            config.getHandler().handle(session, request);
+                            Packet handle = config.getHandler().handle(session, request);
+                            if (handle != null) {
+                                Aio.send(session, handle);
+                            }
                         }
                     } while (buffer.hasRemaining());
                 } catch (Throwable e) {

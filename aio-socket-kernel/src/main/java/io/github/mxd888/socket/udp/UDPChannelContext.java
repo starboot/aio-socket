@@ -79,6 +79,13 @@ final class UDPChannelContext extends ChannelContext {
 
     @Override
     protected void sendPacket(Packet packet, boolean isBlock) {
-        throw  new UnsupportedOperationException("UDPChannelContext don't support use sendRunnable");
+        synchronized (this) {
+            getAioConfig().getHandler().encode(packet, this);
+        }
+        flush();
+    }
+
+    protected void UDPFlush() {
+        flush();
     }
 }

@@ -82,7 +82,7 @@ public final class UDPChannel {
         if (writeSemaphore.tryAcquire() && responseTasks.isEmpty() && send(memoryUnit.buffer(), session) > 0) {
             memoryUnit.clean();
             writeSemaphore.release();
-//            session.getWriteBuffer().flush();
+            session.UDPFlush();
             return;
         }
         responseTasks.offer(new ResponseUnit(session, memoryUnit));
@@ -116,7 +116,7 @@ public final class UDPChannel {
             }
             if (send(responseUnit.response.buffer(), responseUnit.session) > 0) {
                 responseUnit.response.clean();
-//                responseUnit.session.getWriteBuffer().flush();
+                responseUnit.session.UDPFlush();
             } else {
                 failResponseUnit = responseUnit;
                 LOGGER.warn("send fail,will retry...");

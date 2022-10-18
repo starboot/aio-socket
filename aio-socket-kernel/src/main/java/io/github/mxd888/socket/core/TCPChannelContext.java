@@ -116,7 +116,7 @@ public final class TCPChannelContext extends ChannelContext{
      * @param config                 配置项
      * @param readCompletionHandler  读回调
      * @param writeCompletionHandler 写回调
-     * @param memoryBlock             绑定内存页
+     * @param memoryBlock            绑定内存页
      */
     TCPChannelContext(AsynchronousSocketChannel channel,
                       final AioConfig config,
@@ -247,7 +247,7 @@ public final class TCPChannelContext extends ChannelContext{
             close();
         } else {
             //也许此时有新的消息通过write方法添加到writeCacheQueue中
-            byteBuf.flush();
+            flush();
         }
     }
 
@@ -286,7 +286,7 @@ public final class TCPChannelContext extends ChannelContext{
      */
     private void setAioExecutor(ExecutorService aioThreadPoolExecutor) {
         if (aioThreadPoolExecutor != null) {
-            Consumer<Boolean> consumer = b -> byteBuf.flush();
+            Consumer<Boolean> consumer = b -> flush();
             this.handlerTask = new HandlerTask(this, aioThreadPoolExecutor);
             this.sendTask = new SendTask(this, aioThreadPoolExecutor, consumer);
             this.decodeTask = new DecodeTask(this, aioThreadPoolExecutor);
@@ -344,7 +344,7 @@ public final class TCPChannelContext extends ChannelContext{
             close(true);
         } else {
             getAioConfig().getHandler().stateEvent(this, StateMachineEnum.CHANNEL_CLOSING, null);
-            byteBuf.flush();
+            flush();
         }
     }
 
@@ -373,7 +373,7 @@ public final class TCPChannelContext extends ChannelContext{
             synchronized (this) {
                 getAioConfig().getHandler().encode(packet, this);
             }
-            getWriteBuffer().flush();
+            flush();
         }
     }
 

@@ -13,30 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.socket.exception;
+package io.github.mxd888.socket.codec.bytes;
 
-/**
- * aio-socket编码异常处理
- */
-public class AioEncoderException extends RuntimeException {
+import io.github.mxd888.socket.Packet;
 
-    public AioEncoderException() {
-        super();
-    }
-
-    public AioEncoderException(String message) {
-        super(message);
-    }
-
-    public AioEncoderException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public AioEncoderException(Throwable cause) {
-        super(cause);
-    }
-
-    protected AioEncoderException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+public class BytesPacket extends Packet {
 }

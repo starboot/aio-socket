@@ -33,17 +33,16 @@ public class UDPHandler extends AioHandler {
         }
         byte[] b = new byte[length];
         buffer.get(b);
-        Packet packet = new Packet();
-        packet.setResp(new String(b, StandardCharsets.UTF_8));
-        return packet;
+        return new UDPPacket(new String(b, StandardCharsets.UTF_8));
     }
 
     @Override
     public void encode(Packet packet, ChannelContext channelContext) {
         WriteBuffer writeBuffer = channelContext.getWriteBuffer();
         try {
-            writeBuffer.writeInt(packet.getResp().getBytes().length);
-            writeBuffer.write(packet.getResp().getBytes());
+            UDPPacket packet1 = (UDPPacket) packet;
+            writeBuffer.writeInt(packet1.getData().getBytes().length);
+            writeBuffer.write(packet1.getData().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,6 +50,6 @@ public class UDPHandler extends AioHandler {
 
     @Override
     public ProtocolEnum name() {
-        return null;
+        return ProtocolEnum.PRIVATE_UDP;
     }
 }

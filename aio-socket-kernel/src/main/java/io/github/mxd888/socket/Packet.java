@@ -61,10 +61,6 @@ public class Packet implements Serializable {
      */
     private ClusterEntity entity;
 
-    public Packet() {
-
-    }
-
     public byte getVersionID() {
         return versionID;
     }

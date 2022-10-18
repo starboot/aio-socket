@@ -135,6 +135,13 @@ public abstract class ChannelContext {
     }
 
     /**
+     * 通道数据输出出
+     */
+    protected void flush(){
+        byteBuf.flush();
+    }
+
+    /**
      * 获取读buffer，不要轻易用
      *
      * @return 读虚拟buffer
@@ -173,10 +180,20 @@ public abstract class ChannelContext {
         this.id = id;
     }
 
+    /**
+     * 获取通道所属协议
+     *
+     * @return 协议枚举
+     */
     public ProtocolEnum getProtocol() {
         return protocol;
     }
 
+    /**
+     * 设置通道所属协议
+     *
+     * @param protocol 协议枚举
+     */
     public void setProtocol(ProtocolEnum protocol) {
         this.protocol = protocol;
     }

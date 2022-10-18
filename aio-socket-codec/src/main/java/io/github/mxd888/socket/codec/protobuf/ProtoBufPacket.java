@@ -13,19 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.socket.test.mutiClient;
+package io.github.mxd888.socket.codec.protobuf;
 
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.test.core.DemoPacket;
-import io.github.mxd888.socket.test.core.DemoHandler;
 
-public class ServerDemoHandler extends DemoHandler {
-    @Override
-    public Packet handle(ChannelContext channelContext, Packet packet) {
-        if (packet instanceof DemoPacket) {
-            return packet;
-        }
-        return null;
-    }
+public class ProtoBufPacket extends Packet {
 }

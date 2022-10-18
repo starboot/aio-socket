@@ -20,7 +20,6 @@ import io.github.mxd888.socket.ProtocolEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
-import io.github.mxd888.socket.intf.Handler;
 import io.github.mxd888.socket.utils.AIOUtil;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 

@@ -1,3 +1,18 @@
+/*
+ *    Copyright 2019 The aio-socket Project
+ *
+ *    The aio-socket Project Licenses this file to you under the Apache License,
+ *    Version 2.0 (the "License"); you may not use this file except in compliance
+ *    with the License. You may obtain a copy of the License at:
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package io.github.mxd888.socket.test.myEnum;
 
 import sun.reflect.ConstructorAccessor;
@@ -14,8 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @description: 生成枚举工具类
- * @create: 2021-06-03 10:56
+ * 生成枚举工具类
  **/
 public class GenerateEnumUtils {
 
@@ -27,7 +41,6 @@ public class GenerateEnumUtils {
      * @param enumClass 枚举类
      * @param enumName  枚举名称 (不可重复)
      * @param params    属性参数，按顺序写入
-     * @date 2021/6/3 12:00
      */
     public static <T extends Enum<?>> void addEnum(Class<T> enumClass, String enumName, Object... params) {
         sanityChecks(enumClass, enumName);
@@ -76,8 +89,6 @@ public class GenerateEnumUtils {
      *
      * @param enumClass 枚举类
      * @param enumName  枚举名称
-     * @return void
-     * @date 2021/6/3 11:04
      */
     private static <T extends Enum<?>> void sanityChecks(Class<T> enumClass, String enumName) {
         // 判断是否枚举类
@@ -96,7 +107,6 @@ public class GenerateEnumUtils {
      * @param additionalTypes  属性类型
      * @param additionalValues 属性值
      * @return java.lang.Object
-     * @date 2021/6/3 11:55
      */
     private static Object makeEnum(Class<?> enumClass, String enumName, int ordinal, Class<?>[] additionalTypes, Object[] additionalValues) throws Exception {
         Object[] params = new Object[additionalValues.length + 2];
@@ -113,7 +123,6 @@ public class GenerateEnumUtils {
      * @param additionalParameterTypes 附加参数类型
      * @return sun.reflect.ConstructorAccessor
      * @throws NoSuchMethodException 未获取到
-     * @date 2021/6/3 11:59
      */
     private static ConstructorAccessor getConstructorAccessor(Class<?> enumClass, Class<?>[] additionalParameterTypes) throws NoSuchMethodException {
         Class<?>[] parameterTypes = new Class[additionalParameterTypes.length + 2];
@@ -130,8 +139,6 @@ public class GenerateEnumUtils {
      * @param field  属性对象
      * @param target 目标对象
      * @param value  值
-     * @return void
-     * @date 2021/6/3 12:23
      */
     private static void setFailsafeFieldValue(Field field, Object target, Object value) throws NoSuchFieldException, IllegalAccessException {
         // 设置可访问

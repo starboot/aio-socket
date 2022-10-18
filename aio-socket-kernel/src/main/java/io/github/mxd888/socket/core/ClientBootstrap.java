@@ -22,7 +22,6 @@ import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnitFactory;
-import io.github.mxd888.socket.intf.Handler;
 import io.github.mxd888.socket.plugins.Plugins;
 import io.github.mxd888.socket.utils.AIOUtil;
 import io.github.mxd888.socket.utils.QuickTimerTask;

@@ -1,7 +1,10 @@
 package io.github.mxd888.socket.test.udp.client;
 
+import io.github.mxd888.socket.ProtocolEnum;
+import io.github.mxd888.socket.core.Aio;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.plugins.MonitorPlugin;
+import io.github.mxd888.socket.test.udp.UDPPacket;
 import io.github.mxd888.socket.udp.UDPBootstrap;
 import io.github.mxd888.socket.udp.UDPChannel;
 import io.github.mxd888.socket.udp.Worker;
@@ -19,27 +22,26 @@ public class UDPClient {
         Worker worker = new Worker(memoryPool, Runtime.getRuntime().availableProcessors());
         int c = 5;
         CountDownLatch count = new CountDownLatch(c);
-        byte[] bytes = "hello aio-socket".getBytes();
+        UDPPacket packet = new UDPPacket("hello aio-socket udp");
+        ClientUDPHandler udpHandler = new ClientUDPHandler();
         for (int i = 0; i < c; i++) {
             new Thread(() -> {
                 try {
-                    UDPBootstrap bootstrap = new UDPBootstrap(new ClientUDPHandler(), worker);
+                    UDPBootstrap bootstrap = new UDPBootstrap(udpHandler, worker);
                     bootstrap
                             .addPlugin(new MonitorPlugin(5))
                             .setBufferFactory(() -> memoryPool)
                             .setReadBufferSize(1024);
                     UDPChannel channel = bootstrap.open();
                     ChannelContext session = channel.connect("localhost", 8888);
-                    for (int i1 = 0; i1 < 10; i1++) {
-                        synchronized (session.getWriteBuffer()) {
-                            session.getWriteBuffer().writeInt(bytes.length);
-                            session.getWriteBuffer().write(bytes);
-//                            session.getWriteBuffer().flush();
-                        }
+                    session.setProtocol(udpHandler.name());
+                    for (int i1 = 0; i1 < 2; i1++) {
+                        Aio.send(session, packet);
                         Thread.sleep(10);
                     }
                     count.countDown();
                     // 关闭会话
+                    Thread.sleep(5000);
                     session.close();
                     System.out.println("发送完毕");
                     bootstrap.shutdown();

@@ -20,7 +20,6 @@ import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.AioConfig;
-import io.github.mxd888.socket.intf.Handler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
