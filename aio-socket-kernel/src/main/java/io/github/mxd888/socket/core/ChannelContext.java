@@ -16,6 +16,7 @@
 package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.ProtocolEnum;
 import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.utils.queue.AioFullWaitQueue;
@@ -39,9 +40,34 @@ public abstract class ChannelContext {
     private String id;
 
     /**
+     * 附件对象
+     */
+    private Object attachment;
+
+    /**
      * 输出流，用于往输出buffer里面输入数据的对象
      */
     protected WriteBuffer byteBuf;
+
+    /**
+     * 当前会话所属协议
+     */
+    private ProtocolEnum protocol;
+
+    /**
+     * 存放当前ChannelContext未解码的虚拟buffer
+     */
+    private AioQueue<MemoryUnit> oldByteBufferQueue;
+
+    /**
+     * 自定义属性Map
+     */
+    private final Map<String, Object> attr = new HashMap<>();
+
+    /**
+     * 当前会话状态
+     */
+    protected byte status = CHANNEL_STATUS_ENABLED;
 
     /**
      * ChannelContext状态:已关闭
@@ -57,26 +83,6 @@ public abstract class ChannelContext {
      * ChannelContext状态:正常
      */
     protected static final byte CHANNEL_STATUS_ENABLED = 3;
-
-    /**
-     * 当前会话状态
-     */
-    protected byte status = CHANNEL_STATUS_ENABLED;
-
-    /**
-     * 附件对象
-     */
-    private Object attachment;
-
-    /**
-     * 自定义属性Map
-     */
-    private final Map<String, Object> attr = new HashMap<>();
-
-    /**
-     * 存放当前ChannelContext未解码的虚拟buffer
-     */
-    private AioQueue<MemoryUnit> oldByteBufferQueue;
 
     /**
      * 读取当前ChannelContext未解码的虚拟buffer
@@ -165,6 +171,14 @@ public abstract class ChannelContext {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    public ProtocolEnum getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(ProtocolEnum protocol) {
+        this.protocol = protocol;
     }
 
     /**

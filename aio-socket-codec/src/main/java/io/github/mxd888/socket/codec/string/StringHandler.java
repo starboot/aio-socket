@@ -1,20 +1,21 @@
 package io.github.mxd888.socket.codec.string;
 
 import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.codec.IProtocol;
+import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.intf.IProtocol;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.exception.AioDecoderException;
-import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.intf.Handler;
 import io.github.mxd888.socket.utils.AIOUtil;
+import io.github.mxd888.socket.ProtocolEnum;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
-public abstract class StringHandler implements AioHandler, IProtocol {
+public abstract class StringHandler extends AioHandler implements Handler, IProtocol {
 
     private int maxLength;
 
@@ -75,8 +76,8 @@ public abstract class StringHandler implements AioHandler, IProtocol {
     }
 
     @Override
-    public String name() {
-        return "StringProtocol";
+    public ProtocolEnum name() {
+        return ProtocolEnum.STRING;
     }
 
     public abstract Packet handle(ChannelContext channelContext, StringPacket packet);

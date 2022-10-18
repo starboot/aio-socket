@@ -5,10 +5,12 @@ import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.decode.Decoder;
 import io.github.mxd888.http.server.decode.HttpMethodDecoder;
 import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.ProtocolEnum;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
+import io.github.mxd888.socket.intf.Handler;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,7 +21,7 @@ import java.util.function.BiConsumer;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class HttpRequestHandler implements AioHandler {
+public class HttpRequestHandler extends AioHandler {
     public static final Decoder BODY_READY_DECODER = (byteBuffer, aioSession, response) -> null;
     public static final Decoder BODY_CONTINUE_DECODER = (byteBuffer, aioSession, response) -> null;
     /**
@@ -105,6 +107,11 @@ public class HttpRequestHandler implements AioHandler {
     @Override
     public void stateEvent(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
         processor.stateEvent0(channelContext, stateMachineEnum, throwable);
+    }
+
+    @Override
+    public ProtocolEnum name() {
+        return ProtocolEnum.HTTP;
     }
 }
 

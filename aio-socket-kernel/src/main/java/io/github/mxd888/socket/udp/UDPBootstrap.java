@@ -15,11 +15,12 @@
  */
 package io.github.mxd888.socket.udp;
 
+import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.core.AioConfig;
-import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.intf.Handler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -43,7 +44,7 @@ public class UDPBootstrap {
     }
 
     public UDPBootstrap(AioHandler handler) {
-        config.getPlugins().setAioHandler(handler);
+        config.getPlugins().addAioHandler(handler);
         config.setHandler(config.getPlugins());
     }
 

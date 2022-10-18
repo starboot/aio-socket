@@ -16,9 +16,11 @@
 package io.github.mxd888.socket.test.maintain;
 
 import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.ProtocolEnum;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.WriteBuffer;
 import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.intf.Handler;
 import io.github.mxd888.socket.test.core.DemoPacket;
 import io.github.mxd888.socket.utils.AIOUtil;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
@@ -26,7 +28,7 @@ import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class DemoHandler implements AioHandler {
+public class DemoHandler extends AioHandler {
 
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {
@@ -74,5 +76,10 @@ public class DemoHandler implements AioHandler {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public ProtocolEnum name() {
+        return null;
     }
 }

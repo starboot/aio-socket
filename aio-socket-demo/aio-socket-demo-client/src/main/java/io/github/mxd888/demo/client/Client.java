@@ -62,11 +62,12 @@ public class Client {
         ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors());
         AsynchronousChannelGroup asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(groupExecutor);
         MemoryPoolFactory poolFactory = () -> new MemoryPool(32 * 1024 * 1024, 10, true);
+        ClientHandler clientHandler = new ClientHandler();
         // 5000
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 // 127.0.0.1
-                ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
+                ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
                 bootstrap.setBufferFactory(poolFactory)
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 1024, 512)
@@ -78,6 +79,7 @@ public class Client {
 
                 try {
                     ChannelContext start = bootstrap.start(asynchronousChannelGroup);
+                    start.setProtocol(clientHandler.name());
                     long num = 0;
                     long startTime = System.currentTimeMillis();
                     while (num++ < Integer.MAX_VALUE) {

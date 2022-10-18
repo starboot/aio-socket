@@ -19,6 +19,7 @@ import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.ChannelContext;
+import io.github.mxd888.socket.intf.Handler;
 
 /**
  * aio-socket 插件接口
@@ -61,7 +62,7 @@ public interface Plugin extends Monitor {
      * @param stateMachineEnum 机器状态
      * @param channelContext   通道上下文
      * @param throwable        异常处理
-     * @see io.github.mxd888.socket.intf.AioHandler#stateEvent(ChannelContext, StateMachineEnum, Throwable)
+     * @see Handler#stateEvent(ChannelContext, StateMachineEnum, Throwable)
      */
     void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable);
 

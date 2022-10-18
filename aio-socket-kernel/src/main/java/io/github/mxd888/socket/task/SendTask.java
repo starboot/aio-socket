@@ -17,7 +17,7 @@ package io.github.mxd888.socket.task;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.intf.Handler;
 import io.github.mxd888.socket.utils.pool.thread.AbstractQueueRunnable;
 import io.github.mxd888.socket.utils.queue.AioFullNotifyQueue;
 import io.github.mxd888.socket.utils.queue.AioQueue;
@@ -39,7 +39,7 @@ public class SendTask extends AbstractQueueRunnable<Packet> {
 
     private final ChannelContext channelContext;
 
-    private final AioHandler aioHandler;
+    private final Handler aioHandler;
 
     private final Consumer<Boolean> consumer;
 

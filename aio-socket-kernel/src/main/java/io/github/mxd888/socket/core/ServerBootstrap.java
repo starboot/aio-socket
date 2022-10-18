@@ -15,13 +15,14 @@
  */
 package io.github.mxd888.socket.core;
 
+import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.plugins.Plugin;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnitFactory;
-import io.github.mxd888.socket.intf.AioHandler;
-import io.github.mxd888.socket.plugins.AioPlugins;
+import io.github.mxd888.socket.intf.Handler;
+import io.github.mxd888.socket.plugins.Plugins;
 import io.github.mxd888.socket.utils.AIOUtil;
 import io.github.mxd888.socket.utils.ThreadUtils;
 import org.slf4j.Logger;
@@ -121,7 +122,7 @@ public class ServerBootstrap {
     public ServerBootstrap(String host, int port, AioHandler handler) {
         this.config.setHost(host);
         this.config.setPort(port);
-        this.config.getPlugins().setAioHandler(handler);
+        this.config.getPlugins().addAioHandler(handler);
     }
 
     /**
@@ -228,7 +229,7 @@ public class ServerBootstrap {
      * 检查配置项
      */
     private void checkAndResetConfig() {
-        AioPlugins plugins = getConfig().getPlugins();
+        Plugins plugins = getConfig().getPlugins();
         getConfig().setMonitor(plugins)
                 .setHandler(plugins);
         if (getConfig().getMaxOnlineNum() == 0) {

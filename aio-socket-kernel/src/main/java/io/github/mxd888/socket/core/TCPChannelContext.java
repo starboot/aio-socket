@@ -24,7 +24,7 @@ import io.github.mxd888.socket.task.HandlerTask;
 import io.github.mxd888.socket.task.SendTask;
 import io.github.mxd888.socket.utils.pool.memory.MemoryBlock;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
-import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.intf.Handler;
 import io.github.mxd888.socket.utils.AIOUtil;
 
 import java.io.IOException;
@@ -167,7 +167,7 @@ public final class TCPChannelContext extends ChannelContext{
             return;
         }
         final ByteBuffer readBuffer = this.readBuffer.buffer();
-        final AioHandler handler = getAioConfig().getHandler();
+        final Handler handler = getAioConfig().getHandler();
         while (readBuffer.hasRemaining() && status == CHANNEL_STATUS_ENABLED) {
             Packet packet = null;
             try {

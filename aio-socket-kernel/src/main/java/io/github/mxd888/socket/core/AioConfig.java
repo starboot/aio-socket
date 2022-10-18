@@ -17,11 +17,11 @@ package io.github.mxd888.socket.core;
 
 import io.github.mxd888.socket.Monitor;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
-import io.github.mxd888.socket.intf.AioHandler;
+import io.github.mxd888.socket.intf.Handler;
 import io.github.mxd888.socket.maintain.ClusterIds;
 import io.github.mxd888.socket.maintain.Groups;
 import io.github.mxd888.socket.maintain.Ids;
-import io.github.mxd888.socket.plugins.AioPlugins;
+import io.github.mxd888.socket.plugins.Plugins;
 
 import java.net.SocketOption;
 import java.util.HashMap;
@@ -73,7 +73,7 @@ public class AioConfig {
     /**
      * 消息处理器
      */
-    private AioHandler handler;
+    private Handler handler;
 
     /**
      * Socket 配置
@@ -117,7 +117,7 @@ public class AioConfig {
     /**
      * 插件
      */
-    private final AioPlugins plugins = new AioPlugins();
+    private final Plugins plugins = new Plugins();
 
     public AioConfig(boolean isServer) {
         this.isServer = isServer;
@@ -203,11 +203,11 @@ public class AioConfig {
         return isServer;
     }
 
-    public AioHandler getHandler() {
+    public Handler getHandler() {
         return handler;
     }
 
-    public AioConfig setHandler(AioHandler handler) {
+    public AioConfig setHandler(Handler handler) {
         this.handler = handler;
         return this;
     }
@@ -232,7 +232,7 @@ public class AioConfig {
         return clusterIds;
     }
 
-    public AioPlugins getPlugins() {
+    public Plugins getPlugins() {
         return plugins;
     }
 
