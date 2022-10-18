@@ -22,7 +22,7 @@ import io.github.mxd888.socket.core.ChannelContext;
 public class ClientHandler extends StringHandler {
 
     @Override
-    public Packet<String> handle(ChannelContext channelContext, Packet<String> packet) {
+    public Packet handle(ChannelContext channelContext, Packet packet) {
         return null;
     }
 }

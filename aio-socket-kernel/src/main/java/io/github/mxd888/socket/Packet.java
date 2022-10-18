@@ -27,7 +27,7 @@ import java.io.Serializable;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class Packet<T> implements Serializable {
+public class Packet implements Serializable {
 
     private static final long serialVersionUID = -4108736058242170393L;
 
@@ -60,15 +60,6 @@ public class Packet<T> implements Serializable {
      * 内核集群所需实体
      */
     private ClusterEntity entity;
-
-    /**
-     * 报文数据
-     */
-    private T data;
-
-    public Packet(T data) {
-        this.data = data;
-    }
 
     public Packet() {
 
@@ -120,13 +111,5 @@ public class Packet<T> implements Serializable {
 
     public void setEntity(ClusterEntity entity) {
         this.entity = entity;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 }

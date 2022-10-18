@@ -16,6 +16,7 @@
 package io.github.mxd888.demo.client;
 
 import io.github.mxd888.socket.Packet;
+import io.github.mxd888.socket.codec.string.StringPacket;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.ThreadUtils;
 import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
@@ -55,7 +56,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
-        Packet<String> demoPacket = new Packet<>("hello aio-socket");
+        Packet demoPacket = new StringPacket("hello aio-socket");
 //        demoPacket.setReq("177");   设置同步位
         ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors());
         AsynchronousChannelGroup asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(groupExecutor);

@@ -22,7 +22,6 @@ public class DemoPacket extends Packet {
     private String data;
 
     public DemoPacket(String data) {
-        super(data);
         this.data = data;
     }
 

@@ -33,7 +33,7 @@ import java.util.function.Consumer;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class SendTask extends AbstractQueueRunnable<Packet<?>> {
+public class SendTask extends AbstractQueueRunnable<Packet> {
 
     private static final Logger LOGGER	= LoggerFactory.getLogger(SendTask.class);
 
@@ -43,7 +43,7 @@ public class SendTask extends AbstractQueueRunnable<Packet<?>> {
 
     private final Consumer<Boolean> consumer;
 
-    private AioQueue<Packet<?>> msgQueue = null;
+    private AioQueue<Packet> msgQueue = null;
 
     public SendTask(ChannelContext channelContext, Executor executor, Consumer<Boolean> consumer) {
         super(executor);
@@ -100,7 +100,7 @@ public class SendTask extends AbstractQueueRunnable<Packet<?>> {
     }
 
     @Override
-    public AioQueue<Packet<?>> getTaskQueue() {
+    public AioQueue<Packet> getTaskQueue() {
         if (msgQueue == null) {
             synchronized (this) {
                 if (msgQueue == null) {

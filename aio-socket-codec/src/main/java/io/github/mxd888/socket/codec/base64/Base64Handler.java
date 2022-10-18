@@ -6,18 +6,18 @@ import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
-public abstract class Base64Handler<T> implements AioHandler<T> {
+public abstract class Base64Handler implements AioHandler {
 
     @Override
-    public abstract Packet<T> handle(ChannelContext channelContext, Packet<T> packet);
+    public abstract Packet handle(ChannelContext channelContext, Packet packet);
 
     @Override
-    public Packet<T> decode(MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException {
+    public Packet decode(MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException {
         return null;
     }
 
     @Override
-    public void encode(Packet<T> packet, ChannelContext channelContext) {
+    public void encode(Packet packet, ChannelContext channelContext) {
 
     }
 }

@@ -12,13 +12,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public abstract class StringHandler implements AioHandler<String> {
+public abstract class StringHandler implements AioHandler {
 
     @Override
-    public abstract Packet<String> handle(ChannelContext channelContext, Packet<String> packet);
+    public abstract Packet handle(ChannelContext channelContext, Packet packet);
 
     @Override
-    public Packet<String> decode(MemoryUnit memoryUnit, ChannelContext channelContext) throws AioDecoderException {
+    public Packet decode(MemoryUnit memoryUnit, ChannelContext channelContext) throws AioDecoderException {
         ByteBuffer buffer = memoryUnit.buffer();
         int remaining = buffer.remaining();
         if (remaining < Integer.BYTES) {
@@ -32,15 +32,16 @@ public abstract class StringHandler implements AioHandler<String> {
             return null;
         }
         // 不使用UTF_8性能会提升8%
-        return new Packet<>(new String(b, StandardCharsets.UTF_8));
+        return new StringPacket(new String(b, StandardCharsets.UTF_8));
     }
 
     @Override
-    public void encode(Packet<String> packet, ChannelContext channelContext) {
+    public void encode(Packet packet, ChannelContext channelContext) {
         WriteBuffer writeBuffer = channelContext.getWriteBuffer();
         try {
-            writeBuffer.writeInt(packet.getData().getBytes().length);
-            writeBuffer.write(packet.getData().getBytes());
+            StringPacket packet1 = (StringPacket) packet;
+            writeBuffer.writeInt(packet1.getData().getBytes().length);
+            writeBuffer.write(packet1.getData().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

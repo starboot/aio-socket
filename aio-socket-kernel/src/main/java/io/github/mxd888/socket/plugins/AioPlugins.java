@@ -33,9 +33,9 @@ import java.util.List;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class AioPlugins<T> implements AioHandler<T>, Monitor {
+public class AioPlugins implements AioHandler, Monitor {
 
-    private AioHandler<T> aioHandler;
+    private AioHandler aioHandler;
 
     private final List<Plugin> plugins = new ArrayList<>();
 
@@ -80,7 +80,7 @@ public class AioPlugins<T> implements AioHandler<T>, Monitor {
     }
 
     @Override
-    public Packet<T> handle(ChannelContext channelContext, Packet<T> packet) {
+    public Packet handle(ChannelContext channelContext, Packet packet) {
         boolean flag = true;
         for (Plugin plugin : plugins) {
             if (!plugin.beforeProcess(channelContext, packet)) {
@@ -94,9 +94,9 @@ public class AioPlugins<T> implements AioHandler<T>, Monitor {
     }
 
     @Override
-    public Packet<T> decode(MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException {
+    public Packet decode(MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException {
 
-        Packet<T> packet = aioHandler.decode(readBuffer, channelContext);
+        Packet packet = aioHandler.decode(readBuffer, channelContext);
         if (packet != null) {
             for (Plugin plugin : plugins) {
                 plugin.afterDecode(packet, channelContext);
@@ -106,7 +106,7 @@ public class AioPlugins<T> implements AioHandler<T>, Monitor {
     }
 
     @Override
-    public void encode(Packet<T> packet, ChannelContext channelContext) {
+    public void encode(Packet packet, ChannelContext channelContext) {
         for (Plugin plugin : plugins) {
             plugin.beforeEncode(packet, channelContext);
         }
@@ -121,11 +121,11 @@ public class AioPlugins<T> implements AioHandler<T>, Monitor {
         aioHandler.stateEvent(channelContext, stateMachineEnum, throwable);
     }
 
-    public void setAioHandler(AioHandler<T> aioHandler) {
+    public void setAioHandler(AioHandler aioHandler) {
         this.aioHandler = aioHandler;
     }
 
-    public final AioPlugins<T> addPlugin(Plugin plugin) {
+    public final AioPlugins addPlugin(Plugin plugin) {
         this.plugins.add(plugin);
         return this;
     }
