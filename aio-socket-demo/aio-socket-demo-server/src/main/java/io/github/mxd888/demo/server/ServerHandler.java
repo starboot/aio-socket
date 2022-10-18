@@ -17,11 +17,15 @@ package io.github.mxd888.demo.server;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.codec.string.StringHandler;
+import io.github.mxd888.socket.codec.string.StringPacket;
 import io.github.mxd888.socket.core.ChannelContext;
 
+import java.nio.charset.Charset;
+
 public class ServerHandler extends StringHandler {
+
     @Override
-    public Packet handle(ChannelContext channelContext, Packet packet) {
+    public Packet handle(ChannelContext channelContext, StringPacket packet) {
         return packet;
     }
 }

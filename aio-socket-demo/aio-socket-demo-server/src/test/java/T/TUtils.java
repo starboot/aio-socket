@@ -2,6 +2,7 @@ package T;
 
 import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.codec.string.StringHandler;
+import io.github.mxd888.socket.codec.string.StringPacket;
 import io.github.mxd888.socket.core.ChannelContext;
 
 import java.lang.reflect.ParameterizedType;
@@ -16,7 +17,7 @@ public class TUtils {
 
         StringHandler stringHandler = new StringHandler() {
             @Override
-            public Packet handle(ChannelContext channelContext, Packet packet) {
+            public Packet handle(ChannelContext channelContext, StringPacket packet) {
                 return null;
             }
         };

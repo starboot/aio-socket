@@ -22,6 +22,7 @@ import io.github.mxd888.socket.plugins.ACKPlugin;
 import io.github.mxd888.socket.plugins.HeartPlugin;
 import io.github.mxd888.socket.plugins.MonitorPlugin;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 /**
