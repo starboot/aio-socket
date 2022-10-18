@@ -16,6 +16,8 @@
 package io.github.mxd888.socket.plugins;
 
 import io.github.mxd888.socket.core.AioConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.SocketOption;
@@ -32,10 +34,14 @@ import java.util.Map;
  */
 public class SocketOptionPlugin extends AbstractPlugin {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReconnectPlugin.class);
+
     private final Map<SocketOption<Object>, Object> optionMap = new HashMap<>();
 
     public SocketOptionPlugin() {
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream socket option plugin added successfully");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream socket option plugin added successfully");
+        }
     }
 
     @Override

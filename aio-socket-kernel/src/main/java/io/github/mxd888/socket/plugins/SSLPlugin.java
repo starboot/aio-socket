@@ -24,6 +24,8 @@ import io.github.mxd888.socket.plugins.ssl.SslService;
 import io.github.mxd888.socket.plugins.ssl.factory.ClientSSLContextFactory;
 import io.github.mxd888.socket.plugins.ssl.factory.SSLContextFactory;
 import io.github.mxd888.socket.plugins.ssl.factory.ServerSSLContextFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLEngine;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -35,33 +37,39 @@ import java.util.function.Consumer;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public final class SslPlugin extends AbstractPlugin {
+public final class SSLPlugin extends AbstractPlugin {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SSLPlugin.class);
+
     private final SslService sslService;
+
     private final MemoryPool memoryPool;
 
-    public SslPlugin(SSLContextFactory factory, Consumer<SSLEngine> consumer) throws Exception {
+    public SSLPlugin(SSLContextFactory factory, Consumer<SSLEngine> consumer) throws Exception {
         this(factory, consumer, MemoryPoolFactory.DISABLED_BUFFER_FACTORY.create());
     }
 
-    public SslPlugin(SSLContextFactory factory, Consumer<SSLEngine> consumer, MemoryPool memoryPool) throws Exception {
+    public SSLPlugin(SSLContextFactory factory, Consumer<SSLEngine> consumer, MemoryPool memoryPool) throws Exception {
         this.memoryPool = memoryPool;
         sslService = new SslService(factory.create(), consumer);
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream SSL/TLS plugin added successfully");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream SSL/TLS plugin added successfully");
+        }
     }
 
-    public SslPlugin(ClientSSLContextFactory factory) throws Exception {
+    public SSLPlugin(ClientSSLContextFactory factory) throws Exception {
         this(factory, MemoryPoolFactory.DISABLED_BUFFER_FACTORY.create());
     }
 
-    public SslPlugin(ClientSSLContextFactory factory, MemoryPool memoryPool) throws Exception {
+    public SSLPlugin(ClientSSLContextFactory factory, MemoryPool memoryPool) throws Exception {
         this(factory, sslEngine -> sslEngine.setUseClientMode(true), memoryPool);
     }
 
-    public SslPlugin(ServerSSLContextFactory factory, ClientAuth clientAuth) throws Exception {
+    public SSLPlugin(ServerSSLContextFactory factory, ClientAuth clientAuth) throws Exception {
         this(factory, clientAuth, MemoryPoolFactory.DISABLED_BUFFER_FACTORY.create());
     }
 
-    public SslPlugin(ServerSSLContextFactory factory, ClientAuth clientAuth, MemoryPool memoryPool) throws Exception {
+    public SSLPlugin(ServerSSLContextFactory factory, ClientAuth clientAuth, MemoryPool memoryPool) throws Exception {
         this(factory, sslEngine -> {
             sslEngine.setUseClientMode(false);
             switch (clientAuth) {

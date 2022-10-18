@@ -20,6 +20,8 @@ import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.core.ClientBootstrap;
 import io.github.mxd888.socket.utils.QuickTimerTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.channels.AsynchronousChannelGroup;
 import java.util.TimerTask;
@@ -33,6 +35,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReconnectPlugin extends AbstractPlugin {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReconnectPlugin.class);
+
     private final AsynchronousChannelGroup asynchronousChannelGroup;
 
     private final ClientBootstrap client;
@@ -44,7 +48,9 @@ public class ReconnectPlugin extends AbstractPlugin {
     public ReconnectPlugin(ClientBootstrap client, AsynchronousChannelGroup asynchronousChannelGroup) {
         this.client = client;
         this.asynchronousChannelGroup = asynchronousChannelGroup;
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's reconnect plugin added successfully");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's reconnect plugin added successfully");
+        }
     }
 
     @Override
@@ -52,7 +58,9 @@ public class ReconnectPlugin extends AbstractPlugin {
         if (stateMachineEnum != StateMachineEnum.CHANNEL_CLOSED) {
             return;
         }
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel starting reconnect");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel starting reconnect");
+        }
         QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(new TimerTask() {
             @Override
             public void run() {

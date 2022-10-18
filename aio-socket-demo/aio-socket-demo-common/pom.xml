@@ -21,6 +21,10 @@
             <groupId>io.github.mxd888.socket</groupId>
             <artifactId>aio-socket-codec</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

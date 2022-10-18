@@ -20,6 +20,8 @@ import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.plugins.channels.AsynchronousSocketChannelProxy;
 import io.github.mxd888.socket.plugins.channels.UnsupportedAsynchronousSocketChannel;
 import io.github.mxd888.socket.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -40,10 +42,18 @@ import java.util.function.BiConsumer;
  */
 public class StreamMonitorPlugin extends AbstractPlugin {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(StreamMonitorPlugin.class);
+
     public static final BiConsumer<AsynchronousSocketChannel, byte[]> BLUE_HEX_INPUT_STREAM = (channel, bytes) -> {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         try {
-            System.out.println(ConsoleColors.BLUE + simpleDateFormat.format(new Date()) + " [ " + channel.getRemoteAddress() + " --> " + channel.getLocalAddress() + " ] [ read: " + bytes.length + " bytes ]" + StringUtils.toHexString(bytes) + ConsoleColors.RESET);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(ConsoleColors.BLUE + simpleDateFormat.format(new Date())
+                        + " [ " + channel.getRemoteAddress() + " --> "
+                        + channel.getLocalAddress() + " ] [ read: "
+                        + bytes.length + " bytes ]" + StringUtils.toHexString(bytes)
+                        + ConsoleColors.RESET);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,7 +61,13 @@ public class StreamMonitorPlugin extends AbstractPlugin {
     public static final BiConsumer<AsynchronousSocketChannel, byte[]> RED_HEX_OUTPUT_STREAM = (channel, bytes) -> {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         try {
-            System.err.println(ConsoleColors.RED + simpleDateFormat.format(new Date()) + " [ " + channel.getLocalAddress() + " --> " + channel.getRemoteAddress() + " ] [ write: " + bytes.length + " bytes ]" + StringUtils.toHexString(bytes) + ConsoleColors.RESET);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(ConsoleColors.RED + simpleDateFormat.format(new Date())
+                        + " [ " + channel.getLocalAddress() + " --> "
+                        + channel.getRemoteAddress() + " ] [ write: "
+                        + bytes.length + " bytes ]" + StringUtils.toHexString(bytes)
+                        + ConsoleColors.RESET);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,7 +76,13 @@ public class StreamMonitorPlugin extends AbstractPlugin {
     public static final BiConsumer<AsynchronousSocketChannel, byte[]> BLUE_TEXT_INPUT_STREAM = (channel, bytes) -> {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         try {
-            System.out.println(ConsoleColors.BLUE + simpleDateFormat.format(new Date()) + " [ " + channel.getRemoteAddress() + " --> " + channel.getLocalAddress() + " ] [ read: " + bytes.length + " bytes ]\r\n" + new String(bytes) + ConsoleColors.RESET);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(ConsoleColors.BLUE + simpleDateFormat.format(new Date())
+                        + " [ " + channel.getRemoteAddress() + " --> "
+                        + channel.getLocalAddress() + " ] [ read: "
+                        + bytes.length + " bytes ]\r\n" + new String(bytes)
+                        + ConsoleColors.RESET);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,7 +90,13 @@ public class StreamMonitorPlugin extends AbstractPlugin {
     public static final BiConsumer<AsynchronousSocketChannel, byte[]> RED_TEXT_OUTPUT_STREAM = (channel, bytes) -> {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         try {
-            System.err.println(ConsoleColors.RED + simpleDateFormat.format(new Date()) + " [ " + channel.getLocalAddress() + " --> " + channel.getRemoteAddress() + " ] [ write: " + bytes.length + " bytes ]\r\n" + new String(bytes) + ConsoleColors.RESET);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(ConsoleColors.RED + simpleDateFormat.format(new Date())
+                        + " [ " + channel.getLocalAddress() + " --> "
+                        + channel.getRemoteAddress() + " ] [ write: "
+                        + bytes.length + " bytes ]\r\n" + new String(bytes)
+                        + ConsoleColors.RESET);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,7 +112,9 @@ public class StreamMonitorPlugin extends AbstractPlugin {
     public StreamMonitorPlugin(BiConsumer<AsynchronousSocketChannel, byte[]> inputStreamConsumer, BiConsumer<AsynchronousSocketChannel, byte[]> outputStreamConsumer) {
         this.inputStreamConsumer = Objects.requireNonNull(inputStreamConsumer);
         this.outputStreamConsumer = Objects.requireNonNull(outputStreamConsumer);
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream monitor plugin added successfully");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream monitor plugin added successfully");
+        }
     }
 
     @Override

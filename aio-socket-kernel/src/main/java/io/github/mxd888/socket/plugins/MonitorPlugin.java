@@ -20,6 +20,8 @@ import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.QuickTimerTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
@@ -31,6 +33,8 @@ import java.util.concurrent.atomic.LongAdder;
  * @version 2.10.1.v20211002-RELEASE
  */
 public final class MonitorPlugin extends AbstractPlugin implements Runnable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MonitorPlugin.class);
 
     /**
      * 当前周期内流入字节数
@@ -100,7 +104,9 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
         this.seconds = seconds;
         long mills = TimeUnit.SECONDS.toMillis(seconds);
         QuickTimerTask.scheduleAtFixedRate(this, mills, mills);
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's monitor plugin added successfully");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's monitor plugin added successfully");
+        }
     }
 
 
@@ -145,18 +151,20 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
         onlineCount += connectCount - disConnectCount;
         totalProcessMsgNum += curProcessMsgNum;
         totalConnect += connectCount;
-        System.out.println("\r\n-----" + seconds + "seconds ----\r\ninflow:\t\t" + curInFlow * 1.0 / (1024 * 1024) + "(MB)"
-                + "\r\noutflow:\t" + curOutFlow * 1.0 / (1024 * 1024) + "(MB)"
-                + "\r\nprocess fail:\t" + curDiscardNum
-                + "\r\nprocess count:\t" + curProcessMsgNum
-                + "\r\nprocess total:\t" + totalProcessMsgNum
-                + "\r\nread count:\t" + curReadCount + "\twrite count:\t" + curWriteCount
-                + "\r\nconnect count:\t" + connectCount
-                + "\r\ndisconnect count:\t" + disConnectCount
-                + "\r\nonline count:\t" + onlineCount
-                + "\r\nconnected total:\t" + totalConnect
-                + "\r\nRequests/sec:\t" + curProcessMsgNum * 1.0 / seconds
-                + "\r\nTransfer/sec:\t" + (curInFlow * 1.0 / (1024 * 1024) / seconds) + "(MB)");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("\r\n-----" + seconds + "seconds ----\r\ninflow:\t\t" + curInFlow * 1.0 / (1024 * 1024) + "(MB)"
+                    + "\r\noutflow:\t" + curOutFlow * 1.0 / (1024 * 1024) + "(MB)"
+                    + "\r\nprocess fail:\t" + curDiscardNum
+                    + "\r\nprocess count:\t" + curProcessMsgNum
+                    + "\r\nprocess total:\t" + totalProcessMsgNum
+                    + "\r\nread count:\t" + curReadCount + "\twrite count:\t" + curWriteCount
+                    + "\r\nconnect count:\t" + connectCount
+                    + "\r\ndisconnect count:\t" + disConnectCount
+                    + "\r\nonline count:\t" + onlineCount
+                    + "\r\nconnected total:\t" + totalConnect
+                    + "\r\nRequests/sec:\t" + curProcessMsgNum * 1.0 / seconds
+                    + "\r\nTransfer/sec:\t" + (curInFlow * 1.0 / (1024 * 1024) / seconds) + "(MB)");
+        }
     }
 
     private long getAndReset(LongAdder longAdder) {

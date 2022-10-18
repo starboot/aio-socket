@@ -20,6 +20,8 @@ import io.github.mxd888.socket.StateMachineEnum;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.QuickTimerTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +35,8 @@ import java.util.concurrent.TimeUnit;
  * @version 2.10.1.v20211002-RELEASE
  */
 public abstract class HeartPlugin extends AbstractPlugin {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HeartPlugin.class);
 
     private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (context, lastTime) -> context.close(true);
 
@@ -65,7 +69,9 @@ public abstract class HeartPlugin extends AbstractPlugin {
         }
         this.timeout = timeUnit.toMillis(timeout);
         this.timeoutCallback = timeoutCallback;
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's heart plugin added successfully");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's heart plugin added successfully");
+        }
     }
 
     @Override

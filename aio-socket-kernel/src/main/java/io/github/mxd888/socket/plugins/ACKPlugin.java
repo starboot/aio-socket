@@ -19,6 +19,8 @@ import io.github.mxd888.socket.Packet;
 import io.github.mxd888.socket.core.AioConfig;
 import io.github.mxd888.socket.core.ChannelContext;
 import io.github.mxd888.socket.utils.QuickTimerTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +32,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ACKPlugin extends AbstractPlugin{
 
-    private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (packet, lastTime) -> System.out.println(packet.getReq() + " : has timeout");
+    private static final Logger LOGGER = LoggerFactory.getLogger(ACKPlugin.class);
+
+    private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (packet, lastTime) -> LOGGER.info(packet.getReq() + " : has timeout");
 
     private final Map<String, Packet> idToPacket = new HashMap<>();
 
@@ -50,7 +54,9 @@ public class ACKPlugin extends AbstractPlugin{
         }
         this.timeout = timeUnit.toMillis(timeout);
         this.timeoutCallback = timeoutCallback;
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's ACK plugin added successfully");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's ACK plugin added successfully");
+        }
     }
 
     @Override
