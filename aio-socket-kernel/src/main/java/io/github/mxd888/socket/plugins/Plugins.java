@@ -104,7 +104,6 @@ public class Plugins implements Handler, Monitor {
         }
         if (flag) {
             return handlers.get(channelContext.getProtocol()).handle(channelContext, packet);
-//            return aioHandler.handle(channelContext, packet);
         }
         return null;
     }
@@ -112,8 +111,9 @@ public class Plugins implements Handler, Monitor {
     @Override
     public Packet decode(MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException {
         Packet packet;
-        if (channelContext.getProtocol() != null) {
-            packet = handlers.get(channelContext.getProtocol()).decode(readBuffer, channelContext);
+        ProtocolEnum protocol = channelContext.getProtocol();
+        if (protocol != null) {
+            packet = handlers.get(protocol).decode(readBuffer, channelContext);
         }else {
             // 首次解码
             packet = aioHandler.decode(readBuffer, channelContext);
@@ -132,7 +132,6 @@ public class Plugins implements Handler, Monitor {
                 }
             }
         }
-//        Packet packet = aioHandler.decode(readBuffer, channelContext);
         if (packet != null) {
             for (Plugin plugin : plugins) {
                 plugin.afterDecode(packet, channelContext);
@@ -147,7 +146,6 @@ public class Plugins implements Handler, Monitor {
             plugin.beforeEncode(packet, channelContext);
         }
         handlers.get(channelContext.getProtocol()).encode(packet, channelContext);
-//        aioHandler.encode(packet, channelContext);
     }
 
     @Override
