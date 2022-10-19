@@ -172,9 +172,6 @@ public final class UDPChannel {
         if (failResponseUnit != null) {
             failResponseUnit.response.clean();
         }
-//        if (worker != null) {
-//            worker.shutdown();
-//        }
     }
 
     MemoryBlock getMemoryBlock() {

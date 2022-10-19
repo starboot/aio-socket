@@ -64,7 +64,7 @@ public final class Worker implements Runnable {
 
     private final ExecutorService executorService;
 
-    public Worker(MemoryPool bufferPool, int threadNum) throws IOException {
+    Worker(MemoryPool bufferPool, int threadNum) throws IOException {
         this.bufferPool = bufferPool;
         this.selector = Selector.open();
         try {

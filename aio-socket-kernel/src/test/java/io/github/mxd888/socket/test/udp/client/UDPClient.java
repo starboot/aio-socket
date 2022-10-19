@@ -17,20 +17,16 @@ public class UDPClient {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        MemoryPool memoryPool = new MemoryPool(1024 * 1024 * 16, Runtime.getRuntime().availableProcessors(), true);
-
-        Worker worker = new Worker(memoryPool, Runtime.getRuntime().availableProcessors());
-        int c = 5;
+        int c = 1;
         CountDownLatch count = new CountDownLatch(c);
         UDPPacket packet = new UDPPacket("hello aio-socket udp");
         ClientUDPHandler udpHandler = new ClientUDPHandler();
         for (int i = 0; i < c; i++) {
             new Thread(() -> {
                 try {
-                    UDPBootstrap bootstrap = new UDPBootstrap(udpHandler, worker);
+                    UDPBootstrap bootstrap = new UDPBootstrap(udpHandler);
                     bootstrap
                             .addPlugin(new MonitorPlugin(5))
-                            .setBufferFactory(() -> memoryPool)
                             .setReadBufferSize(1024);
                     UDPChannel channel = bootstrap.open();
                     ChannelContext session = channel.connect("localhost", 8888);
@@ -43,7 +39,7 @@ public class UDPClient {
                     // 关闭会话
                     Thread.sleep(5000);
                     session.close();
-                    System.out.println("发送完毕");
+//                    System.out.println("发送完毕");
                     bootstrap.shutdown();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -53,6 +49,7 @@ public class UDPClient {
         }
         count.await();
         System.out.println("shutdown...");
+
 
     }
 

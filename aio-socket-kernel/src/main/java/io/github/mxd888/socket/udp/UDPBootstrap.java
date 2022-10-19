@@ -37,14 +37,10 @@ public class UDPBootstrap {
 
     private boolean innerWorker = false;
 
-    public UDPBootstrap(AioHandler handler, Worker worker) {
-        this(handler);
-        this.worker = worker;
-    }
-
     public UDPBootstrap(AioHandler handler) {
         config.getPlugins().addAioHandler(handler);
         config.setHandler(config.getPlugins());
+        this.worker = worker;
     }
 
     /**
