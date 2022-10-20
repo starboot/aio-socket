@@ -8,7 +8,7 @@
     <groupId>io.github.mxd888.socket</groupId>
     <artifactId>aio-socket-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.8.6.v20221002-RELEASE</version>
+    <version>2.0.0</version>
 
     <name>aio-socket-parent</name>
     <url>https://gitee.com/mxd_2022/aio-socket.git</url>
@@ -41,7 +41,7 @@
     </developers>
 
     <properties>
-        <aio-socket.version>3.8.6.v20221002-RELEASE</aio-socket.version>
+        <aio-socket.version>2.0.0</aio-socket.version>
         <slf4j.version>1.7.36</slf4j.version>
         <logback.version>1.2.9</logback.version>
         <lombok.version>1.18.20</lombok.version>

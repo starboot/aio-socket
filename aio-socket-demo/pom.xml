@@ -11,7 +11,7 @@
     <parent>
         <artifactId>aio-socket</artifactId>
         <groupId>io.github.mxd888.socket</groupId>
-        <version>3.8.6.v20221002-RELEASE</version>
+        <version>2.0.0</version>
     </parent>
 
 
