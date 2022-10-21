@@ -1,7 +1,7 @@
 <p align="center">
 	<img alt="logo" src="https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-logo.png">
 </p>
-<h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket 2.10.1.v20211002-RELEASE</h2>
+<h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket v2.0.0</h2>
 <h4 align="center">一款强大且轻量的面向网络层通讯框架</h4>
 <p align="center">
     <a href="https://www.oscs1024.com/project/oscs/mxd888/aio-socket?ref=badge_small"><img 
@@ -10,7 +10,7 @@
 	<a href="https://gitee.com/mxd_2022/aio-socket/stargazers"><img
             src="https://gitee.com/mxd_2022/aio-socket/badge/star.svg?theme=dark"  alt="gitee star"/></a>
 	<a href="https://gitee.com/mxd_2022/aio-socket"><img 
-	        src="https://img.shields.io/badge/aio--socket-2.10.1.v20211002--RELEASE-yellowgreen"  alt=""/></a>
+	        src="https://img.shields.io/badge/aio--socket-2.0.0--RELEASE-yellowgreen"  alt=""/></a>
     <a href="https://www.apache.org/licenses/LICENSE-2.0"><img 
             src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg" alt=""/></a>
     <a target="_blank" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html"><img 
