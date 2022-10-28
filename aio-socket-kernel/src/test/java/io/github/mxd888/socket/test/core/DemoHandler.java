@@ -42,8 +42,8 @@ public class DemoHandler extends AioHandler {
             return null;
         }
         buffer.mark();
-        int length = buffer.getInt();
-        byte[] b = AIOUtil.getBytesFromByteBuffer(length, memoryUnit, channelContext);
+//        int length = buffer.getInt();
+        byte[] b = AIOUtil.getBytesFromByteBuffer(buffer.remaining(), memoryUnit, channelContext);
         if (b == null) {
             buffer.reset();
             return null;

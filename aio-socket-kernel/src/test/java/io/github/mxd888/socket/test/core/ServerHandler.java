@@ -22,7 +22,8 @@ public class ServerHandler extends DemoHandler {
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {
         if (packet instanceof DemoPacket) {
-            return packet;
+			System.out.println(((DemoPacket) packet).getData());
+//            return packet;
         }
         return null;
     }

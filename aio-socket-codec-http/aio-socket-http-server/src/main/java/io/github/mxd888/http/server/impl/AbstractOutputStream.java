@@ -30,7 +30,7 @@ abstract class AbstractOutputStream extends BufferOutputStream {
     protected final HttpServerConfiguration configuration;
 
     public AbstractOutputStream(HttpRequest httpRequest, AbstractResponse response, Request request) {
-        super((TCPChannelContext) request.getAioChannelContext());
+        super(request.getAioChannelContext());
         this.response = response;
         this.request = httpRequest;
         this.configuration = request.getConfiguration();
@@ -105,7 +105,7 @@ abstract class AbstractOutputStream extends BufferOutputStream {
     /**
      * 是否支持chunked输出
      *
-     * @return
+     * @return .
      */
     private boolean supportChunked(HttpRequest request, AbstractResponse response) {
         //gzip采用chunked编码
