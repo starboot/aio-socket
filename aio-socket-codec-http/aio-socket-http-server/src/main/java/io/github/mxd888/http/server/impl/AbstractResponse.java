@@ -187,7 +187,7 @@ class AbstractResponse extends Packet implements HttpResponse, Reset {
         return headerValue == null ? null : headerValue.getValue();
     }
 
-    final Map<String, HeaderValue> getHeaders() {
+    public final Map<String, HeaderValue> getHeaders() {
         return headers;
     }
 

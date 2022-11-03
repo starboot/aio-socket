@@ -17,6 +17,7 @@
             <groupId>io.github.mxd888.socket</groupId>
             <artifactId>aio-socket-demo-common</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>

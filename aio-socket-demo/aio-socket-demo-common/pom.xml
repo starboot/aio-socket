@@ -25,6 +25,11 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
+		<dependency>
+			<groupId>io.github.mxd888.socket</groupId>
+			<artifactId>aio-socket-plugin</artifactId>
+			<version>2.0.0</version>
+		</dependency>
     </dependencies>
 
 </project>

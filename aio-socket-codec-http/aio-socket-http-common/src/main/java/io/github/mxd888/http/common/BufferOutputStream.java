@@ -138,7 +138,7 @@ public abstract class BufferOutputStream extends OutputStream implements Reset {
 
     protected abstract void check();
 
-    protected static class WriteCache {
+	public static class WriteCache {
         private final byte[] cacheData;
         private final Semaphore semaphore = new Semaphore(1);
         private long expireTime;

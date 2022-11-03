@@ -2,10 +2,12 @@ package io.github.mxd888.http.server;
 
 import io.github.mxd888.http.common.BufferOutputStream;
 import io.github.mxd888.http.common.Cookie;
+import io.github.mxd888.http.common.HeaderValue;
 import io.github.mxd888.http.common.enums.HttpStatus;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Http消息响应接口
@@ -43,6 +45,8 @@ public interface HttpResponse {
      */
     void setHttpStatus(int httpStatus, String reasonPhrase);
 
+	public boolean isDefaultStatus();
+
     /**
      * 获取Http响应描述
      *
@@ -78,17 +82,9 @@ public interface HttpResponse {
 
     String getHeader(String name);
 
-    /**
-     * Return a Collection of all the header values associated with the
-     * specified header name.
-     *
-     * @param name Header name to look up
-     * @return The values for the specified header. These are the raw values so
-     * if multiple values are specified in a single header that will be
-     * returned as a single header value.
-     * @since Servlet 3.0
-     */
-    public Collection<String> getHeaders(String name);
+	Map<String, HeaderValue> getHeaders();
+
+	Collection<String> getHeaders(String name);
 
     /**
      * Get the header names set for this HTTP response.
