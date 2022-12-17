@@ -72,27 +72,27 @@ public enum ProtocolEnum {
 
     // ---------------------以下是留给用户的私有化TCP协议枚举类，共五个---------------------
 
-    PRIVATE_TCP(2000, "private TCP protocol"),
+    PRIVATE_TCP(2000, "private TCP(2000) protocol"),
 
-    PRIVATE_TCP_1(2001, "private TCP protocol"),
+    PRIVATE_TCP_1(2001, "private TCP(2001) protocol"),
 
-    PRIVATE_TCP_2(2002, "private TCP protocol"),
+    PRIVATE_TCP_2(2002, "private TCP(2002) protocol"),
 
-    PRIVATE_TCP_3(2003, "private TCP protocol"),
+    PRIVATE_TCP_3(2003, "private TCP(2003) protocol"),
 
-    PRIVATE_TCP_4(2004, "private TCP protocol"),
+    PRIVATE_TCP_4(2004, "private TCP(2004) protocol"),
 
     // ---------------------以下是留给用户的私有化UDP协议枚举类，共五个---------------------
 
-    PRIVATE_UDP(3000, "private TCP protocol"),
+    PRIVATE_UDP(3000, "private UDP(3000) protocol"),
 
-    PRIVATE_UDP_1(3001, "private TCP protocol"),
+    PRIVATE_UDP_1(3001, "private UDP(3001) protocol"),
 
-    PRIVATE_UDP_2(3002, "private TCP protocol"),
+    PRIVATE_UDP_2(3002, "private UDP(3002) protocol"),
 
-    PRIVATE_UDP_3(3003, "private TCP protocol"),
+    PRIVATE_UDP_3(3003, "private UDP(3003) protocol"),
 
-    PRIVATE_UDP_4(3004, "private TCP protocol")
+    PRIVATE_UDP_4(3004, "private UDP(3004) protocol")
     ;
 
     private final int code;
