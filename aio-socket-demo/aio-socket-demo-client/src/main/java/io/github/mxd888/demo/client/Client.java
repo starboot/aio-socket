@@ -61,7 +61,7 @@ public class Client {
 //        demoPacket.setReq("177");   设置同步位
         ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors());
         AsynchronousChannelGroup asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(groupExecutor);
-        MemoryPoolFactory poolFactory = () -> new MemoryPool(32 * 1024 * 1024, 10, true);
+        MemoryPoolFactory poolFactory = () -> new MemoryPool(10 * 1024 * 1024, 10, true);
         ClientHandler clientHandler = new ClientHandler();
         // 5000
         for (int i = 0; i < 10; i++) {

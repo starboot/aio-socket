@@ -27,7 +27,7 @@ import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class DemoHandler extends AioHandler {
+public class DemoHandler implements AioHandler {
 
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class UDPHandler extends AioHandler {
+public class UDPHandler implements AioHandler {
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {
         return null;

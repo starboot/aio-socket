@@ -7,7 +7,7 @@ import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
-public class Http2Handler extends AioHandler {
+public class Http2Handler implements AioHandler {
 	@Override
 	public Packet handle(ChannelContext channelContext, Packet packet) {
 		return null;

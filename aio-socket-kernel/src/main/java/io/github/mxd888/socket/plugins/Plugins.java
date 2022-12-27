@@ -26,10 +26,7 @@ import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.socket.intf.Handler;
 
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * aio-socket 插件嵌入类
@@ -42,7 +39,7 @@ public class Plugins implements Handler, Monitor {
     /**
      * 责任链头指针
      */
-    private AioHandler aioHandler;
+    private final LinkedList<AioHandler> aioHandler = new LinkedList<>();
 
     /**
      * 插件项
@@ -110,27 +107,19 @@ public class Plugins implements Handler, Monitor {
 
     @Override
     public Packet decode(MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException {
-        Packet packet;
+        Packet packet = null;
         ProtocolEnum protocol = channelContext.getProtocol();
         if (protocol != null) {
             packet = handlers.get(protocol).decode(readBuffer, channelContext);
         }else {
-            // 首次解码
-            packet = aioHandler.decode(readBuffer, channelContext);
-            if (packet != null) {
-                channelContext.setProtocol(aioHandler.name());
-            }else {
-                // 使用责任链解码
-                AioHandler endPointer = aioHandler;
-                while (channelContext.getProtocol() == null && endPointer.Next() != null) {
-                    endPointer = endPointer.Next();
-                    packet = endPointer.decode(readBuffer, channelContext);
-                    if (packet != null) {
-                        // 解码成功，设置协议。中断链式解码
-                        channelContext.setProtocol(endPointer.name());
-                    }
-                }
-            }
+			for (AioHandler handler : aioHandler) {
+				packet = handler.decode(readBuffer, channelContext);
+				if (packet != null) {
+					// 解码成功，设置协议。中断链式解码
+					channelContext.setProtocol(handler.name());
+					break;
+				}
+			}
         }
         if (packet != null) {
             for (Plugin plugin : plugins) {
@@ -153,30 +142,17 @@ public class Plugins implements Handler, Monitor {
         for (Plugin plugin : plugins) {
             plugin.stateEvent(stateMachineEnum, channelContext, throwable);
         }
-        if (handlers.get(channelContext.getProtocol()) != null) {
+        if (channelContext.getProtocol() != null) {
             handlers.get(channelContext.getProtocol()).stateEvent(channelContext, stateMachineEnum, throwable);
             return;
         }
         // 当前通道未确定协议就触发状态机，则使用头处理器进行处理
-        aioHandler.stateEvent(channelContext, stateMachineEnum, throwable);
-    }
-
-    private void setAioHandler(AioHandler aioHandler) {
-        this.aioHandler = aioHandler;
+		aioHandler.getFirst().stateEvent(channelContext, stateMachineEnum, throwable);
     }
 
     public void addAioHandler(AioHandler handler) {
         handlers.put(handler.name(), handler);
-        if (handlers.size() == 1) {
-            setAioHandler(handler);
-        }else {
-            // 责任链模式，将处理器串成一条链；endPointer:指针
-            AioHandler endPointer = aioHandler;
-            while (endPointer.Next() != null) {
-                endPointer = endPointer.Next();
-            }
-            endPointer.setNext(handler);
-        }
+        aioHandler.addLast(handler);
     }
 
     public final Plugins addPlugin(Plugin plugin) {

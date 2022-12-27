@@ -7,7 +7,7 @@ import io.github.mxd888.socket.exception.AioDecoderException;
 import io.github.mxd888.socket.intf.AioHandler;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
-public class WebSocketHandler extends AioHandler {
+public class WebSocketHandler implements AioHandler {
 
 	@Override
 	public Packet handle(ChannelContext channelContext, Packet packet) {

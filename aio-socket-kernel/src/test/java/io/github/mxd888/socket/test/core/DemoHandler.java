@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class DemoHandler extends AioHandler {
+public class DemoHandler implements AioHandler {
 
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {

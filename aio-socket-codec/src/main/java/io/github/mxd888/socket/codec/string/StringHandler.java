@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
-public abstract class StringHandler extends AioHandler implements Handler, IProtocol {
+public abstract class StringHandler implements AioHandler {
 
     private int maxLength;
 

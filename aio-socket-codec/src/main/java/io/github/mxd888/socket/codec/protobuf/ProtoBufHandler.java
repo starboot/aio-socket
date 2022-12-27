@@ -24,7 +24,7 @@ import io.github.mxd888.socket.intf.Handler;
 import io.github.mxd888.socket.intf.IProtocol;
 import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
 
-public abstract class ProtoBufHandler extends AioHandler implements Handler, IProtocol {
+public abstract class ProtoBufHandler implements AioHandler {
 
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {

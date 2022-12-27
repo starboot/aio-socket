@@ -21,7 +21,7 @@ import java.util.function.BiConsumer;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class HttpRequestHandler extends AioHandler {
+public class HttpRequestHandler implements AioHandler {
     public static final Decoder BODY_READY_DECODER = (byteBuffer, aioSession, response) -> null;
     public static final Decoder BODY_CONTINUE_DECODER = (byteBuffer, aioSession, response) -> null;
     /**
