@@ -170,7 +170,6 @@
         <module>../aio-socket-codec-websocket</module>
         <module>../aio-socket-codec-http2</module>
         <module>../aio-socket-kernel-cluster</module>
-		<module>../aio-socket-codec-redis</module>
         <module>../aio-socket-plugin</module>
     </modules>
 
