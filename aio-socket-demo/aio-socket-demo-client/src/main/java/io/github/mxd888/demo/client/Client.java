@@ -15,19 +15,17 @@
  */
 package io.github.mxd888.demo.client;
 
-import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.codec.string.StringPacket;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.utils.ThreadUtils;
-import io.github.mxd888.socket.utils.pool.memory.MemoryPool;
-import io.github.mxd888.socket.core.Aio;
-import io.github.mxd888.socket.core.ClientBootstrap;
-import io.github.mxd888.socket.utils.pool.memory.MemoryPoolFactory;
+import cn.starboot.socket.Packet;
+import cn.starboot.socket.codec.string.StringPacket;
+import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.utils.ThreadUtils;
+import cn.starboot.socket.utils.pool.memory.MemoryPool;
+import cn.starboot.socket.core.Aio;
+import cn.starboot.socket.core.ClientBootstrap;
+import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.channels.AsynchronousChannelGroup;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 
 /**

@@ -7,8 +7,8 @@ import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.enums.HeaderValueEnum;
 import io.github.mxd888.http.common.enums.HttpStatus;
 import io.github.mxd888.http.server.HttpResponse;
-import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.core.Aio;
+import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Aio;
 
 import java.io.IOException;
 import java.util.ArrayList;

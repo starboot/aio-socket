@@ -10,8 +10,8 @@ import io.github.mxd888.http.common.utils.TimerUtils;
 import io.github.mxd888.http.server.HttpRequest;
 import io.github.mxd888.http.server.HttpResponse;
 import io.github.mxd888.http.server.HttpResponsePacket;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.WriteBuffer;
+import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.core.WriteBuffer;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

@@ -1,11 +1,11 @@
 package io.github.mxd888.codec.websocket;
 
-import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.ProtocolEnum;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.exception.AioDecoderException;
-import io.github.mxd888.socket.intf.AioHandler;
-import io.github.mxd888.socket.utils.pool.memory.MemoryUnit;
+import cn.starboot.socket.Packet;
+import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.exception.AioDecoderException;
+import cn.starboot.socket.intf.AioHandler;
+import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
 public class WebSocketHandler implements AioHandler {
 

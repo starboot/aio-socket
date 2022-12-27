@@ -1,7 +1,6 @@
 package io.github.mxd888.http.server;
 
-import io.github.mxd888.http.server.impl.Request;
-import io.github.mxd888.socket.Packet;
+import cn.starboot.socket.Packet;
 
 /**
  * 对外输出消息体，将其编码进输出流

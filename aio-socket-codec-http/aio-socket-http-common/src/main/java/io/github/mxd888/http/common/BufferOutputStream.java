@@ -3,8 +3,8 @@ package io.github.mxd888.http.common;
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.GzipUtils;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.WriteBuffer;
+import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.core.WriteBuffer;
 
 import java.io.IOException;
 import java.io.OutputStream;

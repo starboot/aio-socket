@@ -8,9 +8,8 @@ import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.enums.HttpTypeEnum;
 import io.github.mxd888.http.common.utils.*;
 import io.github.mxd888.http.server.*;
-import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.TCPChannelContext;
+import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.ChannelContext;
 
 import java.io.IOException;
 import java.io.InputStream;

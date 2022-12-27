@@ -3,8 +3,8 @@ package io.github.mxd888.http.server;
 import io.github.mxd888.http.common.utils.ByteTree;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.StringUtils;
-import io.github.mxd888.socket.plugins.Plugin;
-import io.github.mxd888.socket.plugins.StreamMonitorPlugin;
+import cn.starboot.socket.plugins.Plugin;
+import cn.starboot.socket.plugins.StreamMonitorPlugin;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

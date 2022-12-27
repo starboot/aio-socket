@@ -10,8 +10,7 @@ import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.ServerHandler;
 import io.github.mxd888.http.server.impl.HttpRequestHandler;
 import io.github.mxd888.http.server.impl.Request;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.TCPChannelContext;
+import cn.starboot.socket.core.ChannelContext;
 
 import java.nio.ByteBuffer;
 import java.util.function.Function;

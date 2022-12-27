@@ -9,9 +9,8 @@ import io.github.mxd888.http.server.HttpRequest;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.HttpServerHandler;
 import io.github.mxd888.http.server.WebSocketHandler;
-import io.github.mxd888.socket.StateMachineEnum;
-import io.github.mxd888.socket.core.ChannelContext;
-import io.github.mxd888.socket.core.TCPChannelContext;
+import cn.starboot.socket.StateMachineEnum;
+import cn.starboot.socket.core.ChannelContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

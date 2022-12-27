@@ -1,9 +1,9 @@
 package T;
 
-import io.github.mxd888.socket.Packet;
-import io.github.mxd888.socket.codec.string.StringHandler;
-import io.github.mxd888.socket.codec.string.StringPacket;
-import io.github.mxd888.socket.core.ChannelContext;
+import cn.starboot.socket.Packet;
+import cn.starboot.socket.codec.string.StringHandler;
+import cn.starboot.socket.codec.string.StringPacket;
+import cn.starboot.socket.core.ChannelContext;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
