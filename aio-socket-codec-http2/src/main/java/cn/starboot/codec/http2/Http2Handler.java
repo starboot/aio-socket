@@ -1,4 +1,4 @@
-package io.github.mxd888.codec.http2;
+package cn.starboot.codec.http2;
 
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.ProtocolEnum;

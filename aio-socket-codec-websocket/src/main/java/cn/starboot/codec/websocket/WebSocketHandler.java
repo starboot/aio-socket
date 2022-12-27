@@ -1,4 +1,4 @@
-package io.github.mxd888.codec.websocket;
+package cn.starboot.codec.websocket;
 
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.ProtocolEnum;
