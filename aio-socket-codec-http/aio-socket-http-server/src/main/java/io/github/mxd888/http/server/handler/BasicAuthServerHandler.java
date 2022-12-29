@@ -6,7 +6,7 @@ import io.github.mxd888.http.common.utils.StringUtils;
 import io.github.mxd888.http.server.HttpRequest;
 import io.github.mxd888.http.server.HttpResponse;
 import io.github.mxd888.http.server.HttpServerHandler;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -27,12 +27,12 @@ public final class BasicAuthServerHandler extends HttpServerHandler {
     }
 
     @Override
-    public void onHeaderComplete(Request request) throws IOException {
-        String clientBasic = request.getHeader(HeaderNameEnum.AUTHORIZATION.getName());
+    public void onHeaderComplete(HttpRequestPacket HTTPRequestPacket) throws IOException {
+        String clientBasic = HTTPRequestPacket.getHeader(HeaderNameEnum.AUTHORIZATION.getName());
         if (StringUtils.equals(clientBasic, this.basic)) {
-            httpServerHandler.onHeaderComplete(request);
+            httpServerHandler.onHeaderComplete(HTTPRequestPacket);
         } else {
-            HttpResponse response = request.newHttpRequest().getResponse();
+            HttpResponse response = HTTPRequestPacket.newHttpRequest().getResponse();
             response.setHeader(HeaderNameEnum.WWW_AUTHENTICATE.getName(), "Basic realm=\"smart-http\"");
             response.setHttpStatus(HttpStatus.UNAUTHORIZED);
             response.close();
@@ -40,13 +40,13 @@ public final class BasicAuthServerHandler extends HttpServerHandler {
     }
 
     @Override
-    public boolean onBodyStream(ByteBuffer buffer, Request request) {
-        return httpServerHandler.onBodyStream(buffer, request);
+    public boolean onBodyStream(ByteBuffer buffer, HttpRequestPacket HTTPRequestPacket) {
+        return httpServerHandler.onBodyStream(buffer, HTTPRequestPacket);
     }
 
     @Override
-    public void onClose(Request request) {
-        httpServerHandler.onClose(request);
+    public void onClose(HttpRequestPacket HTTPRequestPacket) {
+        httpServerHandler.onClose(HTTPRequestPacket);
     }
 
     @Override

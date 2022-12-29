@@ -4,9 +4,11 @@ import io.github.mxd888.http.common.BufferOutputStream;
 import io.github.mxd888.http.common.Cookie;
 import io.github.mxd888.http.common.HeaderValue;
 import io.github.mxd888.http.common.enums.HttpStatus;
+import io.github.mxd888.http.server.impl.AbstractOutputStream;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +24,7 @@ public interface HttpResponse {
      *
      * @return
      */
-    BufferOutputStream getOutputStream();
+	AbstractOutputStream getOutputStream();
 
     /**
      * 获取Http响应状态
@@ -116,4 +118,6 @@ public interface HttpResponse {
      * @param cookie
      */
     void addCookie(Cookie cookie);
+
+	public List<Cookie> getCookies();
 }

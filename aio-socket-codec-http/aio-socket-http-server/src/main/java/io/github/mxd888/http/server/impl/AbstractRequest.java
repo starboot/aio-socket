@@ -17,136 +17,136 @@ import java.util.Map;
  */
 abstract class AbstractRequest implements HttpRequest, Reset {
 
-    protected Request request;
+    protected HttpRequestPacket HTTPRequestPacket;
 
-    protected void init(Request request) {
-        this.request = request;
+    protected void init(HttpRequestPacket HTTPRequestPacket) {
+        this.HTTPRequestPacket = HTTPRequestPacket;
     }
 
 
     @Override
     public final String getHeader(String headName) {
-        return request.getHeader(headName);
+        return HTTPRequestPacket.getHeader(headName);
     }
 
     @Override
     public final Collection<String> getHeaders(String name) {
-        return request.getHeaders(name);
+        return HTTPRequestPacket.getHeaders(name);
     }
 
     @Override
     public final Collection<String> getHeaderNames() {
-        return request.getHeaderNames();
+        return HTTPRequestPacket.getHeaderNames();
     }
 
 
     @Override
     public final String getRequestURI() {
-        return request.getRequestURI();
+        return HTTPRequestPacket.getRequestURI();
     }
 
     @Override
     public final String getProtocol() {
-        return request.getProtocol();
+        return HTTPRequestPacket.getProtocol();
     }
 
     @Override
     public final String getMethod() {
-        return request.getMethod();
+        return HTTPRequestPacket.getMethod();
     }
 
     @Override
     public final String getScheme() {
-        return request.getScheme();
+        return HTTPRequestPacket.getScheme();
     }
 
     @Override
     public final String getRequestURL() {
-        return request.getRequestURL();
+        return HTTPRequestPacket.getRequestURL();
     }
 
     @Override
     public final String getQueryString() {
-        return request.getQueryString();
+        return HTTPRequestPacket.getQueryString();
     }
 
     @Override
     public final String getContentType() {
-        return request.getContentType();
+        return HTTPRequestPacket.getContentType();
     }
 
     @Override
     public final int getContentLength() {
-        return request.getContentLength();
+        return HTTPRequestPacket.getContentLength();
     }
 
     @Override
     public final String getParameter(String name) {
-        return request.getParameter(name);
+        return HTTPRequestPacket.getParameter(name);
     }
 
     @Override
     public final Map<String, String[]> getParameters() {
-        return request.getParameters();
+        return HTTPRequestPacket.getParameters();
     }
 
     @Override
     public final String[] getParameterValues(String name) {
-        return request.getParameters().get(name);
+        return HTTPRequestPacket.getParameters().get(name);
     }
 
     @Override
     public final String getRemoteAddr() {
-        return request.getRemoteAddr();
+        return HTTPRequestPacket.getRemoteAddr();
     }
 
     @Override
     public final InetSocketAddress getRemoteAddress() {
-        return request.getRemoteAddress();
+        return HTTPRequestPacket.getRemoteAddress();
     }
 
     @Override
     public final InetSocketAddress getLocalAddress() {
-        return request.getLocalAddress();
+        return HTTPRequestPacket.getLocalAddress();
     }
 
     @Override
     public final String getRemoteHost() {
-        return request.getRemoteHost();
+        return HTTPRequestPacket.getRemoteHost();
     }
 
     @Override
     public final Locale getLocale() {
-        return request.getLocale();
+        return HTTPRequestPacket.getLocale();
     }
 
     @Override
     public final Enumeration<Locale> getLocales() {
-        return request.getLocales();
+        return HTTPRequestPacket.getLocales();
     }
 
     @Override
     public final String getCharacterEncoding() {
-        return request.getCharacterEncoding();
+        return HTTPRequestPacket.getCharacterEncoding();
     }
 
-    public final Request getRequest() {
-        return request;
+    public final HttpRequestPacket getHTTPRequestPacket() {
+        return HTTPRequestPacket;
     }
 
     @Override
     public Cookie[] getCookies() {
-        return request.getCookies();
+        return HTTPRequestPacket.getCookies();
     }
 
     @Override
     public <A> A getAttachment() {
-        return request.getAttachment();
+        return HTTPRequestPacket.getAttachment();
     }
 
     @Override
     public <A> void setAttachment(A attachment) {
-        request.setAttachment(attachment);
+        HTTPRequestPacket.setAttachment(attachment);
     }
 
     public abstract AbstractResponse getResponse();

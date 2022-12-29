@@ -7,7 +7,7 @@ import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.StringUtils;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.ServerHandler;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 import cn.starboot.socket.core.ChannelContext;
 
 import java.nio.ByteBuffer;
@@ -27,21 +27,21 @@ class HttpUriDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
+    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, HttpRequestPacket HTTPRequestPacket) {
         ByteTree<ServerHandler<?, ?>> uriTreeNode = StringUtils.scanByteTree(byteBuffer, URI_END_MATCHER, getConfiguration().getUriByteTree());
         if (uriTreeNode != null) {
-            request.setUri(uriTreeNode.getStringValue());
+            HTTPRequestPacket.setUri(uriTreeNode.getStringValue());
             if (uriTreeNode.getAttach() == null) {
-                request.setServerHandler(request.getConfiguration().getHttpServerHandler());
+                HTTPRequestPacket.setServerHandler(HTTPRequestPacket.getConfiguration().getHttpServerHandler());
             } else {
-                request.setServerHandler(uriTreeNode.getAttach());
+                HTTPRequestPacket.setServerHandler(uriTreeNode.getAttach());
             }
 
             switch (byteBuffer.get(byteBuffer.position() - 1)) {
                 case Constant.SP:
-                    return protocolDecoder.decode(byteBuffer, channelContext, request);
+                    return protocolDecoder.decode(byteBuffer, channelContext, HTTPRequestPacket);
                 case '?':
-                    return uriQueryDecoder.decode(byteBuffer, channelContext, request);
+                    return uriQueryDecoder.decode(byteBuffer, channelContext, HTTPRequestPacket);
                 default:
                     throw new HttpException(HttpStatus.BAD_REQUEST);
             }

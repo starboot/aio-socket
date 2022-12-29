@@ -3,7 +3,7 @@ package io.github.mxd888.http.server.decode;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.StringUtils;
 import io.github.mxd888.http.server.HttpServerConfiguration;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 import cn.starboot.socket.core.ChannelContext;
 
 import java.nio.ByteBuffer;
@@ -22,12 +22,12 @@ class HttpUriQueryDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
+    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, HttpRequestPacket HTTPRequestPacket) {
         int length = scanUriQuery(byteBuffer);
         if (length >= 0) {
             String query = StringUtils.convertToString(byteBuffer, byteBuffer.position() - 1 - length, length);
-            request.setQueryString(query);
-            return decoder.decode(byteBuffer, channelContext, request);
+            HTTPRequestPacket.setQueryString(query);
+            return decoder.decode(byteBuffer, channelContext, HTTPRequestPacket);
         } else {
             return this;
         }

@@ -6,7 +6,7 @@ import io.github.mxd888.http.server.HttpRequest;
 import io.github.mxd888.http.server.HttpResponse;
 import io.github.mxd888.http.server.HttpServerHandler;
 import io.github.mxd888.http.server.ServerHandler;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -33,22 +33,22 @@ public final class HttpRouteHandler extends HttpServerHandler {
     private final Map<String, HttpServerHandler> handlerMap = new ConcurrentHashMap<>();
 
     @Override
-    public void onHeaderComplete(Request request) throws IOException {
-        ServerHandler httpServerHandler = matchHandler(request);
+    public void onHeaderComplete(HttpRequestPacket HTTPRequestPacket) throws IOException {
+        ServerHandler httpServerHandler = matchHandler(HTTPRequestPacket);
         //注册 URI 与 Handler 的映射关系
-        request.getConfiguration().getUriByteTree().addNode(request.getUri(), httpServerHandler);
+        HTTPRequestPacket.getConfiguration().getUriByteTree().addNode(HTTPRequestPacket.getUri(), httpServerHandler);
         //更新本次请求的实际 Handler
-        request.setServerHandler(httpServerHandler);
-        httpServerHandler.onHeaderComplete(request);
+        HTTPRequestPacket.setServerHandler(httpServerHandler);
+        httpServerHandler.onHeaderComplete(HTTPRequestPacket);
     }
 
     @Override
-    public boolean onBodyStream(ByteBuffer buffer, Request request) {
+    public boolean onBodyStream(ByteBuffer buffer, HttpRequestPacket HTTPRequestPacket) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void onClose(Request request) {
+    public void onClose(HttpRequestPacket HTTPRequestPacket) {
         throw new UnsupportedOperationException();
     }
 
@@ -69,8 +69,8 @@ public final class HttpRouteHandler extends HttpServerHandler {
         return this;
     }
 
-    private HttpServerHandler matchHandler(Request request) {
-        String uri = request.getRequestURI();
+    private HttpServerHandler matchHandler(HttpRequestPacket HTTPRequestPacket) {
+        String uri = HTTPRequestPacket.getRequestURI();
         if (uri == null) {
             return defaultHandler;
         }

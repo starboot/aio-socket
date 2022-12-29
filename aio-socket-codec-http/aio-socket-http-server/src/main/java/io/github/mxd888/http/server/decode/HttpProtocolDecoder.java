@@ -3,7 +3,7 @@ package io.github.mxd888.http.server.decode;
 import io.github.mxd888.http.common.utils.ByteTree;
 import io.github.mxd888.http.common.utils.StringUtils;
 import io.github.mxd888.http.server.HttpServerConfiguration;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 import cn.starboot.socket.core.ChannelContext;
 
 import java.nio.ByteBuffer;
@@ -24,11 +24,11 @@ class HttpProtocolDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
+    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, HttpRequestPacket HTTPRequestPacket) {
         ByteTree<?> protocol = StringUtils.scanByteTree(byteBuffer, CR_END_MATCHER, getConfiguration().getByteCache());
         if (protocol != null) {
-            request.setProtocol(protocol.getStringValue());
-            return lfDecoder.decode(byteBuffer, channelContext, request);
+            HTTPRequestPacket.setProtocol(protocol.getStringValue());
+            return lfDecoder.decode(byteBuffer, channelContext, HTTPRequestPacket);
         } else {
             return this;
         }

@@ -26,9 +26,9 @@ public class WebSocketRequestImpl extends AbstractRequest implements WebSocketRe
     private int frameRsv;
     private int frameOpcode;
 
-    public WebSocketRequestImpl(Request baseHttpRequest) {
-        init(baseHttpRequest);
-        this.response = new WebSocketResponseImpl(this, baseHttpRequest);
+    public WebSocketRequestImpl(HttpRequestPacket baseHttpHttpRequestPacket) {
+        init(baseHttpHttpRequestPacket);
+        this.response = new WebSocketResponseImpl(this, baseHttpHttpRequestPacket);
     }
 
     public final WebSocketResponseImpl getResponse() {
@@ -42,7 +42,7 @@ public class WebSocketRequestImpl extends AbstractRequest implements WebSocketRe
 
     @Override
     public void reset() {
-        request.setDecodePartEnum(DecodePartEnum.BODY);
+        HTTPRequestPacket.setDecodePartEnum(DecodePartEnum.BODY);
         payload.reset();
     }
 

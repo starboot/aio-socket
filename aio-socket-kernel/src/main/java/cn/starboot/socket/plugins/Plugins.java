@@ -20,6 +20,7 @@ import cn.starboot.socket.Packet;
 import cn.starboot.socket.ProtocolEnum;
 import cn.starboot.socket.StateMachineEnum;
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.intf.Handler;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
@@ -130,7 +131,7 @@ public class Plugins implements Handler, Monitor {
     }
 
     @Override
-    public void encode(Packet packet, ChannelContext channelContext) {
+    public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
         for (Plugin plugin : plugins) {
             plugin.beforeEncode(packet, channelContext);
         }

@@ -207,30 +207,6 @@ class AbstractResponse extends Packet implements HttpResponse, Reset {
         return new ArrayList<>(headers.keySet());
     }
 
-
-    public final void write(byte[] buffer) throws IOException {
-        if (buffer == null) {
-            writeByte = null;
-            Aio.bSend(outputStream.getChannelContext(), this);
-            return;
-        }
-        this.write(buffer, 0, buffer.length);
-    }
-
-    protected byte[] writeByte;
-
-    public final void write(byte[] buffer, int off, int len) throws IOException {
-        if (off == 0 && len == buffer.length) {
-            writeByte = buffer;
-        }else {
-            int i = 0;
-            for (int j = off; j < len; j++) {
-                writeByte[i++] = buffer[j];
-            }
-        }
-        Aio.bSend(outputStream.getChannelContext(), this);
-    }
-
     @Override
     public final String getCharacterEncoding() {
         return characterEncoding == null ? request.getCharacterEncoding() : characterEncoding;
@@ -253,11 +229,12 @@ class AbstractResponse extends Packet implements HttpResponse, Reset {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            request.getRequest().getAioChannelContext().close(false);
+            request.getHTTPRequestPacket().getAioChannelContext().close(false);
         }
         closed = true;
     }
 
+	@Override
     public List<Cookie> getCookies() {
         return cookies;
     }
@@ -285,7 +262,18 @@ class AbstractResponse extends Packet implements HttpResponse, Reset {
         return contentType;
     }
 
-    @Override
+	@Override
+	public void write(byte[] data) throws IOException {
+    	if (data == null || data.length == 0)
+    		return;
+		this.write(data, 0, data.length);
+	}
+
+	public final void write(byte[] buffer, int off, int len) throws IOException {
+		getOutputStream().write(buffer, off, len);
+	}
+
+	@Override
     public final void setContentType(String contentType) {
         this.contentType = Objects.requireNonNull(contentType);
     }

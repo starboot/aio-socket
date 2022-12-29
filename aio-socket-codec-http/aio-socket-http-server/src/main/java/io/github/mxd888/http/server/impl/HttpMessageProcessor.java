@@ -27,31 +27,34 @@ public class HttpMessageProcessor {
     private static final int MAX_LENGTH = 255 * 1024;
     private HttpServerConfiguration configuration;
 
-    public void process0(ChannelContext context, Request request) {
+    public void process0(ChannelContext context, HttpRequestPacket HTTPRequestPacket) {
+		System.out.println("---------11111111");
         Object aioAttachment = context.getAttachment();
         RequestAttachment attachment = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
-        AbstractRequest abstractRequest = request.newAbstractRequest();
+        AbstractRequest abstractRequest = HTTPRequestPacket.newAbstractRequest();
         AbstractResponse response = abstractRequest.getResponse();
         try {
-            switch (request.getDecodePartEnum()) {
+			System.out.println(HTTPRequestPacket.getDecodePartEnum());
+            switch (HTTPRequestPacket.getDecodePartEnum()) {
                 case HEADER_FINISH:
-                    doHttpHeader(request);
+                    doHttpHeader(HTTPRequestPacket);
                     if (response.isClosed()) {
                         break;
                     }
                 case BODY:
-                    onHttpBody(request, context.getReadBuffer().buffer(), attachment);
-                    if (response.isClosed() || request.getDecodePartEnum() != DecodePartEnum.FINISH) {
+                    onHttpBody(HTTPRequestPacket, context.getReadBuffer().buffer(), attachment);
+                    if (response.isClosed() || HTTPRequestPacket.getDecodePartEnum() != DecodePartEnum.FINISH) {
                         break;
                     }
                 case FINISH: {
+					System.out.println(HTTPRequestPacket.getRequestType());
                     //消息处理
-                    switch (request.getRequestType()) {
+                    switch (HTTPRequestPacket.getRequestType()) {
                         case WEBSOCKET:
-                            handleWebSocketRequest(context, request);
+                            handleWebSocketRequest(context, HTTPRequestPacket);
                             break;
                         case HTTP:
-                            handleHttpRequest(context, request);
+                            handleHttpRequest(context, HTTPRequestPacket);
                             break;
                     }
                 }
@@ -61,11 +64,11 @@ public class HttpMessageProcessor {
         }
     }
 
-    private void handleWebSocketRequest(ChannelContext context, Request request) throws IOException {
-        AbstractRequest abstractRequest = request.newAbstractRequest();
+    private void handleWebSocketRequest(ChannelContext context, HttpRequestPacket HTTPRequestPacket) throws IOException {
+        AbstractRequest abstractRequest = HTTPRequestPacket.newAbstractRequest();
         CompletableFuture<Object> future = new CompletableFuture<>();
         assert abstractRequest != null;
-        request.getServerHandler().handle(abstractRequest, abstractRequest.getResponse(), future);
+        HTTPRequestPacket.getServerHandler().handle(abstractRequest, abstractRequest.getResponse(), future);
         if (future.isDone()) {
             finishResponse(abstractRequest);
         } else {
@@ -87,8 +90,8 @@ public class HttpMessageProcessor {
         }
     }
 
-    private void handleHttpRequest(ChannelContext context, Request request) throws IOException {
-        AbstractRequest abstractRequest = request.newAbstractRequest();
+    private void handleHttpRequest(ChannelContext context, HttpRequestPacket HTTPRequestPacket) throws IOException {
+        AbstractRequest abstractRequest = HTTPRequestPacket.newAbstractRequest();
         assert abstractRequest != null;
         AbstractResponse response = abstractRequest.getResponse();
         CompletableFuture<Object> future = new CompletableFuture<>();
@@ -101,7 +104,7 @@ public class HttpMessageProcessor {
             }
         }
         try {
-            request.getServerHandler().handle(abstractRequest, response, future);
+            HTTPRequestPacket.getServerHandler().handle(abstractRequest, response, future);
             finishHttpHandle(context, abstractRequest, keepAlive, future);
         } catch (HttpException e) {
             e.printStackTrace();
@@ -172,6 +175,7 @@ public class HttpMessageProcessor {
 
     private void finishResponse(AbstractRequest abstractRequest) throws IOException {
         AbstractResponse response = abstractRequest.getResponse();
+		System.out.println("*****关闭下那个硬"+!response.getOutputStream().isClosed());
         //关闭本次请求的输出流
         if (!response.getOutputStream().isClosed()) {
             response.getOutputStream().close();
@@ -180,10 +184,10 @@ public class HttpMessageProcessor {
     }
 
 
-    private void onHttpBody(Request request, ByteBuffer readBuffer, RequestAttachment attachment) {
-        if (request.getServerHandler().onBodyStream(readBuffer, request)) {
-            request.setDecodePartEnum(DecodePartEnum.FINISH);
-            if (request.getRequestType() == HttpTypeEnum.HTTP) {
+    private void onHttpBody(HttpRequestPacket HTTPRequestPacket, ByteBuffer readBuffer, RequestAttachment attachment) {
+        if (HTTPRequestPacket.getServerHandler().onBodyStream(readBuffer, HTTPRequestPacket)) {
+            HTTPRequestPacket.setDecodePartEnum(DecodePartEnum.FINISH);
+            if (HTTPRequestPacket.getRequestType() == HttpTypeEnum.HTTP) {
                 attachment.setDecoder(null);
             }
         } else if (readBuffer.hasRemaining()) {
@@ -192,17 +196,17 @@ public class HttpMessageProcessor {
         }
     }
 
-    private void doHttpHeader(Request request) throws IOException {
-        methodCheck(request);
-        uriCheck(request);
-        request.getServerHandler().onHeaderComplete(request);
-        request.setDecodePartEnum(DecodePartEnum.BODY);
+    private void doHttpHeader(HttpRequestPacket HTTPRequestPacket) throws IOException {
+        methodCheck(HTTPRequestPacket);
+        uriCheck(HTTPRequestPacket);
+        HTTPRequestPacket.getServerHandler().onHeaderComplete(HTTPRequestPacket);
+        HTTPRequestPacket.setDecodePartEnum(DecodePartEnum.BODY);
     }
 
     public void stateEvent0(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
         switch (stateMachineEnum) {
             case NEW_CHANNEL:
-                RequestAttachment attachment = new RequestAttachment(new Request(configuration, channelContext));
+                RequestAttachment attachment = new RequestAttachment(new HttpRequestPacket(configuration, channelContext));
                 channelContext.setAttachment(attachment);
                 break;
             case PROCESS_EXCEPTION:
@@ -212,8 +216,8 @@ public class HttpMessageProcessor {
             case CHANNEL_CLOSED:
                 Object aioAttachment = channelContext.getAttachment();
                 RequestAttachment att = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
-                if (att != null && att.getRequest().getServerHandler() != null) {
-                    att.getRequest().getServerHandler().onClose(att.getRequest());
+                if (att != null && att.getHTTPRequestPacket().getServerHandler() != null) {
+                    att.getHTTPRequestPacket().getServerHandler().onClose(att.getHTTPRequestPacket());
                 }
                 break;
             case DECODE_EXCEPTION:
@@ -251,8 +255,8 @@ public class HttpMessageProcessor {
      * 2、发送 HTTP/1.1 请求的客户端必须发送 Host 头域。
      * 3、如果 HTTP/1.1 请求不包括 Host 请求头域，服务器必须报告错误 400(Bad Request)。 --服务器必须接受绝对 URIs(absolute URIs)。
      */
-    private void hostCheck(Request request) {
-        if (request.getHost() == null) {
+    private void hostCheck(HttpRequestPacket HTTPRequestPacket) {
+        if (HTTPRequestPacket.getHost() == null) {
             throw new HttpException(HttpStatus.BAD_REQUEST);
         }
     }
@@ -263,8 +267,8 @@ public class HttpMessageProcessor {
      * HTTP 协议不对 URI 的长度作事先的限制，服务器必须能够处理任何他们提供资源的 URI，并 且应该能够处理无限长度的 URIs，这种无效长度的 URL 可能会在客户端以基于 GET 方式的 请求时产生。如果服务器不能处理太长的 URI 的时候，服务器应该返回 414 状态码(此状态码 代表 Request-URI 太长)。
      * 注:服务器在依赖大于 255 字节的 URI 时应谨慎，因为一些旧的客户或代理实现可能不支持这 些长度。
      */
-    private void uriCheck(Request request) {
-        String originalUri = request.getUri();
+    private void uriCheck(HttpRequestPacket HTTPRequestPacket) {
+        String originalUri = HTTPRequestPacket.getUri();
         if (StringUtils.length(originalUri) > MAX_LENGTH) {
             throw new HttpException(HttpStatus.URI_TOO_LONG);
         }
@@ -275,20 +279,20 @@ public class HttpMessageProcessor {
          *3. 假如由规则1或规则2定义的主机(host)对服务器来说是一个无效的主机(host)， 则应当以一个 400(坏请求)错误消息返回。
          */
         if (originalUri.charAt(0) == '/') {
-            request.setRequestURI(originalUri);
+            HTTPRequestPacket.setRequestURI(originalUri);
             return;
         }
         int schemeIndex = originalUri.indexOf("://");
         if (schemeIndex > 0) {//绝对路径
             int uriIndex = originalUri.indexOf('/', schemeIndex + 3);
             if (uriIndex == StringUtils.INDEX_NOT_FOUND) {
-                request.setRequestURI("/");
+                HTTPRequestPacket.setRequestURI("/");
             } else {
-                request.setRequestURI(StringUtils.substring(originalUri, uriIndex));
+                HTTPRequestPacket.setRequestURI(StringUtils.substring(originalUri, uriIndex));
             }
-            request.setScheme(StringUtils.substring(originalUri, 0, schemeIndex));
+            HTTPRequestPacket.setScheme(StringUtils.substring(originalUri, 0, schemeIndex));
         } else {
-            request.setRequestURI(originalUri);
+            HTTPRequestPacket.setRequestURI(originalUri);
         }
     }
 

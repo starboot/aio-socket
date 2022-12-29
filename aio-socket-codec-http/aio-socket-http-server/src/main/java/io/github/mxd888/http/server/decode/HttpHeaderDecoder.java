@@ -8,8 +8,8 @@ import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.StringUtils;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.ServerHandler;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 import io.github.mxd888.http.server.impl.HttpRequestHandler;
-import io.github.mxd888.http.server.impl.Request;
 import cn.starboot.socket.core.ChannelContext;
 
 import java.nio.ByteBuffer;
@@ -32,9 +32,9 @@ class HttpHeaderDecoder extends AbstractDecoder {
     }
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
-        if (request.getHeaderSize() >= 0 && request.getHeaderSize() >= getConfiguration().getHeaderLimiter()) {
-            return ignoreHeaderDecoder.decode(byteBuffer, channelContext, request);
+    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, HttpRequestPacket HTTPRequestPacket) {
+        if (HTTPRequestPacket.getHeaderSize() >= 0 && HTTPRequestPacket.getHeaderSize() >= getConfiguration().getHeaderLimiter()) {
+            return ignoreHeaderDecoder.decode(byteBuffer, channelContext, HTTPRequestPacket);
         }
         if (byteBuffer.remaining() < 2) {
             return this;
@@ -54,8 +54,8 @@ class HttpHeaderDecoder extends AbstractDecoder {
             return this;
         }
 //        System.out.println("headerName: " + name.getAttach());
-        request.setHeaderTemp(name);
-        return headerValueDecoder.decode(byteBuffer, channelContext, request);
+        HTTPRequestPacket.setHeaderTemp(name);
+        return headerValueDecoder.decode(byteBuffer, channelContext, HTTPRequestPacket);
     }
 
     /**
@@ -63,7 +63,7 @@ class HttpHeaderDecoder extends AbstractDecoder {
      */
     class HeaderValueDecoder implements Decoder {
         @Override
-        public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request request) {
+        public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, HttpRequestPacket HTTPRequestPacket) {
             ByteTree<?> value = StringUtils.scanByteTree(byteBuffer, CR_END_MATCHER, getConfiguration().getByteCache());
             if (value == null) {
                 if (byteBuffer.remaining() == byteBuffer.capacity()) {
@@ -72,8 +72,8 @@ class HttpHeaderDecoder extends AbstractDecoder {
                 return this;
             }
 //            System.out.println("value: " + value.getStringValue());
-            request.setHeadValue(value.getStringValue());
-            return lfDecoder.decode(byteBuffer, channelContext, request);
+            HTTPRequestPacket.setHeadValue(value.getStringValue());
+            return lfDecoder.decode(byteBuffer, channelContext, HTTPRequestPacket);
         }
     }
 }

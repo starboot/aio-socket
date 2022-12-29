@@ -2,7 +2,7 @@ package io.github.mxd888.http.server.decode;
 
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.server.impl.HttpRequestHandler;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 import cn.starboot.socket.core.ChannelContext;
 
 import java.nio.ByteBuffer;
@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
 public class IgnoreHeaderDecoder implements Decoder {
 
     @Override
-    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, Request httpHeader) {
+    public Decoder decode(ByteBuffer byteBuffer, ChannelContext channelContext, HttpRequestPacket httpHeader) {
         int position = byteBuffer.position() + byteBuffer.arrayOffset();
         int limit = byteBuffer.limit() + byteBuffer.arrayOffset();
         byte[] data = byteBuffer.array();

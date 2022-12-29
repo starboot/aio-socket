@@ -1,6 +1,6 @@
 # Contributing
 
-我们提倡您通过提 issue 和 pull request 方式来促进 WePY 的发展。
+我们提倡您通过提 issue 和 pull HTTPRequestPacket 方式来促进 WePY 的发展。
 
 
 ## Acknowledgements
@@ -33,9 +33,9 @@ aio-socket 已开发近一年，在此感谢所有开发者对于 aio-socket 的
 
 ​             
 
-##  Pull request
+##  Pull HTTPRequestPacket
 
-我们除了希望听到您的反馈和建议外，我们也希望您接受代码形式的直接帮助，对我们的 GitHub 发出 pull request 请求。
+我们除了希望听到您的反馈和建议外，我们也希望您接受代码形式的直接帮助，对我们的 GitHub 发出 pull HTTPRequestPacket 请求。
 
 以下是具体步骤：
 

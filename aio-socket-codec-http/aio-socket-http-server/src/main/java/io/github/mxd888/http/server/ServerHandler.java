@@ -1,7 +1,7 @@
 package io.github.mxd888.http.server;
 
 import io.github.mxd888.http.common.Handler;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public interface ServerHandler<REQ, RSP> extends Handler<Request> {
+public interface ServerHandler<REQ, RSP> extends Handler<HttpRequestPacket> {
 
     /**
      * 执行当前处理器逻辑。

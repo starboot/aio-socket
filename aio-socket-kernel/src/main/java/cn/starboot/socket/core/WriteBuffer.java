@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
@@ -121,7 +122,7 @@ public final class WriteBuffer {
      * @param v short数值
      * @throws IOException 写异常
      */
-    public void writeShort(short v) throws IOException {
+    public void writeShort(short v) throws AioEncoderException {
         byte[] bytes = initCacheBytes();
         bytes[0] = (byte) ((v >>> 8) & 0xFF);
         bytes[1] = (byte) (v & 0xFF);
@@ -145,7 +146,7 @@ public final class WriteBuffer {
      * @param v int数值
      * @throws IOException 写异常
      */
-    public void writeInt(int v) throws IOException {
+    public void writeInt(int v) throws AioEncoderException {
         byte[] bytes = initCacheBytes();
         bytes[0] = (byte) ((v >>> 24) & 0xFF);
         bytes[1] = (byte) ((v >>> 16) & 0xFF);
@@ -160,7 +161,7 @@ public final class WriteBuffer {
      * @param v long数值
      * @throws IOException IO异常
      */
-    public void writeLong(long v) throws IOException {
+    public void writeLong(long v) throws AioEncoderException {
         byte[] bytes = initCacheBytes();
         bytes[0] = (byte) ((v >>> 56) & 0xFF);
         bytes[1] = (byte) ((v >>> 48) & 0xFF);
@@ -173,7 +174,7 @@ public final class WriteBuffer {
         write(bytes, 0, 8);
     }
 
-    public void write(byte[] b) throws IOException {
+    public void write(byte[] b) throws AioEncoderException {
         write(b, 0, b.length);
     }
 
@@ -187,7 +188,7 @@ public final class WriteBuffer {
      * @param len               有效长度
      * @throws IOException      IO异常
      */
-    public synchronized void write(byte[] b, int off, int len) throws IOException {
+    public synchronized void write(byte[] b, int off, int len) throws AioEncoderException {
         if (writeInBuf == null) {
             writeInBuf = memoryBlock.allocate(Math.max(chunkSize, len));
         }
@@ -195,7 +196,7 @@ public final class WriteBuffer {
         if (closed) {
             writeInBuf.clean();
             writeInBuf = null;
-            throw new IOException("writeBuffer has closed");
+            throw new AioEncoderException("writeBuffer has closed");
         }
         int remaining = writeBuffer.remaining();
         if (remaining > len) {
@@ -341,6 +342,7 @@ public final class WriteBuffer {
             writeInBuf.buffer().flip();
             MemoryUnit buffer = writeInBuf;
             writeInBuf = null;
+			System.out.println("发送数据：" + buffer.buffer().remaining());
             return buffer;
         } else {
             return null;

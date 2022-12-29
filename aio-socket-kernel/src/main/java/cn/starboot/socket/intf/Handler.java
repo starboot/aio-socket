@@ -16,6 +16,7 @@
 package cn.starboot.socket.intf;
 
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.exception.AioDecoderException;
@@ -53,6 +54,6 @@ public interface Handler extends StateMachineEvent{
      * @param packet         需要编码消息包
      * @param channelContext 用户上下文
      */
-    void encode(Packet packet, ChannelContext channelContext);
+    void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException;
 
 }

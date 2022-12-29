@@ -1,5 +1,6 @@
 package io.github.mxd888.http.server.impl;
 
+import cn.starboot.socket.exception.AioEncoderException;
 import io.github.mxd888.http.common.BufferOutputStream;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.decode.Decoder;
@@ -10,6 +11,7 @@ import cn.starboot.socket.StateMachineEnum;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
+import io.github.mxd888.http.server.encode.HttpResponseEncoder;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -30,15 +32,18 @@ public class HttpRequestHandler implements AioHandler {
 
     private final HttpMessageProcessor processor;
 
+    private final HttpResponseEncoder encoder;
+
     public HttpRequestHandler(HttpServerConfiguration configuration, HttpMessageProcessor processor) {
         this.httpMethodDecoder = new HttpMethodDecoder(configuration);
         this.processor = processor;
+        this.encoder = new HttpResponseEncoder();
     }
 
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {
-        if (packet instanceof Request) {
-            Request packet1 = (Request) packet;
+        if (packet instanceof HttpRequestPacket) {
+            HttpRequestPacket packet1 = (HttpRequestPacket) packet;
             System.out.println(packet1.getProtocol() + "--" + packet1.getMethod() + "--" + packet1.getContentType() +
                     "--" + packet1.getHeaderNames() + "--"  + packet1.getHeader("Upgrade"));
             packet1.getParameters().forEach(new BiConsumer<String, String[]>() {
@@ -47,7 +52,7 @@ public class HttpRequestHandler implements AioHandler {
                     System.out.println(s + "---" + Arrays.toString(strings));
                 }
             });
-            processor.process0(channelContext, (Request) packet);
+            processor.process0(channelContext, (HttpRequestPacket) packet);
         }else {
             System.out.println("在io.github.mxd888.http.server.impl.HttpRequestHandler的handle方法里出现http处理错误");
         }
@@ -61,7 +66,7 @@ public class HttpRequestHandler implements AioHandler {
         }
         Object aioAttachment = channelContext.getAttachment();
         RequestAttachment attachment = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
-        Request request = attachment.getRequest();
+        HttpRequestPacket HTTPRequestPacket = attachment.getHTTPRequestPacket();
         Decoder decodeChain = attachment.getDecoder();
         if (decodeChain == null) {
             decodeChain = httpMethodDecoder;
@@ -71,36 +76,27 @@ public class HttpRequestHandler implements AioHandler {
             attachment.setDecoder(BODY_READY_DECODER);
             return null;
         } else if (decodeChain == BODY_READY_DECODER) {
-            return request;
+            return HTTPRequestPacket;
         }
 
-        decodeChain = decodeChain.decode(readBuffer.buffer(), channelContext, request);
+        decodeChain = decodeChain.decode(readBuffer.buffer(), channelContext, HTTPRequestPacket);
         attachment.setDecoder(decodeChain);
         if (decodeChain == BODY_READY_DECODER) {
-            return request;
+            return HTTPRequestPacket;
         }
         if (readBuffer.buffer().remaining() == readBuffer.buffer().capacity()) {
-            throw new RuntimeException("buffer is too small when decode " + decodeChain.getClass().getName() + " ," + request);
+            throw new RuntimeException("buffer is too small when decode " + decodeChain.getClass().getName() + " ," + HTTPRequestPacket);
         }
         return null;
     }
 
     @Override
-    public void encode(Packet packet, ChannelContext channelContext) {
-        if (packet instanceof AbstractResponse) {
-            AbstractResponse packet1 = (AbstractResponse) packet;
-            BufferOutputStream bufferOutputStream = channelContext.getAttr("BufferOutputStream", BufferOutputStream.class);
-            try {
-                if (packet1.writeByte != null) {
-                    bufferOutputStream.write(packet1.writeByte);
-                }else {
-                    // 无消息体只写头
-                    bufferOutputStream.flush();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
+		if (packet instanceof HttpResponsePacket) {
+			HttpResponsePacket httpResponsePacket = (HttpResponsePacket) packet;
+			encoder.encode(httpResponsePacket, channelContext);
+		}
+
     }
 
     @Override

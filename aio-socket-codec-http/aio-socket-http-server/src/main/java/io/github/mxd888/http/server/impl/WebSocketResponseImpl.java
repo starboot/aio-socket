@@ -17,8 +17,8 @@ import java.util.Arrays;
 public class WebSocketResponseImpl extends AbstractResponse implements WebSocketResponse {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketResponseImpl.class);
 
-    public WebSocketResponseImpl(WebSocketRequestImpl webSocketRequest, Request request) {
-        init(webSocketRequest, new WebSocketOutputStream(webSocketRequest, this, request));
+    public WebSocketResponseImpl(WebSocketRequestImpl webSocketRequest, HttpRequestPacket HTTPRequestPacket) {
+        init(webSocketRequest, new WebSocketOutputStream(webSocketRequest, this, HTTPRequestPacket));
     }
 
     @Override
@@ -27,6 +27,7 @@ public class WebSocketResponseImpl extends AbstractResponse implements WebSocket
             LOGGER.info("发送字符串消息: " + text);
         byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         try {
+			System.out.println(bytes.length);
             send(WebSocketRequestImpl.OPCODE_TEXT, bytes, 0, bytes.length);
         } catch (IOException e) {
             throw new RuntimeException(e);

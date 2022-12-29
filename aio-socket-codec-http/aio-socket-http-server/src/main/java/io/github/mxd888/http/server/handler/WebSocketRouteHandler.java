@@ -6,7 +6,7 @@ import io.github.mxd888.http.common.utils.AntPathMatcher;
 import io.github.mxd888.http.server.WebSocketHandler;
 import io.github.mxd888.http.server.WebSocketRequest;
 import io.github.mxd888.http.server.WebSocketResponse;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -33,13 +33,13 @@ public final class WebSocketRouteHandler extends WebSocketHandler {
     private final Map<String, WebSocketHandler> handlerMap = new ConcurrentHashMap<>();
 
     @Override
-    public void onClose(Request request) {
-        handlerMap.get(request.getRequestURI()).onClose(request);
+    public void onClose(HttpRequestPacket HTTPRequestPacket) {
+        handlerMap.get(HTTPRequestPacket.getRequestURI()).onClose(HTTPRequestPacket);
     }
 
     @Override
-    public void onHeaderComplete(Request request) throws IOException {
-        String uri = request.getRequestURI();
+    public void onHeaderComplete(HttpRequestPacket HTTPRequestPacket) throws IOException {
+        String uri = HTTPRequestPacket.getRequestURI();
         WebSocketHandler httpHandler = handlerMap.get(uri);
         if (httpHandler == null) {
             for (Map.Entry<String, WebSocketHandler> entity : handlerMap.entrySet()) {
@@ -53,12 +53,12 @@ public final class WebSocketRouteHandler extends WebSocketHandler {
             }
             handlerMap.put(uri, httpHandler);
         }
-        httpHandler.onHeaderComplete(request);
+        httpHandler.onHeaderComplete(HTTPRequestPacket);
     }
 
     @Override
-    public boolean onBodyStream(ByteBuffer byteBuffer, Request request) {
-        return handlerMap.get(request.getRequestURI()).onBodyStream(byteBuffer, request);
+    public boolean onBodyStream(ByteBuffer byteBuffer, HttpRequestPacket HTTPRequestPacket) {
+        return handlerMap.get(HTTPRequestPacket.getRequestURI()).onBodyStream(byteBuffer, HTTPRequestPacket);
     }
 
     @Override

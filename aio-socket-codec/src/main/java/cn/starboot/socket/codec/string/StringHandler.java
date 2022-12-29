@@ -17,6 +17,7 @@ package cn.starboot.socket.codec.string;
 
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
+import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.utils.AIOUtil;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
@@ -77,15 +78,11 @@ public abstract class StringHandler implements AioHandler {
     }
 
     @Override
-    public void encode(Packet packet, ChannelContext channelContext) {
+    public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
         WriteBuffer writeBuffer = channelContext.getWriteBuffer();
-        try {
-            StringPacket packet1 = (StringPacket) packet;
-            writeBuffer.writeInt(packet1.getData().getBytes().length);
-            writeBuffer.write(packet1.getData().getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		StringPacket packet1 = (StringPacket) packet;
+		writeBuffer.writeInt(packet1.getData().getBytes().length);
+		writeBuffer.write(packet1.getData().getBytes());
     }
 
     @Override

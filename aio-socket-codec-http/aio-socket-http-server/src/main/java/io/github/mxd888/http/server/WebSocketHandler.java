@@ -6,12 +6,11 @@ import io.github.mxd888.http.common.enums.HttpStatus;
 import io.github.mxd888.http.common.exception.HttpException;
 import io.github.mxd888.http.common.utils.Constant;
 import io.github.mxd888.http.common.utils.SHA1;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 import io.github.mxd888.http.server.impl.WebSocketRequestImpl;
 import io.github.mxd888.http.server.impl.WebSocketResponseImpl;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Base64;
@@ -26,9 +25,9 @@ public abstract class WebSocketHandler implements ServerHandler<WebSocketRequest
     public static final String WEBSOCKET_13_ACCEPT_GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
     @Override
-    public void onHeaderComplete(Request request) throws IOException {
-        WebSocketResponseImpl response = request.newWebsocketRequest().getResponse();
-        String key = request.getHeader(HeaderNameEnum.Sec_WebSocket_Key.getName());
+    public void onHeaderComplete(HttpRequestPacket HTTPRequestPacket) throws IOException {
+        WebSocketResponseImpl response = HTTPRequestPacket.newWebsocketRequest().getResponse();
+        String key = HTTPRequestPacket.getHeader(HeaderNameEnum.Sec_WebSocket_Key.getName());
         String acceptSeed = key + WEBSOCKET_13_ACCEPT_GUID;
         byte[] sha1 = SHA1.encode(acceptSeed);
         String accept = Base64.getEncoder().encodeToString(sha1);
@@ -36,13 +35,14 @@ public abstract class WebSocketHandler implements ServerHandler<WebSocketRequest
         response.setHeader(HeaderNameEnum.UPGRADE.getName(), HeaderValueEnum.WEBSOCKET.getName());
         response.setHeader(HeaderNameEnum.CONNECTION.getName(), HeaderValueEnum.UPGRADE.getName());
         response.setHeader(HeaderNameEnum.Sec_WebSocket_Accept.getName(), accept);
+        response.flush();
 //        OutputStream outputStream = response.getOutputStream();
 //        outputStream.flush();
-        response.write(null);
+//        response.write(null);
     }
 
     @Override
-    public boolean onBodyStream(ByteBuffer byteBuffer, Request request) {
+    public boolean onBodyStream(ByteBuffer byteBuffer, HttpRequestPacket HTTPRequestPacket) {
         if (byteBuffer.remaining() < 2) {
             return false;
         }
@@ -72,7 +72,7 @@ public abstract class WebSocketHandler implements ServerHandler<WebSocketRequest
         boolean fin = (first & 0x80) != 0;
         int rsv = (first & 0x70) >> 4;
         int opcode = first & 0x0f;
-        WebSocketRequestImpl webSocketRequest = request.newWebsocketRequest();
+        WebSocketRequestImpl webSocketRequest = HTTPRequestPacket.newWebsocketRequest();
         webSocketRequest.setFrameFinalFlag(fin);
         webSocketRequest.setFrameRsv(rsv);
         webSocketRequest.setFrameOpcode(opcode);

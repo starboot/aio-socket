@@ -9,8 +9,8 @@ import io.github.mxd888.http.common.enums.HeaderNameEnum;
  */
 final class WebSocketOutputStream extends AbstractOutputStream {
 
-    public WebSocketOutputStream(WebSocketRequestImpl webSocketRequest, WebSocketResponseImpl response, Request request) {
-        super(webSocketRequest, response, request);
+    public WebSocketOutputStream(WebSocketRequestImpl webSocketRequest, WebSocketResponseImpl response, HttpRequestPacket HTTPRequestPacket) {
+        super(webSocketRequest, response, HTTPRequestPacket);
         super.chunked = false;
     }
 

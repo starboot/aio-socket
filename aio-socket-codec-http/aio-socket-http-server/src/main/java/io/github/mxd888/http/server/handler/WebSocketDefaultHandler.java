@@ -5,7 +5,7 @@ import io.github.mxd888.http.common.logging.LoggerFactory;
 import io.github.mxd888.http.server.WebSocketHandler;
 import io.github.mxd888.http.server.WebSocketRequest;
 import io.github.mxd888.http.server.WebSocketResponse;
-import io.github.mxd888.http.server.impl.Request;
+import io.github.mxd888.http.server.impl.HttpRequestPacket;
 import io.github.mxd888.http.server.impl.WebSocketRequestImpl;
 
 import java.io.IOException;
@@ -21,9 +21,9 @@ public class WebSocketDefaultHandler extends WebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketDefaultHandler.class);
 
     @Override
-    public void onHeaderComplete(Request request) throws IOException {
-        super.onHeaderComplete(request);
-        WebSocketRequestImpl webSocketRequest = request.newWebsocketRequest();
+    public void onHeaderComplete(HttpRequestPacket HTTPRequestPacket) throws IOException {
+        super.onHeaderComplete(HTTPRequestPacket);
+        WebSocketRequestImpl webSocketRequest = HTTPRequestPacket.newWebsocketRequest();
         onHandShake(webSocketRequest, webSocketRequest.getResponse());
     }
 

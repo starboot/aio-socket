@@ -7,7 +7,7 @@ package io.github.mxd888.http.server.impl;
  */
 class HttpResponseImpl extends AbstractResponse {
 
-    public HttpResponseImpl(HttpRequestImpl httpRequest, Request request) {
-        init(httpRequest, new HttpOutputStream(httpRequest, this, request));
+    public HttpResponseImpl(HttpRequestImpl httpRequest, HttpRequestPacket HTTPRequestPacket) {
+        init(httpRequest, new HttpOutputStream(httpRequest, this, HTTPRequestPacket));
     }
 }

@@ -19,6 +19,7 @@ import cn.starboot.socket.Packet;
 import cn.starboot.socket.ProtocolEnum;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
+import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.utils.AIOUtil;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
@@ -60,7 +61,7 @@ public class DemoHandler implements AioHandler {
             try {
                 writeBuffer.writeInt(demoPacket.getData().getBytes().length);
                 writeBuffer.write(demoPacket.getData().getBytes());
-            } catch (IOException e) {
+            } catch (AioEncoderException e) {
                 e.printStackTrace();
             }
         }

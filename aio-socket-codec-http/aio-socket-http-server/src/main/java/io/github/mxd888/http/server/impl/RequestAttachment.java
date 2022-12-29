@@ -14,7 +14,7 @@ public class RequestAttachment {
     /**
      * 请求对象
      */
-    private final Request request;
+    private final HttpRequestPacket HTTPRequestPacket;
     /**
      * 当前使用的解码器
      */
@@ -25,12 +25,12 @@ public class RequestAttachment {
      */
     private SmartDecoder bodyDecoder;
 
-    public RequestAttachment(Request request) {
-        this.request = request;
+    public RequestAttachment(HttpRequestPacket HTTPRequestPacket) {
+        this.HTTPRequestPacket = HTTPRequestPacket;
     }
 
-    public Request getRequest() {
-        return request;
+    public HttpRequestPacket getHTTPRequestPacket() {
+        return HTTPRequestPacket;
     }
 
     public Decoder getDecoder() {

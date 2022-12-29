@@ -1,5 +1,6 @@
 package io.github.mxd888.http.server.impl;
 
+import io.github.mxd888.http.common.BufferOutputStream;
 import io.github.mxd888.http.common.enums.HeaderNameEnum;
 import io.github.mxd888.http.common.enums.HeaderValueEnum;
 import io.github.mxd888.http.common.utils.Constant;
@@ -23,7 +24,7 @@ final class HttpOutputStream extends AbstractOutputStream {
     /**
      * key:status+contentType
      */
-    private static final Map<String, WriteCache>[] CACHE_CONTENT_TYPE_AND_LENGTH = new Map[CACHE_LIMIT];
+    private static final Map<String, BufferOutputStream.WriteCache>[] CACHE_CONTENT_TYPE_AND_LENGTH = new Map[CACHE_LIMIT];
     private static final Date currentDate = new Date(0);
     private static final Semaphore flushDateSemaphore = new Semaphore(1);
     private static long expireTime;
@@ -37,8 +38,8 @@ final class HttpOutputStream extends AbstractOutputStream {
         }
     }
 
-    public HttpOutputStream(HttpRequestImpl httpRequest, HttpResponseImpl response, Request request) {
-        super(httpRequest, response, request);
+    public HttpOutputStream(HttpRequestImpl httpRequest, HttpResponseImpl response, HttpRequestPacket HTTPRequestPacket) {
+        super(httpRequest, response, HTTPRequestPacket);
     }
 
     private static long flushDate() {
@@ -64,7 +65,7 @@ final class HttpOutputStream extends AbstractOutputStream {
         boolean cache = response.isDefaultStatus() && contentLength > 0 && contentLength < CACHE_LIMIT && !hasHeader;
 
         if (cache) {
-            WriteCache data = CACHE_CONTENT_TYPE_AND_LENGTH[contentLength].get(contentType);
+            BufferOutputStream.WriteCache data = CACHE_CONTENT_TYPE_AND_LENGTH[contentLength].get(contentType);
             if (data != null) {
                 if (currentTime > data.getExpireTime() && data.getSemaphore().tryAcquire()) {
                     try {
@@ -97,7 +98,7 @@ final class HttpOutputStream extends AbstractOutputStream {
         //缓存响应头
         if (cache) {
             sb.append(Constant.CRLF);
-            WriteCache writeCache = new WriteCache(currentTime + 1000, sb.toString().getBytes());
+            BufferOutputStream.WriteCache writeCache = new BufferOutputStream.WriteCache(currentTime + 1000, sb.toString().getBytes());
             CACHE_CONTENT_TYPE_AND_LENGTH[contentLength].put(contentType, writeCache);
             return writeCache.getCacheData();
         }

@@ -32,7 +32,7 @@ import java.util.function.Function;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public final class Request extends Packet implements HttpRequest, Reset {
+public final class HttpRequestPacket extends Packet implements HttpRequest, Reset {
     private static final Locale defaultLocale = Locale.getDefault();
     private static final int INIT_CONTENT_LENGTH = -2;
     private static final int NONE_CONTENT_LENGTH = -1;
@@ -93,7 +93,7 @@ public final class Request extends Packet implements HttpRequest, Reset {
     private WebSocketRequestImpl webSocketRequest;
     private ServerHandler serverHandler;
 
-    Request(HttpServerConfiguration configuration, ChannelContext channelContext) {
+    HttpRequestPacket(HttpServerConfiguration configuration, ChannelContext channelContext) {
         this.configuration = configuration;
         this.channelContext = channelContext;
     }

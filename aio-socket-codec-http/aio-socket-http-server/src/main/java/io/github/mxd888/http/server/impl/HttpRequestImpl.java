@@ -12,9 +12,9 @@ public class HttpRequestImpl extends AbstractRequest {
     private final HttpResponseImpl response;
     private InputStream inputStream;
 
-    HttpRequestImpl(Request request) {
-        init(request);
-        this.response = new HttpResponseImpl(this, request);
+    HttpRequestImpl(HttpRequestPacket HTTPRequestPacket) {
+        init(HTTPRequestPacket);
+        this.response = new HttpResponseImpl(this, HTTPRequestPacket);
     }
 
     public final HttpResponseImpl getResponse() {
@@ -27,7 +27,7 @@ public class HttpRequestImpl extends AbstractRequest {
     }
 
     public void reset() {
-        request.reset();
+        HTTPRequestPacket.reset();
         response.reset();
         if (inputStream != null) {
             try {

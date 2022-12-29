@@ -19,6 +19,7 @@ import cn.starboot.socket.Packet;
 import cn.starboot.socket.StateMachineEnum;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
@@ -30,62 +31,67 @@ import java.util.function.Consumer;
 
 final class UDPChannelContext extends ChannelContext {
 
-    private final UDPChannel udpChannel;
+	private final UDPChannel udpChannel;
 
-    private final SocketAddress remote;
+	private final SocketAddress remote;
 
-    UDPChannelContext(final UDPChannel udpChannel, final SocketAddress remote, MemoryBlock memoryBlock) {
-        this.udpChannel = udpChannel;
-        this.remote = remote;
-        Consumer<WriteBuffer> consumer = var -> {
-            MemoryUnit writeBuffer = var.poll();
-            if (writeBuffer != null) {
-                this.udpChannel.write(writeBuffer, this);
-            }
-        };
-        setWriteBuffer(memoryBlock, consumer, this.udpChannel.config.getWriteBufferSize(), 20);
-        this.udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
-    }
+	UDPChannelContext(final UDPChannel udpChannel, final SocketAddress remote, MemoryBlock memoryBlock) {
+		this.udpChannel = udpChannel;
+		this.remote = remote;
+		Consumer<WriteBuffer> consumer = var -> {
+			MemoryUnit writeBuffer = var.poll();
+			if (writeBuffer != null) {
+				this.udpChannel.write(writeBuffer, this);
+			}
+		};
+		setWriteBuffer(memoryBlock, consumer, this.udpChannel.config.getWriteBufferSize(), 20);
+		this.udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
+	}
 
-    @Override
-    public void signalRead(boolean flip) {
-        throw new UnsupportedOperationException();
-    }
+	@Override
+	public void signalRead(boolean flip) {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public MemoryUnit getReadBuffer() {
-        throw new UnsupportedOperationException();
-    }
+	@Override
+	public MemoryUnit getReadBuffer() {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public void close(boolean immediate) {
-        this.udpChannel.close();
-        this.byteBuf.close();
-    }
+	@Override
+	public void close(boolean immediate) {
+		this.udpChannel.close();
+		this.byteBuf.close();
+	}
 
-    @Override
-    public InetSocketAddress getLocalAddress() throws IOException {
-        return (InetSocketAddress) udpChannel.getChannel().getLocalAddress();
-    }
-    @Override
-    public InetSocketAddress getRemoteAddress() {
-        return (InetSocketAddress) remote;
-    }
+	@Override
+	public InetSocketAddress getLocalAddress() throws IOException {
+		return (InetSocketAddress) udpChannel.getChannel().getLocalAddress();
+	}
 
-    @Override
-    public AioConfig getAioConfig() {
-        return this.udpChannel.config;
-    }
+	@Override
+	public InetSocketAddress getRemoteAddress() {
+		return (InetSocketAddress) remote;
+	}
 
-    @Override
-    protected void sendPacket(Packet packet, boolean isBlock) {
-        synchronized (this) {
-            getAioConfig().getHandler().encode(packet, this);
-        }
-        flush();
-    }
+	@Override
+	public AioConfig getAioConfig() {
+		return this.udpChannel.config;
+	}
 
-    protected void UDPFlush() {
-        flush();
-    }
+	@Override
+	protected void sendPacket(Packet packet, boolean isBlock) {
+		try {
+			synchronized (this) {
+				getAioConfig().getHandler().encode(packet, this);
+			}
+		} catch (AioEncoderException e) {
+			e.printStackTrace();
+		}
+		flush();
+	}
+
+	protected void UDPFlush() {
+		flush();
+	}
 }

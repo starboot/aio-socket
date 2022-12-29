@@ -15,10 +15,12 @@
  */
 package cn.starboot.socket.exception;
 
+import java.io.IOException;
+
 /**
  * aio-socket编码异常处理
  */
-public class AioEncoderException extends RuntimeException {
+public class AioEncoderException extends Exception {
 
     public AioEncoderException() {
         super();
