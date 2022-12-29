@@ -40,7 +40,6 @@ public class HttpResponseEncoder extends AbstractResponseEncoder {
 		// 判断是否为关闭报文
 		if (closed) {
 			if (chunked) {
-				System.out.println("写chunk");
 				writeBuffer.write(Constant.CHUNKED_END_BYTES);
 			}
 			return;
@@ -52,9 +51,7 @@ public class HttpResponseEncoder extends AbstractResponseEncoder {
 		int off = 0;
 		int len = data.length;
 		if (httpResponsePacket.isChunked()) {
-			System.out.println("is chunked: " + len);
 			if (httpResponsePacket.isGzip()) {
-				System.out.println("-000");
 				data = GzipUtils.compress(data, off, len);
 				off = 0;
 				len = data.length;
@@ -64,9 +61,6 @@ public class HttpResponseEncoder extends AbstractResponseEncoder {
 			writeBuffer.write(data, off, len);
 			writeBuffer.write(Constant.CRLF_BYTES);
 		} else {
-			System.out.println("不chunked");
-			System.out.println(off + "---" + len);
-			System.out.println(Arrays.toString(data));
 			writeBuffer.write(data, off, len);
 		}
 

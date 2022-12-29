@@ -342,7 +342,6 @@ public final class WriteBuffer {
             writeInBuf.buffer().flip();
             MemoryUnit buffer = writeInBuf;
             writeInBuf = null;
-			System.out.println("发送数据：" + buffer.buffer().remaining());
             return buffer;
         } else {
             return null;

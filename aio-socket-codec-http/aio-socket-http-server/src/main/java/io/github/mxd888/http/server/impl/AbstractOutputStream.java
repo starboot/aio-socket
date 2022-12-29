@@ -64,14 +64,11 @@ public abstract class AbstractOutputStream extends OutputStream implements Reset
 
 	public final void directWrite(byte[] b, int off, int len) throws IOException {
 		httpResponsePacket.setDirectWrite(true);
-		System.out.println("directWrite buffer");
 		write(b, off, len);
-
 	}
 
 	public final void write(ByteBuffer buffer) throws IOException {
     	write(buffer.array());
-		System.out.println("write(ByteBuffer buffer)");
 	}
 
 	@Override
@@ -107,7 +104,6 @@ public abstract class AbstractOutputStream extends OutputStream implements Reset
 		httpResponsePacket.setChunked(chunked);
 		closed = true;
 		// 在这里输出一下
-		System.out.println("---- 这里输出一下");
 		flush();
     }
 
@@ -116,7 +112,6 @@ public abstract class AbstractOutputStream extends OutputStream implements Reset
         if (!committed) {
             chunked = supportChunked(request, response);
         }
-		System.out.println(committed + "--" + chunked);
     }
 
 	protected void writeHeader() {

@@ -28,7 +28,6 @@ public class HttpMessageProcessor {
     private HttpServerConfiguration configuration;
 
     public void process0(ChannelContext context, HttpRequestPacket HTTPRequestPacket) {
-		System.out.println("---------11111111");
         Object aioAttachment = context.getAttachment();
         RequestAttachment attachment = (aioAttachment instanceof RequestAttachment) ? (RequestAttachment) aioAttachment : null;
         AbstractRequest abstractRequest = HTTPRequestPacket.newAbstractRequest();
@@ -175,7 +174,6 @@ public class HttpMessageProcessor {
 
     private void finishResponse(AbstractRequest abstractRequest) throws IOException {
         AbstractResponse response = abstractRequest.getResponse();
-		System.out.println("*****关闭下那个硬"+!response.getOutputStream().isClosed());
         //关闭本次请求的输出流
         if (!response.getOutputStream().isClosed()) {
             response.getOutputStream().close();
