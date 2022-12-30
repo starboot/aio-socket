@@ -9,6 +9,7 @@ import java.util.Map;
  * @version 2.10.1.v20211002-RELEASE
  */
 public final class LoggerFactory {
+
     private static final Map<String, Logger> loggerMap = new HashMap<>();
 
     public static Logger getLogger(Class<?> clazz) {

@@ -8,6 +8,7 @@ import cn.starboot.http.common.enums.HttpStatus;
  * @version 2.10.1.v20211002-RELEASE
  */
 public class HttpException extends RuntimeException {
+
     private int httpCode;
 
     private String desc;

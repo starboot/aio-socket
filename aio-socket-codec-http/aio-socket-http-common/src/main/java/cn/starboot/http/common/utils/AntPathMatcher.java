@@ -6,39 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * <p>Part of this mapping code has been kindly borrowed from <a href="http://ant.apache.org">Apache Ant</a>.
- *
- * <p>The mapping matches URLs using the following rules:<br>
- * <ul>
- * <li>{@code ?} matches one character</li>
- * <li>{@code *} matches zero or more characters</li>
- * <li>{@code **} matches zero or more <em>directories</em> in a path</li>
- * </ul>
- *
- * <h3>Examples</h3>
- * <ul>
- * <li>{@code com/t?st.jsp} &mdash; matches {@code com/test.jsp} but also
- * {@code com/tast.jsp} or {@code com/txst.jsp}</li>
- * <li>{@code com/*.jsp} &mdash; matches all {@code .jsp} files in the
- * {@code com} directory</li>
- * <li><code>com/&#42;&#42;/test.jsp</code> &mdash; matches all {@code test.jsp}
- * files underneath the {@code com} path</li>
- * <li><code>org/springframework/&#42;&#42;/*.jsp</code> &mdash; matches all
- * {@code .jsp} files underneath the {@code org/springframework} path</li>
- * <li><code>org/&#42;&#42;/servlet/bla.jsp</code> &mdash; matches
- * {@code org/springframework/servlet/bla.jsp} but also
- * {@code org/springframework/testing/servlet/bla.jsp} and {@code org/servlet/bla.jsp}</li>
- * </ul>
- *
- * @author Alef Arendsen
- * @author Juergen Hoeller
- * @author Rob Harrop
- * @author Arjen Poutsma
- * @author Rossen Stoyanchev
- * @author Sam Brannen
- * @since 16.07.2003
- */
 public class AntPathMatcher {
 
     /**
@@ -49,13 +16,18 @@ public class AntPathMatcher {
     private static final int CACHE_TURNOFF_THRESHOLD = 65536;
 
     private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{[^/]+?\\}");
-    final Map<String, AntPathStringMatcher> stringMatcherCache = new ConcurrentHashMap<String, AntPathStringMatcher>(256);
-    private final Map<String, String[]> tokenizedPatternCache = new ConcurrentHashMap<String, String[]>(256);
-    private String pathSeparator;
-    private PathSeparatorPatternCache pathSeparatorPatternCache;
-    private boolean trimTokens = true;
-    private volatile Boolean cachePatterns;
 
+    final Map<String, AntPathStringMatcher> stringMatcherCache = new ConcurrentHashMap<String, AntPathStringMatcher>(256);
+
+    private final Map<String, String[]> tokenizedPatternCache = new ConcurrentHashMap<String, String[]>(256);
+
+    private String pathSeparator;
+
+    private PathSeparatorPatternCache pathSeparatorPatternCache;
+
+    private boolean trimTokens = true;
+
+    private volatile Boolean cachePatterns;
 
     /**
      * Create a new instance with the {@link #DEFAULT_PATH_SEPARATOR}.

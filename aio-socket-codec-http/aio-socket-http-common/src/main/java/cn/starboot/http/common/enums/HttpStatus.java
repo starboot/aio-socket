@@ -1,17 +1,5 @@
 package cn.starboot.http.common.enums;
 
-/**
- * 本类取自Spring代码org.springframework.http.HttpStatus
- * Java 5 enumeration of HTTP status codes.
- * <p>
- * <p>The HTTP status code series can be retrieved via {@link #series()}.
- *
- * @author Arjen Poutsma
- * @author Sebastien Deleuze
- * @see Series
- * @see <a href="http://www.iana.org/assignments/http-status-codes">HTTP Status Code Registry</a>
- * @see <a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of HTTP status codes - Wikipedia</a>
- */
 public enum HttpStatus {
 
     // 1xx Informational

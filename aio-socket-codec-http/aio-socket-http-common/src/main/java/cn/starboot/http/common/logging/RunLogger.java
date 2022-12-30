@@ -14,7 +14,8 @@ import java.util.logging.Logger;
 class RunLogger implements cn.starboot.http.common.logging.Logger {
 
     private final String loggerName;
-    private Logger logger = null;
+
+    private final Logger logger;
 
     RunLogger(String name) {
         this.loggerName = name;

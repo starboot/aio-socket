@@ -13,16 +13,22 @@ import java.util.logging.LogRecord;
  * @version 2.10.1.v20211002-RELEASE
  */
 class LogFormatter extends Formatter {
+
     private final static String format = "{0,date,yyyy-MM-dd} {0,time,HH:mm:ss.SS}";
+
     private final String lineSeparator = System.getProperty("line.separator");
+
     Date dat = new Date();
+
     String logClassName = RunLogger.class.getName();
+
     private MessageFormat formatter;
-    private Object args[] = new Object[1];
+
+    private final Object[] args = new Object[1];
 
     @Override
     public synchronized String format(LogRecord record) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         // Minimize memory allocations here.
         dat.setTime(record.getMillis());
         args[0] = dat;
@@ -37,7 +43,7 @@ class LogFormatter extends Formatter {
         sb.append("] ");
 
 //        sb.append("[Thread-" + record.getThreadID() + "] "); // 线程
-        sb.append("[" + Thread.currentThread().getName() + "] "); // 线程
+        sb.append("[").append(Thread.currentThread().getName()).append("] "); // 线程
 
         StackTraceElement[] stackElement = new Throwable().getStackTrace();
         boolean lookingForLogger = true;
@@ -52,9 +58,7 @@ class LogFormatter extends Formatter {
                 if (!cname.matches(logClassName)) {
                     String simpleClassName = cname.substring(cname
                             .lastIndexOf(".") + 1);
-                    sb.append("[" + simpleClassName + "("
-                            + stack.getMethodName() + ":"
-                            + stack.getLineNumber() + ")]");
+                    sb.append("[").append(simpleClassName).append("(").append(stack.getMethodName()).append(":").append(stack.getLineNumber()).append(")]");
                     break;
                 }
             }
@@ -70,7 +74,7 @@ class LogFormatter extends Formatter {
                 record.getThrown().printStackTrace(pw);
                 pw.close();
                 sb.append(sw.toString());
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
         }
         sb.append(lineSeparator);
