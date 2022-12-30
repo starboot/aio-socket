@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  *
@@ -58,6 +59,7 @@ public abstract class AbstractOutputStream extends OutputStream implements Reset
 	@Override
 	public final void write(byte[] b, int off, int len) throws IOException {
 		check();
+		httpResponsePacket.setClosed(false);
 		httpResponsePacket.setData(b);
 		flush();
 	}
@@ -75,7 +77,7 @@ public abstract class AbstractOutputStream extends OutputStream implements Reset
 	public final void flush() throws IOException {
 		writeHeader();
 		// send
-		Aio.bSend(this.context, httpResponsePacket);
+		Aio.bSend(this.context, this.httpResponsePacket);
 	}
 
 	public final boolean isClosed() {

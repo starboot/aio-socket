@@ -27,7 +27,6 @@ public class WebSocketResponseImpl extends AbstractResponse implements WebSocket
             LOGGER.info("发送字符串消息: " + text);
         byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         try {
-			System.out.println(bytes.length);
             send(WebSocketRequestImpl.OPCODE_TEXT, bytes, 0, bytes.length);
         } catch (IOException e) {
             throw new RuntimeException(e);

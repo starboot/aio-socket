@@ -33,7 +33,6 @@ public class HttpMessageProcessor {
         AbstractRequest abstractRequest = HTTPRequestPacket.newAbstractRequest();
         AbstractResponse response = abstractRequest.getResponse();
         try {
-			System.out.println(HTTPRequestPacket.getDecodePartEnum());
             switch (HTTPRequestPacket.getDecodePartEnum()) {
                 case HEADER_FINISH:
                     doHttpHeader(HTTPRequestPacket);
@@ -46,7 +45,6 @@ public class HttpMessageProcessor {
                         break;
                     }
                 case FINISH: {
-					System.out.println(HTTPRequestPacket.getRequestType());
                     //消息处理
                     switch (HTTPRequestPacket.getRequestType()) {
                         case WEBSOCKET:
