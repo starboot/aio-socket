@@ -144,7 +144,7 @@ class RunLogger implements cn.starboot.http.common.logging.Logger {
 
     @Override
     public boolean isInfoEnabled() {
-        return false;
+        return true;
     }
 
     @Override
