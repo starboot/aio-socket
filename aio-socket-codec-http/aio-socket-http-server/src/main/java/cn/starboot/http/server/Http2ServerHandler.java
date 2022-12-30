@@ -33,9 +33,10 @@ public abstract class Http2ServerHandler implements ServerHandler<HttpRequest, H
         response.setHttpStatus(HttpStatus.SWITCHING_PROTOCOLS);
         response.setHeader(HeaderNameEnum.UPGRADE.getName(), HeaderValueEnum.H2C.getName());
         response.setHeader(HeaderNameEnum.CONNECTION.getName(), HeaderValueEnum.UPGRADE.getName());
+        response.flush();
 //        OutputStream outputStream = response.getOutputStream();
 //        outputStream.flush();
-        response.write(null);
+//        response.write(null);
     }
 
     @Override

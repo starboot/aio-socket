@@ -167,8 +167,6 @@
         <module>../aio-socket-utils</module>
         <module>../aio-socket-codec-mqtt</module>
         <module>../aio-socket-all</module>
-        <module>../aio-socket-codec-websocket</module>
-        <module>../aio-socket-codec-http2</module>
         <module>../aio-socket-plugin</module>
     </modules>
 
