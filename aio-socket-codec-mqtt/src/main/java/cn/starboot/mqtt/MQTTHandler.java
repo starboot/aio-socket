@@ -1,4 +1,4 @@
-package io.github.mxd888.mqtt;
+package cn.starboot.mqtt;
 
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.ProtocolEnum;
