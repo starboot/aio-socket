@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.enums.ChannelStatusEnum;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.utils.queue.AioFullWaitQueue;
 import cn.starboot.socket.utils.queue.AioQueue;
@@ -67,22 +68,7 @@ public abstract class ChannelContext {
     /**
      * 当前会话状态
      */
-    protected byte status = CHANNEL_STATUS_ENABLED;
-
-    /**
-     * ChannelContext状态:已关闭
-     */
-    protected static final byte CHANNEL_STATUS_CLOSED = 1;
-
-    /**
-     * ChannelContext状态:关闭中
-     */
-    protected static final byte CHANNEL_STATUS_CLOSING = 2;
-
-    /**
-     * ChannelContext状态:正常
-     */
-    protected static final byte CHANNEL_STATUS_ENABLED = 3;
+    protected ChannelStatusEnum status = ChannelStatusEnum.CHANNEL_STATUS_ENABLED;
 
     /**
      * 读取当前ChannelContext未解码的虚拟buffer
@@ -228,7 +214,7 @@ public abstract class ChannelContext {
      * @return 是否失效
      */
     public boolean isInvalid() {
-        return status != CHANNEL_STATUS_ENABLED;
+        return status != ChannelStatusEnum.CHANNEL_STATUS_ENABLED;
     }
 
     /**

@@ -13,14 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package cn.starboot.http.common;
+package cn.starboot.socket.enums;
 
 /**
+ * ChannelContext状态
  *
- * @author MDong
- * @version 2.10.1.v20211002-RELEASE
+ * Created by DELL(mxd) on 2022/12/30 14:38
  */
-public interface Reset {
+public enum ChannelStatusEnum {
 
-    void reset();
+	/*
+	通道已关闭
+	 */
+	CHANNEL_STATUS_CLOSED,
+
+	/*
+	通道正在关闭中
+	 */
+	CHANNEL_STATUS_CLOSING,
+
+	/*
+	通道可用
+	 */
+	CHANNEL_STATUS_ENABLED
+	;
 }

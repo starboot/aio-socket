@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.enums.ChannelStatusEnum;
 import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.Monitor;
@@ -164,12 +165,12 @@ public final class TCPChannelContext extends ChannelContext {
 	@Override
 	public void signalRead(boolean isFlip) {
 		flipRead(isFlip);
-		if (status == CHANNEL_STATUS_CLOSED) {
+		if (status == ChannelStatusEnum.CHANNEL_STATUS_CLOSED) {
 			return;
 		}
 		final ByteBuffer readBuffer = this.readBuffer.buffer();
 		final Handler handler = getAioConfig().getHandler();
-		while (readBuffer.hasRemaining() && status == CHANNEL_STATUS_ENABLED) {
+		while (readBuffer.hasRemaining() && status == ChannelStatusEnum.CHANNEL_STATUS_ENABLED) {
 			Packet packet = null;
 			try {
 				if (getOldByteBuffer().isEmpty()) {
@@ -187,12 +188,12 @@ public final class TCPChannelContext extends ChannelContext {
 			}
 			aioHandler(packet);
 		}
-		if (eof || status == CHANNEL_STATUS_CLOSING) {
+		if (eof || status == ChannelStatusEnum.CHANNEL_STATUS_CLOSING) {
 			close(false);
 			handler.stateEvent(this, StateMachineEnum.INPUT_SHUTDOWN, null);
 			return;
 		}
-		if (status == CHANNEL_STATUS_CLOSED) {
+		if (status == ChannelStatusEnum.CHANNEL_STATUS_CLOSED) {
 			return;
 		}
 		if (readBuffer.capacity() == readBuffer.remaining()) {
@@ -244,7 +245,7 @@ public final class TCPChannelContext extends ChannelContext {
 		}
 		semaphore.release();
 		//此时可能是Closing或Closed状态
-		if (status != CHANNEL_STATUS_ENABLED) {
+		if (status != ChannelStatusEnum.CHANNEL_STATUS_ENABLED) {
 			close();
 		} else {
 			//也许此时有新的消息通过write方法添加到writeCacheQueue中
@@ -276,7 +277,7 @@ public final class TCPChannelContext extends ChannelContext {
 	 * @throws IOException IO异常
 	 */
 	private void assertChannel() throws IOException {
-		if (status == CHANNEL_STATUS_CLOSED || channel == null) {
+		if (status == ChannelStatusEnum.CHANNEL_STATUS_CLOSED || channel == null) {
 			throw new IOException("ChannelContext is closed");
 		}
 	}
@@ -328,10 +329,10 @@ public final class TCPChannelContext extends ChannelContext {
 
 	@Override
 	public synchronized void close(boolean immediate) {
-		if (status == CHANNEL_STATUS_CLOSED) {
+		if (status == ChannelStatusEnum.CHANNEL_STATUS_CLOSED) {
 			return;
 		}
-		status = immediate ? CHANNEL_STATUS_CLOSED : CHANNEL_STATUS_CLOSING;
+		status = immediate ? ChannelStatusEnum.CHANNEL_STATUS_CLOSED : ChannelStatusEnum.CHANNEL_STATUS_CLOSING;
 		if (immediate) {
 			try {
 				this.byteBuf.close();
