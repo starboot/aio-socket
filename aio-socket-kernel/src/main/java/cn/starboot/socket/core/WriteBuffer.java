@@ -266,7 +266,7 @@ public final class WriteBuffer {
     /**
      * 刷新缓冲区，将数据发送出去
      */
-    public void flush() {
+    protected void flush() {
         if (closed) {
             throw new RuntimeException("OutputStream has closed");
         }
