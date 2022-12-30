@@ -1,6 +1,5 @@
 package io.github.mxd888.http.server;
 
-import io.github.mxd888.http.common.BufferOutputStream;
 import io.github.mxd888.http.common.Cookie;
 import io.github.mxd888.http.common.HeaderValue;
 import io.github.mxd888.http.common.enums.HttpStatus;

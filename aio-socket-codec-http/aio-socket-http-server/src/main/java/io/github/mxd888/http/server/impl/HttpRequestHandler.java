@@ -1,7 +1,6 @@
 package io.github.mxd888.http.server.impl;
 
 import cn.starboot.socket.exception.AioEncoderException;
-import io.github.mxd888.http.common.BufferOutputStream;
 import io.github.mxd888.http.server.HttpServerConfiguration;
 import io.github.mxd888.http.server.decode.Decoder;
 import io.github.mxd888.http.server.decode.HttpMethodDecoder;
@@ -13,7 +12,6 @@ import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import io.github.mxd888.http.server.encode.HttpResponseEncoder;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 
