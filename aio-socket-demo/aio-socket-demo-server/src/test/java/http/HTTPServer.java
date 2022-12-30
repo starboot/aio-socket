@@ -10,7 +10,11 @@ import java.io.IOException;
 public class HTTPServer {
 
     public static void main(String[] args) {
-        //1. 实例化路由Handle
+
+		/*
+		 * http 服务
+		 */
+		//1. 实例化路由Handle
         HttpRouteHandler routeHandle = new HttpRouteHandler();
 
         //2. 指定路由规则以及请求的处理实现
@@ -31,11 +35,10 @@ public class HTTPServer {
             }
         });
 
-        // 3. 启动服务
-        HttpBootstrap bootstrap = new HttpBootstrap();
-        bootstrap.httpHandler(routeHandle);
-
-        WebSocketRouteHandler wsRouteHandle = new WebSocketRouteHandler();
+		/*
+		 * websocket服务
+		 */
+		WebSocketRouteHandler wsRouteHandle = new WebSocketRouteHandler();
         wsRouteHandle.route("/ws", new WebSocketDefaultHandler() {
             @Override
             public void onHandShake(WebSocketRequest request, WebSocketResponse webSocketResponse) {
@@ -58,8 +61,12 @@ public class HTTPServer {
                 response.sendBinaryMessage(data);
             }
         });
-        bootstrap.webSocketHandler(wsRouteHandle);
 
+		// 3. 启动服务
+		HttpBootstrap bootstrap = new HttpBootstrap();
+		bootstrap.setPort(8080)
+				.handler(routeHandle)
+				.handler(wsRouteHandle);
         bootstrap.start();
     }
 }

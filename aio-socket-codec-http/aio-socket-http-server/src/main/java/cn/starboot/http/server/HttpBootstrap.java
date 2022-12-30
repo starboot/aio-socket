@@ -48,7 +48,9 @@ public class HttpBootstrap {
      * http消息解码器
      */
     private final HttpMessageProcessor processor;
+
     private final HttpServerConfiguration configuration = new HttpServerConfiguration();
+
     private ServerBootstrap server;
     /**
      * Http服务端口号
@@ -60,7 +62,7 @@ public class HttpBootstrap {
         this(new HttpMessageProcessor());
     }
 
-    public HttpBootstrap(HttpMessageProcessor processor) {
+    private HttpBootstrap(HttpMessageProcessor processor) {
         this.processor = processor;
         this.processor.setConfiguration(configuration);
     }
@@ -73,31 +75,25 @@ public class HttpBootstrap {
         return this;
     }
 
-    /**
-     * 往 http 处理器管道中注册 Handle
-     *
-     * @param httpHandler
-     * @return
-     */
-    public HttpBootstrap httpHandler(HttpServerHandler httpHandler) {
-        processor.httpServerHandler(httpHandler);
-        return this;
-    }
-
-    /**
-     * 获取websocket的处理器管道
-     *
-     * @return
-     */
-    public HttpBootstrap webSocketHandler(WebSocketHandler webSocketHandler) {
-        processor.setWebSocketHandler(webSocketHandler);
-        return this;
-    }
+	/**
+	 * 注册handle
+	 *
+	 * @param serverHandler 处理器
+	 * @return HTTP服务器
+	 */
+	public HttpBootstrap handler(ServerHandler<?, ?> serverHandler) {
+		if (serverHandler instanceof HttpServerHandler) {
+			processor.httpServerHandler((HttpServerHandler) serverHandler);
+		}else if (serverHandler instanceof WebSocketHandler) {
+			processor.setWebSocketHandler((WebSocketHandler) serverHandler);
+		}
+    	return this;
+	}
 
     /**
      * 服务配置
      *
-     * @return
+     * @return 配置类
      */
     public HttpServerConfiguration configuration() {
         return configuration;
