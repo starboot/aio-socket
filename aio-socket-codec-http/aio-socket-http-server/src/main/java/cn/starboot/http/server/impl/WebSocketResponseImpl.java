@@ -15,10 +15,10 @@
  */
 package cn.starboot.http.server.impl;
 
-import cn.starboot.http.common.logging.Logger;
-import cn.starboot.http.common.logging.LoggerFactory;
 import cn.starboot.http.common.utils.Constant;
 import cn.starboot.http.server.WebSocketResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -38,8 +38,6 @@ public class WebSocketResponseImpl extends AbstractResponse implements WebSocket
 
     @Override
     public void sendTextMessage(String text) {
-        if(LOGGER.isInfoEnabled())
-            LOGGER.info("发送字符串消息: " + text);
         byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         try {
             send(WebSocketRequestImpl.OPCODE_TEXT, bytes, 0, bytes.length);
@@ -50,8 +48,6 @@ public class WebSocketResponseImpl extends AbstractResponse implements WebSocket
 
     @Override
     public void sendBinaryMessage(byte[] bytes) {
-        if(LOGGER.isInfoEnabled())
-            LOGGER.info("发送二进制消息: " + Arrays.toString(bytes));
         try {
             send(WebSocketRequestImpl.OPCODE_BINARY, bytes,0, bytes.length);
         } catch (IOException e) {

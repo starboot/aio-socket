@@ -18,14 +18,14 @@ package cn.starboot.http.server.handler;
 import cn.starboot.http.common.enums.HeaderNameEnum;
 import cn.starboot.http.common.enums.HttpMethodEnum;
 import cn.starboot.http.common.enums.HttpStatus;
-import cn.starboot.http.common.logging.Logger;
-import cn.starboot.http.common.logging.LoggerFactory;
 import cn.starboot.http.common.utils.DateUtils;
 import cn.starboot.http.common.utils.Mimetypes;
 import cn.starboot.http.common.utils.StringUtils;
 import cn.starboot.http.server.HttpResponse;
 import cn.starboot.http.server.HttpServerHandler;
 import cn.starboot.http.server.HttpRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,8 +58,8 @@ public class HttpStaticResourceHandler extends HttpServerHandler {
         if (!this.baseDir.isDirectory()) {
             throw new RuntimeException(baseDir + " is not a directory");
         }
-        if(LOGGER.isInfoEnabled())
-            LOGGER.info("dir is:{}", this.baseDir.getAbsolutePath());
+        if(LOGGER.isDebugEnabled())
+            LOGGER.debug("dir is:{}", this.baseDir.getAbsolutePath());
     }
 
     @Override
@@ -69,8 +69,8 @@ public class HttpStaticResourceHandler extends HttpServerHandler {
         if (StringUtils.endsWith(fileName, "/")) {
             fileName += "index.html";
         }
-        if(LOGGER.isInfoEnabled())
-            LOGGER.info("请求URL: " + fileName);
+        if(LOGGER.isDebugEnabled())
+            LOGGER.debug("请求URL: " + fileName);
         File file = new File(baseDir, URLDecoder.decode(fileName, "utf8"));
         //404
         if (!file.isFile()) {
