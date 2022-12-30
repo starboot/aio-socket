@@ -65,8 +65,8 @@ public class HTTPServer {
 		// 3. 启动服务
 		HttpBootstrap bootstrap = new HttpBootstrap();
 		bootstrap.setPort(8080)
-				.handler(routeHandle)
-				.handler(wsRouteHandle);
+				.addHandler(routeHandle)
+				.addHandler(wsRouteHandle);
         bootstrap.start();
     }
 }

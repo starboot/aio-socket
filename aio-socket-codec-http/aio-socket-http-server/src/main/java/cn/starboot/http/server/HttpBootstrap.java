@@ -71,7 +71,7 @@ public class HttpBootstrap {
 	 * @param serverHandler 处理器
 	 * @return HTTP服务器
 	 */
-	public HttpBootstrap handler(ServerHandler<?, ?> serverHandler) {
+	public HttpBootstrap addHandler(ServerHandler<?, ?> serverHandler) {
 		if (serverHandler instanceof HttpServerHandler) {
 			processor.httpServerHandler((HttpServerHandler) serverHandler);
 		}else if (serverHandler instanceof WebSocketHandler) {
@@ -96,9 +96,8 @@ public class HttpBootstrap {
         initByteCache();
         configuration.getPlugins().forEach(requestPlugin -> server.getConfig().getPlugins().addPlugin(requestPlugin));
         server = new ServerBootstrap(configuration.getHost(), port, new HttpRequestHandler(configuration, processor));
-		System.out.println(LOGGER.isInfoEnabled());
-        if (configuration.isBannerEnabled()) {
-			LOGGER.info(HttpBanner.BANNER + "\r\n :: aio-socket http server :: (v" + AioConfig.VERSION + ")");
+        if (configuration.isBannerEnabled() && LOGGER.isInfoEnabled()) {
+			LOGGER.info("\r\n" + HttpBanner.BANNER + "\r\n :: aio-socket http server :: (v" + AioConfig.VERSION + ")");
         }
         server.setReadBufferSize(configuration.getReadPageSize())
 				.start();
