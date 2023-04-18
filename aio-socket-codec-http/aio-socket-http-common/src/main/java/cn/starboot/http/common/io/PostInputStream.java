@@ -1,4 +1,4 @@
-package cn.starboot.http.common.utils;
+package cn.starboot.http.common.io;
 
 import java.io.IOException;
 import java.io.InputStream;

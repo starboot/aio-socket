@@ -72,6 +72,7 @@ public class HttpStaticResourceHandler extends HttpServerHandler {
         if(LOGGER.isDebugEnabled())
             LOGGER.debug("请求URL: " + fileName);
         File file = new File(baseDir, URLDecoder.decode(fileName, "utf8"));
+		System.out.println(file.isFile());
         //404
         if (!file.isFile()) {
             LOGGER.warn("file: {} not found!", request.getRequestURI());
