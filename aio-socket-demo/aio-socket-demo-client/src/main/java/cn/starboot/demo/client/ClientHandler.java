@@ -13,17 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.demo.server;
+package cn.starboot.demo.client;
 
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.codec.string.StringHandler;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.ChannelContext;
 
-public class ServerHandler extends StringHandler {
+public class ClientHandler extends StringHandler {
 
     @Override
     public Packet handle(ChannelContext channelContext, StringPacket packet) {
-        return packet;
+        return null;
     }
 }

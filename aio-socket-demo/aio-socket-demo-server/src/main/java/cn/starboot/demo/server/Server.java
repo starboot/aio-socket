@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.demo.server;
+package cn.starboot.demo.server;
 
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.core.ServerBootstrap;

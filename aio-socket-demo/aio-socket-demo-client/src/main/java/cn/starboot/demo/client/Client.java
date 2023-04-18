@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package io.github.mxd888.demo.client;
+package cn.starboot.demo.client;
 
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.codec.string.StringPacket;

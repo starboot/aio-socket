@@ -10,8 +10,8 @@
     <packaging>pom</packaging>
     <parent>
         <artifactId>aio-socket</artifactId>
-        <groupId>io.github.mxd888.socket</groupId>
-        <version>2.0.0</version>
+        <groupId>cn.starboot.socket</groupId>
+        <version>1.0.0</version>
     </parent>
 
 </project>

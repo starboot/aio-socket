@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>aio-socket</artifactId>
-        <groupId>io.github.mxd888.socket</groupId>
-        <version>2.0.0</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+	<parent>
+		<artifactId>aio-socket</artifactId>
+		<groupId>cn.starboot.socket</groupId>
+		<version>1.0.0</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aio-socket-demo-parent</artifactId>
@@ -21,7 +21,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.github.mxd888.socket</groupId>
+                <groupId>cn.starboot.socket</groupId>
                 <artifactId>aio-socket-demo-common</artifactId>
                 <version>${aio-socket.version}</version>
             </dependency>
