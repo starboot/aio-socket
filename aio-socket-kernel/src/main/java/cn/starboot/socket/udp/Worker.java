@@ -217,8 +217,12 @@ public final class Worker implements Runnable {
         selector.wakeup();
         executorService.shutdown();
         try {
+        	// 同步等待线程池关闭后再关闭selector
+        	executorService.awaitTermination(5L, TimeUnit.SECONDS);
+//			System.out.println(executorService.isShutdown());
+//			System.out.println(executorService.isTerminated());
             selector.close();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

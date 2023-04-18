@@ -40,8 +40,7 @@ public class UDPBootstrap {
     public UDPBootstrap(AioHandler handler) {
         config.getPlugins().addAioHandler(handler);
         config.setHandler(config.getPlugins());
-        this.worker = worker;
-    }
+	}
 
     /**
      * 开启一个UDP通道，端口号随机
@@ -95,7 +94,7 @@ public class UDPBootstrap {
      */
     public void shutdown() {
         if (innerWorker) {
-            worker.shutdown();
+            this.worker.shutdown();
         }
         if (innerBufferPool != null) {
             innerBufferPool.release();

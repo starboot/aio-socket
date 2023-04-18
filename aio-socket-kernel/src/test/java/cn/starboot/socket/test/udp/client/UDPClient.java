@@ -2,17 +2,15 @@ package cn.starboot.socket.test.udp.client;
 
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-//import io.github.mxd888.socket.plugins.MonitorPlugin;
 import cn.starboot.socket.test.udp.UDPPacket;
 import cn.starboot.socket.udp.UDPBootstrap;
 import cn.starboot.socket.udp.UDPChannel;
 
-import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 public class UDPClient {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
         int c = 1;
         CountDownLatch count = new CountDownLatch(c);
