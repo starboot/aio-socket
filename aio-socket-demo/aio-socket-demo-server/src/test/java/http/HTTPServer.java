@@ -21,7 +21,7 @@ public class HTTPServer {
         routeHandle.route("/", new HttpServerHandler() {
             @Override
             public void handle(HttpRequest request, HttpResponse response) throws IOException {
-                response.write("smart-http".getBytes());
+                response.write("aio-socket HTTP Server".getBytes());
             }
         }).route("/test1", new HttpServerHandler() {
             @Override
@@ -31,7 +31,7 @@ public class HTTPServer {
         }).route("/test2", new HttpServerHandler() {
             @Override
             public void handle(HttpRequest request, HttpResponse response) throws IOException {
-                response.write(("test2").getBytes());
+                response.write(("<h1>test2</h1>").getBytes());
             }
         });
 

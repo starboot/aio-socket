@@ -57,8 +57,8 @@ public class HttpRequestHandler implements AioHandler {
     public Packet handle(ChannelContext channelContext, Packet packet) {
         if (packet instanceof HttpRequestPacket) {
             HttpRequestPacket packet1 = (HttpRequestPacket) packet;
-            System.out.println(packet1.getProtocol() + "--" + packet1.getMethod() + "--" + packet1.getContentType() +
-                    "--" + packet1.getHeaderNames() + "--"  + packet1.getHeader("Upgrade"));
+//            System.out.println(packet1.getProtocol() + "--" + packet1.getMethod() + "--" + packet1.getContentType() +
+//                    "--" + packet1.getHeaderNames() + "--"  + packet1.getHeader("Upgrade"));
             packet1.getParameters().forEach(new BiConsumer<String, String[]>() {
                 @Override
                 public void accept(String s, String[] strings) {
