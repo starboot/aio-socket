@@ -32,7 +32,7 @@ public class UDPClient {
                     }
                     count.countDown();
                     // 关闭会话
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                     session.close();
 //                    System.out.println("发送完毕");
                     bootstrap.shutdown();
