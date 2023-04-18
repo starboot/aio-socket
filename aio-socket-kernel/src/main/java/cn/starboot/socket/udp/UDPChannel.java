@@ -119,7 +119,9 @@ public final class UDPChannel {
                 responseUnit.session.UDPFlush();
             } else {
                 failResponseUnit = responseUnit;
-                LOGGER.warn("send fail,will retry...");
+                if (LOGGER.isWarnEnabled()) {
+					LOGGER.warn("send fail,will retry...");
+				}
                 break;
             }
         }
@@ -150,7 +152,6 @@ public final class UDPChannel {
     }
 
     public void close() {
-        LOGGER.info("close channel...");
         if (selectionKey != null) {
             Selector selector = selectionKey.selector();
             selectionKey.cancel();
@@ -162,7 +163,9 @@ public final class UDPChannel {
                 channel.close();
             }
         } catch (IOException e) {
-            LOGGER.error("", e);
+        	if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("", e);
+			}
         }
         //内存回收
         ResponseUnit task;

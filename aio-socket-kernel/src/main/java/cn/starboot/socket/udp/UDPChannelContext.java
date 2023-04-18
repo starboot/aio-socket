@@ -23,6 +23,8 @@ import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -30,6 +32,8 @@ import java.net.SocketAddress;
 import java.util.function.Consumer;
 
 final class UDPChannelContext extends ChannelContext {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(UDPChannelContext.class);
 
 	private final UDPChannel udpChannel;
 
@@ -60,6 +64,9 @@ final class UDPChannelContext extends ChannelContext {
 
 	@Override
 	public void close(boolean immediate) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("The UDP channel with ID " + this.getId() + " is closing");
+		}
 		this.udpChannel.close();
 		this.byteBuf.close();
 	}
