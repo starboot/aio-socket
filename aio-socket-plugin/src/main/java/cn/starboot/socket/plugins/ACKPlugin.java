@@ -55,7 +55,7 @@ public class ACKPlugin extends AbstractPlugin{
         this.timeout = timeUnit.toMillis(timeout);
         this.timeoutCallback = timeoutCallback;
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's ACK plugin added successfully");
+            LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's ACK plugin added successfully");
         }
     }
 

@@ -105,7 +105,7 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
         long mills = TimeUnit.SECONDS.toMillis(seconds);
         QuickTimerTask.scheduleAtFixedRate(this, mills, mills);
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's monitor plugin added successfully");
+            LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's monitor plugin added successfully");
         }
     }
 

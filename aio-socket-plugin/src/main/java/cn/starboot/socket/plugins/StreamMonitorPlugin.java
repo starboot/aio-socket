@@ -113,7 +113,7 @@ public class StreamMonitorPlugin extends AbstractPlugin {
         this.inputStreamConsumer = Objects.requireNonNull(inputStreamConsumer);
         this.outputStreamConsumer = Objects.requireNonNull(outputStreamConsumer);
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream monitor plugin added successfully");
+            LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's stream monitor plugin added successfully");
         }
     }
 

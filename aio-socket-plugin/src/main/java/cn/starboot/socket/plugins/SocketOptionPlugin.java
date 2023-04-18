@@ -40,7 +40,7 @@ public class SocketOptionPlugin extends AbstractPlugin {
 
     public SocketOptionPlugin() {
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream socket option plugin added successfully");
+            LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's stream socket option plugin added successfully");
         }
     }
 

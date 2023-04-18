@@ -53,7 +53,7 @@ public final class SSLPlugin extends AbstractPlugin {
         this.memoryPool = memoryPool;
         sslService = new SslService(factory.create(), consumer);
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's stream SSL/TLS plugin added successfully");
+            LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's stream SSL/TLS plugin added successfully");
         }
     }
 

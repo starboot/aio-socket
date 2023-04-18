@@ -70,7 +70,7 @@ public abstract class HeartPlugin extends AbstractPlugin {
         this.timeout = timeUnit.toMillis(timeout);
         this.timeoutCallback = timeoutCallback;
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's heart plugin added successfully");
+            LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's heart plugin added successfully");
         }
     }
 

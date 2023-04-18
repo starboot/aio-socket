@@ -31,7 +31,7 @@ import java.util.Objects;
 public class ClusterPlugin extends AbstractPlugin {
 
     public ClusterPlugin() {
-        System.out.println("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's cluster plugin added successfully");
+        System.out.println("aio-socket version: " + AioConfig.VERSION + "; server kernel's cluster plugin added successfully");
     }
 
     @Override

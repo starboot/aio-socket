@@ -49,7 +49,7 @@ public class ReconnectPlugin extends AbstractPlugin {
         this.client = client;
         this.asynchronousChannelGroup = asynchronousChannelGroup;
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("aio-socket "+"version: " + AioConfig.VERSION + "; server kernel's reconnect plugin added successfully");
+            LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's reconnect plugin added successfully");
         }
     }
 
