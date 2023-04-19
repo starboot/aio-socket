@@ -59,7 +59,7 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 <dependency>
   <groupId>cn.starboot.socket</groupId>
   <artifactId>aio-socket-all</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ~~~
 #### 起步
