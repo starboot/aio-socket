@@ -20,19 +20,19 @@ import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.plugins.MonitorPlugin;
 
 /**
- * -----5seconds ----
- * inflow:		751.988525390625(MB)
- * outflow:	    751.5911026000977(MB)
- * process fail:	0
- * process count:	39405082
- * process total:	156391430
- * read count:	752	write count:	192410
- * connect count:	0
- * disconnect count:	0
- * online count:	10
- * connected total:	10
- * Requests/sec:	7881016.4
- * Transfer/sec:	150.397705078125(MB)
+ *  -----5seconds ----
+ *  inflow:		771.9616775512695(MB)
+ *  outflow:	773.6727828979492(MB)
+ *  process fail:	0
+ *  process count:	40514816
+ *  process total:	82435765
+ *  read count:	1038	write count:	198011
+ *  connect count:	0
+ *  disconnect count:	0
+ *  online count:	9
+ *  connected total:	10
+ *  Requests/sec:	8102963.2
+ *  Transfer/sec:	154.3923355102539(MB)
  */
 public class Server {
 

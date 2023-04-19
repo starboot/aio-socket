@@ -76,7 +76,7 @@ public class HttpRequestImpl extends AbstractRequest {
 		} else {
 			int contentLength = getContentLength();
 			if (contentLength > 0 && HTTPRequestPacket.getFormUrlencoded() == null) {
-//				inputStream = new PostInputStream(HTTPRequestPacket.getAioChannelContext().getInputStream(contentLength), contentLength);
+				inputStream = new PostInputStream(HTTPRequestPacket.getAioChannelContext().getInputStream(contentLength), contentLength);
 			} else {
 				inputStream = EMPTY_INPUT_STREAM;
 			}

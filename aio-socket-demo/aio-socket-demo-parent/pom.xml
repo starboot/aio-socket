@@ -5,18 +5,18 @@
 	<parent>
 		<artifactId>aio-socket</artifactId>
 		<groupId>cn.starboot.socket</groupId>
-		<version>1.0.0</version>
+		<version>1.1.0</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aio-socket-demo-parent</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>../aio-socket-demo-common</module>
-        <module>../aio-socket-demo-server</module>
-        <module>../aio-socket-demo-client</module>
-    </modules>
+
+
+	<properties>
+		<fileupload.version>1.4</fileupload.version>
+	</properties>
 
     <dependencyManagement>
         <dependencies>
@@ -25,7 +25,17 @@
                 <artifactId>aio-socket-demo-common</artifactId>
                 <version>${aio-socket.version}</version>
             </dependency>
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${fileupload.version}</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 
+	<modules>
+		<module>../aio-socket-demo-common</module>
+		<module>../aio-socket-demo-server</module>
+		<module>../aio-socket-demo-client</module>
+	</modules>
 </project>

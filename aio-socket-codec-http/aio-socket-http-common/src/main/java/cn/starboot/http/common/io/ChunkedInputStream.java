@@ -1,3 +1,18 @@
+/*
+ *    Copyright 2019 The aio-socket Project
+ *
+ *    The aio-socket Project Licenses this file to you under the Apache License,
+ *    Version 2.0 (the "License"); you may not use this file except in compliance
+ *    with the License. You may obtain a copy of the License at:
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package cn.starboot.http.common.io;
 
 import cn.starboot.http.common.enums.HttpStatus;
@@ -30,7 +45,7 @@ public class ChunkedInputStream extends InputStream {
 //        int b = inputStream.read();
 //        if (b == -1) {
 //            inputStream.close();
-//            inputStream = session.getInputStream();
+//            inputStream = channelContext.getInputStream();
 //            readCrlf();
 //            readFlag = true;
 //            return read();
@@ -47,7 +62,7 @@ public class ChunkedInputStream extends InputStream {
 		int i = inputStream.read(data, off, len);
 		if (i == -1) {
 			inputStream.close();
-//			inputStream = channelContext.getInputStream();
+			inputStream = channelContext.getInputStream();
 			readCrlf();
 			readFlag = true;
 			return read(data, off, len);
@@ -57,7 +72,7 @@ public class ChunkedInputStream extends InputStream {
 
 	private void readChunkedLength() throws IOException {
 		while (readFlag) {
-//			inputStream = channelContext.getInputStream();
+			inputStream = channelContext.getInputStream();
 			int b = inputStream.read();
 			if (b == Constant.LF) {
 				int length = Integer.parseInt(buffer.toString(), 16);
@@ -68,7 +83,7 @@ public class ChunkedInputStream extends InputStream {
 					break;
 				}
 				inputStream.close();
-//				inputStream = channelContext.getInputStream(length);
+				inputStream = channelContext.getInputStream(length);
 				readFlag = false;
 			} else if (b != Constant.CR) {
 				buffer.write(b);

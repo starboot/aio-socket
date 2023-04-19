@@ -50,6 +50,7 @@ public class FileUploadDemo {
 									System.out.println("File field " + name + " with file name "
 											+ item.getName() + " detected.");
 									// Process the input stream
+
 								}
 							}
 						} catch (Exception e) {

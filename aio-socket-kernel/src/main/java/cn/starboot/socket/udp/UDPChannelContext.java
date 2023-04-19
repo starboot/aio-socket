@@ -98,6 +98,11 @@ final class UDPChannelContext extends ChannelContext {
 		flush();
 	}
 
+	@Override
+	public void awaitRead() {
+		throw new UnsupportedOperationException();
+	}
+
 	protected void UDPFlush() {
 		flush();
 	}

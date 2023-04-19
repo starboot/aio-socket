@@ -24,6 +24,7 @@ import cn.starboot.socket.ProtocolEnum;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.HashMap;
@@ -268,4 +269,36 @@ public abstract class ChannelContext {
      * 发送器
      */
     protected abstract void sendPacket(Packet packet, boolean isBlock);
+
+	/**
+	 * 同步等待读
+	 */
+	public abstract void awaitRead();
+
+	/**
+	 * 获得数据输入流对象。
+	 * <p>
+	 * faster模式下调用该方法会触发UnsupportedOperationException异常。
+	 * </p>
+	 * <p>
+	 * MessageProcessor采用异步处理消息的方式时，调用该方法可能会出现异常。
+	 * </p>
+	 *
+	 * @return 输入流
+	 * @throws IOException IO异常
+	 */
+	public InputStream getInputStream() throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 获取已知长度的InputStream
+	 *
+	 * @param length InputStream长度
+	 * @return 输入流
+	 * @throws IOException IO异常
+	 */
+	public InputStream getInputStream(int length) throws IOException {
+		throw new UnsupportedOperationException();
+	}
 }
