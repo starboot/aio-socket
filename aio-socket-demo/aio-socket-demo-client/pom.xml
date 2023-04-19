@@ -18,5 +18,4 @@
             <artifactId>aio-socket-demo-common</artifactId>
         </dependency>
     </dependencies>
-
 </project>

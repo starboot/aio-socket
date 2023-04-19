@@ -216,17 +216,7 @@
     </modules>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
 
-        </plugins>
         <!-- 适配idea下生成不了配置文件问题 -->
         <resources>
             <resource>
