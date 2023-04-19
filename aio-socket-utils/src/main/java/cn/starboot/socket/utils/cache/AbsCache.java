@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.utils.cache;
 
-import cn.hutool.core.util.StrUtil;
+import cn.starboot.socket.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,14 +32,14 @@ public abstract class AbsCache implements ICache {
 	private Long timeToIdleSeconds;
 
 	public AbsCache(String cacheName) {
-		if (StrUtil.isBlank(cacheName)) {
+		if (StringUtils.isBlank(cacheName)) {
 			throw new RuntimeException("cacheName不允许为空");
 		}
 		this.setCacheName(cacheName);
 	}
 
 	public AbsCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
-		if (StrUtil.isBlank(cacheName)) {
+		if (StringUtils.isBlank(cacheName)) {
 			throw new RuntimeException("cacheName不允许为空");
 		}
 		this.setCacheName(cacheName);

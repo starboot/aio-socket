@@ -38,7 +38,7 @@ public class AioConfig {
     /**
      * 当前aio-socket版本号
      */
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.2.0";
 
     /**
      * 消息体缓存大小,字节

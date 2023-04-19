@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.utils.cache.caffeine;
 
-import cn.hutool.core.util.StrUtil;
+import cn.starboot.socket.utils.StringUtils;
 import cn.starboot.socket.utils.cache.AbsCache;
 import cn.starboot.socket.utils.caffeine.CaffeineUtils;
 import com.github.benmanes.caffeine.cache.LoadingCache;
@@ -98,7 +98,7 @@ public class CaffeineCache extends AbsCache {
 
 	@Override
 	public Serializable _get(String key) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return null;
 		}
 		Serializable ret = loadingCache.getIfPresent(key);
@@ -117,7 +117,7 @@ public class CaffeineCache extends AbsCache {
 
 	@Override
 	public void put(String key, Serializable value) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		loadingCache.put(key, value);
@@ -125,7 +125,7 @@ public class CaffeineCache extends AbsCache {
 
 	@Override
 	public void putTemporary(String key, Serializable value) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		temporaryLoadingCache.put(key, value);
@@ -133,7 +133,7 @@ public class CaffeineCache extends AbsCache {
 
 	@Override
 	public void remove(String key) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		loadingCache.invalidate(key);

@@ -15,9 +15,7 @@
  */
 package cn.starboot.socket.utils.cache.guava;
 
-
-import cn.hutool.core.util.StrUtil;
-
+import cn.starboot.socket.utils.StringUtils;
 import cn.starboot.socket.utils.cache.AbsCache;
 import cn.starboot.socket.utils.guava.GuavaUtils;
 import com.google.common.cache.LoadingCache;
@@ -96,7 +94,7 @@ public class GuavaCache extends AbsCache {
 
 	@Override
 	public Serializable _get(String key) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return null;
 		}
 		Serializable ret = loadingCache.getIfPresent(key);
@@ -115,7 +113,7 @@ public class GuavaCache extends AbsCache {
 
 	@Override
 	public void put(String key, Serializable value) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		loadingCache.put(key, value);
@@ -123,7 +121,7 @@ public class GuavaCache extends AbsCache {
 
 	@Override
 	public void putTemporary(String key, Serializable value) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		temporaryLoadingCache.put(key, value);
@@ -131,7 +129,7 @@ public class GuavaCache extends AbsCache {
 
 	@Override
 	public void remove(String key) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		loadingCache.invalidate(key);

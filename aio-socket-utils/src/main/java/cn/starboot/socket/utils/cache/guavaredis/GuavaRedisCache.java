@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.utils.cache.guavaredis;
 
-import cn.hutool.core.util.StrUtil;
+import cn.starboot.socket.utils.StringUtils;
 import cn.starboot.socket.utils.cache.AbsCache;
 import cn.starboot.socket.utils.cache.CacheChangeType;
 import cn.starboot.socket.utils.cache.CacheChangedVo;
@@ -62,7 +62,7 @@ public class GuavaRedisCache extends AbsCache {
 						@Override
 						public void onMessage(CharSequence channel, CacheChangedVo cacheChangedVo) {
 							String clientid = cacheChangedVo.getClientId();
-							if (StrUtil.isBlank(clientid)) {
+							if (StringUtils.isBlank(clientid)) {
 								log.error("clientid is null");
 								return;
 							}
@@ -147,7 +147,7 @@ public class GuavaRedisCache extends AbsCache {
 
 	@Override
 	public Serializable _get(String key) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return null;
 		}
 
@@ -189,7 +189,7 @@ public class GuavaRedisCache extends AbsCache {
 
 	@Override
 	public void remove(String key) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 

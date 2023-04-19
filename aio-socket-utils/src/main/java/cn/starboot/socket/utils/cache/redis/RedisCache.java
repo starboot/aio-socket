@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.utils.cache.redis;
 
-import cn.hutool.core.util.StrUtil;
+import cn.starboot.socket.utils.StringUtils;
 import cn.starboot.socket.utils.cache.AbsCache;
 import cn.starboot.socket.utils.SystemTimer;
 import org.redisson.api.RBucket;
@@ -102,7 +102,7 @@ public class RedisCache extends AbsCache {
 
 	@Override
 	public Serializable _get(String key) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return null;
 		}
 		RBucket<Serializable> bucket = getBucket(key);
@@ -151,7 +151,7 @@ public class RedisCache extends AbsCache {
 
 	@Override
 	public void put(String key, Serializable value) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		RBucket<Serializable> bucket = getBucket(key);
@@ -169,7 +169,7 @@ public class RedisCache extends AbsCache {
 
 	@Override
 	public void putTemporary(String key, Serializable value) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		RBucket<Serializable> bucket = getBucket(key);
@@ -178,7 +178,7 @@ public class RedisCache extends AbsCache {
 
 	@Override
 	public void remove(String key) {
-		if (StrUtil.isBlank(key)) {
+		if (StringUtils.isBlank(key)) {
 			return;
 		}
 		RBucket<Serializable> bucket = getBucket(key);
