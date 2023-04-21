@@ -22,7 +22,7 @@ import cn.starboot.socket.core.ChannelContext;
 
 public class ServerHandler extends StringHandler {
 
-    @Override
+	@Override
     public Packet handle(ChannelContext channelContext, StringPacket packet) {
         return packet;
     }

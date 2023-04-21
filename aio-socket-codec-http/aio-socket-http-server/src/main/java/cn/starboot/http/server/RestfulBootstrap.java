@@ -26,7 +26,7 @@ public class RestfulBootstrap {
 	private final HttpBootstrap httpBootstrap = new HttpBootstrap();
 	private final RestHandler restHandler;
 	private static final HttpServerHandler DEFAULT_HANDLER = new HttpServerHandler() {
-		private final byte[] BYTES = "hello smart-http-rest".getBytes();
+		private final byte[] BYTES = "hello aio-socket-http-rest".getBytes();
 
 		@Override
 		public void handle(HttpRequest request, HttpResponse response) throws IOException {

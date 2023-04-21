@@ -24,6 +24,7 @@ public class ClientHandler extends StringHandler {
 
     @Override
     public Packet handle(ChannelContext channelContext, StringPacket packet) {
+//		System.out.println(packet.getData());
         return null;
     }
 }

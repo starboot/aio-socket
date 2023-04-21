@@ -48,6 +48,7 @@ public class Server {
                 // 注册流量监控插件
 //                .addPlugin(new StreamMonitorPlugin())
                 .addPlugin(new MonitorPlugin(5))
+				.addAioHandler(new MyServerHandler(5))
 //                .addPlugin(new HeartPlugin(30, TimeUnit.SECONDS) {
 //                    @Override
 //                    public boolean isHeartMessage(Packet packet) {

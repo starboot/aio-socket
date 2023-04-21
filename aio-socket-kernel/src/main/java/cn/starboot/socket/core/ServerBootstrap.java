@@ -309,7 +309,7 @@ public class ServerBootstrap {
      *
      * @param bossThreadNum   内核IO线程数量
      * @param workerThreadNum 普通作业线程数量
-     * @return                this
+     * @return                ServerBootstrap 对象
      */
     public ServerBootstrap setThreadNum(int bossThreadNum, int workerThreadNum) {
         this.bossThreadNum = bossThreadNum;
@@ -321,7 +321,7 @@ public class ServerBootstrap {
      * 设置内存池工厂
      *
      * @param memoryPoolFactory 内存池工厂
-     * @return this
+     * @return                  ServerBootstrap 对象
      */
     public ServerBootstrap setMemoryPoolFactory(MemoryPoolFactory memoryPoolFactory) {
         getConfig().setMemoryPoolFactory(memoryPoolFactory);
@@ -333,7 +333,7 @@ public class ServerBootstrap {
      *
      * @param writeBufferSize 写缓冲区大小
      * @param maxWaitNum      最大等待队列长度
-     * @return                this
+     * @return                ServerBootstrap 对象
      */
     public ServerBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum) {
         getConfig().setWriteBufferSize(writeBufferSize)
@@ -345,7 +345,7 @@ public class ServerBootstrap {
      * 设置读缓冲区大小
      *
      * @param readBufferSize 读缓冲区大小
-     * @return               this
+     * @return               ServerBootstrap 对象
      */
     public ServerBootstrap setReadBufferSize(int readBufferSize) {
         getConfig().setReadBufferSize(readBufferSize);
@@ -356,11 +356,22 @@ public class ServerBootstrap {
      * 注册插件
      *
      * @param plugin 插件项
-     * @return       this
+     * @return       ServerBootstrap 对象
      */
     public ServerBootstrap addPlugin(Plugin plugin) {
         getConfig().getPlugins().addPlugin(plugin);
         return this;
     }
+
+	/**
+	 * 支持单端口绑定多协议
+	 *
+	 * @param aioHandler 协议处理器
+	 * @return           ServerBootstrap 对象
+	 */
+	public ServerBootstrap addAioHandler(AioHandler aioHandler) {
+    	getConfig().getPlugins().addAioHandler(aioHandler);
+    	return this;
+	}
 
 }

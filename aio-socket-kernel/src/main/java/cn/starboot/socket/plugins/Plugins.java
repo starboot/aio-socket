@@ -28,6 +28,7 @@ import cn.starboot.socket.exception.AioDecoderException;
 
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * aio-socket 插件嵌入类
@@ -40,7 +41,7 @@ public class Plugins implements Handler, Monitor {
     /**
      * 责任链头指针
      */
-    private final LinkedList<AioHandler> aioHandler = new LinkedList<>();
+//    private final LinkedList<AioHandler> aioHandler = new LinkedList<>();
 
     /**
      * 插件项
@@ -113,7 +114,7 @@ public class Plugins implements Handler, Monitor {
         if (protocol != null) {
             packet = handlers.get(protocol).decode(readBuffer, channelContext);
         }else {
-			for (AioHandler handler : aioHandler) {
+			for (AioHandler handler : handlers.values()) {
 				packet = handler.decode(readBuffer, channelContext);
 				if (packet != null) {
 					// 解码成功，设置协议。中断链式解码
@@ -148,12 +149,16 @@ public class Plugins implements Handler, Monitor {
             return;
         }
         // 当前通道未确定协议就触发状态机，则使用头处理器进行处理
-		aioHandler.getFirst().stateEvent(channelContext, stateMachineEnum, throwable);
+		for (AioHandler handler : handlers.values()) {
+			handler.stateEvent(channelContext, stateMachineEnum, throwable);
+			break;
+		}
+//		aioHandler.getFirst().stateEvent(channelContext, stateMachineEnum, throwable);
     }
 
     public void addAioHandler(AioHandler handler) {
         handlers.put(handler.name(), handler);
-        aioHandler.addLast(handler);
+//        aioHandler.addLast(handler);
     }
 
     public final Plugins addPlugin(Plugin plugin) {

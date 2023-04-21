@@ -46,9 +46,6 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 ![Image text](https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-frame.jpg)
 <h5 align="center">单机服务器架构图</h5>
 
-![Image text](https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-cluster.jpg)
-<h5 align="center">集群服务器架构图</h5>
-
 ## 开始使用
 #### aio-socket 作者电脑环境
 > 1. jdk 1.8.0_221
