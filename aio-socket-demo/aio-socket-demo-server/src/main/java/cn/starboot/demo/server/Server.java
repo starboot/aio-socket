@@ -15,9 +15,16 @@
  */
 package cn.starboot.demo.server;
 
+import cn.starboot.demo.common.TestPacket;
+import cn.starboot.socket.Packet;
+import cn.starboot.socket.codec.string.StringPacket;
+import cn.starboot.socket.plugins.HeartPlugin;
+import cn.starboot.socket.plugins.StreamMonitorPlugin;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.plugins.MonitorPlugin;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  *  -----5seconds ----
@@ -29,7 +36,7 @@ import cn.starboot.socket.plugins.MonitorPlugin;
  *  read count:	1038	write count:	198011
  *  connect count:	0
  *  disconnect count:	0
- *  online count:	9
+ *  online count:	10
  *  connected total:	10
  *  Requests/sec:	8102963.2
  *  Transfer/sec:	154.3923355102539(MB)
@@ -52,8 +59,8 @@ public class Server {
 //                .addPlugin(new HeartPlugin(30, TimeUnit.SECONDS) {
 //                    @Override
 //                    public boolean isHeartMessage(Packet packet) {
-//                        if (packet instanceof DemoPacket) {
-//                            DemoPacket packet1 = (DemoPacket) packet;
+//                        if (packet instanceof StringPacket) {
+//							StringPacket packet1 = (StringPacket) packet;
 //                            return packet1.getData().equals("heartbeat message");
 //                        }
 //                        return false;

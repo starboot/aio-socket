@@ -19,11 +19,16 @@ import cn.starboot.socket.Packet;
 import cn.starboot.socket.codec.string.StringHandler;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.exception.AioDecoderException;
+import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
 public class ServerHandler extends StringHandler {
 
 	@Override
     public Packet handle(ChannelContext channelContext, StringPacket packet) {
+//		if (packet.getReq() != null)  {
+//			packet.setResp(packet.getReq());
+//		}
         return packet;
     }
 }
