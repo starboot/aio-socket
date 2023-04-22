@@ -28,7 +28,6 @@ import cn.starboot.socket.exception.AioDecoderException;
 
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * aio-socket 插件嵌入类
@@ -39,9 +38,9 @@ import java.util.function.Consumer;
 public class Plugins implements Handler, Monitor {
 
     /**
-     * 责任链头指针
+     * 服务器第一个协议解析器
      */
-//    private final LinkedList<AioHandler> aioHandler = new LinkedList<>();
+	private ProtocolEnum serverDefaultFirstProtocol = null;
 
     /**
      * 插件项
@@ -148,17 +147,15 @@ public class Plugins implements Handler, Monitor {
             handlers.get(channelContext.getProtocol()).stateEvent(channelContext, stateMachineEnum, throwable);
             return;
         }
-        // 当前通道未确定协议就触发状态机，则使用头处理器进行处理
-		for (AioHandler handler : handlers.values()) {
-			handler.stateEvent(channelContext, stateMachineEnum, throwable);
-			break;
-		}
-//		aioHandler.getFirst().stateEvent(channelContext, stateMachineEnum, throwable);
+        // 当前通道未确定协议就触发状态机，则使用第一个处理器进行处理
+		handlers.get(serverDefaultFirstProtocol).stateEvent(channelContext, stateMachineEnum, throwable);
     }
 
     public void addAioHandler(AioHandler handler) {
         handlers.put(handler.name(), handler);
-//        aioHandler.addLast(handler);
+        if (serverDefaultFirstProtocol == null) {
+        	serverDefaultFirstProtocol = handler.name();
+		}
     }
 
     public final Plugins addPlugin(Plugin plugin) {

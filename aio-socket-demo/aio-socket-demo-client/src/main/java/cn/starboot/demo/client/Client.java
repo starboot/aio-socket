@@ -77,7 +77,6 @@ public class Client {
 
                 try {
                     ChannelContext start = bootstrap.start(asynchronousChannelGroup);
-                    start.setProtocol(clientHandler.name());
                     long num = 0;
                     long startTime = System.currentTimeMillis();
                     while (num++ < Integer.MAX_VALUE) {

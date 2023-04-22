@@ -1,7 +1,6 @@
 package cn.starboot.demo.client.multiProto;
 
 import cn.starboot.demo.client.ClientHandler;
-import cn.starboot.socket.ProtocolEnum;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
@@ -20,8 +19,6 @@ public class MultiProtocolClient {
 
 				.setBufferFactory(() -> new MemoryPool(1024 * 1024, 10, true))
 				.start();
-		context.setProtocol(ProtocolEnum.STRING);
-
 		Thread.sleep(1000);
 		Aio.send(context, packet);
 

@@ -25,7 +25,7 @@ public class UDPClient {
                             .setReadBufferSize(1024);
                     UDPChannel channel = bootstrap.open();
                     ChannelContext session = channel.connect("localhost", 8888);
-                    session.setProtocol(udpHandler.name());
+//                    session.setProtocol(udpHandler.name());
                     for (int i1 = 0; i1 < 2; i1++) {
                         Aio.send(session, packet);
                         Thread.sleep(10);

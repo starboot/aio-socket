@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.ProtocolEnum;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.intf.AioHandler;
@@ -71,6 +72,11 @@ public class ClientBootstrap {
      */
     private SocketAddress localAddress;
 
+	/**
+	 * 客户端所用协议
+	 */
+	private final ProtocolEnum clientProtocol;
+
     /**
      * 网络连接的会话对象
      */
@@ -113,6 +119,7 @@ public class ClientBootstrap {
         this.config.setHost(host);
         this.config.setPort(port);
         this.config.getPlugins().addAioHandler(handler);
+        this.clientProtocol = handler.name();
     }
 
     /**
@@ -153,6 +160,7 @@ public class ClientBootstrap {
                     channelContext.close();
                     LOGGER.error("aio-socket version: {}; client kernel started failed because of future is done or cancelled", AioConfig.VERSION);
                 } else {
+                	channelContext.setProtocol(clientProtocol);
                     future.complete(channelContext);
                     if (Objects.nonNull(heartBeat)) {
                         heartMessage();
