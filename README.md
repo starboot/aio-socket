@@ -42,7 +42,7 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 > 15. 基于aio-socket实现的产品：t-im(即时通讯框架)、WeChat(即时通讯安卓客户端)
 
 ## 软件架构
-给大家画个架构图🎉 （我太笨了用了免费软件却去不掉它自带的水印）
+给大家画个架构图🎉 
 ![Image text](https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-frame.jpg)
 <h5 align="center">单机服务器架构图</h5>
 
