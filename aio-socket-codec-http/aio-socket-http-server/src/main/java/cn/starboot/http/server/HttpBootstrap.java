@@ -97,7 +97,7 @@ public class HttpBootstrap {
         configuration.getPlugins().forEach(requestPlugin -> server.getConfig().getPlugins().addPlugin(requestPlugin));
         server = new ServerBootstrap(configuration.getHost(), port, new HttpRequestHandler(configuration, processor));
         if (configuration.isBannerEnabled() && LOGGER.isInfoEnabled()) {
-			LOGGER.info("\r\n" + HttpBanner.BANNER + "\r\n :: aio-socket http server :: (v" + AioConfig.VERSION + ")");
+			LOGGER.info("\r\n" + HttpBanner.BANNER + "\r\n :: aio-socket http server :: (" + AioConfig.VERSION + ")");
         }
         server.setReadBufferSize(configuration.getReadPageSize())
 				.start();
