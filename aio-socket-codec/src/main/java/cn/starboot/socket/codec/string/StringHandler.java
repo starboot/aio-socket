@@ -80,9 +80,14 @@ public abstract class StringHandler implements AioHandler {
     @Override
     public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
         WriteBuffer writeBuffer = channelContext.getWriteBuffer();
-		StringPacket packet1 = (StringPacket) packet;
-		writeBuffer.writeInt(packet1.getData().getBytes().length);
-		writeBuffer.write(packet1.getData().getBytes());
+        if (packet instanceof StringPacket) {
+			StringPacket packet1 = (StringPacket) packet;
+			writeBuffer.writeInt(packet1.getData().getBytes().length);
+			writeBuffer.write(packet1.getData().getBytes());
+		}else {
+			throw new AioEncoderException("String Protocol encode failed because of the Packet is not StringPacket.");
+		}
+
     }
 
     @Override

@@ -16,11 +16,16 @@
 package cn.starboot.socket.codec.protobuf;
 
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.core.WriteBuffer;
+import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.intf.AioHandler;
+import cn.starboot.socket.utils.AIOUtil;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.ProtocolEnum;
 import cn.starboot.socket.exception.AioDecoderException;
+
+import java.nio.ByteBuffer;
 
 public abstract class ProtoBufHandler implements AioHandler {
 
@@ -34,11 +39,31 @@ public abstract class ProtoBufHandler implements AioHandler {
 
     @Override
     public Packet decode(MemoryUnit readBuffer, ChannelContext channelContext) throws AioDecoderException {
-        return null;
+		ByteBuffer buffer = readBuffer.buffer();
+		int remaining = buffer.remaining();
+		if (remaining < Integer.BYTES) {
+			return null;
+		}
+		buffer.mark();
+		int length = buffer.getInt();
+		byte[] b = AIOUtil.getBytesFromByteBuffer(length, readBuffer, channelContext);
+		if (b == null) {
+			buffer.reset();
+			return null;
+		}
+        return new ProtoBufPacket(b);
     }
 
     @Override
-    public void encode(Packet packet, ChannelContext channelContext) {
+    public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
+		WriteBuffer writeBuffer = channelContext.getWriteBuffer();
+		if (packet instanceof ProtoBufPacket) {
+			ProtoBufPacket packet1 = (ProtoBufPacket) packet;
+			writeBuffer.writeInt(packet1.getLength());
+			writeBuffer.write(packet1.getData());
+		}else {
+			throw new AioEncoderException("ProtoBuf Protocol encode failed because of the Packet is not ProtoBufPacket.");
+		}
 
     }
 

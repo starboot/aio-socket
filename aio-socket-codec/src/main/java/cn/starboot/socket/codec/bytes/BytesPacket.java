@@ -18,4 +18,21 @@ package cn.starboot.socket.codec.bytes;
 import cn.starboot.socket.Packet;
 
 public class BytesPacket extends Packet {
+
+	private final int length;
+
+	private final byte[] data;
+
+	public BytesPacket(byte[] data) {
+		this.data = data;
+		this.length = data.length;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public byte[] getData() {
+		return data;
+	}
 }
