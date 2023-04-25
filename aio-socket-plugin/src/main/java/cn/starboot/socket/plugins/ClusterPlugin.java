@@ -56,16 +56,16 @@ public class ClusterPlugin extends AbstractPlugin {
 //            return false;
 //        }
         // 获取接收方所在ServerIP
-        String s = config.getClusterIds().get(packet.getToId());
-        if (Objects.isNull(s)) {
+//        String s = config.getClusterIds().get(packet.getToId());
+//        if (Objects.isNull(s)) {
 //            Aio.bindID(packet.getToId(), channelContext);
-            return true;
-        }
+//            return true;
+//        }
         // 判断接收方是否在本服务器
-        if (s.equals(config.getHost())) {
+//        if (s.equals(config.getHost())) {
             // 执行处理逻辑
-            return true;
-        }
+//            return true;
+//        }
         // 否则发送到集群服务器
 //        Aio.send(config.getIds().get(s), packet);
         // 本服务器不做处理逻辑

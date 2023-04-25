@@ -19,12 +19,12 @@ import cn.starboot.socket.maintain.AbstractMultiMaintain;
 import cn.starboot.socket.maintain.MaintainEnum;
 
 /**
- * 集群消息业务逻辑类
+ * 集群业务逻辑类
  *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class ClusterIds extends AbstractMultiMaintain {
+public class CluIds extends AbstractMultiMaintain {
 
 	@Override
 	public MaintainEnum getName() {

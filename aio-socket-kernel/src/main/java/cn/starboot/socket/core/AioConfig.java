@@ -17,7 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.maintain.*;
-import cn.starboot.socket.maintain.impl.ClusterIds;
+import cn.starboot.socket.maintain.impl.CluIds;
 import cn.starboot.socket.maintain.impl.Groups;
 import cn.starboot.socket.maintain.impl.Ids;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
@@ -109,7 +109,7 @@ public class AioConfig {
     /**
      * 集群服务器：用户ID与集群服务器ID一一对应
      */
-    private final ClusterIds clusterIds = new ClusterIds();
+    private final CluIds cluIds = new CluIds();
 
     /**
      * 单台aio-socket最大在线用户量；再启动MonitorPlugin时才生效（通过触发状态机来通知应用层处理）
@@ -234,8 +234,8 @@ public class AioConfig {
         return ids;
     }
 
-    public ClusterIds getClusterIds() {
-        return clusterIds;
+    public CluIds getCluIds() {
+        return cluIds;
     }
 
     public Plugins getPlugins() {

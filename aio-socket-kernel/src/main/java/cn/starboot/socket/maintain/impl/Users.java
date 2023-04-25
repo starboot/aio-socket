@@ -4,7 +4,8 @@ import cn.starboot.socket.maintain.AbstractMultiMaintain;
 import cn.starboot.socket.maintain.MaintainEnum;
 
 /**
- * ID业务逻辑类(一对多)
+ * 用户维持逻辑类(一对多)
+ * 某一用户存在(PC,WEB,IOS,Android......)
  *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE

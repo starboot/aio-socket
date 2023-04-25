@@ -9,11 +9,11 @@ import cn.starboot.socket.maintain.MaintainEnum;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class BusinessIds extends AbstractSingleMaintain {
+public class BsIds extends AbstractSingleMaintain {
 
 	@Override
 	public MaintainEnum getName() {
-		return MaintainEnum.BUSINESS_ID;
+		return MaintainEnum.Bs_ID;
 	}
 
 }

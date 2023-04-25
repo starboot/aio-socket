@@ -7,7 +7,7 @@ package cn.starboot.socket.maintain;
  */
 public enum MaintainEnum {
 
-	BUSINESS_ID,
+	Bs_ID,
 
 	CLIENT_NODE_ID,
 
@@ -21,5 +21,5 @@ public enum MaintainEnum {
 
 	TOKEN,
 
-	USER;
+	USER
 }

@@ -47,8 +47,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Server {
 
-	/*
-	内存池改为只能使用直接内存
+	/**
+	 * 内存池改为只能使用直接内存
 	 */
     public static void main(String[] args) {
 
