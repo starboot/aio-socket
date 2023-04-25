@@ -14,18 +14,45 @@ public abstract class AbstractSingleMaintain extends AbstractMaintain {
 		return singleMaintainMap;
 	}
 
+	/**
+	 * 一对一加入
+	 * 不存在 = 加入成功
+	 * 存在 && 并且一样 = 加入成功
+	 * 存在 && 不一样 = 加入失败
+	 *
+	 * @param id      一对一ID
+	 * @param context 通道上下文
+	 * @return 加入结果
+	 */
 	@Override
 	public boolean join(String id, ChannelContext context) {
-		return Objects.nonNull(getSingleMaintainMap().put(id, context));
+		if (Objects.isNull(getSingleMaintainMap().get(id))) {
+			return Objects.nonNull(getSingleMaintainMap().put(id, context));
+		} else {
+			return Objects.equals(getSingleMaintainMap().get(id), context);
+		}
 	}
 
+	/**
+	 * 一对一删除
+	 * 不存在 = 删除成功
+	 * 存在 && 且相等 = 进行删除
+	 * 存在 && 不相等 = 不进行删除
+	 *
+	 * @param id      一对一ID
+	 * @param context 通道上下文
+	 * @return 加入结果
+	 */
 	@Override
 	public boolean remove(String id, ChannelContext context) {
 		ChannelContext singleMaintainMapChannelContext = getSingleMaintainMap().get(id);
 		if (Objects.nonNull(singleMaintainMapChannelContext)
-				&& Objects.equals(singleMaintainMapChannelContext,context)) {
+				&& Objects.equals(singleMaintainMapChannelContext, context)) {
 			return Objects.nonNull(getSingleMaintainMap().remove(id));
-		}else return Objects.isNull(singleMaintainMapChannelContext);
+		} else if (Objects.nonNull(singleMaintainMapChannelContext)
+				&& !Objects.equals(singleMaintainMapChannelContext, context)) {
+			return false;
+		} else return Objects.isNull(singleMaintainMapChannelContext);
 	}
 
 	@Override
