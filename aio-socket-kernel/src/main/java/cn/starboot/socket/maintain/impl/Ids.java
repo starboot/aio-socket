@@ -15,14 +15,11 @@
  */
 package cn.starboot.socket.maintain.impl;
 
-import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.maintain.AbstractSingleMaintain;
 import cn.starboot.socket.maintain.MaintainEnum;
 
-import java.util.Objects;
-
 /**
- * ID业务逻辑类
+ * ID业务逻辑类(一对一)
  *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
@@ -30,32 +27,8 @@ import java.util.Objects;
 public class Ids extends AbstractSingleMaintain {
 
 	@Override
-	public final synchronized boolean join(String id, ChannelContext context) {
-		return Objects.nonNull(getSingleMaintainMap().put(id, context));
-	}
-
-	@Override
-	public boolean remove(String id, ChannelContext context) {
-		ChannelContext singleMaintainMapChannelContext = getSingleMaintainMap().get(id);
-		if (Objects.nonNull(singleMaintainMapChannelContext)
-				&& Objects.equals(singleMaintainMapChannelContext,context)) {
-			return Objects.nonNull(getSingleMaintainMap().remove(id));
-		}else return Objects.isNull(singleMaintainMapChannelContext);
-	}
-
-	@Override
-	public boolean removeAll(String id, ChannelContext context) {
-		return remove(id, context);
-	}
-
-	@Override
-	public <T> T get(String id, Class<T> t) {
-		ChannelContext singleMaintainMapChannelContext = getSingleMaintainMap().get(id);
-		return Objects.isNull(singleMaintainMapChannelContext) ? null : (T) singleMaintainMapChannelContext;
-	}
-
-	@Override
 	public MaintainEnum getName() {
 		return MaintainEnum.USER_ID;
 	}
+
 }
