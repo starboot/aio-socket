@@ -28,7 +28,7 @@ public class Ids extends AbstractSingleMaintain {
 
 	@Override
 	public MaintainEnum getName() {
-		return MaintainEnum.USER_ID;
+		return MaintainEnum.ID;
 	}
 
 }

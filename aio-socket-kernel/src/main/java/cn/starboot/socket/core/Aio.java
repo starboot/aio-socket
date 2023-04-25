@@ -33,29 +33,37 @@ import java.util.function.Consumer;
  */
 public class Aio {
 
-    /**
-     * 绑定ID跟通道的联系
-     *
-     * @param id             用户ID
-     * @param channelContext 用户通道
-     */
-    public static void bindId(String id, ChannelContext channelContext) {
-        // 绑定ID
-        AioConfig config = channelContext.getAioConfig();
-        boolean b = config.getIds().join(id, channelContext);
-        channelContext.setId(id);
-    }
+	public static boolean bindBs(String bsId, ChannelContext channelContext){
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.Bs_ID).join(bsId, channelContext);
+	}
 
-    /**
-     * 绑定群组
-     *
-     * @param groupId        群组ID
-     * @param channelContext 用户通道
-     */
-    public static void bindGroup(String groupId, ChannelContext channelContext) {
-        // 绑定群组
-        Groups groups = channelContext.getAioConfig().getGroups();
-		boolean b = groups.join(groupId, channelContext);
+	public static boolean bindCliNode(String cliNode, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).join(cliNode, channelContext);
+	}
+
+	public static boolean bindClu(String CluId, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).join(CluId, channelContext);
+	}
+
+	public static boolean bindGroup(String groupId, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).join(groupId, channelContext);
+	}
+
+	public static boolean bindId(String id, ChannelContext channelContext) {
+		channelContext.setId(id);
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.ID).join(id, channelContext);
+	}
+
+	public static boolean bindIp(String ip, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.IP).join(ip, channelContext);
+	}
+
+	public static boolean bindToken(String token, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.TOKEN).join(token, channelContext);
+	}
+
+	public static boolean bindUser(String user, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.USER).join(user, channelContext);
 	}
 
     /**
@@ -82,7 +90,7 @@ public class Aio {
     }
 
     public static ChannelContext getChannelContextById(String channelContextId, AioConfig config) {
-        return config.getMaintainManager().getCommand(MaintainEnum.USER_ID).get(channelContextId, ChannelContext.class);
+        return config.getMaintainManager().getCommand(MaintainEnum.ID).get(channelContextId, ChannelContext.class);
     }
 
     /**
@@ -113,9 +121,9 @@ public class Aio {
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).removeAll(channelContext.getId(), channelContext);
     }
 
-    public static boolean removeUserFromGroup(ChannelContext channelContext, String groupId) {
-        return channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
-    }
+//    public static boolean removeUserFromGroup(ChannelContext channelContext, String groupId) {
+//        return channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
+//    }
 
     /**
      * 关闭某个连接
@@ -124,7 +132,7 @@ public class Aio {
      */
     public static void close(ChannelContext channelContext) {
         removeUserFromAllGroup(channelContext);
-        channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.USER_ID).remove(channelContext.getId(), channelContext);
+        channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.ID).remove(channelContext.getId(), channelContext);
         channelContext.close();
     }
 }

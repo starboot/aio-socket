@@ -15,7 +15,7 @@ public enum MaintainEnum {
 
 	GROUP_ID,
 
-	USER_ID,
+	ID,
 
 	IP,
 
