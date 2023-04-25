@@ -16,11 +16,12 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.Monitor;
+import cn.starboot.socket.maintain.*;
+import cn.starboot.socket.maintain.impl.ClusterIds;
+import cn.starboot.socket.maintain.impl.Groups;
+import cn.starboot.socket.maintain.impl.Ids;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.intf.Handler;
-import cn.starboot.socket.maintain.ClusterIds;
-import cn.starboot.socket.maintain.Groups;
-import cn.starboot.socket.maintain.Ids;
 import cn.starboot.socket.plugins.Plugins;
 
 import java.net.SocketOption;
@@ -90,7 +91,12 @@ public class AioConfig {
      */
     private final boolean isServer;
 
-    /**
+	/**
+	 * 关系维持管理器
+	 */
+	private final MaintainManager maintainManager = MaintainManager.getInstance();
+
+	/**
      * 群组和其ChannelContext绑定
      */
     private final Groups groups = new Groups();
@@ -254,4 +260,8 @@ public class AioConfig {
         }
         this.multilevelModel = multilevelModel;
     }
+
+	public MaintainManager getMaintainManager() {
+		return maintainManager;
+	}
 }

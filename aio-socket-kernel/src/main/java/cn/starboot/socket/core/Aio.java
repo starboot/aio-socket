@@ -16,7 +16,8 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.maintain.Groups;
+import cn.starboot.socket.maintain.MaintainEnum;
+import cn.starboot.socket.maintain.impl.Groups;
 
 /**
  *
@@ -37,7 +38,7 @@ public class Aio {
     public static void bindId(String id, ChannelContext channelContext) {
         // 绑定ID
         AioConfig config = channelContext.getAioConfig();
-        config.getIds().join(id, channelContext);
+        boolean b = config.getIds().join(id, channelContext);
         channelContext.setId(id);
     }
 
@@ -77,7 +78,7 @@ public class Aio {
     }
 
     public static ChannelContext getChannelContextById(String channelContextId, AioConfig config) {
-        return config.getIds().get(channelContextId);
+        return config.getMaintainManager().getCommand(MaintainEnum.USER_ID).get(channelContextId, ChannelContext.class);
     }
 
     /**
@@ -106,7 +107,7 @@ public class Aio {
      */
     public static void close(ChannelContext channelContext) {
         removeUserFromAllGroup(channelContext);
-        channelContext.getAioConfig().getIds().remove(channelContext.getId());
+        channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.USER_ID).remove(channelContext.getId(), channelContext);
         channelContext.close();
     }
 }
