@@ -49,4 +49,8 @@ public class ServerHandler extends DemoHandler {
         }
         return null;
     }
+
+    private boolean Test(ChannelContext channelContext) {
+		return Aio.removeUserFromGroup(channelContext, "") && Aio.removeUserFromAllGroup(channelContext);
+	}
 }

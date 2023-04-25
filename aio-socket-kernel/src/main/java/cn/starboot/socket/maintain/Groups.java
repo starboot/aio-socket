@@ -41,13 +41,13 @@ public class Groups {
      * @param group 群组ID
      * @param context 用户上下文
      */
-    public final synchronized void join(String group, ChannelContext context) {
+    public final synchronized boolean join(String group, ChannelContext context) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
             groupUnit = new GroupUnit();
             channelGroup.put(group, groupUnit);
         }
-        groupUnit.groupList.add(context);
+        return groupUnit.groupList.add(context);
     }
 
     /**
@@ -55,15 +55,16 @@ public class Groups {
      * @param group    群组ID
      * @param context  被移除的ChannelContext
      */
-    public final synchronized void remove(String group, ChannelContext context) {
+    public final synchronized boolean remove(String group, ChannelContext context) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
-            return;
+            return true;
         }
-        groupUnit.groupList.remove(context);
-        if (groupUnit.groupList.isEmpty()) {
+		boolean remove = groupUnit.groupList.remove(context);
+		if (groupUnit.groupList.isEmpty()) {
             channelGroup.remove(group);
         }
+		return remove;
     }
 
     /**
@@ -71,10 +72,12 @@ public class Groups {
      *
      * @param context 被移除的ChannelContext
      */
-    public final void remove(ChannelContext context) {
+    public final boolean removeUserFromAllGroup(ChannelContext context) {
+    	boolean isSuccess = true;
         for (String group : channelGroup.keySet()) {
-            remove(group, context);
+            isSuccess = isSuccess && remove(group, context);
         }
+        return isSuccess;
     }
 
     /**

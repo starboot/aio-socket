@@ -50,8 +50,8 @@ public class Aio {
     public static void bindGroup(String groupId, ChannelContext channelContext) {
         // 绑定群组
         Groups groups = channelContext.getAioConfig().getGroups();
-        groups.join(groupId, channelContext);
-    }
+		boolean b = groups.join(groupId, channelContext);
+	}
 
     /**
      * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
@@ -60,16 +60,20 @@ public class Aio {
      * @param packet         数据包
      */
     public static void send(ChannelContext channelContext, Packet packet) {
-        channelContext.sendPacket(packet, false);
+        send0(channelContext, packet, false);
     }
 
+	private static void send0(ChannelContext channelContext, Packet packet, boolean isBlock) {
+		channelContext.sendPacket(packet, isBlock);
+	}
+
     public static void bSend(ChannelContext channelContext, Packet packet) {
-        channelContext.sendPacket(packet, true);
+        send0(channelContext, packet, true);
     }
 
     public static void sendToId(String channelContextId, Packet packet, AioConfig config) {
-        ChannelContext Id = Aio.getChannelContextById(channelContextId, config);
-        Aio.send(Id, packet);
+        ChannelContext Id = getChannelContextById(channelContextId, config);
+        send(Id, packet);
     }
 
     public static ChannelContext getChannelContextById(String channelContextId, AioConfig config) {
@@ -87,12 +91,12 @@ public class Aio {
         channelContext.getAioConfig().getGroups().writeToGroup(groupId, packet, channelContext, channelContextFilter, isBlock);
     }
 
-    public static void removeUserFromAllGroup(ChannelContext channelContext) {
-        channelContext.getAioConfig().getGroups().remove(channelContext);
+    public static boolean removeUserFromAllGroup(ChannelContext channelContext) {
+        return channelContext.getAioConfig().getGroups().removeUserFromAllGroup(channelContext);
     }
 
-    public static void removeUserFromGroup(ChannelContext channelContext, String groupId) {
-        channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
+    public static boolean removeUserFromGroup(ChannelContext channelContext, String groupId) {
+        return channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
     }
 
     /**
