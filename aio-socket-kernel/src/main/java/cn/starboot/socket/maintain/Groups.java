@@ -18,6 +18,7 @@ package cn.starboot.socket.maintain;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.core.ChannelContextFilter;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -83,25 +84,33 @@ public class Groups {
      * @param packet         消息包
      * @param channelContext 发送者channelContext
      */
-    public void writeToGroup(String group, Packet packet, ChannelContext channelContext) {
+    public void writeToGroup(String group, Packet packet, ChannelContext channelContext, ChannelContextFilter channelContextFilter, boolean isBlock) {
         GroupUnit groupUnit = channelGroup.get(group);
         if (groupUnit == null) {
             return;
         }
-        if (channelContext == null) {
-            for (ChannelContext context : groupUnit.groupList) {
-                Aio.send(context, packet);
-            }
-            return;
-        }
-        for (ChannelContext context : groupUnit.groupList) {
-            if (channelContext != context) {
-                Aio.send(context, packet);
-            }
-        }
+        if (channelContextFilter != null) {
+			for (ChannelContext context : groupUnit.groupList) {
+				if (!channelContextFilter.filter(context)) {
+					send(context, packet, isBlock);
+				}
+			}
+		} else {
+			for (ChannelContext context : groupUnit.groupList) {
+				send(context, packet, isBlock);
+			}
+		}
     }
 
     private static class GroupUnit {
         Set<ChannelContext> groupList = new HashSet<>();
     }
+
+    private void send(ChannelContext channelContext, Packet packet, boolean isBlock) {
+		if (isBlock) {
+			Aio.bSend(channelContext, packet);
+		} else {
+			Aio.send(channelContext, packet);
+		}
+	}
 }

@@ -29,7 +29,7 @@ public class ServerHandler extends DemoHandler {
             DemoPacket packet1 = (DemoPacket) packet;
             System.out.println("收到消息：" + packet1.getFromId() + "-" + packet1.getToId() + "-" + packet1.getData());
             if (channelContext.getId() == null) {
-                Aio.bindID(packet.getFromId(), channelContext);
+                Aio.bindId(packet.getFromId(), channelContext);
                 Aio.bindGroup("1191998028", channelContext);
                 System.out.println("进行绑定");
             }
@@ -37,11 +37,11 @@ public class ServerHandler extends DemoHandler {
 
                 if (packet.getToId().equals("123")) {
                     System.out.println("群发");
-                    Aio.sendGroup("1191998028", packet, channelContext);
+                    Aio.sendGroup("1191998028", packet, channelContext, null, false);
                     return null;
                 }
                 System.out.println("私发");
-                Aio.sendToID(packet.getToId(), packet, channelContext.getAioConfig());
+                Aio.sendToId(packet.getToId(), packet, channelContext.getAioConfig());
                 return null;
             }
             packet1.setData("服务器收到消息：" + packet1.getData());

@@ -34,7 +34,7 @@ public class Aio {
      * @param id             用户ID
      * @param channelContext 用户通道
      */
-    public static void bindID(String id, ChannelContext channelContext) {
+    public static void bindId(String id, ChannelContext channelContext) {
         // 绑定ID
         AioConfig config = channelContext.getAioConfig();
         config.getIds().join(id, channelContext);
@@ -67,7 +67,7 @@ public class Aio {
         channelContext.sendPacket(packet, true);
     }
 
-    public static void sendToID(String channelContextId, Packet packet, AioConfig config) {
+    public static void sendToId(String channelContextId, Packet packet, AioConfig config) {
         ChannelContext Id = Aio.getChannelContextById(channelContextId, config);
         Aio.send(Id, packet);
     }
@@ -83,8 +83,8 @@ public class Aio {
      * @param packet         消息包
      * @param channelContext 发送者上下文
      */
-    public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext) {
-        channelContext.getAioConfig().getGroups().writeToGroup(groupId, packet, channelContext);
+    public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext, ChannelContextFilter channelContextFilter, boolean isBlock) {
+        channelContext.getAioConfig().getGroups().writeToGroup(groupId, packet, channelContext, channelContextFilter, isBlock);
     }
 
     public static void removeUserFromAllGroup(ChannelContext channelContext) {
