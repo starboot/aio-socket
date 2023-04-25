@@ -7,7 +7,7 @@ import cn.starboot.socket.maintain.MaintainEnum;
 public class Users extends AbstractSingleMaintain {
 	@Override
 	public MaintainEnum getName() {
-		return null;
+		return MaintainEnum.USER;
 	}
 
 	@Override

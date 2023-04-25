@@ -10,7 +10,7 @@ import cn.starboot.socket.maintain.MaintainEnum;
 public class Ips extends AbstractMultiMaintain {
 	@Override
 	public MaintainEnum getName() {
-		return null;
+		return MaintainEnum.IP;
 	}
 
 	@Override

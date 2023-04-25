@@ -8,9 +8,10 @@ import cn.starboot.socket.maintain.MaintainEnum;
  * 一对一
  */
 public class ClientNodes extends AbstractSingleMaintain {
+
 	@Override
 	public MaintainEnum getName() {
-		return null;
+		return MaintainEnum.CLIENT_NODE_ID;
 	}
 
 	@Override

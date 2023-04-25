@@ -67,7 +67,7 @@ public class ClusterPlugin extends AbstractPlugin {
             return true;
         }
         // 否则发送到集群服务器
-        Aio.send(config.getIds().get(s), packet);
+//        Aio.send(config.getIds().get(s), packet);
         // 本服务器不做处理逻辑
         return false;
     }

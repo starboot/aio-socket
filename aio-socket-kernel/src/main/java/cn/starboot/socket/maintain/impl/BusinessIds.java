@@ -10,7 +10,7 @@ import cn.starboot.socket.maintain.MaintainEnum;
 public class BusinessIds extends AbstractSingleMaintain {
 	@Override
 	public MaintainEnum getName() {
-		return null;
+		return MaintainEnum.BUSINESS_ID;
 	}
 
 	@Override

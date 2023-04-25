@@ -21,6 +21,10 @@ public class MaintainManager {
 
 	private static MaintainManager maintainManager;
 
+	public Map<MaintainEnum, AbstractMaintain> getHandlerMap() {
+		return handlerMap;
+	}
+
 	private MaintainManager() {
 	}
 
@@ -63,14 +67,6 @@ public class MaintainManager {
 		} else {
 			throw new Exception("cmd code:" + command + ",has been registered, please correct!");
 		}
-	}
-
-	public <T> T getCommand(MaintainEnum command, Class<T> clazz) {
-		AbstractMaintain cmdHandler = getCommand(command);
-		if (cmdHandler != null) {
-			return (T) cmdHandler;
-		}
-		return null;
 	}
 
 	public AbstractMaintain getCommand(MaintainEnum command) {

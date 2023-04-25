@@ -18,12 +18,16 @@ package cn.starboot.demo.server;
 import cn.starboot.demo.common.TestPacket;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.codec.string.StringPacket;
+import cn.starboot.socket.maintain.AbstractMaintain;
+import cn.starboot.socket.maintain.MaintainEnum;
+import cn.starboot.socket.maintain.MaintainManager;
 import cn.starboot.socket.plugins.HeartPlugin;
 import cn.starboot.socket.plugins.StreamMonitorPlugin;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.plugins.MonitorPlugin;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -68,6 +72,10 @@ public class Server {
 //                })
 //                .addPlugin(new ACKPlugin(30, TimeUnit.SECONDS, (context, lastTime) -> System.out.println("超时了：..." + lastTime)))
                 .start();
+
+		MaintainManager maintainManager = bootstrap.getConfig().getMaintainManager();
+		Map<MaintainEnum, AbstractMaintain> map = maintainManager.getHandlerMap();
+		System.out.println(map.size());
 
     }
 }
