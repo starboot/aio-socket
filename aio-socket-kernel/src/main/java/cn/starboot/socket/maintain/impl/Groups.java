@@ -15,15 +15,8 @@
  */
 package cn.starboot.socket.maintain.impl;
 
-import cn.starboot.socket.Packet;
-import cn.starboot.socket.core.Aio;
-import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.ChannelContextFilter;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import cn.starboot.socket.maintain.AbstractMultiMaintain;
+import cn.starboot.socket.maintain.MaintainEnum;
 
 /**
  * 群组业务逻辑类
@@ -31,89 +24,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class Groups {
+public class Groups extends AbstractMultiMaintain {
 
-    private final Map<String, GroupUnit> channelGroup = new ConcurrentHashMap<>();
-
-    /**
-     * 将ChannelContext加入群组group
-     *
-     * @param group 群组ID
-     * @param context 用户上下文
-     */
-    public final synchronized boolean join(String group, ChannelContext context) {
-        GroupUnit groupUnit = channelGroup.get(group);
-        if (groupUnit == null) {
-            groupUnit = new GroupUnit();
-            channelGroup.put(group, groupUnit);
-        }
-        return groupUnit.groupList.add(context);
-    }
-
-    /**
-     * 从指定群组中移除用户
-     * @param group    群组ID
-     * @param context  被移除的ChannelContext
-     */
-    public final synchronized boolean remove(String group, ChannelContext context) {
-        GroupUnit groupUnit = channelGroup.get(group);
-        if (groupUnit == null) {
-            return true;
-        }
-		boolean remove = groupUnit.groupList.remove(context);
-		if (groupUnit.groupList.isEmpty()) {
-            channelGroup.remove(group);
-        }
-		return remove;
-    }
-
-    /**
-     * 从所有群组中移除用户
-     *
-     * @param context 被移除的ChannelContext
-     */
-    public final boolean removeUserFromAllGroup(ChannelContext context) {
-    	boolean isSuccess = true;
-        for (String group : channelGroup.keySet()) {
-            isSuccess = isSuccess && remove(group, context);
-        }
-        return isSuccess;
-    }
-
-    /**
-     * 群发
-     *
-     * @param group          群组ID
-     * @param packet         消息包
-     * @param channelContext 发送者channelContext
-     */
-    public void writeToGroup(String group, Packet packet, ChannelContext channelContext, ChannelContextFilter channelContextFilter, boolean isBlock) {
-        GroupUnit groupUnit = channelGroup.get(group);
-        if (groupUnit == null) {
-            return;
-        }
-        if (channelContextFilter != null) {
-			for (ChannelContext context : groupUnit.groupList) {
-				if (!channelContextFilter.filter(context)) {
-					send(context, packet, isBlock);
-				}
-			}
-		} else {
-			for (ChannelContext context : groupUnit.groupList) {
-				send(context, packet, isBlock);
-			}
-		}
-    }
-
-    private static class GroupUnit {
-        Set<ChannelContext> groupList = new HashSet<>();
-    }
-
-    private void send(ChannelContext channelContext, Packet packet, boolean isBlock) {
-		if (isBlock) {
-			Aio.bSend(channelContext, packet);
-		} else {
-			Aio.send(channelContext, packet);
-		}
+	@Override
+	public MaintainEnum getName() {
+		return MaintainEnum.GROUP_ID;
 	}
 }

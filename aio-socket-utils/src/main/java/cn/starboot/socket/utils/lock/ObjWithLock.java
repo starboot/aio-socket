@@ -32,9 +32,9 @@ public class ObjWithLock<T> implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(ObjWithLock.class);
 
-	private T obj = null;
+	private T obj;
 
-	private ReentrantReadWriteLock lock = null;
+	private final ReentrantReadWriteLock lock;
 
 	public ObjWithLock(T obj) {
 		this(obj, new ReentrantReadWriteLock());
@@ -68,7 +68,7 @@ public class ObjWithLock<T> implements Serializable {
 
 	/**
 	 * 操作obj时，带上读锁
-	 * @param readLockHandler
+	 * @param readLockHandler 处理器
 	 */
 	public void handle(ReadLockHandler<T> readLockHandler) {
 		ReadLock readLock = lock.readLock();
@@ -84,7 +84,7 @@ public class ObjWithLock<T> implements Serializable {
 
 	/**
 	 * 操作obj时，带上写锁
-	 * @param writeLockHandler
+	 * @param writeLockHandler 写处理器
 	 */
 	public void handle(WriteLockHandler<T> writeLockHandler) {
 		WriteLock writeLock = lock.writeLock();

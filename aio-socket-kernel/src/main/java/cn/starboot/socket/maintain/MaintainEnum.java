@@ -11,6 +11,8 @@ public enum MaintainEnum {
 
 	CLIENT_NODE_ID,
 
+	CLU_ID,
+
 	GROUP_ID,
 
 	USER_ID,

@@ -18,6 +18,10 @@ package cn.starboot.socket.core;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.maintain.MaintainEnum;
 import cn.starboot.socket.maintain.impl.Groups;
+import cn.starboot.socket.utils.lock.SetWithLock;
+
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  *
@@ -89,11 +93,24 @@ public class Aio {
      * @param channelContext 发送者上下文
      */
     public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext, ChannelContextFilter channelContextFilter, boolean isBlock) {
-        channelContext.getAioConfig().getGroups().writeToGroup(groupId, packet, channelContext, channelContextFilter, isBlock);
+        // 群发
+		SetWithLock<?> set = channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).get(groupId, SetWithLock.class);
+
+		set.getObj().forEach((Consumer<Object>) o -> {
+			if (Objects.isNull(channelContextFilter)) {
+				if (o instanceof ChannelContext) {
+					send0((ChannelContext) o, packet, isBlock);
+				}
+			}else {
+				if (o instanceof ChannelContext && !channelContextFilter.filter((ChannelContext) o)) {
+					send0((ChannelContext) o, packet, isBlock);
+				}
+			}
+		});
     }
 
     public static boolean removeUserFromAllGroup(ChannelContext channelContext) {
-        return channelContext.getAioConfig().getGroups().removeUserFromAllGroup(channelContext);
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).removeAll(channelContext.getId(), channelContext);
     }
 
     public static boolean removeUserFromGroup(ChannelContext channelContext, String groupId) {
