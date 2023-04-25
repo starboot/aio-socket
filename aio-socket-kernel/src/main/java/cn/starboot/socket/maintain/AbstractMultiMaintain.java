@@ -1,4 +1,4 @@
 package cn.starboot.socket.maintain;
 
-public abstract class AbstractMultiMaintain {
+public abstract class AbstractMultiMaintain extends AbstractMaintain{
 }
