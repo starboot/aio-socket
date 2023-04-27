@@ -29,9 +29,9 @@ public class ServerHandler extends DemoHandler {
             DemoPacket packet1 = (DemoPacket) packet;
             System.out.println("收到消息：" + packet1.getFromId() + "-" + packet1.getToId() + "-" + packet1.getData());
             if (channelContext.getId() == null) {
-                Aio.bindId(packet.getFromId(), channelContext);
-                Aio.bindGroup("1191998028", channelContext);
-                System.out.println("进行绑定");
+				boolean b1 = Aio.bindId(packet.getFromId(), channelContext);
+				boolean b = Aio.bindGroup("1191998028", channelContext);
+				System.out.println("进行绑定");
             }
             if (packet.getToId() != null && !packet.getToId().equals("111")) {
 
@@ -51,6 +51,7 @@ public class ServerHandler extends DemoHandler {
     }
 
     private boolean Test(ChannelContext channelContext) {
-		return Aio.removeUserFromGroup(channelContext, "") && Aio.removeUserFromAllGroup(channelContext);
+    	return true;
+//		return Aio.removeUserFromGroup(channelContext, "") && Aio.removeUserFromAllGroup(channelContext);
 	}
 }

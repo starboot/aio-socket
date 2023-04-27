@@ -209,6 +209,11 @@ public final class Worker implements Runnable {
 		return true;
 	}
 
+
+	private static final Long timeout = 1000L;
+
+	private static final TimeUnit timeUnit = TimeUnit.MILLISECONDS;
+
 	void shutdown() {
 		try {
 			requestQueue.put(SHUTDOWN_CHANNEL);
@@ -217,14 +222,17 @@ public final class Worker implements Runnable {
 		}
 		selector.wakeup();
 		executorService.shutdown();
+//		System.out.println(executorService.isShutdown());
+//		System.out.println(executorService.isTerminated());
 		try {
 			// 同步等待线程池关闭后再关闭selector
-			executorService.awaitTermination(5L, TimeUnit.SECONDS);
-//			System.out.println(executorService.isShutdown());
-//			System.out.println(executorService.isTerminated());
+			executorService.awaitTermination(timeout, timeUnit);
+		} catch (InterruptedException ignored) {
+		}
+		try {
 			selector.close();
-		} catch (IOException | InterruptedException e) {
-			throw new RuntimeException(e);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

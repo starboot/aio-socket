@@ -33,7 +33,7 @@ import java.util.function.Consumer;
  */
 public class Aio {
 
-	public static boolean bindBs(String bsId, ChannelContext channelContext){
+	public static boolean bindBsId(String bsId, ChannelContext channelContext){
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.Bs_ID).join(bsId, channelContext);
 	}
 
@@ -41,7 +41,7 @@ public class Aio {
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).join(cliNode, channelContext);
 	}
 
-	public static boolean bindClu(String CluId, ChannelContext channelContext) {
+	public static boolean bindCluId(String CluId, ChannelContext channelContext) {
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).join(CluId, channelContext);
 	}
 
