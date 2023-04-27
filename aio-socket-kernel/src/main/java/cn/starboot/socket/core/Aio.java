@@ -24,7 +24,6 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- *
  * 基础常用API
  * 绑定ID、绑定群组、单发、群发、移出群、关闭连接
  *
@@ -33,7 +32,7 @@ import java.util.function.Consumer;
  */
 public class Aio {
 
-	public static boolean bindBsId(String bsId, ChannelContext channelContext){
+	public static boolean bindBsId(String bsId, ChannelContext channelContext) {
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.Bs_ID).join(bsId, channelContext);
 	}
 
@@ -47,6 +46,11 @@ public class Aio {
 
 	public static boolean bindGroup(String groupId, ChannelContext channelContext) {
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).join(groupId, channelContext);
+	}
+
+	public static boolean bindGroup(String groupId, String userId, AioConfig aioConfig) {
+		return false;
+//		return aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).join(groupId, channelContext);
 	}
 
 	public static boolean bindId(String id, ChannelContext channelContext) {
@@ -66,42 +70,143 @@ public class Aio {
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.USER).join(user, channelContext);
 	}
 
-    /**
-     * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
-     *
-     * @param channelContext 接收方通道
-     * @param packet         数据包
-     */
-    public static void send(ChannelContext channelContext, Packet packet) {
-        send0(channelContext, packet, false);
-    }
-
-	private static void send0(ChannelContext channelContext, Packet packet, boolean isBlock) {
-		channelContext.sendPacket(packet, isBlock);
+	public static boolean bSend(ChannelContext channelContext, Packet packet) {
+		if (Objects.isNull(channelContext)) {
+			return false;
+		}
+		return send0(channelContext, packet, true);
 	}
 
-    public static void bSend(ChannelContext channelContext, Packet packet) {
-        send0(channelContext, packet, true);
-    }
+	/**
+	 * 阻塞发送到指定 IP + port
+	 *
+	 * @param ip
+	 * @param port
+	 * @param aioConfig
+	 * @param packet
+	 */
+	public static void bSend(String ip, int port, AioConfig aioConfig, Packet packet) {
+		//
+	}
 
-    public static void sendToId(String channelContextId, Packet packet, AioConfig config) {
-        ChannelContext Id = getChannelContextById(channelContextId, config);
-        send(Id, packet);
-    }
+	public static void bSendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter) {
 
-    public static ChannelContext getChannelContextById(String channelContextId, AioConfig config) {
-        return config.getMaintainManager().getCommand(MaintainEnum.ID).get(channelContextId, ChannelContext.class);
-    }
+	}
 
-    /**
-     * 群发
-     *
-     * @param groupId        群组ID
-     * @param packet         消息包
-     * @param channelContext 发送者上下文
-     */
-    public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext, ChannelContextFilter channelContextFilter, boolean isBlock) {
-        // 群发
+	public static void bSendToBsId() {
+
+	}
+
+	public static boolean bSendToGroup(String groupId, Packet packet, AioConfig aioConfig) {
+		return bSendToGroup(groupId, packet, aioConfig, null);
+	}
+
+	public static boolean bSendToGroup(String groupId, Packet packet, AioConfig aioConfig, ChannelContextFilter channelContextFilter) {
+		return true;
+	}
+
+	/**
+	 * 关闭某个连接
+	 *
+	 * @param channelContext 通道上下文
+	 */
+	public static void close(ChannelContext channelContext) {
+		removeUserFromAllGroup(channelContext);
+		channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.ID).remove(channelContext.getId(), channelContext);
+		channelContext.close();
+	}
+
+	// G
+
+	public static void getAll(AioConfig aioConfig) {
+
+	}
+
+	public static void getByBsId(AioConfig aioConfig, String bsId) {
+
+	}
+
+
+	public static ChannelContext getChannelContextById(String channelContextId, AioConfig config) {
+		return config.getMaintainManager().getCommand(MaintainEnum.ID).get(channelContextId, ChannelContext.class);
+	}
+
+	public static void getChannelContextByBsId(AioConfig aioConfig, String bsId) {
+
+	}
+
+	public static void groupCount(AioConfig aioConfig, String groupId) {
+
+	}
+
+	// I
+
+	public static void isInGroup(String groupId, ChannelContext channelContext) {
+
+	}
+
+	// R
+
+	public static void remove(AioConfig aioConfig, String clientIp, Integer clientPort, Throwable throwable, String remark) {
+
+	}
+
+	public static boolean removeUserFromAllGroup(ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).removeAll(channelContext.getId(), channelContext);
+	}
+
+	// S
+
+
+	/**
+	 * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
+	 *
+	 * @param channelContext 接收方通道
+	 * @param packet         数据包
+	 */
+	public static boolean send(ChannelContext channelContext, Packet packet) {
+		if (Objects.isNull(channelContext)) {
+			return false;
+		}
+		return send0(channelContext, packet, false);
+	}
+
+	private static boolean send0(ChannelContext channelContext, Packet packet, boolean isBlock) {
+		return channelContext.sendPacket(packet, isBlock);
+	}
+
+	public static void sendToAll(AioConfig aioConfig, Packet packet) {
+
+	}
+
+	public static void sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter) {
+
+	}
+
+	public static void sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
+
+	}
+
+
+	public static void sendToId(AioConfig config, String id, Packet packet) {
+		ChannelContext Id = getChannelContextById(id, config);
+		send(Id, packet);
+	}
+
+	public static void sendToId(AioConfig config, String id, Packet packet, boolean isBlock) {
+
+	}
+
+
+	/**
+	 * 群发
+	 *
+	 * @param groupId        群组ID
+	 * @param packet         消息包
+	 * @param channelContext 发送者上下文
+	 */
+	public static void sendGroup(String groupId, Packet packet, ChannelContext channelContext, ChannelContextFilter channelContextFilter, boolean isBlock) {
+		// 群发
 		SetWithLock<?> set = channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).get(groupId, SetWithLock.class);
 
 		set.getObj().forEach((Consumer<Object>) o -> {
@@ -109,30 +214,28 @@ public class Aio {
 				if (o instanceof ChannelContext) {
 					send0((ChannelContext) o, packet, isBlock);
 				}
-			}else {
+			} else {
 				if (o instanceof ChannelContext && !channelContextFilter.filter((ChannelContext) o)) {
 					send0((ChannelContext) o, packet, isBlock);
 				}
 			}
 		});
-    }
+	}
 
-    public static boolean removeUserFromAllGroup(ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).removeAll(channelContext.getId(), channelContext);
-    }
 
 //    public static boolean removeUserFromGroup(ChannelContext channelContext, String groupId) {
 //        return channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
 //    }
 
-    /**
-     * 关闭某个连接
-     *
-     * @param channelContext 通道上下文
-     */
-    public static void close(ChannelContext channelContext) {
-        removeUserFromAllGroup(channelContext);
-        channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.ID).remove(channelContext.getId(), channelContext);
-        channelContext.close();
-    }
+	// U
+
+	public static void unbindBsId(ChannelContext channelContext) {
+
+	}
+
+	private Aio() {
+
+	}
+
+
 }

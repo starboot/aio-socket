@@ -386,7 +386,7 @@ public final class TCPChannelContext extends ChannelContext {
 	}
 
 	@Override
-	protected void sendPacket(Packet packet, boolean isBlock) {
+	protected boolean sendPacket(Packet packet, boolean isBlock) {
 		if (!isBlock && this.sendTask != null && this.sendTask.addTask(packet)) {
 			this.sendTask.execute();
 		} else {
@@ -395,10 +395,12 @@ public final class TCPChannelContext extends ChannelContext {
 					getAioConfig().getHandler().encode(packet, this);
 				}
 			} catch (AioEncoderException e) {
-				e.printStackTrace();
+				Aio.close(this);
+				return false;
 			}
 			flush();
 		}
+		return true;
 	}
 
 	@Override

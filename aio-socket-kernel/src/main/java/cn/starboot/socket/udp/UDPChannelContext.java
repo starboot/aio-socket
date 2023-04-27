@@ -17,6 +17,7 @@ package cn.starboot.socket.udp;
 
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.StateMachineEnum;
+import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.exception.AioEncoderException;
@@ -87,15 +88,17 @@ final class UDPChannelContext extends ChannelContext {
 	}
 
 	@Override
-	protected void sendPacket(Packet packet, boolean isBlock) {
+	protected boolean sendPacket(Packet packet, boolean isBlock) {
 		try {
 			synchronized (this) {
 				getAioConfig().getHandler().encode(packet, this);
 			}
 		} catch (AioEncoderException e) {
-			e.printStackTrace();
+			Aio.close(this);
+			return false;
 		}
 		flush();
+		return true;
 	}
 
 	@Override

@@ -268,7 +268,7 @@ public abstract class ChannelContext {
     /**
      * 发送器
      */
-    protected abstract void sendPacket(Packet packet, boolean isBlock);
+    protected abstract boolean sendPacket(Packet packet, boolean isBlock);
 
 	/**
 	 * 同步等待读
