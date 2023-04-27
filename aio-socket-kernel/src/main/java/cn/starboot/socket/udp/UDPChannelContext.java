@@ -18,7 +18,7 @@ package cn.starboot.socket.udp;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.StateMachineEnum;
 import cn.starboot.socket.core.Aio;
-import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;

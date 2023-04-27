@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.plugins;
 
-import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.core.config.AioConfig;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

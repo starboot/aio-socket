@@ -17,7 +17,7 @@ package cn.starboot.socket.udp;
 
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
-import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.core.config.AioConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

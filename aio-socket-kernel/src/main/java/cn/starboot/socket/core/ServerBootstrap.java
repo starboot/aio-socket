@@ -15,6 +15,8 @@
  */
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.core.config.AioConfig;
+import cn.starboot.socket.core.config.AioServerConfig;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
@@ -100,7 +102,7 @@ public class ServerBootstrap {
     /**
      * 服务器配置类
      */
-    private final AioConfig config = new AioConfig(true);
+    private final AioConfig config = new AioServerConfig();
 
     /**
      * socketChannel 和 ChannelContext联系

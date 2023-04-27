@@ -16,11 +16,8 @@
 package cn.starboot.socket.plugins;
 
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.core.Aio;
-import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
-
-import java.util.Objects;
 
 /**
  * 集群插件

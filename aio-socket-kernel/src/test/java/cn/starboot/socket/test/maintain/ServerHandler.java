@@ -41,7 +41,7 @@ public class ServerHandler extends DemoHandler {
                     return null;
                 }
                 System.out.println("私发");
-                Aio.sendToId(packet.getToId(), packet, channelContext.getAioConfig());
+//                Aio.sendToId(packet.getToId(), packet, channelContext.getAioConfig());
                 return null;
             }
             packet1.setData("服务器收到消息：" + packet1.getData());

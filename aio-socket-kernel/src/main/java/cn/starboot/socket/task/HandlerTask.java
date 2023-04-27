@@ -16,7 +16,7 @@
 package cn.starboot.socket.task;
 
 import cn.starboot.socket.core.Aio;
-import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.utils.pool.thread.AbstractQueueRunnable;
 import cn.starboot.socket.utils.queue.AioFullNotifyQueue;

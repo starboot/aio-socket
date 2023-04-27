@@ -16,9 +16,11 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.maintain.MaintainEnum;
-import cn.starboot.socket.maintain.impl.Groups;
 import cn.starboot.socket.utils.lock.SetWithLock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -31,6 +33,8 @@ import java.util.function.Consumer;
  * @version 2.10.1.v20211002-RELEASE
  */
 public class Aio {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Aio.class);
 
 	public static boolean bindBsId(String bsId, ChannelContext channelContext) {
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.Bs_ID).join(bsId, channelContext);
@@ -175,16 +179,57 @@ public class Aio {
 		return channelContext.sendPacket(packet, isBlock);
 	}
 
-	public static void sendToAll(AioConfig aioConfig, Packet packet) {
-
+	public static boolean sendToAll(AioConfig aioConfig, Packet packet) {
+		if (aioConfig.isUseConnections()) {
+			aioConfig.getConnections();
+			return true;
+		}else {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("未开启保持连接状态");
+			}
+			 return false;
+		}
 	}
 
-	public static void sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter) {
-
+	public static boolean sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter) {
+		return true;
 	}
 
-	public static void sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
+	public static boolean sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
+		if (aioConfig.isUseConnections()) {
+			if (aioConfig.getConnections().size() > 0) {
+			}else {
+				LOGGER.debug("没人在线");
+			}
+			return true;
+		}else {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("未开启保持连接状态");
+			}
+			return false;
+		}
+	}
 
+	public static boolean sendToSet(AioConfig aioConfig, SetWithLock<ChannelContext> setWithLock, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock){
+		if (setWithLock.getObj().size() == 0) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("{}没人在线", aioConfig.getName());
+			}
+			return false;
+		}
+
+		setWithLock.getObj().forEach(channelContext -> {
+			if (Objects.isNull(channelContextFilter)) {
+				if (channelContext != null) {
+					send0(channelContext, packet, isBlock);
+				}
+			} else {
+				if (channelContext != null && !channelContextFilter.filter(channelContext)) {
+					send0(channelContext, packet, isBlock);
+				}
+			}
+		});
+		return true;
 	}
 
 

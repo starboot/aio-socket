@@ -16,6 +16,8 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.core.config.AioClientConfig;
+import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.intf.AioHandler;
@@ -101,7 +103,7 @@ public class ClientBootstrap {
     /**
      * 客户端服务配置。
      */
-    private final AioConfig config = new AioConfig(false);
+    private final AioConfig config = new AioClientConfig();
 
     /**
      * 构造虚拟缓冲区工厂

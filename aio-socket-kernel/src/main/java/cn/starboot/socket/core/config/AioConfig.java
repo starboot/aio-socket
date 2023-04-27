@@ -13,13 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package cn.starboot.socket.core;
+package cn.starboot.socket.core.config;
 
 import cn.starboot.socket.Monitor;
+import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.maintain.*;
-import cn.starboot.socket.maintain.impl.CluIds;
-import cn.starboot.socket.maintain.impl.Groups;
-import cn.starboot.socket.maintain.impl.Ids;
 import cn.starboot.socket.utils.lock.SetWithLock;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.intf.Handler;
@@ -37,7 +35,7 @@ import java.util.Objects;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class AioConfig {
+public abstract class AioConfig {
 
     /**
      * 当前aio-socket版本号
@@ -89,11 +87,6 @@ public class AioConfig {
      */
     private MemoryPoolFactory memoryPoolFactory = MemoryPoolFactory.DISABLED_BUFFER_FACTORY;
 
-    /**
-     * 是否是服务器
-     */
-    private final boolean isServer;
-
 	/**
 	 * 关系维持管理器
 	 */
@@ -119,10 +112,6 @@ public class AioConfig {
      * 插件
      */
     private final Plugins plugins = new Plugins();
-
-    public AioConfig(boolean isServer) {
-        this.isServer = isServer;
-    }
 
     public int getMaxWaitNum() {
         return maxWaitNum;
@@ -200,10 +189,6 @@ public class AioConfig {
         return this;
     }
 
-    public boolean isServer() {
-        return isServer;
-    }
-
     public Handler getHandler() {
         return handler;
     }
@@ -238,7 +223,7 @@ public class AioConfig {
     }
 
     public void setMultilevelModel(boolean multilevelModel) {
-        if (!isServer) {
+        if (!isServer()) {
             throw new UnsupportedOperationException("ClientBootstrap does not support Setting MultilevelModel");
         }
         this.multilevelModel = multilevelModel;
@@ -258,4 +243,12 @@ public class AioConfig {
 			this.connections = new SetWithLock<>(new HashSet<>());
 		}
 	}
+
+	public SetWithLock<ChannelContext> getConnections() {
+		return connections;
+	}
+
+	public abstract String getName();
+
+	public abstract boolean isServer();
 }

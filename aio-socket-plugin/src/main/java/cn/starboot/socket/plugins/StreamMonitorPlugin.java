@@ -17,7 +17,7 @@ package cn.starboot.socket.plugins;
 
 
 import cn.starboot.socket.plugins.channels.AsynchronousSocketChannelProxy;
-import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.plugins.channels.UnsupportedAsynchronousSocketChannel;
 import cn.starboot.socket.utils.StringUtils;
 import org.slf4j.Logger;
