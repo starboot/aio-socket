@@ -223,7 +223,7 @@ public class Aio {
 					send0(channelContext, packet, isBlock);
 				}
 			} else {
-				if (channelContext != null && !channelContextFilter.filter(channelContext)) {
+				if (channelContext != null && channelContextFilter.filter(channelContext)) {
 					send0(channelContext, packet, isBlock);
 				}
 			}
@@ -259,7 +259,7 @@ public class Aio {
 					send0((ChannelContext) o, packet, isBlock);
 				}
 			} else {
-				if (o instanceof ChannelContext && !channelContextFilter.filter((ChannelContext) o)) {
+				if (o instanceof ChannelContext && channelContextFilter.filter((ChannelContext) o)) {
 					send0((ChannelContext) o, packet, isBlock);
 				}
 			}
