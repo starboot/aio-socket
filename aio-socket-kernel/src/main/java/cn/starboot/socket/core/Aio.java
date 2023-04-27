@@ -181,8 +181,7 @@ public class Aio {
 
 	public static boolean sendToAll(AioConfig aioConfig, Packet packet) {
 		if (aioConfig.isUseConnections()) {
-			aioConfig.getConnections();
-			return true;
+			return sendToAll(aioConfig, packet, null);
 		}else {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error("未开启保持连接状态");
@@ -192,12 +191,13 @@ public class Aio {
 	}
 
 	public static boolean sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter) {
-		return true;
+		return sendToAll(aioConfig, packet, channelContextFilter, false);
 	}
 
 	public static boolean sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
 		if (aioConfig.isUseConnections()) {
 			if (aioConfig.getConnections().size() > 0) {
+				sendToSet(aioConfig, aioConfig.getConnections(), packet, channelContextFilter, isBlock);
 			}else {
 				LOGGER.debug("没人在线");
 			}
@@ -213,11 +213,10 @@ public class Aio {
 	public static boolean sendToSet(AioConfig aioConfig, SetWithLock<ChannelContext> setWithLock, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock){
 		if (setWithLock.getObj().size() == 0) {
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("{}没人在线", aioConfig.getName());
+				LOGGER.debug("{}, 没人在线", aioConfig.getName());
 			}
 			return false;
 		}
-
 		setWithLock.getObj().forEach(channelContext -> {
 			if (Objects.isNull(channelContextFilter)) {
 				if (channelContext != null) {
