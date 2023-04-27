@@ -20,13 +20,16 @@ import cn.starboot.socket.maintain.*;
 import cn.starboot.socket.maintain.impl.CluIds;
 import cn.starboot.socket.maintain.impl.Groups;
 import cn.starboot.socket.maintain.impl.Ids;
+import cn.starboot.socket.utils.lock.SetWithLock;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.intf.Handler;
 import cn.starboot.socket.plugins.Plugins;
 
 import java.net.SocketOption;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * AIO 配置信息
@@ -104,6 +107,13 @@ public class AioConfig {
     private int maxWaitNum = 50;
 
     private boolean multilevelModel = false;
+
+	/**
+	 * 启用用户连接保存
+	 */
+	private boolean useConnections;
+
+    private SetWithLock<ChannelContext> connections;
 
     /**
      * 插件
@@ -235,6 +245,17 @@ public class AioConfig {
     }
 
 	public MaintainManager getMaintainManager() {
-		return maintainManager;
+		return this.maintainManager;
+	}
+
+	public boolean isUseConnections() {
+		return this.useConnections;
+	}
+
+	public synchronized void setUseConnections(boolean useConnections) {
+		this.useConnections = useConnections;
+		if (this.useConnections && Objects.isNull(this.connections)) {
+			this.connections = new SetWithLock<>(new HashSet<>());
+		}
 	}
 }
