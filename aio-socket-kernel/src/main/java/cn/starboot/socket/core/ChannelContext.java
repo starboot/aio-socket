@@ -17,6 +17,9 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.enums.ChannelStatusEnum;
+import cn.starboot.socket.task.DecodeTask;
+import cn.starboot.socket.task.HandlerTask;
+import cn.starboot.socket.task.SendTask;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.utils.queue.AioFullWaitQueue;
 import cn.starboot.socket.utils.queue.AioQueue;
@@ -46,6 +49,8 @@ public abstract class ChannelContext {
      * 附件对象
      */
     private Object attachment;
+
+	private CloseCode closeCode;
 
     /**
      * 输出流，用于往输出buffer里面输入数据的对象
@@ -150,7 +155,15 @@ public abstract class ChannelContext {
      */
     public abstract void close(boolean immediate);
 
-    /**
+	public CloseCode getCloseCode() {
+		return closeCode;
+	}
+
+	public void setCloseCode(CloseCode closeCode) {
+		this.closeCode = closeCode;
+	}
+
+	/**
      * 获取通道ID
      *
      * @return 通道上下文唯一ID
@@ -219,6 +232,11 @@ public abstract class ChannelContext {
         return status != ChannelStatusEnum.CHANNEL_STATUS_ENABLED;
     }
 
+    protected abstract DecodeTask getDecodeTaskRunnable();
+
+	protected abstract HandlerTask getHandlerTaskRunnable();
+
+	protected abstract SendTask getSendTaskRunnable();
     /**
      * 获取附件对象
      *

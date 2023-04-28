@@ -37,7 +37,7 @@ public class ServerHandler extends DemoHandler {
 
                 if (packet.getToId().equals("123")) {
                     System.out.println("群发");
-                    Aio.sendGroup("1191998028", packet, channelContext, null, false);
+//                    Aio.sendToGroup("1191998028", packet, channelContext, null, false);
                     return null;
                 }
                 System.out.println("私发");

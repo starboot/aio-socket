@@ -21,6 +21,9 @@ import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.exception.AioEncoderException;
+import cn.starboot.socket.task.DecodeTask;
+import cn.starboot.socket.task.HandlerTask;
+import cn.starboot.socket.task.SendTask;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
@@ -80,6 +83,21 @@ final class UDPChannelContext extends ChannelContext {
 	@Override
 	public InetSocketAddress getRemoteAddress() {
 		return (InetSocketAddress) remote;
+	}
+
+	@Override
+	protected DecodeTask getDecodeTaskRunnable() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected HandlerTask getHandlerTaskRunnable() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected SendTask getSendTaskRunnable() {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

@@ -382,6 +382,21 @@ public final class TCPChannelContext extends ChannelContext {
 	}
 
 	@Override
+	protected DecodeTask getDecodeTaskRunnable() {
+		return this.decodeTask;
+	}
+
+	@Override
+	protected HandlerTask getHandlerTaskRunnable() {
+		return this.handlerTask;
+	}
+
+	@Override
+	protected SendTask getSendTaskRunnable() {
+		return this.sendTask;
+	}
+
+	@Override
 	public AioConfig getAioConfig() {
 		return this.aioConfig;
 	}
