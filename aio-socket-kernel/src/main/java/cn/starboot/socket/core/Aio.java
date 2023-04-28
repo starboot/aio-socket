@@ -186,23 +186,122 @@ public class Aio {
 		channelContext.close();
 	}
 
+	public static void closeClu(AioConfig aioConfig, String cluId) {
+		closeClu(aioConfig, cluId, null);
+	}
+
+	public static void closeClu(AioConfig aioConfig, String cluId, CloseCode closeCode) {
+
+	}
+
+	public static void closeGroup(AioConfig aioConfig, String groupId) {
+		closeGroup(aioConfig, groupId, null);
+	}
+
+	public static void closeGroup(AioConfig aioConfig, String groupId, CloseCode closeCode) {
+
+	}
+
+	public static void closeIp(AioConfig aioConfig, String ip) {
+		closeIp(aioConfig, ip, null);
+	}
+
+	public static void closeIp(AioConfig aioConfig, String ip, CloseCode closeCode) {
+
+	}
+
+	public static void closeToken(AioConfig aioConfig, String token) {
+		closeToken(aioConfig, token, null);
+	}
+
+	public static void closeToken(AioConfig aioConfig, String token, CloseCode closeCode) {
+
+	}
+
+	public static void closeUser(AioConfig aioConfig, String user) {
+		closeUser(aioConfig, user, null);
+	}
+
+	public static void closeUser(AioConfig aioConfig, String user, CloseCode closeCode) {
+
+	}
+
+	public static void closeSet(AioConfig aioConfig, SetWithLock<ChannelContext> setWithLock, CloseCode closeCode) {
+
+	}
+
 	// Get篇
 
-	public static void getAll(AioConfig aioConfig) {
-
+	public static SetWithLock<ChannelContext> getAll(AioConfig aioConfig) {
+		return aioConfig.getConnections();
 	}
 
-	public static void getByBsId(AioConfig aioConfig, String bsId) {
-
+	public static SetWithLock<ChannelContext> getAllChannelContexts(AioConfig aioConfig) {
+		return getAll(aioConfig);
 	}
 
-
-	public static ChannelContext getChannelContextById(AioConfig config, String channelContextId) {
-		return config.getMaintainManager().getCommand(MaintainEnum.ID).get(channelContextId, ChannelContext.class);
+	public static ChannelContext getByBsId(AioConfig aioConfig, String bsId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.Bs_ID).get(bsId, ChannelContext.class);
 	}
 
-	public static void getChannelContextByBsId(AioConfig aioConfig, String bsId) {
+	public static ChannelContext getChannelContextByBsId(AioConfig aioConfig, String bsId) {
+		return getByBsId(aioConfig, bsId);
+	}
 
+	public static ChannelContext getByClientNode(AioConfig aioConfig, String bsId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).get(bsId, ChannelContext.class);
+	}
+
+	public static ChannelContext getChannelContextByClientNode(AioConfig aioConfig, String bsId) {
+		return getByClientNode(aioConfig, bsId);
+	}
+
+	public static SetWithLock<?> getByCluId(AioConfig aioConfig, String bsId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).get(bsId, SetWithLock.class);
+	}
+
+	public static SetWithLock<?> getChannelContextByCluId(AioConfig aioConfig, String bsId) {
+		return getByCluId(aioConfig, bsId);
+	}
+
+	public static SetWithLock<?> getByGroupId(AioConfig aioConfig, String bsId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).get(bsId, SetWithLock.class);
+	}
+
+	public static SetWithLock<?> getChannelContextByGroupId(AioConfig aioConfig, String bsId) {
+		return getByGroupId(aioConfig, bsId);
+	}
+
+	public static ChannelContext getById(AioConfig aioConfig, String bsId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.ID).get(bsId, ChannelContext.class);
+	}
+
+	public static ChannelContext getChannelContextById(AioConfig aioConfig, String bsId) {
+		return getById(aioConfig, bsId);
+	}
+
+	public static SetWithLock<?> getByIp(AioConfig aioConfig, String bsId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).get(bsId, SetWithLock.class);
+	}
+
+	public static SetWithLock<?> getChannelContextByIp(AioConfig aioConfig, String bsId) {
+		return getByIp(aioConfig, bsId);
+	}
+
+	public static SetWithLock<?> getByToken(AioConfig aioConfig, String bsId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).get(bsId, SetWithLock.class);
+	}
+
+	public static SetWithLock<?> getChannelContextByToken(AioConfig aioConfig, String bsId) {
+		return getByToken(aioConfig, bsId);
+	}
+
+	public static SetWithLock<?> getByUser(AioConfig aioConfig, String bsId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).get(bsId, SetWithLock.class);
+	}
+
+	public static SetWithLock<?> getChannelContextByUser(AioConfig aioConfig, String bsId) {
+		return getByUser(aioConfig, bsId);
 	}
 
 	public static void groupCount(AioConfig aioConfig, String groupId) {
