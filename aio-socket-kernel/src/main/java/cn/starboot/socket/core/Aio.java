@@ -304,15 +304,27 @@ public class Aio {
 		return getByUser(aioConfig, user);
 	}
 
+	// 按照分页获取所有在线用户
+	public static void getPageOfAll(AioConfig aioConfig, Integer pageIndex, Integer pageSize) {
+
+	}
+
+	// 按照分页获取群组
+	public static void getPageOfGroup(AioConfig aioConfig, String group, Integer pageIndex, Integer pageSize) {
+
+	}
+
+	// 群组有多少个连接
 	public static void groupCount(AioConfig aioConfig, String groupId) {
 
 	}
 
-	// I
-
+	// 某通道是否在某群组中
 	public static void isInGroup(String groupId, ChannelContext channelContext) {
 
 	}
+
+	// 所有一对多的都需要有此方法
 
 	// R
 
@@ -539,9 +551,61 @@ public class Aio {
 //        return channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
 //    }
 
-	// U
+	// UnBing
+
+	public static void unbindAll(ChannelContext channelContext) {
+
+	}
 
 	public static void unbindBsId(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindClientNode(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindClu(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindAllClu(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindGroup(ChannelContext channelContext, String groupId) {
+
+	}
+
+	public static void unbindAllGroup(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindId(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindIp(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindAllIp(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindToken(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindAllToken(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindUser(ChannelContext channelContext) {
+
+	}
+
+	public static void unbindAllUser(ChannelContext channelContext) {
 
 	}
 
