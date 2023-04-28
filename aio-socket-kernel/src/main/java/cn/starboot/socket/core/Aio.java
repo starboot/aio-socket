@@ -182,11 +182,11 @@ public class Aio {
 	public static boolean sendToAll(AioConfig aioConfig, Packet packet) {
 		if (aioConfig.isUseConnections()) {
 			return sendToAll(aioConfig, packet, null);
-		}else {
+		} else {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error("未开启保持连接状态");
 			}
-			 return false;
+			return false;
 		}
 	}
 
@@ -198,11 +198,11 @@ public class Aio {
 		if (aioConfig.isUseConnections()) {
 			if (aioConfig.getConnections().size() > 0) {
 				sendToSet(aioConfig, aioConfig.getConnections(), packet, channelContextFilter, isBlock);
-			}else {
+			} else {
 				LOGGER.debug("没人在线");
 			}
 			return true;
-		}else {
+		} else {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error("未开启保持连接状态");
 			}
@@ -210,7 +210,7 @@ public class Aio {
 		}
 	}
 
-	public static boolean sendToSet(AioConfig aioConfig, SetWithLock<ChannelContext> setWithLock, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock){
+	public static boolean sendToSet(AioConfig aioConfig, SetWithLock<ChannelContext> setWithLock, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
 		if (setWithLock.getObj().size() == 0) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("{}, 没人在线", aioConfig.getName());
