@@ -9,6 +9,4 @@ public interface Maintain {
 	boolean remove(String id, ChannelContext context);
 
 	boolean removeAll(ChannelContext context);
-
-	<T> T get(String id, Class<T> t);
 }

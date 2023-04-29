@@ -72,7 +72,7 @@ public abstract class AbstractMultiMaintain extends AbstractMaintain {
 	}
 
 	@Override
-	public <T> T get(String id, Class<T> t) {
-		return Objects.isNull(getMultiMaintainMap().get(id)) ? null : (T) getMultiMaintainMap().get(id);
+	public SetWithLock<ChannelContext> getSet(String id) {
+		return Objects.isNull(getMultiMaintainMap().get(id)) ? null : getMultiMaintainMap().get(id);
 	}
 }

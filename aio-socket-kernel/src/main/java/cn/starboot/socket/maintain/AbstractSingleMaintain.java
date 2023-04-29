@@ -63,8 +63,7 @@ public abstract class AbstractSingleMaintain extends AbstractMaintain {
 	}
 
 	@Override
-	public <T> T get(String id, Class<T> t) {
-		ChannelContext singleMaintainMapChannelContext = getSingleMaintainMap().get(id);
-		return Objects.isNull(singleMaintainMapChannelContext) ? null : (T) singleMaintainMapChannelContext;
+	public ChannelContext getChannelContext(String id) {
+		return Objects.isNull(getSingleMaintainMap().get(id)) ? null : getSingleMaintainMap().get(id);
 	}
 }
