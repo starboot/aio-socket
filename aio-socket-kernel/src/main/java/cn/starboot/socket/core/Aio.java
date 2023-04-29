@@ -463,26 +463,74 @@ public class Aio {
 
 	}
 
-	// 按照分页获取群组
-	public static void getPageOfGroup(AioConfig aioConfig, String group, Integer pageIndex, Integer pageSize) {
+	public static void getPageOfClu(AioConfig aioConfig, String cluId, Integer pageIndex, Integer pageSize) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).get(cluId, SetWithLock.class);
+	}
 
+	public static int cluCount(AioConfig aioConfig, String cluId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).get(cluId, SetWithLock.class).size();
+	}
+
+	public static void isInClu(AioConfig aioConfig, String cluId, ChannelContext channelContext) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).get(cluId, SetWithLock.class);
+	}
+
+	// 按照分页获取群组
+	public static void getPageOfGroup(AioConfig aioConfig, String groupId, Integer pageIndex, Integer pageSize) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).get(groupId, SetWithLock.class);
 	}
 
 	// 群组有多少个连接
-	public static void groupCount(AioConfig aioConfig, String groupId) {
-
+	public static int groupCount(AioConfig aioConfig, String groupId) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).get(groupId, SetWithLock.class).size();
 	}
 
 	// 某通道是否在某群组中
-	public static void isInGroup(String groupId, ChannelContext channelContext) {
-
+	public static void isInGroup(AioConfig aioConfig, String groupId, ChannelContext channelContext) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).get(groupId, SetWithLock.class);
 	}
 
-	// 所有一对多的都需要有此方法
+	public static void getPageOfIp(AioConfig aioConfig, String ip, Integer pageIndex, Integer pageSize) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).get(ip, SetWithLock.class);
+	}
+
+	public static int ipCount(AioConfig aioConfig, String ip) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).get(ip, SetWithLock.class).size();
+	}
+
+	public static void isInIp(AioConfig aioConfig, String ip, ChannelContext channelContext) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).get(ip, SetWithLock.class);
+	}
+
+	public static void getPageOfToken(AioConfig aioConfig, String token, Integer pageIndex, Integer pageSize) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).get(token, SetWithLock.class);
+	}
+
+	public static int tokenCount(AioConfig aioConfig, String token) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).get(token, SetWithLock.class).size();
+	}
+
+	public static void isInToken(AioConfig aioConfig, String token, ChannelContext channelContext) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).get(token, SetWithLock.class);
+	}
+
+	public static void getPageOfUser(AioConfig aioConfig, String user, Integer pageIndex, Integer pageSize) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).get(user, SetWithLock.class);
+	}
+
+	public static int userCount(AioConfig aioConfig, String user) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).get(user, SetWithLock.class).size();
+	}
+
+	public static void isInUser(AioConfig aioConfig, String user, ChannelContext channelContext) {
+		SetWithLock<?> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).get(user, SetWithLock.class);
+	}
 
 	// Remove
 	public static boolean removeUserFromAllGroup(ChannelContext channelContext) {
-		return channelContext.getAioConfig()
+		if (Objects.isNull(channelContext)) return true;
+		return channelContext
+				.getAioConfig()
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
 				.removeAll(channelContext);
@@ -573,7 +621,7 @@ public class Aio {
 		closeSet(aioConfig, setWithLock, closeCode);
 	}
 
-	// ***************************************************              Send 篇
+	//                                Send 篇
 
 	/**
 	 * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
@@ -590,7 +638,8 @@ public class Aio {
 	}
 
 	private static boolean send0(ChannelContext channelContext,
-								 Packet packet, boolean isBlock) {
+								 Packet packet,
+								 boolean isBlock) {
 		return channelContext.sendPacket(packet, isBlock);
 	}
 
@@ -600,7 +649,8 @@ public class Aio {
 	}
 
 	public static boolean sendToAll(AioConfig aioConfig,
-									Packet packet, ChannelContextFilter channelContextFilter) {
+									Packet packet,
+									ChannelContextFilter channelContextFilter) {
 		return sendToAll(aioConfig, packet, channelContextFilter, false);
 	}
 
@@ -823,7 +873,9 @@ public class Aio {
 		return sendToToken(aioConfig, token, packet, null);
 	}
 
-	public static boolean sendToToken(AioConfig aioConfig, String token, Packet packet,
+	public static boolean sendToToken(AioConfig aioConfig,
+									  String token,
+									  Packet packet,
 									  ChannelContextFilter channelContextFilter) {
 		return sendToToken(aioConfig, token, packet, channelContextFilter, false);
 	}
