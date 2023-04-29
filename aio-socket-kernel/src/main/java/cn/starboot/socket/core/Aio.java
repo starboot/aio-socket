@@ -83,70 +83,106 @@ public class Aio {
 	}
 
 	// ********************************************* 阻塞发送篇
-	public static boolean bSend(ChannelContext channelContext, Packet packet) {
+	public static boolean bSend(ChannelContext channelContext,
+								Packet packet) {
 		if (Objects.isNull(channelContext)) {
 			return false;
 		}
 		return send0(channelContext, packet, true);
 	}
 
-	public static boolean bSendToAll(AioConfig aioConfig, Packet packet) {
+	public static boolean bSendToAll(AioConfig aioConfig,
+									 Packet packet) {
 		return bSendToAll(aioConfig, packet, null);
 	}
 
-	public static boolean bSendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean bSendToAll(AioConfig aioConfig,
+									 Packet packet,
+									 ChannelContextFilter channelContextFilter) {
 		return sendToAll(aioConfig, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToBsId(AioConfig aioConfig, String bsId, Packet packet) {
+	public static boolean bSendToBsId(AioConfig aioConfig,
+									  String bsId,
+									  Packet packet) {
 		return sendToBsId(aioConfig, bsId, packet, true);
 	}
 
-	public static boolean bSendToClientNode(AioConfig aioConfig, String ip, int port, Packet packet) {
+	public static boolean bSendToClientNode(AioConfig aioConfig,
+											String ip,
+											int port,
+											Packet packet) {
 		return sendToClientNode(aioConfig, ip, port, packet, true);
 	}
 
-	public static boolean bSendToCluId(AioConfig aioConfig, String cluId, Packet packet) {
+	public static boolean bSendToCluId(AioConfig aioConfig,
+									   String cluId,
+									   Packet packet) {
 		return bSendToCluId(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean bSendToCluId(AioConfig aioConfig, String cluId, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean bSendToCluId(AioConfig aioConfig,
+									   String cluId,
+									   Packet packet,
+									   ChannelContextFilter channelContextFilter) {
 		return sendToCluId(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToGroup(String groupId, Packet packet, AioConfig aioConfig) {
+	public static boolean bSendToGroup(String groupId,
+									   Packet packet,
+									   AioConfig aioConfig) {
 		return bSendToGroup(aioConfig, groupId, packet, null);
 	}
 
-	public static boolean bSendToGroup(AioConfig aioConfig, String groupId, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean bSendToGroup(AioConfig aioConfig,
+									   String groupId,
+									   Packet packet,
+									   ChannelContextFilter channelContextFilter) {
 		return sendToGroup(aioConfig, groupId, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToId(AioConfig aioConfig, String bsId, Packet packet) {
+	public static boolean bSendToId(AioConfig aioConfig,
+									String bsId,
+									Packet packet) {
 		return sendToId(aioConfig, bsId, packet, true);
 	}
 
-	public static boolean bSendToIp(AioConfig aioConfig, String cluId, Packet packet) {
+	public static boolean bSendToIp(AioConfig aioConfig,
+									String cluId,
+									Packet packet) {
 		return bSendToIp(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean bSendToIp(AioConfig aioConfig, String cluId, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean bSendToIp(AioConfig aioConfig,
+									String cluId,
+									Packet packet,
+									ChannelContextFilter channelContextFilter) {
 		return sendToIp(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToToken(AioConfig aioConfig, String cluId, Packet packet) {
+	public static boolean bSendToToken(AioConfig aioConfig,
+									   String cluId,
+									   Packet packet) {
 		return bSendToToken(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean bSendToToken(AioConfig aioConfig, String cluId, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean bSendToToken(AioConfig aioConfig,
+									   String cluId,
+									   Packet packet,
+									   ChannelContextFilter channelContextFilter) {
 		return sendToToken(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToUser(AioConfig aioConfig, String cluId, Packet packet) {
+	public static boolean bSendToUser(AioConfig aioConfig,
+									  String cluId,
+									  Packet packet) {
 		return bSendToUser(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean bSendToUser(AioConfig aioConfig, String cluId, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean bSendToUser(AioConfig aioConfig,
+									  String cluId,
+									  Packet packet,
+									  ChannelContextFilter channelContextFilter) {
 		return sendToUser(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
