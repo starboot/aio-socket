@@ -59,12 +59,11 @@ public abstract class AbstractMultiMaintain extends AbstractMaintain {
 	/**
 	 * 从所有群组中移除用户
 	 *
-	 * @param id      群组ID
 	 * @param context 被移除的ChannelContext上下文信息
 	 * @return        移除状态
 	 */
 	@Override
-	public boolean removeAll(String id, ChannelContext context) {
+	public boolean removeAll(ChannelContext context) {
 		boolean result = true;
 		for (String groupId : getMultiMaintainMap().keySet()) {
 			result = result && remove(groupId, context);

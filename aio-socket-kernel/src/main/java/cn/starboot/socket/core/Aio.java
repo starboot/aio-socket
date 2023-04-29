@@ -45,8 +45,8 @@ public class Aio {
 		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).join(cliNode, channelContext);
 	}
 
-	public static boolean bindCluId(String CluId, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).join(CluId, channelContext);
+	public static boolean bindCluId(String cluId, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).join(cluId, channelContext);
 	}
 
 	public static boolean bindGroup(String groupId, ChannelContext channelContext) {
@@ -178,11 +178,11 @@ public class Aio {
 	}
 
 	public static void closeBsId(AioConfig aioConfig, String bsId) {
-
+		close(getChannelContextByBsId(aioConfig, bsId));
 	}
 
 	public static void closeClientNode(AioConfig aioConfig, String clientNode) {
-
+		close(getChannelContextByClientNode(aioConfig, clientNode));
 	}
 
 	public static void closeClu(AioConfig aioConfig, String cluId) {
@@ -190,7 +190,7 @@ public class Aio {
 	}
 
 	public static void closeClu(AioConfig aioConfig, String cluId, CloseCode closeCode) {
-
+		closeSet(aioConfig, getChannelContextByCluId(aioConfig, cluId), closeCode);
 	}
 
 	public static void closeGroup(AioConfig aioConfig, String groupId) {
@@ -198,7 +198,7 @@ public class Aio {
 	}
 
 	public static void closeGroup(AioConfig aioConfig, String groupId, CloseCode closeCode) {
-
+		closeSet(aioConfig, getChannelContextByGroupId(aioConfig, groupId), closeCode);
 	}
 
 	public static void closeId(AioConfig aioConfig, String id) {
@@ -210,7 +210,7 @@ public class Aio {
 	}
 
 	public static void closeIp(AioConfig aioConfig, String ip, CloseCode closeCode) {
-
+		closeSet(aioConfig, getChannelContextByIp(aioConfig, ip), closeCode);
 	}
 
 	public static void closeToken(AioConfig aioConfig, String token) {
@@ -218,7 +218,7 @@ public class Aio {
 	}
 
 	public static void closeToken(AioConfig aioConfig, String token, CloseCode closeCode) {
-
+		closeSet(aioConfig, getChannelContextByToken(aioConfig, token), closeCode);
 	}
 
 	public static void closeUser(AioConfig aioConfig, String user) {
@@ -226,11 +226,18 @@ public class Aio {
 	}
 
 	public static void closeUser(AioConfig aioConfig, String user, CloseCode closeCode) {
-
+		closeSet(aioConfig, getChannelContextByUser(aioConfig, user), closeCode);
 	}
 
-	public static void closeSet(AioConfig aioConfig, SetWithLock<ChannelContext> setWithLock, CloseCode closeCode) {
-
+	public static void closeSet(AioConfig aioConfig, SetWithLock<?> setWithLock, CloseCode closeCode) {
+		if (Objects.isNull(setWithLock) || setWithLock.getObj().size() == 0) {
+			return;
+		}
+		setWithLock.getObj().forEach((Consumer<Object>) object -> {
+			if (Objects.nonNull(object) && object instanceof ChannelContext) {
+				close((ChannelContext) object,closeCode);
+			}
+		});
 	}
 
 	// Get篇
@@ -331,7 +338,10 @@ public class Aio {
 
 	// Remove
 	public static boolean removeUserFromAllGroup(ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).removeAll(channelContext.getId(), channelContext);
+		return channelContext.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.removeAll(channelContext);
 	}
 
 	public static void remove(ChannelContext channelContext) {
@@ -343,11 +353,11 @@ public class Aio {
 	}
 
 	public static void removeBsId(AioConfig aioConfig, String bsId) {
-
+		remove(getChannelContextByBsId(aioConfig, bsId));
 	}
 
 	public static void removeClientNode(AioConfig aioConfig, String clientNode) {
-
+		remove(getChannelContextByClientNode(aioConfig, clientNode));
 	}
 
 	public static void removeClu(AioConfig aioConfig, String cluId) {
@@ -355,7 +365,7 @@ public class Aio {
 	}
 
 	public static void removeClu(AioConfig aioConfig, String cluId, CloseCode closeCode) {
-
+		removeSet(aioConfig, getChannelContextByCluId(aioConfig, cluId), closeCode);
 	}
 
 	public static void removeGroup(AioConfig aioConfig, String groupId) {
@@ -363,7 +373,7 @@ public class Aio {
 	}
 
 	public static void removeGroup(AioConfig aioConfig, String groupId, CloseCode closeCode) {
-
+		removeSet(aioConfig, getChannelContextByGroupId(aioConfig, groupId), closeCode);
 	}
 
 	public static void removeId(AioConfig aioConfig, String id) {
@@ -375,7 +385,7 @@ public class Aio {
 	}
 
 	public static void removeIp(AioConfig aioConfig, String ip, CloseCode closeCode) {
-
+		removeSet(aioConfig, getChannelContextByIp(aioConfig, ip), closeCode);
 	}
 
 	public static void removeToken(AioConfig aioConfig, String token) {
@@ -383,7 +393,7 @@ public class Aio {
 	}
 
 	public static void removeToken(AioConfig aioConfig, String token, CloseCode closeCode) {
-
+		removeSet(aioConfig, getChannelContextByToken(aioConfig, token), closeCode);
 	}
 
 	public static void removeUser(AioConfig aioConfig, String user) {
@@ -391,11 +401,11 @@ public class Aio {
 	}
 
 	public static void removeUser(AioConfig aioConfig, String user, CloseCode closeCode) {
-
+		removeSet(aioConfig, getChannelContextByUser(aioConfig, user), closeCode);
 	}
 
-	public static void removeSet(AioConfig aioConfig, SetWithLock<ChannelContext> setWithLock, CloseCode closeCode) {
-
+	public static void removeSet(AioConfig aioConfig, SetWithLock<?> setWithLock, CloseCode closeCode) {
+		closeSet(aioConfig, setWithLock, closeCode);
 	}
 
 	// ***************************************************              Send 篇
@@ -531,13 +541,19 @@ public class Aio {
 		return sendToSet(aioConfig, setWithLock, packet, null);
 	}
 
-	public static boolean sendToSet(AioConfig aioConfig, SetWithLock<?> setWithLock, Packet packet,
-									ChannelContextFilter channelContextFilter) {
+	public static boolean sendToSet(AioConfig aioConfig,
+									SetWithLock<?> setWithLock,
+									Packet packet,
+									ChannelContextFilter channelContextFilter)
+	{
 		return sendToSet(aioConfig, setWithLock, packet, channelContextFilter, false);
 	}
 
-	private static boolean sendToSet(AioConfig aioConfig, SetWithLock<?> setWithLock,
-									 Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
+	private static boolean sendToSet(AioConfig aioConfig,
+									 SetWithLock<?> setWithLock,
+									 Packet packet,
+									 ChannelContextFilter channelContextFilter,
+									 boolean isBlock) {
 		if (Objects.isNull(setWithLock) || setWithLock.getObj().size() == 0) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("{}, 没人在线", aioConfig.getName());
@@ -608,72 +624,93 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-
-//    public static boolean removeUserFromGroup(ChannelContext channelContext, String groupId) {
-//        return channelContext.getAioConfig().getGroups().remove(groupId, channelContext);
-//    }
-
 	// UnBing
 
-	public static void unbindAll(ChannelContext channelContext) {
-
+	public static void unbindFromAll(AioConfig aioConfig, ChannelContext channelContext) {
+		unbindBsId(aioConfig, "", channelContext);
+//		channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.Bs_ID).remove(channelContext.getId(), channelContext);
 	}
 
-	public static void unbindBsId(ChannelContext channelContext) {
-
+	public static boolean unbindBsId(AioConfig aioConfig, String bsId) {
+		return unbindBsId(aioConfig, bsId, null);
 	}
 
-	public static void unbindClientNode(ChannelContext channelContext) {
-
+	public static boolean unbindBsId(AioConfig aioConfig, String bsId, ChannelContext channelContext) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.Bs_ID).remove(bsId, channelContext);
 	}
 
-	public static void unbindClu(ChannelContext channelContext, String cluId) {
-
+	public static boolean unbindClientNode(AioConfig aioConfig, String cliNode) {
+		return unbindClientNode(aioConfig, cliNode, null);
 	}
 
-	public static void unbindAllClu(ChannelContext channelContext) {
-
+	public static boolean unbindClientNode(AioConfig aioConfig, String cliNode, ChannelContext channelContext) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).remove(cliNode, channelContext);
 	}
 
-	public static void unbindGroup(ChannelContext channelContext, String groupId) {
-
+	public static boolean unbindClu(String cluId, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).remove(cluId, channelContext);
 	}
 
-	public static void unbindAllGroup(ChannelContext channelContext) {
-
+	public static boolean unbindFromAllClu(ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).removeAll(channelContext);
 	}
 
-	public static void unbindId(ChannelContext channelContext) {
-
+	public static boolean unbindGroup(String groupId, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).remove(groupId, channelContext);
 	}
 
-	public static void unbindIp(ChannelContext channelContext, String ip) {
-
+	public static boolean unbindFromAllGroup(ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).removeAll(channelContext);
 	}
 
-	public static void unbindAllIp(ChannelContext channelContext) {
-
+	public static boolean unbindId(AioConfig aioConfig, String id) {
+		return unbindId(aioConfig, id, null);
 	}
 
-	public static void unbindToken(ChannelContext channelContext, String token) {
-
+	public static boolean unbindId(AioConfig aioConfig, String id, ChannelContext channelContext) {
+		return aioConfig.getMaintainManager().getCommand(MaintainEnum.ID).remove(id, channelContext);
 	}
 
-	public static void unbindAllToken(ChannelContext channelContext) {
-
+	public static boolean unbindIp(String ip, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.IP).remove(ip, channelContext);
 	}
 
-	public static void unbindUser(ChannelContext channelContext, String user) {
-
+	public static boolean unbindFromAllIp(ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.IP).removeAll(channelContext);
 	}
 
-	public static void unbindAllUser(ChannelContext channelContext) {
-
+	public static boolean unbindToken(String token, ChannelContext channelContext) {
+		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.TOKEN).remove(token, channelContext);
 	}
 
-	private Aio() {
-
+	public static boolean unbindFromAllToken(ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.TOKEN)
+				.removeAll(channelContext);
 	}
 
+	public static boolean unbindUser(String user,
+									 ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.USER)
+				.remove(user, channelContext);
+	}
+
+	public static boolean unbindFromAllUser(ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.USER)
+				.removeAll(channelContext);
+	}
+
+	/**
+	 * 禁止实例化
+	 */
+	private Aio() { }
 
 }

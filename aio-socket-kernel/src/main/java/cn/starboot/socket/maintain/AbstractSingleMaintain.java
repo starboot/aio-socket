@@ -46,18 +46,20 @@ public abstract class AbstractSingleMaintain extends AbstractMaintain {
 	@Override
 	public boolean remove(String id, ChannelContext context) {
 		ChannelContext singleMaintainMapChannelContext = getSingleMaintainMap().get(id);
-		if (Objects.nonNull(singleMaintainMapChannelContext)
-				&& Objects.equals(singleMaintainMapChannelContext, context)) {
+		if (Objects.isNull(singleMaintainMapChannelContext)) {
+			return true;
+		}
+		if (Objects.isNull(context)) {
 			return Objects.nonNull(getSingleMaintainMap().remove(id));
-		} else if (Objects.nonNull(singleMaintainMapChannelContext)
-				&& !Objects.equals(singleMaintainMapChannelContext, context)) {
-			return false;
-		} else return Objects.isNull(singleMaintainMapChannelContext);
+		}
+		if (Objects.equals(singleMaintainMapChannelContext, context)) {
+			return Objects.nonNull(getSingleMaintainMap().remove(id));
+		} else return false;
 	}
 
 	@Override
-	public boolean removeAll(String id, ChannelContext context) {
-		return remove(id, context);
+	public boolean removeAll(ChannelContext context) {
+		throw new UnsupportedOperationException("不支持此操作");
 	}
 
 	@Override
