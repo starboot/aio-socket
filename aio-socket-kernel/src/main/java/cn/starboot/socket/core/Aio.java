@@ -79,8 +79,7 @@ public class Aio {
 
 	public static boolean bindGroup(AioConfig aioConfig,
 									String userId,
-									String groupId,
-									MaintainEnum maintainEnum) {
+									String groupId) {
 		return bindGroup(groupId, getChannelContextById(aioConfig, userId));
 	}
 
