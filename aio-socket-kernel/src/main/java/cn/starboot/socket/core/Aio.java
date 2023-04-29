@@ -73,14 +73,6 @@ public class Aio {
 				.join(groupId, channelContext);
 	}
 
-	/**
-	 *
-	 * @param aioConfig
-	 * @param userId
-	 * @param groupId
-	 * @param maintainEnum
-	 * @return
-	 */
 	public static boolean bindGroup(AioConfig aioConfig,
 									String userId,
 									String groupId,
