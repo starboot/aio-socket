@@ -354,67 +354,107 @@ public class Aio {
 		return getAll(aioConfig);
 	}
 
-	public static ChannelContext getByBsId(AioConfig aioConfig, String bsId) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.Bs_ID).get(bsId, ChannelContext.class);
+	public static ChannelContext getByBsId(AioConfig aioConfig,
+										   String bsId) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.Bs_ID)
+				.get(bsId, ChannelContext.class);
 	}
 
-	public static ChannelContext getChannelContextByBsId(AioConfig aioConfig, String bsId) {
+	public static ChannelContext getChannelContextByBsId(AioConfig aioConfig,
+														 String bsId) {
 		return getByBsId(aioConfig, bsId);
 	}
 
-	public static ChannelContext getByClientNode(AioConfig aioConfig, String clientNode) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).get(clientNode, ChannelContext.class);
+	public static ChannelContext getByClientNode(AioConfig aioConfig,
+												 String clientNode) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLIENT_NODE_ID)
+				.get(clientNode, ChannelContext.class);
 	}
 
-	public static ChannelContext getChannelContextByClientNode(AioConfig aioConfig, String clientNode) {
+	public static ChannelContext getChannelContextByClientNode(AioConfig aioConfig,
+															   String clientNode) {
 		return getByClientNode(aioConfig, clientNode);
 	}
 
-	public static SetWithLock<?> getByCluId(AioConfig aioConfig, String cluId) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).get(cluId, SetWithLock.class);
+	public static SetWithLock<?> getByCluId(AioConfig aioConfig,
+											String cluId) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLU_ID)
+				.get(cluId, SetWithLock.class);
 	}
 
-	public static SetWithLock<?> getChannelContextByCluId(AioConfig aioConfig, String cluId) {
+	public static SetWithLock<?> getChannelContextByCluId(AioConfig aioConfig,
+														  String cluId) {
 		return getByCluId(aioConfig, cluId);
 	}
 
-	public static SetWithLock<?> getByGroupId(AioConfig aioConfig, String groupId) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).get(groupId, SetWithLock.class);
+	public static SetWithLock<?> getByGroupId(AioConfig aioConfig,
+											  String groupId) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.get(groupId, SetWithLock.class);
 	}
 
-	public static SetWithLock<?> getChannelContextByGroupId(AioConfig aioConfig, String groupId) {
+	public static SetWithLock<?> getChannelContextByGroupId(AioConfig aioConfig,
+															String groupId) {
 		return getByGroupId(aioConfig, groupId);
 	}
 
-	public static ChannelContext getById(AioConfig aioConfig, String id) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.ID).get(id, ChannelContext.class);
+	public static ChannelContext getById(AioConfig aioConfig,
+										 String id) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.ID)
+				.get(id, ChannelContext.class);
 	}
 
-	public static ChannelContext getChannelContextById(AioConfig aioConfig, String id) {
+	public static ChannelContext getChannelContextById(AioConfig aioConfig,
+													   String id) {
 		return getById(aioConfig, id);
 	}
 
-	public static SetWithLock<?> getByIp(AioConfig aioConfig, String ip) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).get(ip, SetWithLock.class);
+	public static SetWithLock<?> getByIp(AioConfig aioConfig,
+										 String ip) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.IP)
+				.get(ip, SetWithLock.class);
 	}
 
-	public static SetWithLock<?> getChannelContextByIp(AioConfig aioConfig, String ip) {
+	public static SetWithLock<?> getChannelContextByIp(AioConfig aioConfig,
+													   String ip) {
 		return getByIp(aioConfig, ip);
 	}
 
-	public static SetWithLock<?> getByToken(AioConfig aioConfig, String token) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).get(token, SetWithLock.class);
+	public static SetWithLock<?> getByToken(AioConfig aioConfig,
+											String token) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.TOKEN)
+				.get(token, SetWithLock.class);
 	}
 
-	public static SetWithLock<?> getChannelContextByToken(AioConfig aioConfig, String token) {
+	public static SetWithLock<?> getChannelContextByToken(AioConfig aioConfig,
+														  String token) {
 		return getByToken(aioConfig, token);
 	}
 
-	public static SetWithLock<?> getByUser(AioConfig aioConfig, String user) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).get(user, SetWithLock.class);
+	public static SetWithLock<?> getByUser(AioConfig aioConfig,
+										   String user) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.USER)
+				.get(user, SetWithLock.class);
 	}
 
-	public static SetWithLock<?> getChannelContextByUser(AioConfig aioConfig, String user) {
+	public static SetWithLock<?> getChannelContextByUser(AioConfig aioConfig,
+														 String user) {
 		return getByUser(aioConfig, user);
 	}
 
