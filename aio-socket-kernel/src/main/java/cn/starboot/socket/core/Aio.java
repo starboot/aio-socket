@@ -624,66 +624,132 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-	// UnBing
+	// UnBing篇
 
-	public static void unbindFromAll(AioConfig aioConfig, ChannelContext channelContext) {
-		unbindBsId(aioConfig, "", channelContext);
-//		channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.Bs_ID).remove(channelContext.getId(), channelContext);
+	public static boolean unbindFromAll(AioConfig aioConfig,
+										ChannelContext channelContext) {
+		if (Objects.isNull(channelContext)) return false;
+		return unbindBsId(aioConfig, "", channelContext) &&
+				unbindClientNode(aioConfig, "", channelContext) &&
+				unbindFromAllClu(channelContext) &&
+				unbindFromAllGroup(channelContext) &&
+				unbindId(aioConfig, "", channelContext) &&
+				unbindFromAllIp(channelContext) &&
+				unbindFromAllToken(channelContext) &&
+				unbindFromAllUser(channelContext);
 	}
 
-	public static boolean unbindBsId(AioConfig aioConfig, String bsId) {
+	public static boolean unbindBsId(AioConfig aioConfig,
+									 String bsId) {
 		return unbindBsId(aioConfig, bsId, null);
 	}
 
-	public static boolean unbindBsId(AioConfig aioConfig, String bsId, ChannelContext channelContext) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.Bs_ID).remove(bsId, channelContext);
+	public static boolean unbindBsId(AioConfig aioConfig,
+									 String bsId,
+									 ChannelContext channelContext) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.Bs_ID)
+				.remove(bsId, channelContext);
 	}
 
-	public static boolean unbindClientNode(AioConfig aioConfig, String cliNode) {
+	public static boolean unbindClientNode(AioConfig aioConfig,
+										   String cliNode) {
 		return unbindClientNode(aioConfig, cliNode, null);
 	}
 
-	public static boolean unbindClientNode(AioConfig aioConfig, String cliNode, ChannelContext channelContext) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).remove(cliNode, channelContext);
+	public static boolean unbindClientNode(AioConfig aioConfig,
+										   String cliNode,
+										   ChannelContext channelContext) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLIENT_NODE_ID)
+				.remove(cliNode, channelContext);
 	}
 
-	public static boolean unbindClu(String cluId, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).remove(cluId, channelContext);
+	public static boolean unbindClu(String cluId,
+									ChannelContext channelContext) {
+		if (Objects.isNull(channelContext)) return false;
+		return channelContext.
+				getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLU_ID)
+				.remove(cluId, channelContext);
 	}
 
 	public static boolean unbindFromAllClu(ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).removeAll(channelContext);
+		if (Objects.isNull(channelContext)) return false;
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLU_ID)
+				.removeAll(channelContext);
 	}
 
-	public static boolean unbindGroup(String groupId, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).remove(groupId, channelContext);
+	public static boolean unbindGroup(String groupId,
+									  ChannelContext channelContext) {
+		if (Objects.isNull(channelContext)) return false;
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.remove(groupId, channelContext);
 	}
 
 	public static boolean unbindFromAllGroup(ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).removeAll(channelContext);
+		if (Objects.isNull(channelContext)) return false;
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.removeAll(channelContext);
 	}
 
-	public static boolean unbindId(AioConfig aioConfig, String id) {
+	public static boolean unbindId(AioConfig aioConfig,
+								   String id) {
 		return unbindId(aioConfig, id, null);
 	}
 
-	public static boolean unbindId(AioConfig aioConfig, String id, ChannelContext channelContext) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.ID).remove(id, channelContext);
+	public static boolean unbindId(AioConfig aioConfig,
+								   String id,
+								   ChannelContext channelContext) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.ID)
+				.remove(id, channelContext);
 	}
 
-	public static boolean unbindIp(String ip, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.IP).remove(ip, channelContext);
+	public static boolean unbindIp(String ip,
+								   ChannelContext channelContext) {
+		if (Objects.isNull(channelContext)) return false;
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.IP)
+				.remove(ip, channelContext);
 	}
 
 	public static boolean unbindFromAllIp(ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.IP).removeAll(channelContext);
+		if (Objects.isNull(channelContext)) return false;
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.IP)
+				.removeAll(channelContext);
 	}
 
-	public static boolean unbindToken(String token, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.TOKEN).remove(token, channelContext);
+	public static boolean unbindToken(String token,
+									  ChannelContext channelContext) {
+		if (Objects.isNull(channelContext)) return false;
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.TOKEN)
+				.remove(token, channelContext);
 	}
 
 	public static boolean unbindFromAllToken(ChannelContext channelContext) {
+		if (Objects.isNull(channelContext)) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -693,6 +759,7 @@ public class Aio {
 
 	public static boolean unbindUser(String user,
 									 ChannelContext channelContext) {
+		if (Objects.isNull(channelContext)) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -701,6 +768,7 @@ public class Aio {
 	}
 
 	public static boolean unbindFromAllUser(ChannelContext channelContext) {
+		if (Objects.isNull(channelContext)) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
