@@ -37,20 +37,40 @@ public class Aio {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Aio.class);
 
-	public static boolean bindBsId(String bsId, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.Bs_ID).join(bsId, channelContext);
+	public static boolean bindBsId(String bsId,
+								   ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.Bs_ID)
+				.join(bsId, channelContext);
 	}
 
-	public static boolean bindCliNode(String cliNode, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).join(cliNode, channelContext);
+	public static boolean bindCliNode(String cliNode,
+									  ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLIENT_NODE_ID)
+				.join(cliNode, channelContext);
 	}
 
-	public static boolean bindCluId(String cluId, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.CLU_ID).join(cluId, channelContext);
+	public static boolean bindCluId(String cluId,
+									ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLU_ID)
+				.join(cluId, channelContext);
 	}
 
-	public static boolean bindGroup(String groupId, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.GROUP_ID).join(groupId, channelContext);
+	public static boolean bindGroup(String groupId,
+									ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.join(groupId, channelContext);
 	}
 
 	/**
@@ -61,25 +81,48 @@ public class Aio {
 	 * @param maintainEnum
 	 * @return
 	 */
-	public static boolean bindGroup(AioConfig aioConfig, String userId, String groupId, MaintainEnum maintainEnum) {
+	public static boolean bindGroup(AioConfig aioConfig,
+									String userId,
+									String groupId,
+									MaintainEnum maintainEnum) {
 		return bindGroup(groupId, getChannelContextById(aioConfig, userId));
 	}
 
-	public static boolean bindId(String id, ChannelContext channelContext) {
+	public static boolean bindId(String id,
+								 ChannelContext channelContext) {
 		channelContext.setId(id);
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.ID).join(id, channelContext);
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.ID)
+				.join(id, channelContext);
 	}
 
-	public static boolean bindIp(String ip, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.IP).join(ip, channelContext);
+	public static boolean bindIp(String ip,
+								 ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.IP)
+				.join(ip, channelContext);
 	}
 
-	public static boolean bindToken(String token, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.TOKEN).join(token, channelContext);
+	public static boolean bindToken(String token,
+									ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.TOKEN)
+				.join(token, channelContext);
 	}
 
-	public static boolean bindUser(String user, ChannelContext channelContext) {
-		return channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.USER).join(user, channelContext);
+	public static boolean bindUser(String user,
+								   ChannelContext channelContext) {
+		return channelContext
+				.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.USER)
+				.join(user, channelContext);
 	}
 
 	// ********************************************* 阻塞发送篇
