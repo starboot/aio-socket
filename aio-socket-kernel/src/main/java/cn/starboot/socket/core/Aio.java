@@ -18,11 +18,13 @@ package cn.starboot.socket.core;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.maintain.MaintainEnum;
+import cn.starboot.socket.utils.lock.ReadLockHandler;
 import cn.starboot.socket.utils.lock.SetWithLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 
@@ -870,24 +872,30 @@ public class Aio {
 		LongAdder sendNum = new LongAdder();
 		LongAdder sendSuc = new LongAdder();
 		if (Objects.isNull(channelContextFilter)) {
-			setWithLock.getObj().forEach((Consumer<Object>) object -> {
-				if (Objects.nonNull(object) && object instanceof ChannelContext) {
+			setWithLock
+					.handle((ReadLockHandler<Set<ChannelContext>>)
+							channelContextSet -> channelContextSet.forEach(
+									channelContext -> {
+				if (Objects.nonNull(channelContext)) {
 					sendNum.increment();
-					if (send0((ChannelContext) object, packet, isBlock)) {
+					if (send0(channelContext, packet, isBlock)) {
 						sendSuc.increment();
 					}
 				}
-			});
+			}));
 		}else {
-			setWithLock.getObj().forEach((Consumer<Object>) object -> {
-				if (Objects.nonNull(object) && object instanceof ChannelContext
-						&& channelContextFilter.filter((ChannelContext) object)) {
+			setWithLock
+					.handle((ReadLockHandler<Set<ChannelContext>>)
+							channelContextSet -> channelContextSet.forEach(
+									channelContext -> {
+				if (Objects.nonNull(channelContext)
+						&& channelContextFilter.filter(channelContext)) {
 					sendNum.increment();
-					if (send0((ChannelContext) object, packet, isBlock)) {
+					if (send0(channelContext, packet, isBlock)) {
 						sendSuc.increment();
 					}
 				}
-			});
+			}));
 		}
 		return sendNum.longValue() == sendSuc.longValue();
 	}
