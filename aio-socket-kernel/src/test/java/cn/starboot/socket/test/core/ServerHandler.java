@@ -16,6 +16,7 @@
 package cn.starboot.socket.test.core;
 
 import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
 
 public class ServerHandler extends DemoHandler {
@@ -24,7 +25,8 @@ public class ServerHandler extends DemoHandler {
         if (packet instanceof DemoPacket) {
 			System.out.println(((DemoPacket) packet).getData());
 //            return packet;
-        }
+			Aio.bSend(channelContext, packet)
+		}
         return null;
     }
 }

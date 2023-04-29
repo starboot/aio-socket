@@ -39,6 +39,7 @@ public class Aio {
 
 	public static boolean bindBsId(String bsId,
 								   ChannelContext channelContext) {
+		if (Objects.isNull(bsId) || Objects.isNull(channelContext) || bsId.length() == 0) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -48,6 +49,7 @@ public class Aio {
 
 	public static boolean bindCliNode(String cliNode,
 									  ChannelContext channelContext) {
+		if (Objects.isNull(cliNode) || Objects.isNull(channelContext) || cliNode.length() == 0) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -57,6 +59,7 @@ public class Aio {
 
 	public static boolean bindCluId(String cluId,
 									ChannelContext channelContext) {
+		if (Objects.isNull(cluId) || Objects.isNull(channelContext) || cluId.length() == 0) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -66,6 +69,7 @@ public class Aio {
 
 	public static boolean bindGroup(String groupId,
 									ChannelContext channelContext) {
+		if (Objects.isNull(groupId) || Objects.isNull(channelContext) || groupId.length() == 0) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -82,6 +86,7 @@ public class Aio {
 
 	public static boolean bindId(String id,
 								 ChannelContext channelContext) {
+		if (Objects.isNull(id) || Objects.isNull(channelContext) || id.length() == 0) return false;
 		channelContext.setId(id);
 		return channelContext
 				.getAioConfig()
@@ -92,6 +97,7 @@ public class Aio {
 
 	public static boolean bindIp(String ip,
 								 ChannelContext channelContext) {
+		if (Objects.isNull(ip) || Objects.isNull(channelContext) || ip.length() == 0) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -101,6 +107,7 @@ public class Aio {
 
 	public static boolean bindToken(String token,
 									ChannelContext channelContext) {
+		if (Objects.isNull(token) || Objects.isNull(channelContext) || token.length() == 0) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -110,6 +117,7 @@ public class Aio {
 
 	public static boolean bindUser(String user,
 								   ChannelContext channelContext) {
+		if (Objects.isNull(user) || Objects.isNull(channelContext) || user.length() == 0) return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
