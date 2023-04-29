@@ -359,16 +359,18 @@ public class Aio {
 	}
 
 	public static void closeSet(AioConfig aioConfig,
-								SetWithLock<?> setWithLock,
+								SetWithLock<ChannelContext> setWithLock,
 								CloseCode closeCode) {
 		if (Objects.isNull(setWithLock) || setWithLock.getObj().size() == 0) {
 			return;
 		}
-		setWithLock.getObj().forEach((Consumer<Object>) object -> {
-			if (Objects.nonNull(object) && object instanceof ChannelContext) {
-				close((ChannelContext) object,closeCode);
+		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>)
+				channelContextSet -> channelContextSet.forEach((Consumer<ChannelContext>)
+						channelContext -> {
+			if (Objects.nonNull(channelContext)) {
+				close(channelContext,closeCode);
 			}
-		});
+		}));
 	}
 
 	// Get篇
@@ -415,7 +417,7 @@ public class Aio {
 				.getSet(cluId);
 	}
 
-	public static SetWithLock<?> getChannelContextByCluId(AioConfig aioConfig,
+	public static SetWithLock<ChannelContext> getChannelContextByCluId(AioConfig aioConfig,
 														  String cluId) {
 		return getByCluId(aioConfig, cluId);
 	}
@@ -643,7 +645,7 @@ public class Aio {
 	}
 
 	public static void removeSet(AioConfig aioConfig,
-								 SetWithLock<?> setWithLock,
+								 SetWithLock<ChannelContext> setWithLock,
 								 CloseCode closeCode) {
 		closeSet(aioConfig, setWithLock, closeCode);
 	}
