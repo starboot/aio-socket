@@ -348,63 +348,84 @@ public class Aio {
 		remove(channelContext, null);
 	}
 
-	public static void remove(ChannelContext channelContext, CloseCode closeCode) {
+	public static void remove(ChannelContext channelContext,
+							  CloseCode closeCode) {
 		close(channelContext, closeCode);
 	}
 
-	public static void removeBsId(AioConfig aioConfig, String bsId) {
+	public static void removeBsId(AioConfig aioConfig,
+								  String bsId) {
 		remove(getChannelContextByBsId(aioConfig, bsId));
 	}
 
-	public static void removeClientNode(AioConfig aioConfig, String clientNode) {
+	public static void removeClientNode(AioConfig aioConfig,
+										String clientNode) {
 		remove(getChannelContextByClientNode(aioConfig, clientNode));
 	}
 
-	public static void removeClu(AioConfig aioConfig, String cluId) {
+	public static void removeClu(AioConfig aioConfig,
+								 String cluId) {
 		removeClu(aioConfig, cluId, null);
 	}
 
-	public static void removeClu(AioConfig aioConfig, String cluId, CloseCode closeCode) {
+	public static void removeClu(AioConfig aioConfig,
+								 String cluId,
+								 CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByCluId(aioConfig, cluId), closeCode);
 	}
 
-	public static void removeGroup(AioConfig aioConfig, String groupId) {
+	public static void removeGroup(AioConfig aioConfig,
+								   String groupId) {
 		removeGroup(aioConfig, groupId, null);
 	}
 
-	public static void removeGroup(AioConfig aioConfig, String groupId, CloseCode closeCode) {
+	public static void removeGroup(AioConfig aioConfig,
+								   String groupId,
+								   CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByGroupId(aioConfig, groupId), closeCode);
 	}
 
-	public static void removeId(AioConfig aioConfig, String id) {
+	public static void removeId(AioConfig aioConfig,
+								String id) {
 		remove(getChannelContextById(aioConfig, id));
 	}
 
-	public static void removeIp(AioConfig aioConfig, String ip) {
+	public static void removeIp(AioConfig aioConfig,
+								String ip) {
 		removeIp(aioConfig, ip, null);
 	}
 
-	public static void removeIp(AioConfig aioConfig, String ip, CloseCode closeCode) {
+	public static void removeIp(AioConfig aioConfig,
+								String ip,
+								CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByIp(aioConfig, ip), closeCode);
 	}
 
-	public static void removeToken(AioConfig aioConfig, String token) {
+	public static void removeToken(AioConfig aioConfig,
+								   String token) {
 		removeToken(aioConfig, token, null);
 	}
 
-	public static void removeToken(AioConfig aioConfig, String token, CloseCode closeCode) {
+	public static void removeToken(AioConfig aioConfig,
+								   String token,
+								   CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByToken(aioConfig, token), closeCode);
 	}
 
-	public static void removeUser(AioConfig aioConfig, String user) {
+	public static void removeUser(AioConfig aioConfig,
+								  String user) {
 		removeUser(aioConfig, user, null);
 	}
 
-	public static void removeUser(AioConfig aioConfig, String user, CloseCode closeCode) {
+	public static void removeUser(AioConfig aioConfig,
+								  String user,
+								  CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByUser(aioConfig, user), closeCode);
 	}
 
-	public static void removeSet(AioConfig aioConfig, SetWithLock<?> setWithLock, CloseCode closeCode) {
+	public static void removeSet(AioConfig aioConfig,
+								 SetWithLock<?> setWithLock,
+								 CloseCode closeCode) {
 		closeSet(aioConfig, setWithLock, closeCode);
 	}
 
