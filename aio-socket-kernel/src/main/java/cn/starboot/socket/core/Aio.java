@@ -241,7 +241,8 @@ public class Aio {
 		}
 		// 从各个关系中移除
 		boolean b = removeUserFromAllGroup(channelContext);
-		channelContext.getAioConfig()
+		channelContext
+				.getAioConfig()
 				.getMaintainManager()
 				.getCommand(MaintainEnum.ID)
 				.remove(channelContext.getId(), channelContext);
@@ -929,14 +930,14 @@ public class Aio {
 	public static boolean unbindFromAll(AioConfig aioConfig,
 										ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
-		return unbindBsId(aioConfig, "", channelContext) &&
-				unbindClientNode(aioConfig, "", channelContext) &&
-				unbindFromAllClu(channelContext) &&
-				unbindFromAllGroup(channelContext) &&
-				unbindId(aioConfig, "", channelContext) &&
-				unbindFromAllIp(channelContext) &&
-				unbindFromAllToken(channelContext) &&
-				unbindFromAllUser(channelContext);
+		return unbindBsId(aioConfig, "", channelContext)
+				&& unbindClientNode(aioConfig, "", channelContext)
+				&& unbindFromAllClu(channelContext)
+				&& unbindFromAllGroup(channelContext)
+				&& unbindId(aioConfig, "", channelContext)
+				&& unbindFromAllIp(channelContext)
+				&& unbindFromAllToken(channelContext)
+				&& unbindFromAllUser(channelContext);
 	}
 
 	public static boolean unbindBsId(AioConfig aioConfig,
