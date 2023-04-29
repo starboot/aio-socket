@@ -416,26 +416,33 @@ public class Aio {
 	 * @param channelContext 接收方通道
 	 * @param packet         数据包
 	 */
-	public static boolean send(ChannelContext channelContext, Packet packet) {
+	public static boolean send(ChannelContext channelContext,
+							   Packet packet) {
 		if (Objects.isNull(channelContext)) {
 			return false;
 		}
 		return send0(channelContext, packet, false);
 	}
 
-	private static boolean send0(ChannelContext channelContext, Packet packet, boolean isBlock) {
+	private static boolean send0(ChannelContext channelContext,
+								 Packet packet, boolean isBlock) {
 		return channelContext.sendPacket(packet, isBlock);
 	}
 
-	public static boolean sendToAll(AioConfig aioConfig, Packet packet) {
+	public static boolean sendToAll(AioConfig aioConfig,
+									Packet packet) {
 		return sendToAll(aioConfig, packet, null);
 	}
 
-	public static boolean sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean sendToAll(AioConfig aioConfig,
+									Packet packet, ChannelContextFilter channelContextFilter) {
 		return sendToAll(aioConfig, packet, channelContextFilter, false);
 	}
 
-	public static boolean sendToAll(AioConfig aioConfig, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
+	public static boolean sendToAll(AioConfig aioConfig,
+									Packet packet,
+									ChannelContextFilter channelContextFilter,
+									boolean isBlock) {
 		if (aioConfig.isUseConnections()) {
 			if (aioConfig.getConnections().size() > 0) {
 				sendToSet(aioConfig, aioConfig.getConnections(), packet, channelContextFilter, isBlock);
@@ -451,34 +458,64 @@ public class Aio {
 		}
 	}
 
-	public static boolean sendToBsId(AioConfig aioConfig, String bsId, Packet packet) {
+	public static boolean sendToBsId(AioConfig aioConfig,
+									 String bsId,
+									 Packet packet) {
 		return sendToBsId(aioConfig, bsId, packet, false);
 	}
 
-	private static boolean sendToBsId(AioConfig aioConfig, String bsId, Packet packet, boolean isBlock) {
-		ChannelContext channelContext = aioConfig.getMaintainManager().getCommand(MaintainEnum.Bs_ID).get(bsId, ChannelContext.class);
+	private static boolean sendToBsId(AioConfig aioConfig,
+									  String bsId,
+									  Packet packet,
+									  boolean isBlock) {
+		ChannelContext channelContext = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.Bs_ID)
+				.get(bsId, ChannelContext.class);
 		return send0(channelContext, packet, isBlock);
 	}
 
-	public static boolean sendToClientNode(AioConfig aioConfig, String ip, int port, Packet packet) {
+	public static boolean sendToClientNode(AioConfig aioConfig,
+										   String ip,
+										   int port,
+										   Packet packet) {
 		return sendToClientNode(aioConfig, ip, port, packet, false);
 	}
 
-	private static boolean sendToClientNode(AioConfig aioConfig, String ip, int port, Packet packet, boolean isBlock) {
-		ChannelContext channelContext = aioConfig.getMaintainManager().getCommand(MaintainEnum.CLIENT_NODE_ID).get(ip + port, ChannelContext.class);
+	private static boolean sendToClientNode(AioConfig aioConfig,
+											String ip,
+											int port,
+											Packet packet,
+											boolean isBlock) {
+		ChannelContext channelContext = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLIENT_NODE_ID)
+				.get(ip + port, ChannelContext.class);
 		return send0(channelContext, packet, isBlock);
 	}
 
-	public static boolean sendToCluId(AioConfig aioConfig, String cluId, Packet packet) {
+	public static boolean sendToCluId(AioConfig aioConfig,
+									  String cluId,
+									  Packet packet) {
 		return sendToCluId(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean sendToCluId(AioConfig aioConfig, String cluId, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean sendToCluId(AioConfig aioConfig,
+									  String cluId,
+									  Packet packet,
+									  ChannelContextFilter channelContextFilter) {
 		return sendToCluId(aioConfig, cluId, packet, channelContextFilter, false);
 	}
 
-	private static boolean sendToCluId(AioConfig aioConfig, String cluId, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
-		SetWithLock<?> set = aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).get(cluId, SetWithLock.class);
+	private static boolean sendToCluId(AioConfig aioConfig,
+									   String cluId,
+									   Packet packet,
+									   ChannelContextFilter channelContextFilter,
+									   boolean isBlock) {
+		SetWithLock<?> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLU_ID)
+				.get(cluId, SetWithLock.class);
 		if (Objects.isNull(set)) {
 			LOGGER.info("该cluId没有绑定任何通道");
 			return false;
@@ -487,11 +524,16 @@ public class Aio {
 	}
 
 
-	public static boolean sendToGroup(AioConfig aioConfig, String groupId, Packet packet) {
+	public static boolean sendToGroup(AioConfig aioConfig,
+									  String groupId,
+									  Packet packet) {
 		return sendToGroup(aioConfig, groupId, packet, null);
 	}
 
-	public static boolean sendToGroup(AioConfig aioConfig, String groupId, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean sendToGroup(AioConfig aioConfig,
+									  String groupId,
+									  Packet packet,
+									  ChannelContextFilter channelContextFilter) {
 		return sendToGroup(aioConfig, groupId, packet, channelContextFilter, false);
 	}
 
