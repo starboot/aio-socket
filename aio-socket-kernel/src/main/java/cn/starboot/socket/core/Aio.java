@@ -150,17 +150,23 @@ public class Aio {
 		return sendToUser(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
+	//                              close篇
+
 	public static void close(ChannelContext channelContext) {
 		close(channelContext, null);
 	}
 
-	public static void close(ChannelContext channelContext, CloseCode closeCode) {
+	public static void close(ChannelContext channelContext,
+							 CloseCode closeCode) {
 		if (Objects.isNull(channelContext)) {
 			return;
 		}
 		// 从各个关系中移除
 		boolean b = removeUserFromAllGroup(channelContext);
-		channelContext.getAioConfig().getMaintainManager().getCommand(MaintainEnum.ID).remove(channelContext.getId(), channelContext);
+		channelContext.getAioConfig()
+				.getMaintainManager()
+				.getCommand(MaintainEnum.ID)
+				.remove(channelContext.getId(), channelContext);
 		// 停止各种处理器的运行
 		channelContext.getDecodeTaskRunnable().setCanceled(true);
 		channelContext.getHandlerTaskRunnable().setCanceled(true);
@@ -177,59 +183,79 @@ public class Aio {
 		channelContext.close();
 	}
 
-	public static void closeBsId(AioConfig aioConfig, String bsId) {
+	public static void closeBsId(AioConfig aioConfig,
+								 String bsId) {
 		close(getChannelContextByBsId(aioConfig, bsId));
 	}
 
-	public static void closeClientNode(AioConfig aioConfig, String clientNode) {
+	public static void closeClientNode(AioConfig aioConfig,
+									   String clientNode) {
 		close(getChannelContextByClientNode(aioConfig, clientNode));
 	}
 
-	public static void closeClu(AioConfig aioConfig, String cluId) {
+	public static void closeClu(AioConfig aioConfig,
+								String cluId) {
 		closeClu(aioConfig, cluId, null);
 	}
 
-	public static void closeClu(AioConfig aioConfig, String cluId, CloseCode closeCode) {
+	public static void closeClu(AioConfig aioConfig,
+								String cluId,
+								CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByCluId(aioConfig, cluId), closeCode);
 	}
 
-	public static void closeGroup(AioConfig aioConfig, String groupId) {
+	public static void closeGroup(AioConfig aioConfig,
+								  String groupId) {
 		closeGroup(aioConfig, groupId, null);
 	}
 
-	public static void closeGroup(AioConfig aioConfig, String groupId, CloseCode closeCode) {
+	public static void closeGroup(AioConfig aioConfig,
+								  String groupId,
+								  CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByGroupId(aioConfig, groupId), closeCode);
 	}
 
-	public static void closeId(AioConfig aioConfig, String id) {
+	public static void closeId(AioConfig aioConfig,
+							   String id) {
 		close(getChannelContextById(aioConfig, id));
 	}
 
-	public static void closeIp(AioConfig aioConfig, String ip) {
+	public static void closeIp(AioConfig aioConfig,
+							   String ip) {
 		closeIp(aioConfig, ip, null);
 	}
 
-	public static void closeIp(AioConfig aioConfig, String ip, CloseCode closeCode) {
+	public static void closeIp(AioConfig aioConfig,
+							   String ip,
+							   CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByIp(aioConfig, ip), closeCode);
 	}
 
-	public static void closeToken(AioConfig aioConfig, String token) {
+	public static void closeToken(AioConfig aioConfig,
+								  String token) {
 		closeToken(aioConfig, token, null);
 	}
 
-	public static void closeToken(AioConfig aioConfig, String token, CloseCode closeCode) {
+	public static void closeToken(AioConfig aioConfig,
+								  String token,
+								  CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByToken(aioConfig, token), closeCode);
 	}
 
-	public static void closeUser(AioConfig aioConfig, String user) {
+	public static void closeUser(AioConfig aioConfig,
+								 String user) {
 		closeUser(aioConfig, user, null);
 	}
 
-	public static void closeUser(AioConfig aioConfig, String user, CloseCode closeCode) {
+	public static void closeUser(AioConfig aioConfig,
+								 String user,
+								 CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByUser(aioConfig, user), closeCode);
 	}
 
-	public static void closeSet(AioConfig aioConfig, SetWithLock<?> setWithLock, CloseCode closeCode) {
+	public static void closeSet(AioConfig aioConfig,
+								SetWithLock<?> setWithLock,
+								CloseCode closeCode) {
 		if (Objects.isNull(setWithLock) || setWithLock.getObj().size() == 0) {
 			return;
 		}
