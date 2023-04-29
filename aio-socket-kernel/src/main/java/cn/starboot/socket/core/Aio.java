@@ -528,7 +528,11 @@ public class Aio {
 		return sendToIp(aioConfig, ip, packet, channelContextFilter, false);
 	}
 
-	public static boolean sendToIp(AioConfig aioConfig, String ip, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
+	public static boolean sendToIp(AioConfig aioConfig,
+								   String ip,
+								   Packet packet,
+								   ChannelContextFilter channelContextFilter,
+								   boolean isBlock) {
 		SetWithLock<?> set = aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).get(ip, SetWithLock.class);
 		if (Objects.isNull(set)) {
 			LOGGER.info("该ip没有绑定任何通道");
@@ -537,15 +541,16 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-	public static boolean sendToSet(AioConfig aioConfig, SetWithLock<?> setWithLock, Packet packet) {
+	public static boolean sendToSet(AioConfig aioConfig,
+									SetWithLock<?> setWithLock,
+									Packet packet) {
 		return sendToSet(aioConfig, setWithLock, packet, null);
 	}
 
 	public static boolean sendToSet(AioConfig aioConfig,
 									SetWithLock<?> setWithLock,
 									Packet packet,
-									ChannelContextFilter channelContextFilter)
-	{
+									ChannelContextFilter channelContextFilter) {
 		return sendToSet(aioConfig, setWithLock, packet, channelContextFilter, false);
 	}
 
@@ -585,7 +590,9 @@ public class Aio {
 		return sendNum.longValue() == sendSuc.longValue();
 	}
 
-	public static boolean sendToToken(AioConfig aioConfig, String token, Packet packet) {
+	public static boolean sendToToken(AioConfig aioConfig,
+									  String token,
+									  Packet packet) {
 		return sendToToken(aioConfig, token, packet, null);
 	}
 
@@ -594,8 +601,11 @@ public class Aio {
 		return sendToToken(aioConfig, token, packet, channelContextFilter, false);
 	}
 
-	private static boolean sendToToken(AioConfig aioConfig, String token, Packet packet,
-									   ChannelContextFilter channelContextFilter, boolean isBlock) {
+	private static boolean sendToToken(AioConfig aioConfig,
+									   String token,
+									   Packet packet,
+									   ChannelContextFilter channelContextFilter,
+									   boolean isBlock) {
 		SetWithLock<?> set = aioConfig.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
 				.get(token, SetWithLock.class);
@@ -606,17 +616,28 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-
-	public static boolean sendToUser(AioConfig aioConfig, String user, Packet packet) {
+	public static boolean sendToUser(AioConfig aioConfig,
+									 String user,
+									 Packet packet) {
 		return sendToUser(aioConfig, user, packet, null);
 	}
 
-	public static boolean sendToUser(AioConfig aioConfig, String user, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean sendToUser(AioConfig aioConfig,
+									 String user,
+									 Packet packet,
+									 ChannelContextFilter channelContextFilter) {
 		return sendToUser(aioConfig, user, packet, channelContextFilter, false);
 	}
 
-	private static boolean sendToUser(AioConfig aioConfig, String user, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
-		SetWithLock<?> set = aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).get(user, SetWithLock.class);
+	private static boolean sendToUser(AioConfig aioConfig,
+									  String user,
+									  Packet packet,
+									  ChannelContextFilter channelContextFilter,
+									  boolean isBlock) {
+		SetWithLock<?> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.USER)
+				.get(user, SetWithLock.class);
 		if (Objects.isNull(set)) {
 			LOGGER.info("该user没有绑定任何通道");
 			return false;
