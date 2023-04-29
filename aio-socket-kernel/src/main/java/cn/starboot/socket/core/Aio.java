@@ -502,9 +502,16 @@ public class Aio {
 	 * @param packet         消息包
 	 * @param aioConfig 发送者上下文
 	 */
-	public static boolean sendToGroup(AioConfig aioConfig, String groupId, Packet packet, ChannelContextFilter channelContextFilter, boolean isBlock) {
+	public static boolean sendToGroup(AioConfig aioConfig,
+									  String groupId,
+									  Packet packet,
+									  ChannelContextFilter channelContextFilter,
+									  boolean isBlock) {
 		// 群组成员集合
-		SetWithLock<?> set = aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).get(groupId, SetWithLock.class);
+		SetWithLock<?> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.get(groupId, SetWithLock.class);
 		if (Objects.isNull(set)) {
 			LOGGER.info("该groupId没有绑定任何通道");
 			return false;
@@ -512,19 +519,29 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-	public static boolean sendToId(AioConfig config, String id, Packet packet) {
+	public static boolean sendToId(AioConfig config,
+								   String id,
+								   Packet packet) {
 		return sendToId(config, id, packet, false);
 	}
 
-	private static boolean sendToId(AioConfig config, String id, Packet packet, boolean isBlock) {
+	private static boolean sendToId(AioConfig config,
+									String id,
+									Packet packet,
+									boolean isBlock) {
 		return send0(getChannelContextById(config, id), packet, isBlock);
 	}
 
-	public static boolean sendToIp(AioConfig aioConfig, String ip, Packet packet) {
+	public static boolean sendToIp(AioConfig aioConfig,
+								   String ip,
+								   Packet packet) {
 		return sendToIp(aioConfig, ip, packet, null);
 	}
 
-	public static boolean sendToIp(AioConfig aioConfig, String ip, Packet packet, ChannelContextFilter channelContextFilter) {
+	public static boolean sendToIp(AioConfig aioConfig,
+								   String ip,
+								   Packet packet,
+								   ChannelContextFilter channelContextFilter) {
 		return sendToIp(aioConfig, ip, packet, channelContextFilter, false);
 	}
 
@@ -533,7 +550,10 @@ public class Aio {
 								   Packet packet,
 								   ChannelContextFilter channelContextFilter,
 								   boolean isBlock) {
-		SetWithLock<?> set = aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).get(ip, SetWithLock.class);
+		SetWithLock<?> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.IP)
+				.get(ip, SetWithLock.class);
 		if (Objects.isNull(set)) {
 			LOGGER.info("该ip没有绑定任何通道");
 			return false;
