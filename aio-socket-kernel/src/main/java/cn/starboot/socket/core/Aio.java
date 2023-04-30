@@ -731,7 +731,7 @@ public class Aio {
 	/**
 	 * 获取所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @return
 	 */
 	public static SetWithLock<ChannelContext> getAll(AioConfig aioConfig) {
@@ -741,7 +741,7 @@ public class Aio {
 	/**
 	 * 获取所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @return
 	 */
 	public static SetWithLock<ChannelContext> getAllChannelContexts(AioConfig aioConfig) {
@@ -751,7 +751,7 @@ public class Aio {
 	/**
 	 * 根据业务ID获取指定用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param bsId
 	 * @return
 	 */
@@ -766,7 +766,7 @@ public class Aio {
 	/**
 	 * 根据业务ID获取指定用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param bsId
 	 * @return
 	 */
@@ -778,7 +778,7 @@ public class Aio {
 	/**
 	 * 根据客户节点获取指定用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param clientNode
 	 * @return
 	 */
@@ -793,7 +793,7 @@ public class Aio {
 	/**
 	 * 根据客户节点获取指定用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param clientNode
 	 * @return
 	 */
@@ -805,7 +805,7 @@ public class Aio {
 	/**
 	 * 根据集群ID获取指定ID下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 * @return
 	 */
@@ -820,7 +820,7 @@ public class Aio {
 	/**
 	 * 根据集群ID获取指定ID下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 * @return
 	 */
@@ -832,7 +832,7 @@ public class Aio {
 	/**
 	 * 根据群组ID获取指定ID下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 * @return
 	 */
@@ -847,7 +847,7 @@ public class Aio {
 	/**
 	 * 根据群组ID获取指定ID下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 * @return
 	 */
@@ -859,7 +859,7 @@ public class Aio {
 	/**
 	 * 根据ID获取指定用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param id
 	 * @return
 	 */
@@ -874,7 +874,7 @@ public class Aio {
 	/**
 	 * 根据ID获取指定用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param id
 	 * @return
 	 */
@@ -886,7 +886,7 @@ public class Aio {
 	/**
 	 * 根据IP获取指定IP下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 * @return
 	 */
@@ -901,7 +901,7 @@ public class Aio {
 	/**
 	 * 根据IP获取指定IP下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 * @return
 	 */
@@ -913,7 +913,7 @@ public class Aio {
 	/**
 	 * 根据TOKEN获取指定TOKEN下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 * @return
 	 */
@@ -928,7 +928,7 @@ public class Aio {
 	/**
 	 * 根据集群TOKEN获取指定TOKEN下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 * @return
 	 */
@@ -940,7 +940,7 @@ public class Aio {
 	/**
 	 * 根据USER获取指定USER下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 * @return
 	 */
@@ -955,7 +955,7 @@ public class Aio {
 	/**
 	 * 根据USER获取指定USER下所有在线用户上下文信息
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 * @return
 	 */
@@ -967,7 +967,7 @@ public class Aio {
 	/**
 	 * 按照分页获取所有在线用户
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param pageIndex
 	 * @param pageSize
 	 * @return
@@ -982,7 +982,7 @@ public class Aio {
 	/**
 	 * 按照分页获取指定集群组ID下所有在线用户
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 * @param pageIndex
 	 * @param pageSize
@@ -1002,7 +1002,7 @@ public class Aio {
 	/**
 	 * 获取指定集群组下在线用户个数
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 * @return
 	 */
@@ -1018,7 +1018,7 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定集群组中
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 * @param channelContext
 	 * @return
@@ -1036,7 +1036,7 @@ public class Aio {
 	/**
 	 * 按照分页获取指定群组ID下所有在线用户
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 * @param pageIndex
 	 * @param pageSize
@@ -1056,7 +1056,7 @@ public class Aio {
 	/**
 	 * 获取指定群组下在线用户个数
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 * @return
 	 */
@@ -1073,7 +1073,7 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定群组中
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 * @param channelContext
 	 * @return
@@ -1093,7 +1093,7 @@ public class Aio {
 	 *
 	 * 按照分页获取指定IP组下所有在线用户
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 * @param pageIndex
 	 * @param pageSize
@@ -1113,7 +1113,7 @@ public class Aio {
 	/**
 	 * 获取指定IP组下在线用户个数
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 * @return
 	 */
@@ -1129,7 +1129,7 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定IP组中
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 * @param channelContext
 	 * @return
@@ -1147,7 +1147,7 @@ public class Aio {
 	/**
 	 * 按照分页获取指定TOKEN组下所有在线用户
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 * @param pageIndex
 	 * @param pageSize
@@ -1167,7 +1167,7 @@ public class Aio {
 	/**
 	 * 获取指定TOKEN组下在线用户个数
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 * @return
 	 */
@@ -1183,7 +1183,7 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定TOKEN组中
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 * @param channelContext
 	 * @return
@@ -1201,7 +1201,7 @@ public class Aio {
 	/**
 	 * 按照分页获取指定USER组下所有在线用户
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 * @param pageIndex
 	 * @param pageSize
@@ -1221,7 +1221,7 @@ public class Aio {
 	/**
 	 * 获取指定USER组下在线用户个数
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 * @return
 	 */
@@ -1236,7 +1236,8 @@ public class Aio {
 
 	/**
 	 * 判断指定用户是否在指定USER组中
-	 * @param aioConfig
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 * @param channelContext
 	 * @return
@@ -1267,6 +1268,7 @@ public class Aio {
 
 	/**
 	 * 判断指定用户是否在指定SET集合组中
+	 *
 	 * @param setWithLock
 	 * @param channelContext
 	 * @return
