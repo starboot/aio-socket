@@ -413,7 +413,7 @@ public class Aio {
 	}
 
 	public static SetWithLock<ChannelContext> getByCluId(AioConfig aioConfig,
-											String cluId) {
+														 String cluId) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
@@ -421,12 +421,12 @@ public class Aio {
 	}
 
 	public static SetWithLock<ChannelContext> getChannelContextByCluId(AioConfig aioConfig,
-														  String cluId) {
+																	   String cluId) {
 		return getByCluId(aioConfig, cluId);
 	}
 
 	public static SetWithLock<ChannelContext> getByGroupId(AioConfig aioConfig,
-											  String groupId) {
+														   String groupId) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
@@ -434,7 +434,7 @@ public class Aio {
 	}
 
 	public static SetWithLock<ChannelContext> getChannelContextByGroupId(AioConfig aioConfig,
-															String groupId) {
+																		 String groupId) {
 		return getByGroupId(aioConfig, groupId);
 	}
 
@@ -452,7 +452,7 @@ public class Aio {
 	}
 
 	public static SetWithLock<ChannelContext> getByIp(AioConfig aioConfig,
-										 String ip) {
+													  String ip) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
@@ -460,12 +460,12 @@ public class Aio {
 	}
 
 	public static SetWithLock<ChannelContext> getChannelContextByIp(AioConfig aioConfig,
-													   String ip) {
+																	String ip) {
 		return getByIp(aioConfig, ip);
 	}
 
 	public static SetWithLock<ChannelContext> getByToken(AioConfig aioConfig,
-											String token) {
+														 String token) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
@@ -473,12 +473,12 @@ public class Aio {
 	}
 
 	public static SetWithLock<ChannelContext> getChannelContextByToken(AioConfig aioConfig,
-														  String token) {
+																	   String token) {
 		return getByToken(aioConfig, token);
 	}
 
 	public static SetWithLock<ChannelContext> getByUser(AioConfig aioConfig,
-										   String user) {
+														String user) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
@@ -486,26 +486,41 @@ public class Aio {
 	}
 
 	public static SetWithLock<ChannelContext> getChannelContextByUser(AioConfig aioConfig,
-														 String user) {
+																	  String user) {
 		return getByUser(aioConfig, user);
 	}
 
 	// 按照分页获取所有在线用户
-	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig, Integer pageIndex, Integer pageSize) {
+	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig,
+													Integer pageIndex,
+													Integer pageSize) {
 		SetWithLock<ChannelContext> connections = aioConfig.getConnections();
 		return getPageOfSet(connections, pageIndex, pageSize);
 	}
 
-	public static Page<ChannelContext> getPageOfClu(AioConfig aioConfig, String cluId, Integer pageIndex, Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).getSet(cluId);
+	public static Page<ChannelContext> getPageOfClu(AioConfig aioConfig,
+													String cluId,
+													Integer pageIndex,
+													Integer pageSize) {
+		SetWithLock<ChannelContext> setWithLock = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLU_ID)
+				.getSet(cluId);
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
-	public static int cluCount(AioConfig aioConfig, String cluId) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).getSet(cluId).size();
+	public static int cluCount(AioConfig aioConfig,
+							   String cluId) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLU_ID)
+				.getSet(cluId)
+				.size();
 	}
 
-	public static boolean isInClu(AioConfig aioConfig, String cluId, ChannelContext channelContext) {
+	public static boolean isInClu(AioConfig aioConfig,
+								  String cluId,
+								  ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
@@ -514,18 +529,30 @@ public class Aio {
 	}
 
 	// 按照分页获取群组
-	public static Page<ChannelContext> getPageOfGroup(AioConfig aioConfig, String groupId, Integer pageIndex, Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).getSet(groupId);
+	public static Page<ChannelContext> getPageOfGroup(AioConfig aioConfig,
+													  String groupId,
+													  Integer pageIndex,
+													  Integer pageSize) {
+		SetWithLock<ChannelContext> setWithLock = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.getSet(groupId);
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
 	// 群组有多少个连接
 	public static int groupCount(AioConfig aioConfig, String groupId) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).getSet(groupId).size();
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.getSet(groupId)
+				.size();
 	}
 
 	// 某通道是否在某群组中
-	public static boolean isInGroup(AioConfig aioConfig, String groupId, ChannelContext channelContext) {
+	public static boolean isInGroup(AioConfig aioConfig,
+									String groupId,
+									ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
@@ -533,16 +560,28 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
-	public static Page<ChannelContext> getPageOfIp(AioConfig aioConfig, String ip, Integer pageIndex, Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).getSet(ip);
+	public static Page<ChannelContext> getPageOfIp(AioConfig aioConfig,
+												   String ip,
+												   Integer pageIndex,
+												   Integer pageSize) {
+		SetWithLock<ChannelContext> setWithLock = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.IP)
+				.getSet(ip);
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
 	public static int ipCount(AioConfig aioConfig, String ip) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).getSet(ip).size();
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.IP)
+				.getSet(ip)
+				.size();
 	}
 
-	public static boolean isInIp(AioConfig aioConfig, String ip, ChannelContext channelContext) {
+	public static boolean isInIp(AioConfig aioConfig,
+								 String ip,
+								 ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
@@ -550,16 +589,29 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
-	public static Page<ChannelContext> getPageOfToken(AioConfig aioConfig, String token, Integer pageIndex, Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).getSet(token);
+	public static Page<ChannelContext> getPageOfToken(AioConfig aioConfig,
+													  String token,
+													  Integer pageIndex,
+													  Integer pageSize) {
+		SetWithLock<ChannelContext> setWithLock = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.TOKEN)
+				.getSet(token);
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
-	public static int tokenCount(AioConfig aioConfig, String token) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).getSet(token).size();
+	public static int tokenCount(AioConfig aioConfig,
+								 String token) {
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.TOKEN)
+				.getSet(token)
+				.size();
 	}
 
-	public static boolean isInToken(AioConfig aioConfig, String token, ChannelContext channelContext) {
+	public static boolean isInToken(AioConfig aioConfig,
+									String token,
+									ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
@@ -567,16 +619,28 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
-	public static Page<ChannelContext> getPageOfUser(AioConfig aioConfig, String user, Integer pageIndex, Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).getSet(user);
+	public static Page<ChannelContext> getPageOfUser(AioConfig aioConfig,
+													 String user,
+													 Integer pageIndex,
+													 Integer pageSize) {
+		SetWithLock<ChannelContext> setWithLock = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.USER)
+				.getSet(user);
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
 	public static int userCount(AioConfig aioConfig, String user) {
-		return aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).getSet(user).size();
+		return aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.USER)
+				.getSet(user)
+				.size();
 	}
 
-	public static boolean isInUser(AioConfig aioConfig, String user, ChannelContext channelContext) {
+	public static boolean isInUser(AioConfig aioConfig,
+								   String user,
+								   ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
@@ -584,11 +648,14 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
-	private static Page<ChannelContext> getPageOfSet(SetWithLock<ChannelContext> setWithLock, Integer pageIndex, Integer pageSize) {
+	private static Page<ChannelContext> getPageOfSet(SetWithLock<ChannelContext> setWithLock,
+													 Integer pageIndex,
+													 Integer pageSize) {
 		return PageUtils.fromSetWithLock(setWithLock, pageIndex, pageSize);
 	}
 
-	private static boolean isInSet(SetWithLock<ChannelContext> setWithLock, ChannelContext channelContext) {
+	private static boolean isInSet(SetWithLock<ChannelContext> setWithLock,
+								   ChannelContext channelContext) {
 		AtomicBoolean contains = new AtomicBoolean(false);
 		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>)
 				channelContextSet -> contains.set(channelContextSet.contains(channelContext)));
