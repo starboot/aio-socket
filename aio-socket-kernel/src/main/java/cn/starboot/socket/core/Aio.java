@@ -20,6 +20,8 @@ import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.maintain.MaintainEnum;
 import cn.starboot.socket.utils.lock.ReadLockHandler;
 import cn.starboot.socket.utils.lock.SetWithLock;
+import cn.starboot.socket.utils.page.Page;
+import cn.starboot.socket.utils.page.PageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -489,14 +491,14 @@ public class Aio {
 	}
 
 	// 按照分页获取所有在线用户
-	public static void getPageOfAll(AioConfig aioConfig, Integer pageIndex, Integer pageSize) {
+	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig, Integer pageIndex, Integer pageSize) {
 		SetWithLock<ChannelContext> connections = aioConfig.getConnections();
-		getPageOfSet(connections, pageIndex, pageSize);
+		return getPageOfSet(connections, pageIndex, pageSize);
 	}
 
-	public static void getPageOfClu(AioConfig aioConfig, String cluId, Integer pageIndex, Integer pageSize) {
+	public static Page<ChannelContext> getPageOfClu(AioConfig aioConfig, String cluId, Integer pageIndex, Integer pageSize) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).getSet(cluId);
-		getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
 	public static int cluCount(AioConfig aioConfig, String cluId) {
@@ -512,9 +514,9 @@ public class Aio {
 	}
 
 	// 按照分页获取群组
-	public static void getPageOfGroup(AioConfig aioConfig, String groupId, Integer pageIndex, Integer pageSize) {
+	public static Page<ChannelContext> getPageOfGroup(AioConfig aioConfig, String groupId, Integer pageIndex, Integer pageSize) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).getSet(groupId);
-		getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
 	// 群组有多少个连接
@@ -531,9 +533,9 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
-	public static void getPageOfIp(AioConfig aioConfig, String ip, Integer pageIndex, Integer pageSize) {
+	public static Page<ChannelContext> getPageOfIp(AioConfig aioConfig, String ip, Integer pageIndex, Integer pageSize) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).getSet(ip);
-		getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
 	public static int ipCount(AioConfig aioConfig, String ip) {
@@ -548,9 +550,9 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
-	public static void getPageOfToken(AioConfig aioConfig, String token, Integer pageIndex, Integer pageSize) {
+	public static Page<ChannelContext> getPageOfToken(AioConfig aioConfig, String token, Integer pageIndex, Integer pageSize) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).getSet(token);
-		getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
 	public static int tokenCount(AioConfig aioConfig, String token) {
@@ -565,9 +567,9 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
-	public static void getPageOfUser(AioConfig aioConfig, String user, Integer pageIndex, Integer pageSize) {
+	public static Page<ChannelContext> getPageOfUser(AioConfig aioConfig, String user, Integer pageIndex, Integer pageSize) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).getSet(user);
-		getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
 	public static int userCount(AioConfig aioConfig, String user) {
@@ -582,8 +584,8 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
-	private static void getPageOfSet(SetWithLock<ChannelContext> setWithLock, Integer pageIndex, Integer pageSize) {
-
+	private static Page<ChannelContext> getPageOfSet(SetWithLock<ChannelContext> setWithLock, Integer pageIndex, Integer pageSize) {
+		return PageUtils.fromSetWithLock(setWithLock, pageIndex, pageSize);
 	}
 
 	private static boolean isInSet(SetWithLock<ChannelContext> setWithLock, ChannelContext channelContext) {
