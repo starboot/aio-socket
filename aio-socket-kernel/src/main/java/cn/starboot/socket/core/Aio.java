@@ -1004,7 +1004,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
-	 * @return
+	 * @return int
 	 */
 	public static Integer cluCount(AioConfig aioConfig,
 								   String cluId) {
@@ -1058,7 +1058,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
-	 * @return
+	 * @return int
 	 */
 	// 群组有多少个连接
 	public static Integer groupCount(AioConfig aioConfig,
@@ -1115,7 +1115,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
-	 * @return
+	 * @return int
 	 */
 	public static Integer ipCount(AioConfig aioConfig,
 								  String ip) {
@@ -1169,7 +1169,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
-	 * @return
+	 * @return int
 	 */
 	public static Integer tokenCount(AioConfig aioConfig,
 									 String token) {
@@ -1223,7 +1223,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
-	 * @return
+	 * @return int
 	 */
 	public static Integer userCount(AioConfig aioConfig,
 									String user) {
