@@ -604,7 +604,7 @@ public class Aio {
 						}));
 	}
 
-	// Get篇
+	// ---------------------------------Get篇---------------------------------
 
 	public static SetWithLock<ChannelContext> getAll(AioConfig aioConfig) {
 		return aioConfig.getConnections();
@@ -893,7 +893,7 @@ public class Aio {
 		return contains.get();
 	}
 
-	// Remove 篇
+	// -------------------------------Remove篇--------------------------------
 
 	public static void remove(ChannelContext channelContext) {
 		remove(channelContext, null);
@@ -998,7 +998,7 @@ public class Aio {
 		closeSet(aioConfig, setWithLock, closeCode);
 	}
 
-	//                                Send 篇
+	// --------------------------------Send篇---------------------------------
 
 	/**
 	 * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
@@ -1308,7 +1308,7 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-	// UnBing篇
+	// -------------------------------unBing篇--------------------------------
 
 	public static Boolean unbindFromAll(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
