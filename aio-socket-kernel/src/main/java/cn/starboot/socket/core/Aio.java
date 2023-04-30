@@ -985,7 +985,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 * @param pageIndex 索引页
-	 * @param pageSize
+	 * @param pageSize 页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfClu(AioConfig aioConfig,
@@ -1039,7 +1039,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 * @param pageIndex 索引页
-	 * @param pageSize
+	 * @param pageSize 页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfGroup(AioConfig aioConfig,
@@ -1096,7 +1096,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 * @param pageIndex 索引页
-	 * @param pageSize
+	 * @param pageSize 页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfIp(AioConfig aioConfig,
@@ -1150,7 +1150,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 * @param pageIndex 索引页
-	 * @param pageSize
+	 * @param pageSize 页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfToken(AioConfig aioConfig,
@@ -1204,7 +1204,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 * @param pageIndex 索引页
-	 * @param pageSize
+	 * @param pageSize 页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfUser(AioConfig aioConfig,
@@ -1257,7 +1257,7 @@ public class Aio {
 	 *
 	 * @param setWithLock
 	 * @param pageIndex 索引页
-	 * @param pageSize
+	 * @param pageSize 页面大小
 	 * @return 分页结果
 	 */
 	private static Page<ChannelContext> getPageOfSet(SetWithLock<ChannelContext> setWithLock,
