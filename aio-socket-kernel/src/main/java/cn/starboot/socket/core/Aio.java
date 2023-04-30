@@ -729,7 +729,7 @@ public class Aio {
 	// ---------------------------------Get篇---------------------------------
 
 	/**
-	 * 获取或有在线用户上下文信息
+	 * 获取所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @return
@@ -739,6 +739,7 @@ public class Aio {
 	}
 
 	/**
+	 * 获取所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @return
@@ -748,6 +749,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据业务ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param bsId
@@ -762,6 +764,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据业务ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param bsId
@@ -773,6 +776,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据客户节点获取指定用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param clientNode
@@ -787,6 +791,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据客户节点获取指定用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param clientNode
@@ -848,6 +853,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param id
@@ -862,6 +868,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param id
