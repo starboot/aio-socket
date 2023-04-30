@@ -728,14 +728,31 @@ public class Aio {
 
 	// ---------------------------------Get篇---------------------------------
 
+	/**
+	 * 获取或有在线用户上下文信息
+	 *
+	 * @param aioConfig
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getAll(AioConfig aioConfig) {
 		return aioConfig.getConnections();
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getAllChannelContexts(AioConfig aioConfig) {
 		return getAll(aioConfig);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param bsId
+	 * @return
+	 */
 	public static ChannelContext getByBsId(AioConfig aioConfig,
 										   String bsId) {
 		return aioConfig
@@ -744,11 +761,23 @@ public class Aio {
 				.getChannelContext(bsId);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param bsId
+	 * @return
+	 */
 	public static ChannelContext getChannelContextByBsId(AioConfig aioConfig,
 														 String bsId) {
 		return getByBsId(aioConfig, bsId);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param clientNode
+	 * @return
+	 */
 	public static ChannelContext getByClientNode(AioConfig aioConfig,
 												 String clientNode) {
 		return aioConfig
@@ -757,11 +786,23 @@ public class Aio {
 				.getChannelContext(clientNode);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param clientNode
+	 * @return
+	 */
 	public static ChannelContext getChannelContextByClientNode(AioConfig aioConfig,
 															   String clientNode) {
 		return getByClientNode(aioConfig, clientNode);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getByCluId(AioConfig aioConfig,
 														 String cluId) {
 		return aioConfig
@@ -770,11 +811,23 @@ public class Aio {
 				.getSet(cluId);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getChannelContextByCluId(AioConfig aioConfig,
 																	   String cluId) {
 		return getByCluId(aioConfig, cluId);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param groupId
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getByGroupId(AioConfig aioConfig,
 														   String groupId) {
 		return aioConfig
@@ -783,11 +836,23 @@ public class Aio {
 				.getSet(groupId);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param groupId
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getChannelContextByGroupId(AioConfig aioConfig,
 																		 String groupId) {
 		return getByGroupId(aioConfig, groupId);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param id
+	 * @return
+	 */
 	public static ChannelContext getById(AioConfig aioConfig,
 										 String id) {
 		return aioConfig
@@ -796,11 +861,23 @@ public class Aio {
 				.getChannelContext(id);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param id
+	 * @return
+	 */
 	public static ChannelContext getChannelContextById(AioConfig aioConfig,
 													   String id) {
 		return getById(aioConfig, id);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param ip
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getByIp(AioConfig aioConfig,
 													  String ip) {
 		return aioConfig
@@ -809,11 +886,23 @@ public class Aio {
 				.getSet(ip);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param ip
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getChannelContextByIp(AioConfig aioConfig,
 																	String ip) {
 		return getByIp(aioConfig, ip);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param token
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getByToken(AioConfig aioConfig,
 														 String token) {
 		return aioConfig
@@ -822,11 +911,23 @@ public class Aio {
 				.getSet(token);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param token
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getChannelContextByToken(AioConfig aioConfig,
 																	   String token) {
 		return getByToken(aioConfig, token);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param user
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getByUser(AioConfig aioConfig,
 														String user) {
 		return aioConfig
@@ -835,11 +936,24 @@ public class Aio {
 				.getSet(user);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param user
+	 * @return
+	 */
 	public static SetWithLock<ChannelContext> getChannelContextByUser(AioConfig aioConfig,
 																	  String user) {
 		return getByUser(aioConfig, user);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
 	// 按照分页获取所有在线用户
 	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig,
 													Integer pageIndex,
@@ -848,6 +962,14 @@ public class Aio {
 		return getPageOfSet(connections, pageIndex, pageSize);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
 	public static Page<ChannelContext> getPageOfClu(AioConfig aioConfig,
 													String cluId,
 													Integer pageIndex,
@@ -859,6 +981,12 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @return
+	 */
 	public static Integer cluCount(AioConfig aioConfig,
 								   String cluId) {
 		return aioConfig
@@ -868,6 +996,13 @@ public class Aio {
 				.size();
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param channelContext
+	 * @return
+	 */
 	public static Boolean isInClu(AioConfig aioConfig,
 								  String cluId,
 								  ChannelContext channelContext) {
@@ -878,6 +1013,14 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param groupId
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
 	// 按照分页获取群组
 	public static Page<ChannelContext> getPageOfGroup(AioConfig aioConfig,
 													  String groupId,
@@ -890,6 +1033,12 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param groupId
+	 * @return
+	 */
 	// 群组有多少个连接
 	public static Integer groupCount(AioConfig aioConfig,
 									 String groupId) {
@@ -900,6 +1049,13 @@ public class Aio {
 				.size();
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param groupId
+	 * @param channelContext
+	 * @return
+	 */
 	// 某通道是否在某群组中
 	public static Boolean isInGroup(AioConfig aioConfig,
 									String groupId,
@@ -911,6 +1067,14 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param ip
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
 	public static Page<ChannelContext> getPageOfIp(AioConfig aioConfig,
 												   String ip,
 												   Integer pageIndex,
@@ -922,6 +1086,12 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param ip
+	 * @return
+	 */
 	public static Integer ipCount(AioConfig aioConfig,
 								  String ip) {
 		return aioConfig
@@ -931,6 +1101,13 @@ public class Aio {
 				.size();
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param ip
+	 * @param channelContext
+	 * @return
+	 */
 	public static Boolean isInIp(AioConfig aioConfig,
 								 String ip,
 								 ChannelContext channelContext) {
@@ -941,6 +1118,14 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param token
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
 	public static Page<ChannelContext> getPageOfToken(AioConfig aioConfig,
 													  String token,
 													  Integer pageIndex,
@@ -952,6 +1137,12 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param token
+	 * @return
+	 */
 	public static Integer tokenCount(AioConfig aioConfig,
 									 String token) {
 		return aioConfig
@@ -961,6 +1152,13 @@ public class Aio {
 				.size();
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param token
+	 * @param channelContext
+	 * @return
+	 */
 	public static Boolean isInToken(AioConfig aioConfig,
 									String token,
 									ChannelContext channelContext) {
@@ -971,6 +1169,14 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param user
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
 	public static Page<ChannelContext> getPageOfUser(AioConfig aioConfig,
 													 String user,
 													 Integer pageIndex,
@@ -982,6 +1188,12 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param user
+	 * @return
+	 */
 	public static Integer userCount(AioConfig aioConfig,
 									String user) {
 		return aioConfig
@@ -991,6 +1203,13 @@ public class Aio {
 				.size();
 	}
 
+	/**
+	 *
+	 * @param aioConfig
+	 * @param user
+	 * @param channelContext
+	 * @return
+	 */
 	public static Boolean isInUser(AioConfig aioConfig,
 								   String user,
 								   ChannelContext channelContext) {
@@ -1001,12 +1220,25 @@ public class Aio {
 		return isInSet(setWithLock, channelContext);
 	}
 
+	/**
+	 *
+	 * @param setWithLock
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
 	private static Page<ChannelContext> getPageOfSet(SetWithLock<ChannelContext> setWithLock,
 													 Integer pageIndex,
 													 Integer pageSize) {
 		return PageUtils.fromSetWithLock(setWithLock, pageIndex, pageSize);
 	}
 
+	/**
+	 *
+	 * @param setWithLock
+	 * @param channelContext
+	 * @return
+	 */
 	private static Boolean isInSet(SetWithLock<ChannelContext> setWithLock,
 								   ChannelContext channelContext) {
 		AtomicBoolean contains = new AtomicBoolean(false);
