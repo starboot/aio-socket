@@ -965,13 +965,13 @@ public class Aio {
 	}
 
 	/**
+	 * 按照分页获取所有在线用户
 	 *
 	 * @param aioConfig
 	 * @param pageIndex
 	 * @param pageSize
 	 * @return
 	 */
-	// 按照分页获取所有在线用户
 	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig,
 													Integer pageIndex,
 													Integer pageSize) {
@@ -980,6 +980,7 @@ public class Aio {
 	}
 
 	/**
+	 * 按照分页获取指定集群组ID下所有在线用户
 	 *
 	 * @param aioConfig
 	 * @param cluId
@@ -1031,6 +1032,7 @@ public class Aio {
 	}
 
 	/**
+	 * 按照分页获取指定群组ID下所有在线用户
 	 *
 	 * @param aioConfig
 	 * @param groupId
@@ -1038,7 +1040,6 @@ public class Aio {
 	 * @param pageSize
 	 * @return
 	 */
-	// 按照分页获取群组
 	public static Page<ChannelContext> getPageOfGroup(AioConfig aioConfig,
 													  String groupId,
 													  Integer pageIndex,
@@ -1085,6 +1086,8 @@ public class Aio {
 	}
 
 	/**
+	 *
+	 * 按照分页获取指定IP组下所有在线用户
 	 *
 	 * @param aioConfig
 	 * @param ip
@@ -1136,6 +1139,7 @@ public class Aio {
 	}
 
 	/**
+	 * 按照分页获取指定TOKEN组下所有在线用户
 	 *
 	 * @param aioConfig
 	 * @param token
@@ -1187,6 +1191,7 @@ public class Aio {
 	}
 
 	/**
+	 * 按照分页获取指定USER组下所有在线用户
 	 *
 	 * @param aioConfig
 	 * @param user
@@ -1238,6 +1243,7 @@ public class Aio {
 	}
 
 	/**
+	 * 按照分页获取指定集合下所有在线用户
 	 *
 	 * @param setWithLock
 	 * @param pageIndex
