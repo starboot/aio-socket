@@ -803,6 +803,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据集群ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param cluId
@@ -817,6 +818,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据集群ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param cluId
@@ -828,6 +830,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据群组ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param groupId
@@ -842,6 +845,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据群组ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param groupId
@@ -880,6 +884,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据IP获取指定IP下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param ip
@@ -894,6 +899,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据IP获取指定IP下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param ip
@@ -905,6 +911,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据TOKEN获取指定TOKEN下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param token
@@ -919,6 +926,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据集群TOKEN获取指定TOKEN下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param token
@@ -930,6 +938,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据USER获取指定USER下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param user
@@ -944,6 +953,7 @@ public class Aio {
 	}
 
 	/**
+	 * 根据USER获取指定USER下所有在线用户上下文信息
 	 *
 	 * @param aioConfig
 	 * @param user
