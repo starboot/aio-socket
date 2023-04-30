@@ -1283,103 +1283,225 @@ public class Aio {
 
 	// -------------------------------Remove篇--------------------------------
 
+	/**
+	 * 移除连接(与关闭一个道理)
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 */
 	public static void remove(ChannelContext channelContext) {
 		remove(channelContext, null);
 	}
 
+	/**
+	 * 移除连接(与关闭一个道理)
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void remove(ChannelContext channelContext,
 							  CloseCode closeCode) {
 		close(channelContext, closeCode);
 	}
 
+	/**
+	 * 根据业务ID移除连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId 业务ID
+	 */
 	public static void removeBsId(AioConfig aioConfig,
 								  String bsId) {
 		removeBsId(aioConfig, bsId, null);
 	}
 
+	/**
+	 * 根据业务ID移除连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId 业务ID
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeBsId(AioConfig aioConfig,
 								  String bsId,
 								  CloseCode closeCode) {
 		remove(getChannelContextByBsId(aioConfig, bsId), closeCode);
 	}
 
+	/**
+	 * 根据客户节点移除连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param clientNode 客户节点
+	 */
 	public static void removeClientNode(AioConfig aioConfig,
 										String clientNode) {
 		removeClientNode(aioConfig, clientNode, null);
 	}
 
+	/**
+	 * 根据客户节点移除连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param clientNode 客户节点
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeClientNode(AioConfig aioConfig,
 										String clientNode,
 										CloseCode closeCode) {
 		remove(getChannelContextByClientNode(aioConfig, clientNode), closeCode);
 	}
 
+	/**
+	 * 根据集群组ID移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId 集群组ID
+	 */
 	public static void removeClu(AioConfig aioConfig,
 								 String cluId) {
 		removeClu(aioConfig, cluId, null);
 	}
 
+	/**
+	 * 根据集群组ID移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId 集群组ID
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeClu(AioConfig aioConfig,
 								 String cluId,
 								 CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByCluId(aioConfig, cluId), closeCode);
 	}
 
+	/**
+	 * 根据群组ID移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId 群组ID
+	 */
 	public static void removeGroup(AioConfig aioConfig,
 								   String groupId) {
 		removeGroup(aioConfig, groupId, null);
 	}
 
+	/**
+	 * 根据群组ID移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId 群组ID
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeGroup(AioConfig aioConfig,
 								   String groupId,
 								   CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByGroupId(aioConfig, groupId), closeCode);
 	}
 
+	/**
+	 * 根据ID移除连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id ID
+	 */
 	public static void removeId(AioConfig aioConfig,
 								String id) {
 		removeId(aioConfig, id, null);
 	}
 
+	/**
+	 * 根据ID移除连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id ID
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeId(AioConfig aioConfig,
 								String id,
 								CloseCode closeCode) {
 		remove(getChannelContextById(aioConfig, id), closeCode);
 	}
 
+	/**
+	 * 根据IP移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
+	 */
 	public static void removeIp(AioConfig aioConfig,
 								String ip) {
 		removeIp(aioConfig, ip, null);
 	}
 
+	/**
+	 * 根据IP移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeIp(AioConfig aioConfig,
 								String ip,
 								CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByIp(aioConfig, ip), closeCode);
 	}
 
+	/**
+	 * 根据TOKEN移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token TOKEN
+	 */
 	public static void removeToken(AioConfig aioConfig,
 								   String token) {
 		removeToken(aioConfig, token, null);
 	}
 
+	/**
+	 * 根据TOKEN移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token TOKEN
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeToken(AioConfig aioConfig,
 								   String token,
 								   CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByToken(aioConfig, token), closeCode);
 	}
 
+	/**
+	 * 根据USER移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user USER
+	 */
 	public static void removeUser(AioConfig aioConfig,
 								  String user) {
 		removeUser(aioConfig, user, null);
 	}
 
+	/**
+	 * 根据USER移除组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user USER
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeUser(AioConfig aioConfig,
 								  String user,
 								  CloseCode closeCode) {
 		removeSet(aioConfig, getChannelContextByUser(aioConfig, user), closeCode);
 	}
 
+	/**
+	 * 移除集合SET组内所有连接(与关闭一个道理)
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param setWithLock 带有锁结构的SET集合
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 */
 	public static void removeSet(AioConfig aioConfig,
 								 SetWithLock<ChannelContext> setWithLock,
 								 CloseCode closeCode) {
