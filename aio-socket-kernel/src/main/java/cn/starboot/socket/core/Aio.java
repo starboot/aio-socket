@@ -970,7 +970,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param pageIndex
 	 * @param pageSize
-	 * @return
+	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig,
 													Integer pageIndex,
@@ -986,7 +986,7 @@ public class Aio {
 	 * @param cluId
 	 * @param pageIndex
 	 * @param pageSize
-	 * @return
+	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfClu(AioConfig aioConfig,
 													String cluId,
@@ -1021,7 +1021,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 * @param channelContext
-	 * @return
+	 * @return boolean
 	 */
 	public static Boolean isInClu(AioConfig aioConfig,
 								  String cluId,
@@ -1040,7 +1040,7 @@ public class Aio {
 	 * @param groupId
 	 * @param pageIndex
 	 * @param pageSize
-	 * @return
+	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfGroup(AioConfig aioConfig,
 													  String groupId,
@@ -1076,7 +1076,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 * @param channelContext
-	 * @return
+	 * @return boolean
 	 */
 	// 某通道是否在某群组中
 	public static Boolean isInGroup(AioConfig aioConfig,
@@ -1097,7 +1097,7 @@ public class Aio {
 	 * @param ip
 	 * @param pageIndex
 	 * @param pageSize
-	 * @return
+	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfIp(AioConfig aioConfig,
 												   String ip,
@@ -1132,7 +1132,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 * @param channelContext
-	 * @return
+	 * @return boolean
 	 */
 	public static Boolean isInIp(AioConfig aioConfig,
 								 String ip,
@@ -1151,7 +1151,7 @@ public class Aio {
 	 * @param token
 	 * @param pageIndex
 	 * @param pageSize
-	 * @return
+	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfToken(AioConfig aioConfig,
 													  String token,
@@ -1186,7 +1186,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 * @param channelContext
-	 * @return
+	 * @return boolean
 	 */
 	public static Boolean isInToken(AioConfig aioConfig,
 									String token,
@@ -1205,7 +1205,7 @@ public class Aio {
 	 * @param user
 	 * @param pageIndex
 	 * @param pageSize
-	 * @return
+	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfUser(AioConfig aioConfig,
 													 String user,
@@ -1240,7 +1240,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 * @param channelContext
-	 * @return
+	 * @return boolean
 	 */
 	public static Boolean isInUser(AioConfig aioConfig,
 								   String user,
@@ -1258,7 +1258,7 @@ public class Aio {
 	 * @param setWithLock
 	 * @param pageIndex
 	 * @param pageSize
-	 * @return
+	 * @return 分页结果
 	 */
 	private static Page<ChannelContext> getPageOfSet(SetWithLock<ChannelContext> setWithLock,
 													 Integer pageIndex,
@@ -1271,7 +1271,7 @@ public class Aio {
 	 *
 	 * @param setWithLock
 	 * @param channelContext
-	 * @return
+	 * @return boolean
 	 */
 	private static Boolean isInSet(SetWithLock<ChannelContext> setWithLock,
 								   ChannelContext channelContext) {
