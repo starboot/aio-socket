@@ -1255,7 +1255,7 @@ public class Aio {
 	/**
 	 * 按照分页获取指定集合下所有在线用户
 	 *
-	 * @param setWithLock
+	 * @param setWithLock 带有锁结构的SET集合
 	 * @param pageIndex 索引页
 	 * @param pageSize 页面大小
 	 * @return 分页结果
@@ -1269,7 +1269,7 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定SET集合组中
 	 *
-	 * @param setWithLock
+	 * @param setWithLock 带有锁结构的SET集合
 	 * @param channelContext
 	 * @return boolean
 	 */
