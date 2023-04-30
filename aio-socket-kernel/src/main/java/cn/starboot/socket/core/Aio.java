@@ -537,7 +537,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定客户节点的连接
 	 *
 	 * @param aioConfig
 	 * @param clientNode
@@ -548,7 +548,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接，并提供关闭码
+	 * 关闭指定客户节点的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param clientNode
@@ -562,6 +562,7 @@ public class Aio {
 
 	/**
 	 * 关闭指定业务ID的连接
+	 *
 	 * @param aioConfig
 	 * @param cluId
 	 */
@@ -572,6 +573,7 @@ public class Aio {
 
 	/**
 	 * 关闭指定业务ID的连接，并提供关闭码
+	 *
 	 * @param aioConfig
 	 * @param cluId
 	 * @param closeCode
