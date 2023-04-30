@@ -983,7 +983,7 @@ public class Aio {
 	 * 按照分页获取指定集群组ID下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId
+	 * @param cluId 集群ID
 	 * @param pageIndex 索引页
 	 * @param pageSize 页面大小
 	 * @return 分页结果
@@ -1003,7 +1003,7 @@ public class Aio {
 	 * 获取指定集群组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId
+	 * @param cluId 集群ID
 	 * @return int
 	 */
 	public static Integer cluCount(AioConfig aioConfig,
@@ -1019,7 +1019,7 @@ public class Aio {
 	 * 判断指定用户是否在指定集群组中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId
+	 * @param cluId 集群ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1037,7 +1037,7 @@ public class Aio {
 	 * 按照分页获取指定群组ID下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId
+	 * @param groupId 群组ID
 	 * @param pageIndex 索引页
 	 * @param pageSize 页面大小
 	 * @return 分页结果
@@ -1057,7 +1057,7 @@ public class Aio {
 	 * 获取指定群组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId
+	 * @param groupId 群组ID
 	 * @return int
 	 */
 	// 群组有多少个连接
@@ -1074,7 +1074,7 @@ public class Aio {
 	 * 判断指定用户是否在指定群组中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId
+	 * @param groupId 群组ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1094,7 +1094,7 @@ public class Aio {
 	 * 按照分页获取指定IP组下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip
+	 * @param ip IP
 	 * @param pageIndex 索引页
 	 * @param pageSize 页面大小
 	 * @return 分页结果
@@ -1114,7 +1114,7 @@ public class Aio {
 	 * 获取指定IP组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip
+	 * @param ip IP
 	 * @return int
 	 */
 	public static Integer ipCount(AioConfig aioConfig,
@@ -1130,7 +1130,7 @@ public class Aio {
 	 * 判断指定用户是否在指定IP组中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip
+	 * @param ip IP
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1148,7 +1148,7 @@ public class Aio {
 	 * 按照分页获取指定TOKEN组下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token
+	 * @param token TOKEN
 	 * @param pageIndex 索引页
 	 * @param pageSize 页面大小
 	 * @return 分页结果
@@ -1168,7 +1168,7 @@ public class Aio {
 	 * 获取指定TOKEN组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token
+	 * @param token TOKEN
 	 * @return int
 	 */
 	public static Integer tokenCount(AioConfig aioConfig,
@@ -1184,7 +1184,7 @@ public class Aio {
 	 * 判断指定用户是否在指定TOKEN组中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token
+	 * @param token TOKEN
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1202,7 +1202,7 @@ public class Aio {
 	 * 按照分页获取指定USER组下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user
+	 * @param user USER
 	 * @param pageIndex 索引页
 	 * @param pageSize 页面大小
 	 * @return 分页结果
@@ -1222,7 +1222,7 @@ public class Aio {
 	 * 获取指定USER组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user
+	 * @param user USER
 	 * @return int
 	 */
 	public static Integer userCount(AioConfig aioConfig,
@@ -1238,7 +1238,7 @@ public class Aio {
 	 * 判断指定用户是否在指定USER组中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user
+	 * @param user USER
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1270,7 +1270,7 @@ public class Aio {
 	 * 判断指定用户是否在指定SET集合组中
 	 *
 	 * @param setWithLock 带有锁结构的SET集合
-	 * @param channelContext
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
 	private static Boolean isInSet(SetWithLock<ChannelContext> setWithLock,
