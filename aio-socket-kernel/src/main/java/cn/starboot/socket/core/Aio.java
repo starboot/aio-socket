@@ -39,6 +39,9 @@ import java.util.function.Consumer;
  * 移除连接、关闭连接
  * GET：获取指定群组或Id的ChannelContext or ChannelContexts
  *
+ * 使用方式：Aio.bindBsId(bsId, channelContext);
+ * 		   如果需要返回结果：Boolean b = Aio.bindBsId(bsId, channelContext);
+ *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
