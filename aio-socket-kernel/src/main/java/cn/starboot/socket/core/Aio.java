@@ -732,7 +732,7 @@ public class Aio {
 	 * 获取所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getAll(AioConfig aioConfig) {
 		return aioConfig.getConnections();
@@ -742,7 +742,7 @@ public class Aio {
 	 * 获取所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getAllChannelContexts(AioConfig aioConfig) {
 		return getAll(aioConfig);
@@ -807,7 +807,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByCluId(AioConfig aioConfig,
 														 String cluId) {
@@ -822,7 +822,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByCluId(AioConfig aioConfig,
 																	   String cluId) {
@@ -834,7 +834,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByGroupId(AioConfig aioConfig,
 														   String groupId) {
@@ -849,7 +849,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByGroupId(AioConfig aioConfig,
 																		 String groupId) {
@@ -888,7 +888,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByIp(AioConfig aioConfig,
 													  String ip) {
@@ -903,7 +903,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByIp(AioConfig aioConfig,
 																	String ip) {
@@ -915,7 +915,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByToken(AioConfig aioConfig,
 														 String token) {
@@ -930,7 +930,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByToken(AioConfig aioConfig,
 																	   String token) {
@@ -942,7 +942,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByUser(AioConfig aioConfig,
 														String user) {
@@ -957,7 +957,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
-	 * @return
+	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByUser(AioConfig aioConfig,
 																	  String user) {
