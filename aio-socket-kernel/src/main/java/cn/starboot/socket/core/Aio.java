@@ -230,7 +230,7 @@ public class Aio {
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSend(ChannelContext channelContext,
 								Packet packet) {
@@ -243,9 +243,9 @@ public class Aio {
 	/**
 	 * 同步发送到平台所有用户
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToAll(AioConfig aioConfig,
 									 Packet packet) {
@@ -255,10 +255,12 @@ public class Aio {
 	/**
 	 * 同步发送到平台所有用户，并且带有过滤规则
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter
-	 * @return
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToAll(AioConfig aioConfig,
 									 Packet packet,
@@ -269,10 +271,10 @@ public class Aio {
 	/**
 	 * 同步发送到指定业务ID
 	 *
-	 * @param aioConfig
-	 * @param bsId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId 业务ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToBsId(AioConfig aioConfig,
 									  String bsId,
@@ -283,11 +285,11 @@ public class Aio {
 	/**
 	 * 同步发送到指定用户节点
 	 *
-	 * @param aioConfig
-	 * @param ip
-	 * @param port
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
+	 * @param port 端口
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToClientNode(AioConfig aioConfig,
 											String ip,
@@ -299,10 +301,10 @@ public class Aio {
 	/**
 	 * 同步发送到指定集群中
 	 *
-	 * @param aioConfig
-	 * @param cluId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId 集群ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToCluId(AioConfig aioConfig,
 									   String cluId,
@@ -313,11 +315,13 @@ public class Aio {
 	/**
 	 * 同步发送到指定集群中，并且带有过滤规则
 	 *
-	 * @param aioConfig
-	 * @param cluId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId 集群ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter
-	 * @return
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToCluId(AioConfig aioConfig,
 									   String cluId,
@@ -329,10 +333,10 @@ public class Aio {
 	/**
 	 * 同步发送到指定群组中
 	 *
-	 * @param groupId
+	 * @param groupId 群组ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param aioConfig
-	 * @return
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToGroup(String groupId,
 									   Packet packet,
@@ -343,11 +347,13 @@ public class Aio {
 	/**
 	 * 同步发送到指定群组中，并且带有过滤规则
 	 *
-	 * @param aioConfig
-	 * @param groupId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId 群组ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter
-	 * @return
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToGroup(AioConfig aioConfig,
 									   String groupId,
@@ -359,105 +365,111 @@ public class Aio {
 	/**
 	 * 同步发送到指定ID
 	 *
-	 * @param aioConfig
-	 * @param bsId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToId(AioConfig aioConfig,
-									String bsId,
+									String id,
 									Packet packet) {
-		return sendToId(aioConfig, bsId, packet, true);
+		return sendToId(aioConfig, id, packet, true);
 	}
 
 	/**
 	 * 同步发送到指定IP中
 	 *
-	 * @param aioConfig
-	 * @param cluId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToIp(AioConfig aioConfig,
-									String cluId,
+									String ip,
 									Packet packet) {
-		return bSendToIp(aioConfig, cluId, packet, null);
+		return bSendToIp(aioConfig, ip, packet, null);
 	}
 
 	/**
 	 * 同步发送到指定IP中，并且带有过滤规则
 	 *
-	 * @param aioConfig
-	 * @param cluId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter
-	 * @return
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToIp(AioConfig aioConfig,
-									String cluId,
+									String ip,
 									Packet packet,
 									ChannelContextFilter channelContextFilter) {
-		return sendToIp(aioConfig, cluId, packet, channelContextFilter, true);
+		return sendToIp(aioConfig, ip, packet, channelContextFilter, true);
 	}
 
 	/**
 	 * 同步发送到指定TOKEN中
 	 *
-	 * @param aioConfig
-	 * @param cluId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token TOKEN
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToToken(AioConfig aioConfig,
-									   String cluId,
+									   String token,
 									   Packet packet) {
-		return bSendToToken(aioConfig, cluId, packet, null);
+		return bSendToToken(aioConfig, token, packet, null);
 	}
 
 	/**
 	 * 同步发送到指定TOKEN中，并且带有过滤规则
 	 *
-	 * @param aioConfig
-	 * @param cluId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token TOKEN
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter
-	 * @return
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToToken(AioConfig aioConfig,
-									   String cluId,
+									   String token,
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter) {
-		return sendToToken(aioConfig, cluId, packet, channelContextFilter, true);
+		return sendToToken(aioConfig, token, packet, channelContextFilter, true);
 	}
 
 	/**
 	 * 同步发送到指定用户中
 	 *
-	 * @param aioConfig
-	 * @param cluId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user USER
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @return
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToUser(AioConfig aioConfig,
-									  String cluId,
+									  String user,
 									  Packet packet) {
-		return bSendToUser(aioConfig, cluId, packet, null);
+		return bSendToUser(aioConfig, user, packet, null);
 	}
 
 	/**
 	 * 同步发送到指定用户中，并且带有过滤规则
 	 *
-	 * @param aioConfig
-	 * @param cluId
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user USER
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter
-	 * @return
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
 	 */
 	public static Boolean bSendToUser(AioConfig aioConfig,
-									  String cluId,
+									  String user,
 									  Packet packet,
 									  ChannelContextFilter channelContextFilter) {
-		return sendToUser(aioConfig, cluId, packet, channelContextFilter, true);
+		return sendToUser(aioConfig, user, packet, channelContextFilter, true);
 	}
 
 	// --------------------------------close篇--------------------------------
