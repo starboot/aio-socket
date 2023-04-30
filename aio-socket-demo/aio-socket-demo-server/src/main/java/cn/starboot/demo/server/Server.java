@@ -73,9 +73,9 @@ public class Server {
 //                .addPlugin(new ACKPlugin(30, TimeUnit.SECONDS, (context, lastTime) -> System.out.println("超时了：..." + lastTime)))
                 .start();
 
-		MaintainManager maintainManager = bootstrap.getConfig().getMaintainManager();
-		Map<MaintainEnum, AbstractMaintain> map = maintainManager.getHandlerMap();
-		System.out.println(map.size());
+//		MaintainManager maintainManager = bootstrap.getConfig().getMaintainManager();
+//		Map<MaintainEnum, AbstractMaintain> map = maintainManager.getHandlerMap();
+//		System.out.println(map.size());
 
     }
 }

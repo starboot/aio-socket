@@ -20,7 +20,7 @@ import cn.starboot.socket.plugins.ssl.SslAsynchronousSocketChannel;
 import cn.starboot.socket.plugins.ssl.SslService;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
-import cn.starboot.socket.core.config.AioConfig;
+import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.plugins.ssl.factory.ClientSSLContextFactory;
 import cn.starboot.socket.plugins.ssl.factory.SSLContextFactory;
 import cn.starboot.socket.plugins.ssl.factory.ServerSSLContextFactory;

@@ -1,6 +1,8 @@
 package cn.starboot.socket.core.config;
 
-public class AioClientConfig extends AioConfig{
+import cn.starboot.socket.core.AioConfig;
+
+public class AioClientConfig extends AioConfig {
 	@Override
 	public String getName() {
 		return "client";

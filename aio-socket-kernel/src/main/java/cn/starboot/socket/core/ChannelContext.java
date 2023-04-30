@@ -15,7 +15,6 @@
  */
 package cn.starboot.socket.core;
 
-import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.enums.ChannelStatusEnum;
 import cn.starboot.socket.task.DecodeTask;
 import cn.starboot.socket.task.HandlerTask;

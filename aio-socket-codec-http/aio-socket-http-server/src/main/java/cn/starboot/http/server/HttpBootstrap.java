@@ -23,7 +23,7 @@ import cn.starboot.http.common.enums.HttpProtocolEnum;
 import cn.starboot.http.server.banner.HttpBanner;
 import cn.starboot.http.server.impl.HttpMessageProcessor;
 import cn.starboot.http.server.impl.HttpRequestHandler;
-import cn.starboot.socket.core.config.AioConfig;
+import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ServerBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

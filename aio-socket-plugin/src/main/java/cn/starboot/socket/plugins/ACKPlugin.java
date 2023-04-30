@@ -16,7 +16,7 @@
 package cn.starboot.socket.plugins;
 
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.core.config.AioConfig;
+import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.utils.QuickTimerTask;
 import org.slf4j.Logger;

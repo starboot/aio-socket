@@ -13,10 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package cn.starboot.socket.core.config;
+package cn.starboot.socket.core;
 
 import cn.starboot.socket.Monitor;
-import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.maintain.*;
 import cn.starboot.socket.utils.lock.SetWithLock;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
@@ -229,7 +228,7 @@ public abstract class AioConfig {
         this.multilevelModel = multilevelModel;
     }
 
-	public MaintainManager getMaintainManager() {
+	protected MaintainManager getMaintainManager() {
 		return this.maintainManager;
 	}
 

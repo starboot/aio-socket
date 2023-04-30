@@ -20,7 +20,7 @@ import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
-import cn.starboot.socket.core.config.AioConfig;
+import cn.starboot.socket.core.AioConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

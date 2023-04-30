@@ -16,7 +16,6 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.core.config.AioConfig;
 import cn.starboot.socket.maintain.MaintainEnum;
 import cn.starboot.socket.utils.lock.ReadLockHandler;
 import cn.starboot.socket.utils.lock.SetWithLock;
@@ -1058,7 +1057,8 @@ public class Aio {
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter,
 									   boolean isBlock) {
-		SetWithLock<ChannelContext> set = aioConfig.getMaintainManager()
+		SetWithLock<ChannelContext> set = aioConfig
+				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
 				.getSet(token);
 		if (Objects.isNull(set)) {
