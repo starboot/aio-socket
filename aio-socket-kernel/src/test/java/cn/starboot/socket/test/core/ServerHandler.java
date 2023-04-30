@@ -25,7 +25,7 @@ public class ServerHandler extends DemoHandler {
         if (packet instanceof DemoPacket) {
 			System.out.println(((DemoPacket) packet).getData());
 //            return packet;
-			Aio.bSend(channelContext, packet)
+			Boolean aBoolean = Aio.bSend(channelContext, packet);
 		}
         return null;
     }
