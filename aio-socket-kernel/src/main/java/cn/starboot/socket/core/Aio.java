@@ -487,7 +487,7 @@ public class Aio {
 	 * 关闭指定通道的连接，并提供关闭码
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void close(ChannelContext channelContext,
 							 CloseCode closeCode) {
@@ -528,7 +528,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param bsId
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeBsId(AioConfig aioConfig,
 								 String bsId,
@@ -552,7 +552,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param clientNode
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeClientNode(AioConfig aioConfig,
 									   String clientNode,
@@ -576,7 +576,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeClu(AioConfig aioConfig,
 								String cluId,
@@ -600,7 +600,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param groupId
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeGroup(AioConfig aioConfig,
 								  String groupId,
@@ -624,7 +624,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param id
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeId(AioConfig aioConfig,
 							   String id,
@@ -648,7 +648,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param ip
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeIp(AioConfig aioConfig,
 							   String ip,
@@ -672,7 +672,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param token
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeToken(AioConfig aioConfig,
 								  String token,
@@ -696,7 +696,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param user
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeUser(AioConfig aioConfig,
 								 String user,
@@ -709,7 +709,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param setWithLock
-	 * @param closeCode
+	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeSet(AioConfig aioConfig,
 								SetWithLock<ChannelContext> setWithLock,
