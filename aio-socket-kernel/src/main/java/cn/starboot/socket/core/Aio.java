@@ -1508,13 +1508,14 @@ public class Aio {
 		closeSet(aioConfig, setWithLock, closeCode);
 	}
 
-	// --------------------------------Send篇---------------------------------
+	// ------------------------------异步发送篇-------------------------------
 
 	/**
 	 * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
 	 *
-	 * @param channelContext 接收方通道
-	 * @param packet         数据包
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
 	 */
 	public static Boolean send(ChannelContext channelContext,
 							   Packet packet) {
@@ -1524,23 +1525,59 @@ public class Aio {
 		return send0(channelContext, packet, false);
 	}
 
+	/**
+	 * 发送内部逻辑，不对外暴露接口
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	private static Boolean send0(ChannelContext channelContext,
 								 Packet packet,
 								 boolean isBlock) {
 		return channelContext.sendPacket(packet, isBlock);
 	}
 
+	/**
+	 * 向所有在线用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToAll(AioConfig aioConfig,
 									Packet packet) {
 		return sendToAll(aioConfig, packet, null);
 	}
 
+	/**
+	 * 向所有在线用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
 	public static Boolean sendToAll(AioConfig aioConfig,
 									Packet packet,
 									ChannelContextFilter channelContextFilter) {
 		return sendToAll(aioConfig, packet, channelContextFilter, false);
 	}
 
+	/**
+	 * 向所有在线用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	public static Boolean sendToAll(AioConfig aioConfig,
 									Packet packet,
 									ChannelContextFilter channelContextFilter,
@@ -1560,12 +1597,29 @@ public class Aio {
 		}
 	}
 
+	/**
+	 * 向指定业务ID用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId 业务ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToBsId(AioConfig aioConfig,
 									 String bsId,
 									 Packet packet) {
 		return sendToBsId(aioConfig, bsId, packet, false);
 	}
 
+	/**
+	 * 向指定业务ID用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId 业务ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	private static Boolean sendToBsId(AioConfig aioConfig,
 									  String bsId,
 									  Packet packet,
@@ -1577,6 +1631,15 @@ public class Aio {
 		return send0(channelContext, packet, isBlock);
 	}
 
+	/**
+	 * 向指定客户节点用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip ip
+	 * @param port port
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToClientNode(AioConfig aioConfig,
 										   String ip,
 										   int port,
@@ -1584,6 +1647,16 @@ public class Aio {
 		return sendToClientNode(aioConfig, ip, port, packet, false);
 	}
 
+	/**
+	 * 向指定客户节点用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
+	 * @param port port
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	private static Boolean sendToClientNode(AioConfig aioConfig,
 											String ip,
 											int port,
@@ -1596,12 +1669,31 @@ public class Aio {
 		return send0(channelContext, packet, isBlock);
 	}
 
+	/**
+	 * 向指定集群ID所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId 集群ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToCluId(AioConfig aioConfig,
 									  String cluId,
 									  Packet packet) {
 		return sendToCluId(aioConfig, cluId, packet, null);
 	}
 
+	/**
+	 * 向指定集群ID所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId 集群ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
 	public static Boolean sendToCluId(AioConfig aioConfig,
 									  String cluId,
 									  Packet packet,
@@ -1609,6 +1701,18 @@ public class Aio {
 		return sendToCluId(aioConfig, cluId, packet, channelContextFilter, false);
 	}
 
+	/**
+	 * 向指定集群ID所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId 集群ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	private static Boolean sendToCluId(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet,
@@ -1625,13 +1729,31 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-
+	/**
+	 * 向指定群ID内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId 群ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToGroup(AioConfig aioConfig,
 									  String groupId,
 									  Packet packet) {
 		return sendToGroup(aioConfig, groupId, packet, null);
 	}
 
+	/**
+	 * 向指定群ID内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId 群ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
 	public static Boolean sendToGroup(AioConfig aioConfig,
 									  String groupId,
 									  Packet packet,
@@ -1640,11 +1762,16 @@ public class Aio {
 	}
 
 	/**
-	 * 群发
+	 * 向指定群ID内所有用户发送消息
 	 *
-	 * @param groupId   群组ID
-	 * @param packet    消息包
-	 * @param aioConfig 发送者上下文
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId 群ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
 	 */
 	public static Boolean sendToGroup(AioConfig aioConfig,
 									  String groupId,
@@ -1663,12 +1790,29 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
+	/**
+	 * 向指定ID用户发送消息
+	 *
+	 * @param config 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToId(AioConfig config,
 								   String id,
 								   Packet packet) {
 		return sendToId(config, id, packet, false);
 	}
 
+	/**
+	 * 向指定ID用户发送消息
+	 *
+	 * @param config 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id ID
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	private static Boolean sendToId(AioConfig config,
 									String id,
 									Packet packet,
@@ -1676,12 +1820,31 @@ public class Aio {
 		return send0(getChannelContextById(config, id), packet, isBlock);
 	}
 
+	/**
+	 * 向指定IP内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToIp(AioConfig aioConfig,
 								   String ip,
 								   Packet packet) {
 		return sendToIp(aioConfig, ip, packet, null);
 	}
 
+	/**
+	 * 向指定IP内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
 	public static Boolean sendToIp(AioConfig aioConfig,
 								   String ip,
 								   Packet packet,
@@ -1689,6 +1852,18 @@ public class Aio {
 		return sendToIp(aioConfig, ip, packet, channelContextFilter, false);
 	}
 
+	/**
+	 * 向指定IP内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip IP
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	public static Boolean sendToIp(AioConfig aioConfig,
 								   String ip,
 								   Packet packet,
@@ -1705,12 +1880,31 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
+	/**
+	 * 向指定SET集合中所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param setWithLock 带有锁结构的SET集合
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToSet(AioConfig aioConfig,
 									SetWithLock<ChannelContext> setWithLock,
 									Packet packet) {
 		return sendToSet(aioConfig, setWithLock, packet, null);
 	}
 
+	/**
+	 * 向指定SET集合中所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param setWithLock 带有锁结构的SET集合
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
 	public static Boolean sendToSet(AioConfig aioConfig,
 									SetWithLock<ChannelContext> setWithLock,
 									Packet packet,
@@ -1718,6 +1912,18 @@ public class Aio {
 		return sendToSet(aioConfig, setWithLock, packet, channelContextFilter, false);
 	}
 
+	/**
+	 * 向指定SET集合中所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param setWithLock 带有锁结构的SET集合
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	private static Boolean sendToSet(AioConfig aioConfig,
 									 SetWithLock<ChannelContext> setWithLock,
 									 Packet packet,
@@ -1760,12 +1966,31 @@ public class Aio {
 		return sendNum.longValue() == sendSuc.longValue();
 	}
 
+	/**
+	 * 向指定TOKEN内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token TOKEN
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToToken(AioConfig aioConfig,
 									  String token,
 									  Packet packet) {
 		return sendToToken(aioConfig, token, packet, null);
 	}
 
+	/**
+	 * 向指定TOKEN内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token TOKEN
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
 	public static Boolean sendToToken(AioConfig aioConfig,
 									  String token,
 									  Packet packet,
@@ -1773,6 +1998,18 @@ public class Aio {
 		return sendToToken(aioConfig, token, packet, channelContextFilter, false);
 	}
 
+	/**
+	 * 向指定TOKEN内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token TOKEN
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	private static Boolean sendToToken(AioConfig aioConfig,
 									   String token,
 									   Packet packet,
@@ -1789,12 +2026,31 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
+	/**
+	 * 向指定USER内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user USER
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @return 发送状态
+	 */
 	public static Boolean sendToUser(AioConfig aioConfig,
 									 String user,
 									 Packet packet) {
 		return sendToUser(aioConfig, user, packet, null);
 	}
 
+	/**
+	 * 向指定USER内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user USER
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
 	public static Boolean sendToUser(AioConfig aioConfig,
 									 String user,
 									 Packet packet,
@@ -1802,6 +2058,18 @@ public class Aio {
 		return sendToUser(aioConfig, user, packet, channelContextFilter, false);
 	}
 
+	/**
+	 * 向指定USER内所有用户发送消息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user USER
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @param isBlock 是否采用同步等待发送
+	 * @return 发送状态
+	 */
 	private static Boolean sendToUser(AioConfig aioConfig,
 									  String user,
 									  Packet packet,
