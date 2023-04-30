@@ -45,6 +45,8 @@ public class Aio {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Aio.class);
 
+	// ---------------------------------绑定篇--------------------------------
+
 	/**
 	 * 绑定业务ID
 	 *
@@ -65,6 +67,13 @@ public class Aio {
 				.join(bsId, channelContext);
 	}
 
+	/**
+	 * 绑定客户端ip+端口
+	 *
+	 * @param cliNode 客户端
+	 * @param channelContext 用户上下文信息
+	 * @return 绑定状态
+	 */
 	public static Boolean bindCliNode(String cliNode,
 									  ChannelContext channelContext) {
 		if (Objects.isNull(cliNode)
@@ -78,6 +87,13 @@ public class Aio {
 				.join(cliNode, channelContext);
 	}
 
+	/**
+	 * 绑定集群ID
+	 *
+	 * @param cluId 集群ID
+	 * @param channelContext 用户上下文信息
+	 * @return 绑定状态
+	 */
 	public static Boolean bindCluId(String cluId,
 									ChannelContext channelContext) {
 		if (Objects.isNull(cluId)
@@ -91,6 +107,13 @@ public class Aio {
 				.join(cluId, channelContext);
 	}
 
+	/**
+	 * 绑定群组：提供群组ID和用户上下文信息
+	 *
+	 * @param groupId 群组ID
+	 * @param channelContext 用户上下文信息
+	 * @return 绑定状态
+	 */
 	public static Boolean bindGroup(String groupId,
 									ChannelContext channelContext) {
 		if (Objects.isNull(groupId)
@@ -104,12 +127,27 @@ public class Aio {
 				.join(groupId, channelContext);
 	}
 
+	/**
+	 * 绑定群组：不提供群组ID和用户上下文信息
+	 *
+	 * @param aioConfig 配置信息
+	 * @param userId 用户ID
+	 * @param groupId 群组ID
+	 * @return 绑定状态
+	 */
 	public static Boolean bindGroup(AioConfig aioConfig,
 									String userId,
 									String groupId) {
 		return bindGroup(groupId, getChannelContextById(aioConfig, userId));
 	}
 
+	/**
+	 * 绑定ID
+	 *
+	 * @param id ID
+	 * @param channelContext 用户上下文信息
+	 * @return 绑定状态
+	 */
 	public static Boolean bindId(String id,
 								 ChannelContext channelContext) {
 		if (Objects.isNull(id)
@@ -124,6 +162,13 @@ public class Aio {
 				.join(id, channelContext);
 	}
 
+	/**
+	 * 绑定IP
+	 *
+	 * @param ip IP
+	 * @param channelContext 用户上下文信息
+	 * @return 绑定状态
+	 */
 	public static Boolean bindIp(String ip,
 								 ChannelContext channelContext) {
 		if (Objects.isNull(ip)
@@ -137,6 +182,13 @@ public class Aio {
 				.join(ip, channelContext);
 	}
 
+	/**
+	 * 绑定token
+	 *
+	 * @param token TOKEN
+	 * @param channelContext 用户上下文信息
+	 * @return 绑定状态
+	 */
 	public static Boolean bindToken(String token,
 									ChannelContext channelContext) {
 		if (Objects.isNull(token)
@@ -150,6 +202,13 @@ public class Aio {
 				.join(token, channelContext);
 	}
 
+	/**
+	 * 绑定用户
+	 *
+	 * @param user USER
+	 * @param channelContext 用户上下文信息
+	 * @return 绑定状态
+	 */
 	public static Boolean bindUser(String user,
 								   ChannelContext channelContext) {
 		if (Objects.isNull(user)
@@ -163,7 +222,15 @@ public class Aio {
 				.join(user, channelContext);
 	}
 
-	// ********************************************* 阻塞发送篇
+	// -------------------------------同步发送篇-------------------------------
+
+	/**
+	 * 同步发送到指定用户
+	 *
+	 * @param channelContext 用户上下文信息
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSend(ChannelContext channelContext,
 								Packet packet) {
 		if (Objects.isNull(channelContext)) {
@@ -172,23 +239,55 @@ public class Aio {
 		return send0(channelContext, packet, true);
 	}
 
+	/**
+	 * 同步发送到平台所有用户
+	 *
+	 * @param aioConfig
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSendToAll(AioConfig aioConfig,
 									 Packet packet) {
 		return bSendToAll(aioConfig, packet, null);
 	}
 
+	/**
+	 * 同步发送到平台所有用户，并且带有过滤规则
+	 *
+	 * @param aioConfig
+	 * @param packet
+	 * @param channelContextFilter
+	 * @return
+	 */
 	public static Boolean bSendToAll(AioConfig aioConfig,
 									 Packet packet,
 									 ChannelContextFilter channelContextFilter) {
 		return sendToAll(aioConfig, packet, channelContextFilter, true);
 	}
 
+	/**
+	 * 同步发送到指定业务ID
+	 *
+	 * @param aioConfig
+	 * @param bsId
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSendToBsId(AioConfig aioConfig,
 									  String bsId,
 									  Packet packet) {
 		return sendToBsId(aioConfig, bsId, packet, true);
 	}
 
+	/**
+	 * 同步发送到指定用户节点
+	 *
+	 * @param aioConfig
+	 * @param ip
+	 * @param port
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSendToClientNode(AioConfig aioConfig,
 											String ip,
 											int port,
@@ -196,12 +295,29 @@ public class Aio {
 		return sendToClientNode(aioConfig, ip, port, packet, true);
 	}
 
+	/**
+	 * 同步发送到指定集群中
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSendToCluId(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet) {
 		return bSendToCluId(aioConfig, cluId, packet, null);
 	}
 
+	/**
+	 * 同步发送到指定集群中，并且带有过滤规则
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param packet
+	 * @param channelContextFilter
+	 * @return
+	 */
 	public static Boolean bSendToCluId(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet,
@@ -209,12 +325,29 @@ public class Aio {
 		return sendToCluId(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
+	/**
+	 * 同步发送到指定群组中
+	 *
+	 * @param groupId
+	 * @param packet
+	 * @param aioConfig
+	 * @return
+	 */
 	public static Boolean bSendToGroup(String groupId,
 									   Packet packet,
 									   AioConfig aioConfig) {
 		return bSendToGroup(aioConfig, groupId, packet, null);
 	}
 
+	/**
+	 * 同步发送到指定群组中，并且带有过滤规则
+	 *
+	 * @param aioConfig
+	 * @param groupId
+	 * @param packet
+	 * @param channelContextFilter
+	 * @return
+	 */
 	public static Boolean bSendToGroup(AioConfig aioConfig,
 									   String groupId,
 									   Packet packet,
@@ -222,18 +355,43 @@ public class Aio {
 		return sendToGroup(aioConfig, groupId, packet, channelContextFilter, true);
 	}
 
+	/**
+	 * 同步发送到指定ID
+	 *
+	 * @param aioConfig
+	 * @param bsId
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSendToId(AioConfig aioConfig,
 									String bsId,
 									Packet packet) {
 		return sendToId(aioConfig, bsId, packet, true);
 	}
 
+	/**
+	 * 同步发送到指定IP中
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSendToIp(AioConfig aioConfig,
 									String cluId,
 									Packet packet) {
 		return bSendToIp(aioConfig, cluId, packet, null);
 	}
 
+	/**
+	 * 同步发送到指定IP中，并且带有过滤规则
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param packet
+	 * @param channelContextFilter
+	 * @return
+	 */
 	public static Boolean bSendToIp(AioConfig aioConfig,
 									String cluId,
 									Packet packet,
@@ -241,12 +399,29 @@ public class Aio {
 		return sendToIp(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
+	/**
+	 * 同步发送到指定TOKEN中
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSendToToken(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet) {
 		return bSendToToken(aioConfig, cluId, packet, null);
 	}
 
+	/**
+	 * 同步发送到指定TOKEN中，并且带有过滤规则
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param packet
+	 * @param channelContextFilter
+	 * @return
+	 */
 	public static Boolean bSendToToken(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet,
@@ -254,12 +429,29 @@ public class Aio {
 		return sendToToken(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
+	/**
+	 * 同步发送到指定用户中
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param packet
+	 * @return
+	 */
 	public static Boolean bSendToUser(AioConfig aioConfig,
 									  String cluId,
 									  Packet packet) {
 		return bSendToUser(aioConfig, cluId, packet, null);
 	}
 
+	/**
+	 * 同步发送到指定用户中，并且带有过滤规则
+	 *
+	 * @param aioConfig
+	 * @param cluId
+	 * @param packet
+	 * @param channelContextFilter
+	 * @return
+	 */
 	public static Boolean bSendToUser(AioConfig aioConfig,
 									  String cluId,
 									  Packet packet,
@@ -267,7 +459,7 @@ public class Aio {
 		return sendToUser(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
-	//                              close篇
+	// --------------------------------close篇--------------------------------
 
 	public static void close(ChannelContext channelContext) {
 		close(channelContext, null);
