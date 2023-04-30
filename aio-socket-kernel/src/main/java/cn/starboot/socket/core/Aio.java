@@ -284,7 +284,7 @@ public class Aio {
 			if (Objects.equals(channelContext.getCloseCode(), CloseCode.INIT_STATUS)) {
 				channelContext.setCloseCode(CloseCode.NO_CODE);
 			}
-		}else {
+		} else {
 			channelContext.setCloseCode(closeCode);
 		}
 		// 当前通道的所有状态已处理完成，执行断开操作
@@ -370,10 +370,10 @@ public class Aio {
 		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>)
 				channelContextSet -> channelContextSet.forEach((Consumer<ChannelContext>)
 						channelContext -> {
-			if (Objects.nonNull(channelContext)) {
-				close(channelContext,closeCode);
-			}
-		}));
+							if (Objects.nonNull(channelContext)) {
+								close(channelContext, closeCode);
+							}
+						}));
 	}
 
 	// Get篇
@@ -509,8 +509,8 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
-	public static int cluCount(AioConfig aioConfig,
-							   String cluId) {
+	public static Integer cluCount(AioConfig aioConfig,
+								   String cluId) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
@@ -541,8 +541,8 @@ public class Aio {
 	}
 
 	// 群组有多少个连接
-	public static int groupCount(AioConfig aioConfig,
-								 String groupId) {
+	public static Integer groupCount(AioConfig aioConfig,
+									 String groupId) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
@@ -572,8 +572,8 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
-	public static int ipCount(AioConfig aioConfig,
-							  String ip) {
+	public static Integer ipCount(AioConfig aioConfig,
+								  String ip) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
@@ -602,8 +602,8 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
-	public static int tokenCount(AioConfig aioConfig,
-								 String token) {
+	public static Integer tokenCount(AioConfig aioConfig,
+									 String token) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
@@ -632,8 +632,8 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
-	public static int userCount(AioConfig aioConfig,
-								String user) {
+	public static Integer userCount(AioConfig aioConfig,
+									String user) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
@@ -894,8 +894,8 @@ public class Aio {
 	/**
 	 * 群发
 	 *
-	 * @param groupId        群组ID
-	 * @param packet         消息包
+	 * @param groupId   群组ID
+	 * @param packet    消息包
 	 * @param aioConfig 发送者上下文
 	 */
 	public static boolean sendToGroup(AioConfig aioConfig,
@@ -988,26 +988,26 @@ public class Aio {
 					.handle((ReadLockHandler<Set<ChannelContext>>)
 							channelContextSet -> channelContextSet.forEach(
 									channelContext -> {
-				if (Objects.nonNull(channelContext)) {
-					sendNum.increment();
-					if (send0(channelContext, packet, isBlock)) {
-						sendSuc.increment();
-					}
-				}
-			}));
-		}else {
+										if (Objects.nonNull(channelContext)) {
+											sendNum.increment();
+											if (send0(channelContext, packet, isBlock)) {
+												sendSuc.increment();
+											}
+										}
+									}));
+		} else {
 			setWithLock
 					.handle((ReadLockHandler<Set<ChannelContext>>)
 							channelContextSet -> channelContextSet.forEach(
 									channelContext -> {
-				if (Objects.nonNull(channelContext)
-						&& channelContextFilter.filter(channelContext)) {
-					sendNum.increment();
-					if (send0(channelContext, packet, isBlock)) {
-						sendSuc.increment();
-					}
-				}
-			}));
+										if (Objects.nonNull(channelContext)
+												&& channelContextFilter.filter(channelContext)) {
+											sendNum.increment();
+											if (send0(channelContext, packet, isBlock)) {
+												sendSuc.increment();
+											}
+										}
+									}));
 		}
 		return sendNum.longValue() == sendSuc.longValue();
 	}
@@ -1224,6 +1224,7 @@ public class Aio {
 	/**
 	 * 禁止实例化
 	 */
-	private Aio() { }
+	private Aio() {
+	}
 
 }
