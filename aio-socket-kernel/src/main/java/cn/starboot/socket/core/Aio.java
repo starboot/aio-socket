@@ -477,7 +477,7 @@ public class Aio {
 	/**
 	 * 关闭指定通道的连接
 	 *
-	 * @param channelContext
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 */
 	public static void close(ChannelContext channelContext) {
 		close(channelContext, null);
@@ -486,7 +486,7 @@ public class Aio {
 	/**
 	 * 关闭指定通道的连接，并提供关闭码
 	 *
-	 * @param channelContext
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @param closeCode
 	 */
 	public static void close(ChannelContext channelContext,
