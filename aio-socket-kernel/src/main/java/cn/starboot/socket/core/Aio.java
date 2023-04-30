@@ -515,7 +515,7 @@ public class Aio {
 	/**
 	 * 关闭指定业务ID的连接
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param bsId
 	 */
 	public static void closeBsId(AioConfig aioConfig,
@@ -526,7 +526,7 @@ public class Aio {
 	/**
 	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param bsId
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
@@ -539,7 +539,7 @@ public class Aio {
 	/**
 	 * 关闭指定客户节点的连接
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param clientNode
 	 */
 	public static void closeClientNode(AioConfig aioConfig,
@@ -550,7 +550,7 @@ public class Aio {
 	/**
 	 * 关闭指定客户节点的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param clientNode
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
@@ -563,7 +563,7 @@ public class Aio {
 	/**
 	 * 关闭指定集群ID的连接
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 */
 	public static void closeClu(AioConfig aioConfig,
@@ -574,7 +574,7 @@ public class Aio {
 	/**
 	 * 关闭指定集群ID的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
@@ -587,7 +587,7 @@ public class Aio {
 	/**
 	 * 关闭指定群组的连接
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 */
 	public static void closeGroup(AioConfig aioConfig,
@@ -598,7 +598,7 @@ public class Aio {
 	/**
 	 * 关闭指定群组的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
@@ -611,7 +611,7 @@ public class Aio {
 	/**
 	 * 关闭指定ID的连接
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param id
 	 */
 	public static void closeId(AioConfig aioConfig,
@@ -622,7 +622,7 @@ public class Aio {
 	/**
 	 * 关闭指定ID的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param id
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
@@ -635,7 +635,7 @@ public class Aio {
 	/**
 	 * 关闭指定IP的连接
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 */
 	public static void closeIp(AioConfig aioConfig,
@@ -646,7 +646,7 @@ public class Aio {
 	/**
 	 * 关闭指定IP的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
@@ -659,7 +659,7 @@ public class Aio {
 	/**
 	 * 关闭指定TOKEN的连接
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 */
 	public static void closeToken(AioConfig aioConfig,
@@ -670,7 +670,7 @@ public class Aio {
 	/**
 	 * 关闭指定TOKEN的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
@@ -683,7 +683,7 @@ public class Aio {
 	/**
 	 * 关闭指定USER的连接
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 */
 	public static void closeUser(AioConfig aioConfig,
@@ -694,7 +694,7 @@ public class Aio {
 	/**
 	 * 关闭指定USER的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
@@ -707,7 +707,7 @@ public class Aio {
 	/**
 	 * 关闭指定集合的连接，并提供关闭码
 	 *
-	 * @param aioConfig
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param setWithLock
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
