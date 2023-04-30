@@ -968,8 +968,8 @@ public class Aio {
 	 * 按照分页获取所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param pageIndex
-	 * @param pageSize
+	 * @param pageIndex 索引页
+	 * @param pageSize 页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig,
@@ -984,7 +984,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
-	 * @param pageIndex
+	 * @param pageIndex 索引页
 	 * @param pageSize
 	 * @return 分页结果
 	 */
@@ -1038,7 +1038,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
-	 * @param pageIndex
+	 * @param pageIndex 索引页
 	 * @param pageSize
 	 * @return 分页结果
 	 */
@@ -1095,7 +1095,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
-	 * @param pageIndex
+	 * @param pageIndex 索引页
 	 * @param pageSize
 	 * @return 分页结果
 	 */
@@ -1149,7 +1149,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
-	 * @param pageIndex
+	 * @param pageIndex 索引页
 	 * @param pageSize
 	 * @return 分页结果
 	 */
@@ -1203,7 +1203,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
-	 * @param pageIndex
+	 * @param pageIndex 索引页
 	 * @param pageSize
 	 * @return 分页结果
 	 */
@@ -1256,7 +1256,7 @@ public class Aio {
 	 * 按照分页获取指定集合下所有在线用户
 	 *
 	 * @param setWithLock
-	 * @param pageIndex
+	 * @param pageIndex 索引页
 	 * @param pageSize
 	 * @return 分页结果
 	 */
