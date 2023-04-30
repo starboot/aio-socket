@@ -1000,6 +1000,7 @@ public class Aio {
 	}
 
 	/**
+	 * 获取指定集群组下在线用户个数
 	 *
 	 * @param aioConfig
 	 * @param cluId
@@ -1015,6 +1016,7 @@ public class Aio {
 	}
 
 	/**
+	 * 判断指定用户是否在指定集群组中
 	 *
 	 * @param aioConfig
 	 * @param cluId
@@ -1052,6 +1054,7 @@ public class Aio {
 	}
 
 	/**
+	 * 获取指定群组下在线用户个数
 	 *
 	 * @param aioConfig
 	 * @param groupId
@@ -1107,6 +1110,7 @@ public class Aio {
 	}
 
 	/**
+	 * 获取指定IP组下在线用户个数
 	 *
 	 * @param aioConfig
 	 * @param ip
@@ -1159,6 +1163,7 @@ public class Aio {
 	}
 
 	/**
+	 * 获取指定TOKEN组下在线用户个数
 	 *
 	 * @param aioConfig
 	 * @param token
@@ -1211,6 +1216,7 @@ public class Aio {
 	}
 
 	/**
+	 * 获取指定USER组下在线用户个数
 	 *
 	 * @param aioConfig
 	 * @param user
