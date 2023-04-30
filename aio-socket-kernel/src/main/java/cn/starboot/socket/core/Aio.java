@@ -1071,6 +1071,7 @@ public class Aio {
 	}
 
 	/**
+	 * 判断指定用户是否在指定群组中
 	 *
 	 * @param aioConfig
 	 * @param groupId
@@ -1126,6 +1127,7 @@ public class Aio {
 	}
 
 	/**
+	 * 判断指定用户是否在指定IP组中
 	 *
 	 * @param aioConfig
 	 * @param ip
@@ -1179,6 +1181,7 @@ public class Aio {
 	}
 
 	/**
+	 * 判断指定用户是否在指定TOKEN组中
 	 *
 	 * @param aioConfig
 	 * @param token
@@ -1232,7 +1235,7 @@ public class Aio {
 	}
 
 	/**
-	 *
+	 * 判断指定用户是否在指定USER组中
 	 * @param aioConfig
 	 * @param user
 	 * @param channelContext
@@ -1263,7 +1266,7 @@ public class Aio {
 	}
 
 	/**
-	 *
+	 * 判断指定用户是否在指定SET集合组中
 	 * @param setWithLock
 	 * @param channelContext
 	 * @return
