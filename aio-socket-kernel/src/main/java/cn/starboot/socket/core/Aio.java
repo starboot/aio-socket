@@ -42,7 +42,7 @@ public class Aio {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Aio.class);
 
-	public static boolean bindBsId(String bsId,
+	public static Boolean bindBsId(String bsId,
 								   ChannelContext channelContext) {
 		if (Objects.isNull(bsId)
 				|| Objects.isNull(channelContext)
@@ -55,7 +55,7 @@ public class Aio {
 				.join(bsId, channelContext);
 	}
 
-	public static boolean bindCliNode(String cliNode,
+	public static Boolean bindCliNode(String cliNode,
 									  ChannelContext channelContext) {
 		if (Objects.isNull(cliNode)
 				|| Objects.isNull(channelContext)
@@ -68,7 +68,7 @@ public class Aio {
 				.join(cliNode, channelContext);
 	}
 
-	public static boolean bindCluId(String cluId,
+	public static Boolean bindCluId(String cluId,
 									ChannelContext channelContext) {
 		if (Objects.isNull(cluId)
 				|| Objects.isNull(channelContext)
@@ -81,7 +81,7 @@ public class Aio {
 				.join(cluId, channelContext);
 	}
 
-	public static boolean bindGroup(String groupId,
+	public static Boolean bindGroup(String groupId,
 									ChannelContext channelContext) {
 		if (Objects.isNull(groupId)
 				|| Objects.isNull(channelContext)
@@ -94,13 +94,13 @@ public class Aio {
 				.join(groupId, channelContext);
 	}
 
-	public static boolean bindGroup(AioConfig aioConfig,
+	public static Boolean bindGroup(AioConfig aioConfig,
 									String userId,
 									String groupId) {
 		return bindGroup(groupId, getChannelContextById(aioConfig, userId));
 	}
 
-	public static boolean bindId(String id,
+	public static Boolean bindId(String id,
 								 ChannelContext channelContext) {
 		if (Objects.isNull(id)
 				|| Objects.isNull(channelContext)
@@ -114,7 +114,7 @@ public class Aio {
 				.join(id, channelContext);
 	}
 
-	public static boolean bindIp(String ip,
+	public static Boolean bindIp(String ip,
 								 ChannelContext channelContext) {
 		if (Objects.isNull(ip)
 				|| Objects.isNull(channelContext)
@@ -127,7 +127,7 @@ public class Aio {
 				.join(ip, channelContext);
 	}
 
-	public static boolean bindToken(String token,
+	public static Boolean bindToken(String token,
 									ChannelContext channelContext) {
 		if (Objects.isNull(token)
 				|| Objects.isNull(channelContext)
@@ -140,7 +140,7 @@ public class Aio {
 				.join(token, channelContext);
 	}
 
-	public static boolean bindUser(String user,
+	public static Boolean bindUser(String user,
 								   ChannelContext channelContext) {
 		if (Objects.isNull(user)
 				|| Objects.isNull(channelContext)
@@ -154,7 +154,7 @@ public class Aio {
 	}
 
 	// ********************************************* 阻塞发送篇
-	public static boolean bSend(ChannelContext channelContext,
+	public static Boolean bSend(ChannelContext channelContext,
 								Packet packet) {
 		if (Objects.isNull(channelContext)) {
 			return false;
@@ -162,95 +162,95 @@ public class Aio {
 		return send0(channelContext, packet, true);
 	}
 
-	public static boolean bSendToAll(AioConfig aioConfig,
+	public static Boolean bSendToAll(AioConfig aioConfig,
 									 Packet packet) {
 		return bSendToAll(aioConfig, packet, null);
 	}
 
-	public static boolean bSendToAll(AioConfig aioConfig,
+	public static Boolean bSendToAll(AioConfig aioConfig,
 									 Packet packet,
 									 ChannelContextFilter channelContextFilter) {
 		return sendToAll(aioConfig, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToBsId(AioConfig aioConfig,
+	public static Boolean bSendToBsId(AioConfig aioConfig,
 									  String bsId,
 									  Packet packet) {
 		return sendToBsId(aioConfig, bsId, packet, true);
 	}
 
-	public static boolean bSendToClientNode(AioConfig aioConfig,
+	public static Boolean bSendToClientNode(AioConfig aioConfig,
 											String ip,
 											int port,
 											Packet packet) {
 		return sendToClientNode(aioConfig, ip, port, packet, true);
 	}
 
-	public static boolean bSendToCluId(AioConfig aioConfig,
+	public static Boolean bSendToCluId(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet) {
 		return bSendToCluId(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean bSendToCluId(AioConfig aioConfig,
+	public static Boolean bSendToCluId(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter) {
 		return sendToCluId(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToGroup(String groupId,
+	public static Boolean bSendToGroup(String groupId,
 									   Packet packet,
 									   AioConfig aioConfig) {
 		return bSendToGroup(aioConfig, groupId, packet, null);
 	}
 
-	public static boolean bSendToGroup(AioConfig aioConfig,
+	public static Boolean bSendToGroup(AioConfig aioConfig,
 									   String groupId,
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter) {
 		return sendToGroup(aioConfig, groupId, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToId(AioConfig aioConfig,
+	public static Boolean bSendToId(AioConfig aioConfig,
 									String bsId,
 									Packet packet) {
 		return sendToId(aioConfig, bsId, packet, true);
 	}
 
-	public static boolean bSendToIp(AioConfig aioConfig,
+	public static Boolean bSendToIp(AioConfig aioConfig,
 									String cluId,
 									Packet packet) {
 		return bSendToIp(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean bSendToIp(AioConfig aioConfig,
+	public static Boolean bSendToIp(AioConfig aioConfig,
 									String cluId,
 									Packet packet,
 									ChannelContextFilter channelContextFilter) {
 		return sendToIp(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToToken(AioConfig aioConfig,
+	public static Boolean bSendToToken(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet) {
 		return bSendToToken(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean bSendToToken(AioConfig aioConfig,
+	public static Boolean bSendToToken(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter) {
 		return sendToToken(aioConfig, cluId, packet, channelContextFilter, true);
 	}
 
-	public static boolean bSendToUser(AioConfig aioConfig,
+	public static Boolean bSendToUser(AioConfig aioConfig,
 									  String cluId,
 									  Packet packet) {
 		return bSendToUser(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean bSendToUser(AioConfig aioConfig,
+	public static Boolean bSendToUser(AioConfig aioConfig,
 									  String cluId,
 									  Packet packet,
 									  ChannelContextFilter channelContextFilter) {
@@ -518,7 +518,7 @@ public class Aio {
 				.size();
 	}
 
-	public static boolean isInClu(AioConfig aioConfig,
+	public static Boolean isInClu(AioConfig aioConfig,
 								  String cluId,
 								  ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
@@ -551,7 +551,7 @@ public class Aio {
 	}
 
 	// 某通道是否在某群组中
-	public static boolean isInGroup(AioConfig aioConfig,
+	public static Boolean isInGroup(AioConfig aioConfig,
 									String groupId,
 									ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
@@ -581,7 +581,7 @@ public class Aio {
 				.size();
 	}
 
-	public static boolean isInIp(AioConfig aioConfig,
+	public static Boolean isInIp(AioConfig aioConfig,
 								 String ip,
 								 ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
@@ -611,7 +611,7 @@ public class Aio {
 				.size();
 	}
 
-	public static boolean isInToken(AioConfig aioConfig,
+	public static Boolean isInToken(AioConfig aioConfig,
 									String token,
 									ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
@@ -641,7 +641,7 @@ public class Aio {
 				.size();
 	}
 
-	public static boolean isInUser(AioConfig aioConfig,
+	public static Boolean isInUser(AioConfig aioConfig,
 								   String user,
 								   ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig
@@ -657,7 +657,7 @@ public class Aio {
 		return PageUtils.fromSetWithLock(setWithLock, pageIndex, pageSize);
 	}
 
-	private static boolean isInSet(SetWithLock<ChannelContext> setWithLock,
+	private static Boolean isInSet(SetWithLock<ChannelContext> setWithLock,
 								   ChannelContext channelContext) {
 		AtomicBoolean contains = new AtomicBoolean(false);
 		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>)
@@ -666,7 +666,7 @@ public class Aio {
 	}
 
 	// Remove
-	public static boolean removeUserFromAllGroup(ChannelContext channelContext) {
+	public static Boolean removeUserFromAllGroup(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return true;
 		return channelContext
 				.getAioConfig()
@@ -768,7 +768,7 @@ public class Aio {
 	 * @param channelContext 接收方通道
 	 * @param packet         数据包
 	 */
-	public static boolean send(ChannelContext channelContext,
+	public static Boolean send(ChannelContext channelContext,
 							   Packet packet) {
 		if (Objects.isNull(channelContext)) {
 			return false;
@@ -776,24 +776,24 @@ public class Aio {
 		return send0(channelContext, packet, false);
 	}
 
-	private static boolean send0(ChannelContext channelContext,
+	private static Boolean send0(ChannelContext channelContext,
 								 Packet packet,
 								 boolean isBlock) {
 		return channelContext.sendPacket(packet, isBlock);
 	}
 
-	public static boolean sendToAll(AioConfig aioConfig,
+	public static Boolean sendToAll(AioConfig aioConfig,
 									Packet packet) {
 		return sendToAll(aioConfig, packet, null);
 	}
 
-	public static boolean sendToAll(AioConfig aioConfig,
+	public static Boolean sendToAll(AioConfig aioConfig,
 									Packet packet,
 									ChannelContextFilter channelContextFilter) {
 		return sendToAll(aioConfig, packet, channelContextFilter, false);
 	}
 
-	public static boolean sendToAll(AioConfig aioConfig,
+	public static Boolean sendToAll(AioConfig aioConfig,
 									Packet packet,
 									ChannelContextFilter channelContextFilter,
 									boolean isBlock) {
@@ -812,13 +812,13 @@ public class Aio {
 		}
 	}
 
-	public static boolean sendToBsId(AioConfig aioConfig,
+	public static Boolean sendToBsId(AioConfig aioConfig,
 									 String bsId,
 									 Packet packet) {
 		return sendToBsId(aioConfig, bsId, packet, false);
 	}
 
-	private static boolean sendToBsId(AioConfig aioConfig,
+	private static Boolean sendToBsId(AioConfig aioConfig,
 									  String bsId,
 									  Packet packet,
 									  boolean isBlock) {
@@ -829,14 +829,14 @@ public class Aio {
 		return send0(channelContext, packet, isBlock);
 	}
 
-	public static boolean sendToClientNode(AioConfig aioConfig,
+	public static Boolean sendToClientNode(AioConfig aioConfig,
 										   String ip,
 										   int port,
 										   Packet packet) {
 		return sendToClientNode(aioConfig, ip, port, packet, false);
 	}
 
-	private static boolean sendToClientNode(AioConfig aioConfig,
+	private static Boolean sendToClientNode(AioConfig aioConfig,
 											String ip,
 											int port,
 											Packet packet,
@@ -848,20 +848,20 @@ public class Aio {
 		return send0(channelContext, packet, isBlock);
 	}
 
-	public static boolean sendToCluId(AioConfig aioConfig,
+	public static Boolean sendToCluId(AioConfig aioConfig,
 									  String cluId,
 									  Packet packet) {
 		return sendToCluId(aioConfig, cluId, packet, null);
 	}
 
-	public static boolean sendToCluId(AioConfig aioConfig,
+	public static Boolean sendToCluId(AioConfig aioConfig,
 									  String cluId,
 									  Packet packet,
 									  ChannelContextFilter channelContextFilter) {
 		return sendToCluId(aioConfig, cluId, packet, channelContextFilter, false);
 	}
 
-	private static boolean sendToCluId(AioConfig aioConfig,
+	private static Boolean sendToCluId(AioConfig aioConfig,
 									   String cluId,
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter,
@@ -878,13 +878,13 @@ public class Aio {
 	}
 
 
-	public static boolean sendToGroup(AioConfig aioConfig,
+	public static Boolean sendToGroup(AioConfig aioConfig,
 									  String groupId,
 									  Packet packet) {
 		return sendToGroup(aioConfig, groupId, packet, null);
 	}
 
-	public static boolean sendToGroup(AioConfig aioConfig,
+	public static Boolean sendToGroup(AioConfig aioConfig,
 									  String groupId,
 									  Packet packet,
 									  ChannelContextFilter channelContextFilter) {
@@ -898,7 +898,7 @@ public class Aio {
 	 * @param packet    消息包
 	 * @param aioConfig 发送者上下文
 	 */
-	public static boolean sendToGroup(AioConfig aioConfig,
+	public static Boolean sendToGroup(AioConfig aioConfig,
 									  String groupId,
 									  Packet packet,
 									  ChannelContextFilter channelContextFilter,
@@ -915,33 +915,33 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-	public static boolean sendToId(AioConfig config,
+	public static Boolean sendToId(AioConfig config,
 								   String id,
 								   Packet packet) {
 		return sendToId(config, id, packet, false);
 	}
 
-	private static boolean sendToId(AioConfig config,
+	private static Boolean sendToId(AioConfig config,
 									String id,
 									Packet packet,
 									boolean isBlock) {
 		return send0(getChannelContextById(config, id), packet, isBlock);
 	}
 
-	public static boolean sendToIp(AioConfig aioConfig,
+	public static Boolean sendToIp(AioConfig aioConfig,
 								   String ip,
 								   Packet packet) {
 		return sendToIp(aioConfig, ip, packet, null);
 	}
 
-	public static boolean sendToIp(AioConfig aioConfig,
+	public static Boolean sendToIp(AioConfig aioConfig,
 								   String ip,
 								   Packet packet,
 								   ChannelContextFilter channelContextFilter) {
 		return sendToIp(aioConfig, ip, packet, channelContextFilter, false);
 	}
 
-	public static boolean sendToIp(AioConfig aioConfig,
+	public static Boolean sendToIp(AioConfig aioConfig,
 								   String ip,
 								   Packet packet,
 								   ChannelContextFilter channelContextFilter,
@@ -957,20 +957,20 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-	public static boolean sendToSet(AioConfig aioConfig,
+	public static Boolean sendToSet(AioConfig aioConfig,
 									SetWithLock<ChannelContext> setWithLock,
 									Packet packet) {
 		return sendToSet(aioConfig, setWithLock, packet, null);
 	}
 
-	public static boolean sendToSet(AioConfig aioConfig,
+	public static Boolean sendToSet(AioConfig aioConfig,
 									SetWithLock<ChannelContext> setWithLock,
 									Packet packet,
 									ChannelContextFilter channelContextFilter) {
 		return sendToSet(aioConfig, setWithLock, packet, channelContextFilter, false);
 	}
 
-	private static boolean sendToSet(AioConfig aioConfig,
+	private static Boolean sendToSet(AioConfig aioConfig,
 									 SetWithLock<ChannelContext> setWithLock,
 									 Packet packet,
 									 ChannelContextFilter channelContextFilter,
@@ -1012,20 +1012,20 @@ public class Aio {
 		return sendNum.longValue() == sendSuc.longValue();
 	}
 
-	public static boolean sendToToken(AioConfig aioConfig,
+	public static Boolean sendToToken(AioConfig aioConfig,
 									  String token,
 									  Packet packet) {
 		return sendToToken(aioConfig, token, packet, null);
 	}
 
-	public static boolean sendToToken(AioConfig aioConfig,
+	public static Boolean sendToToken(AioConfig aioConfig,
 									  String token,
 									  Packet packet,
 									  ChannelContextFilter channelContextFilter) {
 		return sendToToken(aioConfig, token, packet, channelContextFilter, false);
 	}
 
-	private static boolean sendToToken(AioConfig aioConfig,
+	private static Boolean sendToToken(AioConfig aioConfig,
 									   String token,
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter,
@@ -1040,20 +1040,20 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
-	public static boolean sendToUser(AioConfig aioConfig,
+	public static Boolean sendToUser(AioConfig aioConfig,
 									 String user,
 									 Packet packet) {
 		return sendToUser(aioConfig, user, packet, null);
 	}
 
-	public static boolean sendToUser(AioConfig aioConfig,
+	public static Boolean sendToUser(AioConfig aioConfig,
 									 String user,
 									 Packet packet,
 									 ChannelContextFilter channelContextFilter) {
 		return sendToUser(aioConfig, user, packet, channelContextFilter, false);
 	}
 
-	private static boolean sendToUser(AioConfig aioConfig,
+	private static Boolean sendToUser(AioConfig aioConfig,
 									  String user,
 									  Packet packet,
 									  ChannelContextFilter channelContextFilter,
@@ -1071,7 +1071,7 @@ public class Aio {
 
 	// UnBing篇
 
-	public static boolean unbindFromAll(AioConfig aioConfig,
+	public static Boolean unbindFromAll(AioConfig aioConfig,
 										ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return unbindBsId(aioConfig, "", channelContext)
@@ -1084,12 +1084,12 @@ public class Aio {
 				&& unbindFromAllUser(channelContext);
 	}
 
-	public static boolean unbindBsId(AioConfig aioConfig,
+	public static Boolean unbindBsId(AioConfig aioConfig,
 									 String bsId) {
 		return unbindBsId(aioConfig, bsId, null);
 	}
 
-	public static boolean unbindBsId(AioConfig aioConfig,
+	public static Boolean unbindBsId(AioConfig aioConfig,
 									 String bsId,
 									 ChannelContext channelContext) {
 		return aioConfig
@@ -1098,12 +1098,12 @@ public class Aio {
 				.remove(bsId, channelContext);
 	}
 
-	public static boolean unbindClientNode(AioConfig aioConfig,
+	public static Boolean unbindClientNode(AioConfig aioConfig,
 										   String cliNode) {
 		return unbindClientNode(aioConfig, cliNode, null);
 	}
 
-	public static boolean unbindClientNode(AioConfig aioConfig,
+	public static Boolean unbindClientNode(AioConfig aioConfig,
 										   String cliNode,
 										   ChannelContext channelContext) {
 		return aioConfig
@@ -1112,7 +1112,7 @@ public class Aio {
 				.remove(cliNode, channelContext);
 	}
 
-	public static boolean unbindClu(String cluId,
+	public static Boolean unbindClu(String cluId,
 									ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext.
@@ -1122,7 +1122,7 @@ public class Aio {
 				.remove(cluId, channelContext);
 	}
 
-	public static boolean unbindFromAllClu(ChannelContext channelContext) {
+	public static Boolean unbindFromAllClu(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
 				.getAioConfig()
@@ -1131,7 +1131,7 @@ public class Aio {
 				.removeAll(channelContext);
 	}
 
-	public static boolean unbindGroup(String groupId,
+	public static Boolean unbindGroup(String groupId,
 									  ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
@@ -1141,7 +1141,7 @@ public class Aio {
 				.remove(groupId, channelContext);
 	}
 
-	public static boolean unbindFromAllGroup(ChannelContext channelContext) {
+	public static Boolean unbindFromAllGroup(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
 				.getAioConfig()
@@ -1150,12 +1150,12 @@ public class Aio {
 				.removeAll(channelContext);
 	}
 
-	public static boolean unbindId(AioConfig aioConfig,
+	public static Boolean unbindId(AioConfig aioConfig,
 								   String id) {
 		return unbindId(aioConfig, id, null);
 	}
 
-	public static boolean unbindId(AioConfig aioConfig,
+	public static Boolean unbindId(AioConfig aioConfig,
 								   String id,
 								   ChannelContext channelContext) {
 		return aioConfig
@@ -1164,7 +1164,7 @@ public class Aio {
 				.remove(id, channelContext);
 	}
 
-	public static boolean unbindIp(String ip,
+	public static Boolean unbindIp(String ip,
 								   ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
@@ -1174,7 +1174,7 @@ public class Aio {
 				.remove(ip, channelContext);
 	}
 
-	public static boolean unbindFromAllIp(ChannelContext channelContext) {
+	public static Boolean unbindFromAllIp(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
 				.getAioConfig()
@@ -1183,7 +1183,7 @@ public class Aio {
 				.removeAll(channelContext);
 	}
 
-	public static boolean unbindToken(String token,
+	public static Boolean unbindToken(String token,
 									  ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
@@ -1193,7 +1193,7 @@ public class Aio {
 				.remove(token, channelContext);
 	}
 
-	public static boolean unbindFromAllToken(ChannelContext channelContext) {
+	public static Boolean unbindFromAllToken(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
 				.getAioConfig()
@@ -1202,7 +1202,7 @@ public class Aio {
 				.removeAll(channelContext);
 	}
 
-	public static boolean unbindUser(String user,
+	public static Boolean unbindUser(String user,
 									 ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
@@ -1212,7 +1212,7 @@ public class Aio {
 				.remove(user, channelContext);
 	}
 
-	public static boolean unbindFromAllUser(ChannelContext channelContext) {
+	public static Boolean unbindFromAllUser(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
 				.getAioConfig()
