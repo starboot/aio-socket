@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 
@@ -500,8 +501,13 @@ public class Aio {
 		return aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).getSet(cluId).size();
 	}
 
-	public static void isInClu(AioConfig aioConfig, String cluId, ChannelContext channelContext) {
+	public static boolean isInClu(AioConfig aioConfig, String cluId, ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.CLU_ID).getSet(cluId);
+		AtomicBoolean contains = new AtomicBoolean(false);
+		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>) channelContextSet -> {
+			contains.set(channelContextSet.contains(channelContext));
+		});
+		return contains.get();
 	}
 
 	// 按照分页获取群组
@@ -515,8 +521,13 @@ public class Aio {
 	}
 
 	// 某通道是否在某群组中
-	public static void isInGroup(AioConfig aioConfig, String groupId, ChannelContext channelContext) {
+	public static boolean isInGroup(AioConfig aioConfig, String groupId, ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.GROUP_ID).getSet(groupId);
+		AtomicBoolean contains = new AtomicBoolean(false);
+		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>) channelContextSet -> {
+			contains.set(channelContextSet.contains(channelContext));
+		});
+		return contains.get();
 	}
 
 	public static void getPageOfIp(AioConfig aioConfig, String ip, Integer pageIndex, Integer pageSize) {
@@ -527,8 +538,13 @@ public class Aio {
 		return aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).getSet(ip).size();
 	}
 
-	public static void isInIp(AioConfig aioConfig, String ip, ChannelContext channelContext) {
+	public static boolean isInIp(AioConfig aioConfig, String ip, ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.IP).getSet(ip);
+		AtomicBoolean contains = new AtomicBoolean(false);
+		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>) channelContextSet -> {
+			contains.set(channelContextSet.contains(channelContext));
+		});
+		return contains.get();
 	}
 
 	public static void getPageOfToken(AioConfig aioConfig, String token, Integer pageIndex, Integer pageSize) {
@@ -539,8 +555,13 @@ public class Aio {
 		return aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).getSet(token).size();
 	}
 
-	public static void isInToken(AioConfig aioConfig, String token, ChannelContext channelContext) {
+	public static boolean isInToken(AioConfig aioConfig, String token, ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.TOKEN).getSet(token);
+		AtomicBoolean contains = new AtomicBoolean(false);
+		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>) channelContextSet -> {
+			contains.set(channelContextSet.contains(channelContext));
+		});
+		return contains.get();
 	}
 
 	public static void getPageOfUser(AioConfig aioConfig, String user, Integer pageIndex, Integer pageSize) {
@@ -551,8 +572,13 @@ public class Aio {
 		return aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).getSet(user).size();
 	}
 
-	public static void isInUser(AioConfig aioConfig, String user, ChannelContext channelContext) {
+	public static boolean isInUser(AioConfig aioConfig, String user, ChannelContext channelContext) {
 		SetWithLock<ChannelContext> setWithLock = aioConfig.getMaintainManager().getCommand(MaintainEnum.USER).getSet(user);
+		AtomicBoolean contains = new AtomicBoolean(false);
+		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>) channelContextSet -> {
+			contains.set(channelContextSet.contains(channelContext));
+		});
+		return contains.get();
 	}
 
 	// Remove
