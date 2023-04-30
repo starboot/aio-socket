@@ -268,17 +268,12 @@ public class Aio {
 			return;
 		}
 		// 从各个关系中移除
-//		Boolean aBoolean = removeUserFromAllGroup(channelContext);
-		channelContext
-				.getAioConfig()
-				.getMaintainManager()
-				.getCommand(MaintainEnum.ID)
-				.remove(channelContext.getId(), channelContext);
+		Boolean aBoolean = unbindFromAll(channelContext);
 		// 停止各种处理器的运行
 		channelContext.getDecodeTaskRunnable().setCanceled(true);
 		channelContext.getHandlerTaskRunnable().setCanceled(true);
 		channelContext.getSendTaskRunnable().setCanceled(true);
-
+		// 设置关闭码
 		if (Objects.isNull(closeCode)) {
 			if (Objects.equals(channelContext.getCloseCode(), CloseCode.INIT_STATUS)) {
 				channelContext.setCloseCode(CloseCode.NO_CODE);
@@ -1099,8 +1094,7 @@ public class Aio {
 
 	// UnBing篇
 
-	public static Boolean unbindFromAll(AioConfig aioConfig,
-										ChannelContext channelContext) {
+	public static Boolean unbindFromAll(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return unbindBsId(channelContext)
 				&& unbindClientNode(channelContext)
