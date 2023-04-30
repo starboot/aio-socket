@@ -541,7 +541,8 @@ public class Aio {
 	}
 
 	// 群组有多少个连接
-	public static int groupCount(AioConfig aioConfig, String groupId) {
+	public static int groupCount(AioConfig aioConfig,
+								 String groupId) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
@@ -571,7 +572,8 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
-	public static int ipCount(AioConfig aioConfig, String ip) {
+	public static int ipCount(AioConfig aioConfig,
+							  String ip) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
@@ -630,7 +632,8 @@ public class Aio {
 		return getPageOfSet(setWithLock, pageIndex, pageSize);
 	}
 
-	public static int userCount(AioConfig aioConfig, String user) {
+	public static int userCount(AioConfig aioConfig,
+								String user) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
