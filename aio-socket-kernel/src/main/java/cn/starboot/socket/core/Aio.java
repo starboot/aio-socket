@@ -51,8 +51,9 @@ public class Aio {
 	 * 绑定业务ID
 	 *
 	 * @param bsId 业务ID
-	 * @param channelContext 用户上下文信息
-	 * @return 绑定状态
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return {@code true} 绑定成功 或者
+	 * 		   {@code false} 绑定失败
 	 */
 	public static Boolean bindBsId(String bsId,
 								   ChannelContext channelContext) {
@@ -71,7 +72,7 @@ public class Aio {
 	 * 绑定客户端ip+端口
 	 *
 	 * @param cliNode 客户端
-	 * @param channelContext 用户上下文信息
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
 	public static Boolean bindCliNode(String cliNode,
@@ -91,7 +92,7 @@ public class Aio {
 	 * 绑定集群ID
 	 *
 	 * @param cluId 集群ID
-	 * @param channelContext 用户上下文信息
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
 	public static Boolean bindCluId(String cluId,
@@ -111,7 +112,7 @@ public class Aio {
 	 * 绑定群组：提供群组ID和用户上下文信息
 	 *
 	 * @param groupId 群组ID
-	 * @param channelContext 用户上下文信息
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
 	public static Boolean bindGroup(String groupId,
@@ -145,7 +146,7 @@ public class Aio {
 	 * 绑定ID
 	 *
 	 * @param id ID
-	 * @param channelContext 用户上下文信息
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
 	public static Boolean bindId(String id,
@@ -166,7 +167,7 @@ public class Aio {
 	 * 绑定IP
 	 *
 	 * @param ip IP
-	 * @param channelContext 用户上下文信息
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
 	public static Boolean bindIp(String ip,
@@ -186,7 +187,7 @@ public class Aio {
 	 * 绑定token
 	 *
 	 * @param token TOKEN
-	 * @param channelContext 用户上下文信息
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
 	public static Boolean bindToken(String token,
@@ -206,7 +207,7 @@ public class Aio {
 	 * 绑定用户
 	 *
 	 * @param user USER
-	 * @param channelContext 用户上下文信息
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
 	public static Boolean bindUser(String user,
@@ -227,8 +228,8 @@ public class Aio {
 	/**
 	 * 同步发送到指定用户
 	 *
-	 * @param channelContext 用户上下文信息
-	 * @param packet
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSend(ChannelContext channelContext,
@@ -243,7 +244,7 @@ public class Aio {
 	 * 同步发送到平台所有用户
 	 *
 	 * @param aioConfig
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSendToAll(AioConfig aioConfig,
@@ -255,7 +256,7 @@ public class Aio {
 	 * 同步发送到平台所有用户，并且带有过滤规则
 	 *
 	 * @param aioConfig
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter
 	 * @return
 	 */
@@ -270,7 +271,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param bsId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSendToBsId(AioConfig aioConfig,
@@ -285,7 +286,7 @@ public class Aio {
 	 * @param aioConfig
 	 * @param ip
 	 * @param port
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSendToClientNode(AioConfig aioConfig,
@@ -300,7 +301,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSendToCluId(AioConfig aioConfig,
@@ -314,7 +315,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter
 	 * @return
 	 */
@@ -329,7 +330,7 @@ public class Aio {
 	 * 同步发送到指定群组中
 	 *
 	 * @param groupId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @param aioConfig
 	 * @return
 	 */
@@ -344,7 +345,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param groupId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter
 	 * @return
 	 */
@@ -360,7 +361,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param bsId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSendToId(AioConfig aioConfig,
@@ -374,7 +375,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSendToIp(AioConfig aioConfig,
@@ -388,7 +389,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter
 	 * @return
 	 */
@@ -404,7 +405,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSendToToken(AioConfig aioConfig,
@@ -418,7 +419,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter
 	 * @return
 	 */
@@ -434,7 +435,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return
 	 */
 	public static Boolean bSendToUser(AioConfig aioConfig,
@@ -448,7 +449,7 @@ public class Aio {
 	 *
 	 * @param aioConfig
 	 * @param cluId
-	 * @param packet
+	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter
 	 * @return
 	 */
