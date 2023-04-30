@@ -1102,14 +1102,18 @@ public class Aio {
 	public static Boolean unbindFromAll(AioConfig aioConfig,
 										ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
-		return unbindBsId(aioConfig, "", channelContext)
-				&& unbindClientNode(aioConfig, "", channelContext)
+		return unbindBsId(channelContext)
+				&& unbindClientNode(channelContext)
 				&& unbindFromAllClu(channelContext)
 				&& unbindFromAllGroup(channelContext)
-				&& unbindId(aioConfig, "", channelContext)
+				&& unbindId(channelContext)
 				&& unbindFromAllIp(channelContext)
 				&& unbindFromAllToken(channelContext)
 				&& unbindFromAllUser(channelContext);
+	}
+
+	public static Boolean unbindBsId(ChannelContext channelContext) {
+		return unbindBsId(channelContext.getAioConfig(), null, channelContext);
 	}
 
 	public static Boolean unbindBsId(AioConfig aioConfig,
@@ -1124,6 +1128,10 @@ public class Aio {
 				.getMaintainManager()
 				.getCommand(MaintainEnum.Bs_ID)
 				.remove(bsId, channelContext);
+	}
+
+	public static Boolean unbindClientNode(ChannelContext channelContext) {
+		return unbindClientNode(channelContext.getAioConfig(), null, channelContext);
 	}
 
 	public static Boolean unbindClientNode(AioConfig aioConfig,
@@ -1176,6 +1184,10 @@ public class Aio {
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
 				.removeAll(channelContext);
+	}
+
+	public static Boolean unbindId(ChannelContext channelContext) {
+		return unbindId(channelContext.getAioConfig(), null, channelContext);
 	}
 
 	public static Boolean unbindId(AioConfig aioConfig,

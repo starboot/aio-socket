@@ -44,6 +44,9 @@ public abstract class AbstractMultiMaintain extends AbstractMaintain {
 	 */
 	@Override
 	public boolean remove(String id, ChannelContext context) {
+		if (Objects.isNull(id) || id.equals("") || id.length() == 0 || Objects.isNull(context)) {
+			return false;
+		}
 		boolean result;
 		if (Objects.isNull(getMultiMaintainMap().get(id)) && !(getMultiMaintainMap().get(id).getObj().contains(context))) {
 			return true;

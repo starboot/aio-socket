@@ -5,6 +5,7 @@ import cn.starboot.socket.core.ChannelContext;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractSingleMaintain extends AbstractMaintain {
 
@@ -45,6 +46,16 @@ public abstract class AbstractSingleMaintain extends AbstractMaintain {
 	 */
 	@Override
 	public boolean remove(String id, ChannelContext context) {
+		if (Objects.isNull(id) || id.equals("") || id.length() == 0) {
+			if (Objects.isNull(context)) return false;
+			AtomicBoolean r = new AtomicBoolean(false);
+			getSingleMaintainMap().forEach((s, channelContext) -> {
+				if (Objects.equals(channelContext, context)) {
+					r.set(!Objects.isNull(s) && !s.equals("") && s.length() != 0 && remove(s, context));
+				}
+			});
+			return r.get();
+		}
 		ChannelContext singleMaintainMapChannelContext = getSingleMaintainMap().get(id);
 		if (Objects.isNull(singleMaintainMapChannelContext)) {
 			return true;
