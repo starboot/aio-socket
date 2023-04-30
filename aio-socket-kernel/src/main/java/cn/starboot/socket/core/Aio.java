@@ -269,7 +269,7 @@ public class Aio {
 			return;
 		}
 		// 从各个关系中移除
-		Boolean aBoolean = removeUserFromAllGroup(channelContext);
+//		Boolean aBoolean = removeUserFromAllGroup(channelContext);
 		channelContext
 				.getAioConfig()
 				.getMaintainManager()
@@ -683,15 +683,7 @@ public class Aio {
 		return contains.get();
 	}
 
-	// Remove
-	public static Boolean removeUserFromAllGroup(ChannelContext channelContext) {
-		if (Objects.isNull(channelContext)) return true;
-		return channelContext
-				.getAioConfig()
-				.getMaintainManager()
-				.getCommand(MaintainEnum.GROUP_ID)
-				.removeAll(channelContext);
-	}
+	// Remove 篇
 
 	public static void remove(ChannelContext channelContext) {
 		remove(channelContext, null);
