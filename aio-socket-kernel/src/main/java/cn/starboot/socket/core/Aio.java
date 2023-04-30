@@ -293,12 +293,24 @@ public class Aio {
 
 	public static void closeBsId(AioConfig aioConfig,
 								 String bsId) {
-		close(getChannelContextByBsId(aioConfig, bsId));
+		closeBsId(aioConfig, bsId, null);
+	}
+
+	public static void closeBsId(AioConfig aioConfig,
+								 String bsId,
+								 CloseCode closeCode) {
+		close(getChannelContextByBsId(aioConfig, bsId), closeCode);
 	}
 
 	public static void closeClientNode(AioConfig aioConfig,
 									   String clientNode) {
-		close(getChannelContextByClientNode(aioConfig, clientNode));
+		closeClientNode(aioConfig, clientNode, null);
+	}
+
+	public static void closeClientNode(AioConfig aioConfig,
+									   String clientNode,
+									   CloseCode closeCode) {
+		close(getChannelContextByClientNode(aioConfig, clientNode), closeCode);
 	}
 
 	public static void closeClu(AioConfig aioConfig,
@@ -325,7 +337,13 @@ public class Aio {
 
 	public static void closeId(AioConfig aioConfig,
 							   String id) {
-		close(getChannelContextById(aioConfig, id));
+		closeId(aioConfig, id, null);
+	}
+
+	public static void closeId(AioConfig aioConfig,
+							   String id,
+							   CloseCode closeCode) {
+		close(getChannelContextById(aioConfig, id), closeCode);
 	}
 
 	public static void closeIp(AioConfig aioConfig,
