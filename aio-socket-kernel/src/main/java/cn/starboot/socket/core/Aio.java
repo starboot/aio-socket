@@ -474,10 +474,21 @@ public class Aio {
 
 	// --------------------------------close篇--------------------------------
 
+	/**
+	 * 关闭指定通道的连接
+	 *
+	 * @param channelContext
+	 */
 	public static void close(ChannelContext channelContext) {
 		close(channelContext, null);
 	}
 
+	/**
+	 * 关闭指定通道的连接，并提供关闭码
+	 *
+	 * @param channelContext
+	 * @param closeCode
+	 */
 	public static void close(ChannelContext channelContext,
 							 CloseCode closeCode) {
 		if (Objects.isNull(channelContext)) {
@@ -501,94 +512,203 @@ public class Aio {
 		channelContext.close();
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param bsId
+	 */
 	public static void closeBsId(AioConfig aioConfig,
 								 String bsId) {
 		closeBsId(aioConfig, bsId, null);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接，
+	 *
+	 * @param aioConfig
+	 * @param bsId
+	 * @param closeCode
+	 */
 	public static void closeBsId(AioConfig aioConfig,
 								 String bsId,
 								 CloseCode closeCode) {
 		close(getChannelContextByBsId(aioConfig, bsId), closeCode);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param clientNode
+	 */
 	public static void closeClientNode(AioConfig aioConfig,
 									   String clientNode) {
 		closeClientNode(aioConfig, clientNode, null);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param clientNode
+	 * @param closeCode
+	 */
 	public static void closeClientNode(AioConfig aioConfig,
 									   String clientNode,
 									   CloseCode closeCode) {
 		close(getChannelContextByClientNode(aioConfig, clientNode), closeCode);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 * @param aioConfig
+	 * @param cluId
+	 */
 	public static void closeClu(AioConfig aioConfig,
 								String cluId) {
 		closeClu(aioConfig, cluId, null);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 * @param aioConfig
+	 * @param cluId
+	 * @param closeCode
+	 */
 	public static void closeClu(AioConfig aioConfig,
 								String cluId,
 								CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByCluId(aioConfig, cluId), closeCode);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param groupId
+	 */
 	public static void closeGroup(AioConfig aioConfig,
 								  String groupId) {
 		closeGroup(aioConfig, groupId, null);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param groupId
+	 * @param closeCode
+	 */
 	public static void closeGroup(AioConfig aioConfig,
 								  String groupId,
 								  CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByGroupId(aioConfig, groupId), closeCode);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param id
+	 */
 	public static void closeId(AioConfig aioConfig,
 							   String id) {
 		closeId(aioConfig, id, null);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param id
+	 * @param closeCode
+	 */
 	public static void closeId(AioConfig aioConfig,
 							   String id,
 							   CloseCode closeCode) {
 		close(getChannelContextById(aioConfig, id), closeCode);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param ip
+	 */
 	public static void closeIp(AioConfig aioConfig,
 							   String ip) {
 		closeIp(aioConfig, ip, null);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param ip
+	 * @param closeCode
+	 */
 	public static void closeIp(AioConfig aioConfig,
 							   String ip,
 							   CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByIp(aioConfig, ip), closeCode);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param token
+	 */
 	public static void closeToken(AioConfig aioConfig,
 								  String token) {
 		closeToken(aioConfig, token, null);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param token
+	 * @param closeCode
+	 */
 	public static void closeToken(AioConfig aioConfig,
 								  String token,
 								  CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByToken(aioConfig, token), closeCode);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param user
+	 */
 	public static void closeUser(AioConfig aioConfig,
 								 String user) {
 		closeUser(aioConfig, user, null);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param user
+	 * @param closeCode
+	 */
 	public static void closeUser(AioConfig aioConfig,
 								 String user,
 								 CloseCode closeCode) {
 		closeSet(aioConfig, getChannelContextByUser(aioConfig, user), closeCode);
 	}
 
+	/**
+	 * 关闭指定业务ID的连接
+	 *
+	 * @param aioConfig
+	 * @param setWithLock
+	 * @param closeCode
+	 */
 	public static void closeSet(AioConfig aioConfig,
 								SetWithLock<ChannelContext> setWithLock,
 								CloseCode closeCode) {
