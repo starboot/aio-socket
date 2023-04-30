@@ -752,7 +752,7 @@ public class Aio {
 	 * 根据业务ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId
+	 * @param bsId 业务ID
 	 * @return
 	 */
 	public static ChannelContext getByBsId(AioConfig aioConfig,
@@ -767,7 +767,7 @@ public class Aio {
 	 * 根据业务ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId
+	 * @param bsId 业务ID
 	 * @return
 	 */
 	public static ChannelContext getChannelContextByBsId(AioConfig aioConfig,
@@ -779,7 +779,7 @@ public class Aio {
 	 * 根据客户节点获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param clientNode
+	 * @param clientNode 客户节点
 	 * @return
 	 */
 	public static ChannelContext getByClientNode(AioConfig aioConfig,
@@ -794,7 +794,7 @@ public class Aio {
 	 * 根据客户节点获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param clientNode
+	 * @param clientNode 客户节点
 	 * @return
 	 */
 	public static ChannelContext getChannelContextByClientNode(AioConfig aioConfig,
@@ -806,7 +806,7 @@ public class Aio {
 	 * 根据集群ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId
+	 * @param cluId 集群ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByCluId(AioConfig aioConfig,
@@ -821,7 +821,7 @@ public class Aio {
 	 * 根据集群ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId
+	 * @param cluId 集群ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByCluId(AioConfig aioConfig,
@@ -833,7 +833,7 @@ public class Aio {
 	 * 根据群组ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId
+	 * @param groupId 群组ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByGroupId(AioConfig aioConfig,
@@ -848,7 +848,7 @@ public class Aio {
 	 * 根据群组ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId
+	 * @param groupId 群组ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByGroupId(AioConfig aioConfig,
@@ -860,7 +860,7 @@ public class Aio {
 	 * 根据ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id
+	 * @param id ID
 	 * @return
 	 */
 	public static ChannelContext getById(AioConfig aioConfig,
@@ -875,7 +875,7 @@ public class Aio {
 	 * 根据ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id
+	 * @param id ID
 	 * @return
 	 */
 	public static ChannelContext getChannelContextById(AioConfig aioConfig,
@@ -887,7 +887,7 @@ public class Aio {
 	 * 根据IP获取指定IP下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip
+	 * @param ip IP
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByIp(AioConfig aioConfig,
@@ -902,7 +902,7 @@ public class Aio {
 	 * 根据IP获取指定IP下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip
+	 * @param ip IP
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByIp(AioConfig aioConfig,
@@ -914,7 +914,7 @@ public class Aio {
 	 * 根据TOKEN获取指定TOKEN下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token
+	 * @param token TOKEN
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByToken(AioConfig aioConfig,
@@ -929,7 +929,7 @@ public class Aio {
 	 * 根据集群TOKEN获取指定TOKEN下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token
+	 * @param token TOKEN
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByToken(AioConfig aioConfig,
@@ -941,7 +941,7 @@ public class Aio {
 	 * 根据USER获取指定USER下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user
+	 * @param user USER
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByUser(AioConfig aioConfig,
@@ -956,7 +956,7 @@ public class Aio {
 	 * 根据USER获取指定USER下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user
+	 * @param user USER
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByUser(AioConfig aioConfig,
