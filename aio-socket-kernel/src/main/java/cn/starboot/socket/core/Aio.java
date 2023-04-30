@@ -753,7 +753,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param bsId 业务ID
-	 * @return
+	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getByBsId(AioConfig aioConfig,
 										   String bsId) {
@@ -768,7 +768,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param bsId 业务ID
-	 * @return
+	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getChannelContextByBsId(AioConfig aioConfig,
 														 String bsId) {
@@ -780,7 +780,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param clientNode 客户节点
-	 * @return
+	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getByClientNode(AioConfig aioConfig,
 												 String clientNode) {
@@ -795,7 +795,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param clientNode 客户节点
-	 * @return
+	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getChannelContextByClientNode(AioConfig aioConfig,
 															   String clientNode) {
@@ -861,7 +861,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param id ID
-	 * @return
+	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getById(AioConfig aioConfig,
 										 String id) {
@@ -876,7 +876,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param id ID
-	 * @return
+	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getChannelContextById(AioConfig aioConfig,
 													   String id) {
