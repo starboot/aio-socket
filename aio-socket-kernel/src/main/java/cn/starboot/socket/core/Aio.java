@@ -1020,7 +1020,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId
-	 * @param channelContext
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
 	public static Boolean isInClu(AioConfig aioConfig,
@@ -1075,7 +1075,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId
-	 * @param channelContext
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
 	// 某通道是否在某群组中
@@ -1131,7 +1131,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip
-	 * @param channelContext
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
 	public static Boolean isInIp(AioConfig aioConfig,
@@ -1185,7 +1185,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token
-	 * @param channelContext
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
 	public static Boolean isInToken(AioConfig aioConfig,
@@ -1239,7 +1239,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user
-	 * @param channelContext
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
 	public static Boolean isInUser(AioConfig aioConfig,
