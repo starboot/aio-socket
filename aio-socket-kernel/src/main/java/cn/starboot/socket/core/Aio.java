@@ -2088,6 +2088,12 @@ public class Aio {
 
 	// -------------------------------unBing篇--------------------------------
 
+	/**
+	 * 将指定用户的上下文信息从目前系统所存在的所有关系中解除
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindFromAll(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return unbindBsId(channelContext)
@@ -2100,15 +2106,36 @@ public class Aio {
 				&& unbindFromAllUser(channelContext);
 	}
 
+	/**
+	 * 解绑指定用户的业务ID，且不提供业务ID
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindBsId(ChannelContext channelContext) {
 		return unbindBsId(channelContext.getAioConfig(), null, channelContext);
 	}
 
+	/**
+	 * 解绑指定用户的业务ID，提供业务ID
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId 业务ID
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindBsId(AioConfig aioConfig,
 									 String bsId) {
 		return unbindBsId(aioConfig, bsId, null);
 	}
 
+	/**
+	 * 解绑指定用户的业务ID，提供业务ID和用户上下文信息
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId 业务ID
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindBsId(AioConfig aioConfig,
 									 String bsId,
 									 ChannelContext channelContext) {
@@ -2118,15 +2145,36 @@ public class Aio {
 				.remove(bsId, channelContext);
 	}
 
+	/**
+	 * 解绑客户端节点
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindClientNode(ChannelContext channelContext) {
 		return unbindClientNode(channelContext.getAioConfig(), null, channelContext);
 	}
 
+	/**
+	 * 解绑客户端节点
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cliNode 客户节点
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindClientNode(AioConfig aioConfig,
 										   String cliNode) {
 		return unbindClientNode(aioConfig, cliNode, null);
 	}
 
+	/**
+	 * 解绑客户端节点
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cliNode 客户节点
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindClientNode(AioConfig aioConfig,
 										   String cliNode,
 										   ChannelContext channelContext) {
@@ -2136,6 +2184,13 @@ public class Aio {
 				.remove(cliNode, channelContext);
 	}
 
+	/**
+	 * 从指定集群组内解绑
+	 *
+	 * @param cluId 集群ID
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindClu(String cluId,
 									ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
@@ -2146,6 +2201,12 @@ public class Aio {
 				.remove(cluId, channelContext);
 	}
 
+	/**
+	 * 从所有集群组内都解绑
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindFromAllClu(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
@@ -2155,6 +2216,13 @@ public class Aio {
 				.removeAll(channelContext);
 	}
 
+	/**
+	 * 从指定群组内解绑
+	 *
+	 * @param groupId 群组ID
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindGroup(String groupId,
 									  ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
@@ -2165,6 +2233,12 @@ public class Aio {
 				.remove(groupId, channelContext);
 	}
 
+	/**
+	 * 从所有群组中解绑
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindFromAllGroup(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
@@ -2174,15 +2248,36 @@ public class Aio {
 				.removeAll(channelContext);
 	}
 
+	/**
+	 * 解绑ID
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindId(ChannelContext channelContext) {
 		return unbindId(channelContext.getAioConfig(), null, channelContext);
 	}
 
+	/**
+	 * 解绑ID
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id ID
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindId(AioConfig aioConfig,
 								   String id) {
 		return unbindId(aioConfig, id, null);
 	}
 
+	/**
+	 * 解绑ID
+	 *
+	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id ID
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindId(AioConfig aioConfig,
 								   String id,
 								   ChannelContext channelContext) {
@@ -2192,6 +2287,13 @@ public class Aio {
 				.remove(id, channelContext);
 	}
 
+	/**
+	 * 根据指定IP解绑用户
+	 *
+	 * @param ip IP
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindIp(String ip,
 								   ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
@@ -2202,6 +2304,12 @@ public class Aio {
 				.remove(ip, channelContext);
 	}
 
+	/**
+	 * 从所有IP组内解绑用户
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindFromAllIp(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
@@ -2211,6 +2319,13 @@ public class Aio {
 				.removeAll(channelContext);
 	}
 
+	/**
+	 * 根据TOKEN解绑用户
+	 *
+	 * @param token TOKEN
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindToken(String token,
 									  ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
@@ -2221,6 +2336,12 @@ public class Aio {
 				.remove(token, channelContext);
 	}
 
+	/**
+	 * 从所有TOKEN组内解绑用户
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindFromAllToken(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
@@ -2230,6 +2351,13 @@ public class Aio {
 				.removeAll(channelContext);
 	}
 
+	/**
+	 * 根据USER解绑用户
+	 *
+	 * @param user USER
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindUser(String user,
 									 ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
@@ -2240,6 +2368,12 @@ public class Aio {
 				.remove(user, channelContext);
 	}
 
+	/**
+	 * 从所有USER组内解绑用户
+	 *
+	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @return 解绑状态
+	 */
 	public static Boolean unbindFromAllUser(ChannelContext channelContext) {
 		if (Objects.isNull(channelContext)) return false;
 		return channelContext
