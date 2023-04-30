@@ -686,12 +686,24 @@ public class Aio {
 
 	public static void removeBsId(AioConfig aioConfig,
 								  String bsId) {
-		remove(getChannelContextByBsId(aioConfig, bsId));
+		removeBsId(aioConfig, bsId, null);
+	}
+
+	public static void removeBsId(AioConfig aioConfig,
+								  String bsId,
+								  CloseCode closeCode) {
+		remove(getChannelContextByBsId(aioConfig, bsId), closeCode);
 	}
 
 	public static void removeClientNode(AioConfig aioConfig,
 										String clientNode) {
-		remove(getChannelContextByClientNode(aioConfig, clientNode));
+		removeClientNode(aioConfig, clientNode, null);
+	}
+
+	public static void removeClientNode(AioConfig aioConfig,
+										String clientNode,
+										CloseCode closeCode) {
+		remove(getChannelContextByClientNode(aioConfig, clientNode), closeCode);
 	}
 
 	public static void removeClu(AioConfig aioConfig,
@@ -718,7 +730,13 @@ public class Aio {
 
 	public static void removeId(AioConfig aioConfig,
 								String id) {
-		remove(getChannelContextById(aioConfig, id));
+		removeId(aioConfig, id, null);
+	}
+
+	public static void removeId(AioConfig aioConfig,
+								String id,
+								CloseCode closeCode) {
+		remove(getChannelContextById(aioConfig, id), closeCode);
 	}
 
 	public static void removeIp(AioConfig aioConfig,
