@@ -524,7 +524,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接，
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param bsId
@@ -548,7 +548,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param clientNode
@@ -571,7 +571,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 * @param aioConfig
 	 * @param cluId
 	 * @param closeCode
@@ -594,7 +594,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param groupId
@@ -618,7 +618,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param id
@@ -642,7 +642,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param ip
@@ -666,7 +666,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param token
@@ -690,7 +690,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param user
@@ -703,7 +703,7 @@ public class Aio {
 	}
 
 	/**
-	 * 关闭指定业务ID的连接
+	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig
 	 * @param setWithLock
