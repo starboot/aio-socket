@@ -31,8 +31,12 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 
 /**
- * 基础常用API
- * 绑定ID、绑定群组、单发、群发、移出群、关闭连接
+ * aio-socket基础常用API
+ * 绑定、绑定
+ * 单发（同步发送，异步发送）
+ * 群发
+ * 移除连接、关闭连接
+ * GET：获取指定群组或Id的ChannelContext or ChannelContexts
  *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
@@ -41,6 +45,13 @@ public class Aio {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Aio.class);
 
+	/**
+	 * 绑定业务ID
+	 *
+	 * @param bsId 业务ID
+	 * @param channelContext 用户上下文信息
+	 * @return 绑定状态
+	 */
 	public static Boolean bindBsId(String bsId,
 								   ChannelContext channelContext) {
 		if (Objects.isNull(bsId)
