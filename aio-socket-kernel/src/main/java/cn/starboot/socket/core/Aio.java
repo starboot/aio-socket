@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.Node;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.maintain.MaintainEnum;
 import cn.starboot.socket.utils.lock.ReadLockHandler;
@@ -69,23 +70,21 @@ public class Aio {
 	}
 
 	/**
-	 * 绑定客户端ip+端口
+	 * 绑定客户端节点
 	 *
-	 * @param cliNode 客户端
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
-	public static Boolean bindCliNode(String cliNode,
+	public static Boolean bindCliNode(Node node,
 									  ChannelContext channelContext) {
-		if (Objects.isNull(cliNode)
-				|| Objects.isNull(channelContext)
-				|| cliNode.length() == 0)
+		if (Objects.isNull(node))
 			return false;
 		return channelContext
 				.getAioConfig()
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLIENT_NODE_ID)
-				.join(cliNode, channelContext);
+				.join(node.getAddr(), channelContext);
 	}
 
 	/**
@@ -286,16 +285,14 @@ public class Aio {
 	 * 同步发送到指定用户节点
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
-	 * @param port 端口
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToClientNode(AioConfig aioConfig,
-											String ip,
-											int port,
+											Node node,
 											Packet packet) {
-		return sendToClientNode(aioConfig, ip, port, packet, true);
+		return sendToClientNode(aioConfig, node, packet, true);
 	}
 
 	/**
@@ -540,24 +537,24 @@ public class Aio {
 	 * 关闭指定客户节点的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param clientNode 客户节点
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 */
 	public static void closeClientNode(AioConfig aioConfig,
-									   String clientNode) {
-		closeClientNode(aioConfig, clientNode, null);
+									   Node node) {
+		closeClientNode(aioConfig, node, null);
 	}
 
 	/**
 	 * 关闭指定客户节点的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param clientNode 客户节点
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void closeClientNode(AioConfig aioConfig,
-									   String clientNode,
+									   Node node,
 									   CloseCode closeCode) {
-		close(getChannelContextByClientNode(aioConfig, clientNode), closeCode);
+		close(getChannelContextByClientNode(aioConfig, node), closeCode);
 	}
 
 	/**
@@ -779,27 +776,27 @@ public class Aio {
 	 * 根据客户节点获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param clientNode 客户节点
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getByClientNode(AioConfig aioConfig,
-												 String clientNode) {
+												 Node node) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLIENT_NODE_ID)
-				.getChannelContext(clientNode);
+				.getChannelContext(node.getAddr());
 	}
 
 	/**
 	 * 根据客户节点获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param clientNode 客户节点
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getChannelContextByClientNode(AioConfig aioConfig,
-															   String clientNode) {
-		return getByClientNode(aioConfig, clientNode);
+															   Node node) {
+		return getByClientNode(aioConfig, node);
 	}
 
 	/**
@@ -1331,24 +1328,24 @@ public class Aio {
 	 * 根据客户节点移除连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param clientNode 客户节点
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 */
 	public static void removeClientNode(AioConfig aioConfig,
-										String clientNode) {
-		removeClientNode(aioConfig, clientNode, null);
+										Node node) {
+		removeClientNode(aioConfig, node, null);
 	}
 
 	/**
 	 * 根据客户节点移除连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param clientNode 客户节点
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
 	 */
 	public static void removeClientNode(AioConfig aioConfig,
-										String clientNode,
+										Node node,
 										CloseCode closeCode) {
-		remove(getChannelContextByClientNode(aioConfig, clientNode), closeCode);
+		remove(getChannelContextByClientNode(aioConfig, node), closeCode);
 	}
 
 	/**
@@ -1637,37 +1634,33 @@ public class Aio {
 	 * 向指定客户节点用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip ip
-	 * @param port port
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToClientNode(AioConfig aioConfig,
-										   String ip,
-										   int port,
+										   Node node,
 										   Packet packet) {
-		return sendToClientNode(aioConfig, ip, port, packet, false);
+		return sendToClientNode(aioConfig, node, packet, false);
 	}
 
 	/**
 	 * 向指定客户节点用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
-	 * @param port port
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @param isBlock 是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	private static Boolean sendToClientNode(AioConfig aioConfig,
-											String ip,
-											int port,
+											Node node,
 											Packet packet,
 											boolean isBlock) {
 		ChannelContext channelContext = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLIENT_NODE_ID)
-				.getChannelContext(ip + port);
+				.getChannelContext(node.getAddr());
 		return send0(channelContext, packet, isBlock);
 	}
 
@@ -2171,29 +2164,33 @@ public class Aio {
 	 * 解绑客户端节点
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cliNode 客户节点
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @return 解绑状态
 	 */
 	public static Boolean unbindClientNode(AioConfig aioConfig,
-										   String cliNode) {
-		return unbindClientNode(aioConfig, cliNode, null);
+										   Node node) {
+		return unbindClientNode(aioConfig, node, null);
 	}
 
 	/**
 	 * 解绑客户端节点
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cliNode 客户节点
+	 * @param node 客户端 {@link cn.starboot.socket.Node}
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
 	public static Boolean unbindClientNode(AioConfig aioConfig,
-										   String cliNode,
+										   Node node,
 										   ChannelContext channelContext) {
+		String clientNode = null;
+		if (Objects.nonNull(node)) {
+			clientNode = node.getAddr();
+		}
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLIENT_NODE_ID)
-				.remove(cliNode, channelContext);
+				.remove(clientNode, channelContext);
 	}
 
 	/**
