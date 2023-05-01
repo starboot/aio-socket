@@ -9,7 +9,7 @@ import cn.starboot.http.server.annotation.RequestMethod;
 public class RestfulDemo {
 
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
-	public String helloworld() {
+	public String helloWorld() {
 		return "hello world";
 	}
 
