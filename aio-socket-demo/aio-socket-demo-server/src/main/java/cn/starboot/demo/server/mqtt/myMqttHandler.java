@@ -2,6 +2,8 @@ package cn.starboot.demo.server.mqtt;
 
 import cn.starboot.mqtt.MqttHandler;
 import cn.starboot.mqtt.codec.MqttMessage;
+import cn.starboot.mqtt.codec.MqttMessageBuilders;
+import cn.starboot.mqtt.codec.MqttQoS;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.core.ChannelContext;
 
@@ -18,7 +20,18 @@ public class myMqttHandler extends MqttHandler {
 			byte[] bytes = new byte[payload.remaining()];
 			payload.get(bytes);
 			System.out.println(new String(bytes, StandardCharsets.UTF_8));
+
+			MqttMessageBuilders.PublishBuilder publish = MqttMessageBuilders.publish();
+
+			publish.retained(false)
+					.topicName("/aio-socket")
+					.payload(payload)
+					.messageId(-1)
+					.qos(MqttQoS.AT_MOST_ONCE);
+			return publish.build();
+
 		}
+
 		return null;
 	}
 }

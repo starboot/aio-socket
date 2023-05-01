@@ -31,7 +31,7 @@ public final class MqttEncoder {
 	}
 
 	public synchronized static MqttEncoder getInstance() {
-		if (Objects.isNull(mqttEncoder)){
+		if (Objects.isNull(mqttEncoder)) {
 			mqttEncoder = new MqttEncoder();
 		}
 		return mqttEncoder;
@@ -41,48 +41,58 @@ public final class MqttEncoder {
 	 * This is the main encoding method.
 	 * It's only visible for testing.
 	 *
-	 * @param ctx       ChannelContext
-	 * @param message   MQTT message to encode
+	 * @param ctx     ChannelContext
+	 * @param message MQTT message to encode
 	 */
 	public void doEncode(ChannelContext ctx, MqttMessage message) throws AioEncoderException {
 		WriteBuffer writeBuffer = ctx.getWriteBuffer();
 		switch (message.fixedHeader().messageType()) {
 			case CONNECT:
 				encodeConnectMessage(ctx, (MqttConnectMessage) message, writeBuffer);
+				break;
 			case CONNACK:
 				encodeConnAckMessage(ctx, (MqttConnAckMessage) message, writeBuffer);
+				break;
 			case PUBLISH:
 				encodePublishMessage(ctx, (MqttPublishMessage) message, writeBuffer);
+				break;
 			case SUBSCRIBE:
 				encodeSubscribeMessage(ctx, (MqttSubscribeMessage) message, writeBuffer);
+				break;
 			case UNSUBSCRIBE:
 				encodeUnsubscribeMessage(ctx, (MqttUnsubscribeMessage) message, writeBuffer);
+				break;
 			case SUBACK:
 				encodeSubAckMessage(ctx, (MqttSubAckMessage) message, writeBuffer);
+				break;
 			case UNSUBACK:
 				if (message instanceof MqttUnsubAckMessage) {
 					encodeUnsubAckMessage(ctx, (MqttUnsubAckMessage) message, writeBuffer);
 				}
 				encodeMessageWithOnlySingleByteFixedHeaderAndMessageId(message, writeBuffer);
+				break;
 			case PUBACK:
 			case PUBREC:
 			case PUBREL:
 			case PUBCOMP:
 				encodePubReplyMessage(ctx, message, writeBuffer);
+				break;
 			case DISCONNECT:
 			case AUTH:
 				encodeReasonCodePlusPropertiesMessage(ctx, message, writeBuffer);
+				break;
 			case PINGREQ:
 			case PINGRESP:
 				encodeMessageWithOnlySingleByteFixedHeader(message, writeBuffer);
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown message type: " + message.fixedHeader().messageType().value());
 		}
 	}
 
 	private static void encodeConnectMessage(ChannelContext ctx,
-												   MqttConnectMessage message,
-												   WriteBuffer writeBuffer) throws AioEncoderException {
+											 MqttConnectMessage message,
+											 WriteBuffer writeBuffer) throws AioEncoderException {
 		int payloadBufferSize = 0;
 
 		MqttFixedHeader mqttFixedHeader = message.fixedHeader();
@@ -195,7 +205,7 @@ public final class MqttEncoder {
 	}
 
 	private static void encodeConnAckMessage(ChannelContext ctx,
-												   MqttConnAckMessage message,
+											 MqttConnAckMessage message,
 											 WriteBuffer writeBuffer) throws AioEncoderException {
 		final MqttVersion mqttVersion = MqttCodecUtil.getMqttVersion(ctx);
 		byte[] propertiesBytes = encodePropertiesIfNeeded(mqttVersion, message.variableHeader().properties());
@@ -208,8 +218,8 @@ public final class MqttEncoder {
 	}
 
 	private static void encodeSubscribeMessage(ChannelContext ctx,
-													 MqttSubscribeMessage message,
-													 WriteBuffer writeBuffer) throws AioEncoderException {
+											   MqttSubscribeMessage message,
+											   WriteBuffer writeBuffer) throws AioEncoderException {
 		MqttVersion mqttVersion = MqttCodecUtil.getMqttVersion(ctx);
 		byte[] propertiesBytes = encodePropertiesIfNeeded(mqttVersion,
 				message.idAndPropertiesVariableHeader().properties());
@@ -266,8 +276,8 @@ public final class MqttEncoder {
 	}
 
 	private static void encodeUnsubscribeMessage(ChannelContext ctx,
-													   MqttUnsubscribeMessage message,
-													   WriteBuffer writeBuffer) throws AioEncoderException {
+												 MqttUnsubscribeMessage message,
+												 WriteBuffer writeBuffer) throws AioEncoderException {
 		MqttVersion mqttVersion = MqttCodecUtil.getMqttVersion(ctx);
 		byte[] propertiesBytes = encodePropertiesIfNeeded(mqttVersion,
 				message.idAndPropertiesVariableHeader().properties());
@@ -306,8 +316,8 @@ public final class MqttEncoder {
 	}
 
 	private static void encodeSubAckMessage(ChannelContext ctx,
-												  MqttSubAckMessage message,
-												  WriteBuffer writeBuffer) throws AioEncoderException {
+											MqttSubAckMessage message,
+											WriteBuffer writeBuffer) throws AioEncoderException {
 		MqttVersion mqttVersion = MqttCodecUtil.getMqttVersion(ctx);
 		byte[] propertiesBytes = encodePropertiesIfNeeded(mqttVersion,
 				message.idAndPropertiesVariableHeader().properties());
@@ -326,8 +336,8 @@ public final class MqttEncoder {
 	}
 
 	private static void encodeUnsubAckMessage(ChannelContext ctx,
-													MqttUnsubAckMessage message,
-													WriteBuffer writeBuffer) throws AioEncoderException {
+											  MqttUnsubAckMessage message,
+											  WriteBuffer writeBuffer) throws AioEncoderException {
 		if (message.variableHeader() instanceof MqttMessageIdAndPropertiesVariableHeader) {
 			MqttVersion mqttVersion = MqttCodecUtil.getMqttVersion(ctx);
 			byte[] propertiesBytes = encodePropertiesIfNeeded(mqttVersion, message.idAndPropertiesVariableHeader().properties());
@@ -354,8 +364,8 @@ public final class MqttEncoder {
 	}
 
 	private static void encodePublishMessage(ChannelContext ctx,
-												   MqttPublishMessage message,
-												   WriteBuffer writeBuffer) throws AioEncoderException {
+											 MqttPublishMessage message,
+											 WriteBuffer writeBuffer) throws AioEncoderException {
 		MqttVersion mqttVersion = MqttCodecUtil.getMqttVersion(ctx);
 		MqttFixedHeader mqttFixedHeader = message.fixedHeader();
 		MqttPublishVariableHeader variableHeader = message.variableHeader();
@@ -386,8 +396,8 @@ public final class MqttEncoder {
 	}
 
 	private static void encodePubReplyMessage(ChannelContext ctx,
-													MqttMessage message,
-													WriteBuffer writeBuffer) throws AioEncoderException {
+											  MqttMessage message,
+											  WriteBuffer writeBuffer) throws AioEncoderException {
 		if (message.variableHeader() instanceof MqttPubReplyMessageVariableHeader) {
 			MqttFixedHeader mqttFixedHeader = message.fixedHeader();
 			MqttPubReplyMessageVariableHeader variableHeader =
@@ -423,7 +433,7 @@ public final class MqttEncoder {
 	}
 
 	private static void encodeMessageWithOnlySingleByteFixedHeaderAndMessageId(MqttMessage message,
-																					 WriteBuffer writeBuffer) throws AioEncoderException {
+																			   WriteBuffer writeBuffer) throws AioEncoderException {
 		MqttFixedHeader mqttFixedHeader = message.fixedHeader();
 		MqttMessageIdVariableHeader variableHeader = (MqttMessageIdVariableHeader) message.variableHeader();
 		// variable part only has a message id
@@ -436,8 +446,8 @@ public final class MqttEncoder {
 	}
 
 	private static void encodeReasonCodePlusPropertiesMessage(ChannelContext ctx,
-																	MqttMessage message,
-																	WriteBuffer writeBuffer) throws AioEncoderException {
+															  MqttMessage message,
+															  WriteBuffer writeBuffer) throws AioEncoderException {
 		if (message.variableHeader() instanceof MqttReasonCodeAndPropertiesVariableHeader) {
 			MqttVersion mqttVersion = MqttCodecUtil.getMqttVersion(ctx);
 			MqttFixedHeader mqttFixedHeader = message.fixedHeader();
@@ -472,7 +482,7 @@ public final class MqttEncoder {
 	}
 
 	private static void encodeMessageWithOnlySingleByteFixedHeader(MqttMessage message,
-																		 WriteBuffer writeBuffer) {
+																   WriteBuffer writeBuffer) {
 		MqttFixedHeader mqttFixedHeader = message.fixedHeader();
 //		ByteBuffer buf = allocator.allocate(2);
 		writeBuffer.write((byte) getFixedHeaderByte1(mqttFixedHeader));
@@ -490,7 +500,7 @@ public final class MqttEncoder {
 	private static byte[] encodeProperties(MqttProperties mqttProperties) {
 //		WriteBuffer writeBuffer = new WriteBuffer();
 		MqttByteBuffer mqttByteBuffer = new MqttByteBuffer();
-		for (MqttProperties.MqttProperty property : mqttProperties.listAll()) {
+		for (MqttProperties.MqttProperty<?> property : mqttProperties.listAll()) {
 			MqttProperties.MqttPropertyType propertyType = MqttProperties.MqttPropertyType.valueOf(property.propertyId);
 			switch (propertyType) {
 				case PAYLOAD_FORMAT_INDICATOR:
