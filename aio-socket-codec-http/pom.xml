@@ -11,7 +11,7 @@
     <parent>
         <artifactId>aio-socket</artifactId>
         <groupId>cn.starboot.socket</groupId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
     </parent>
 
 </project>
