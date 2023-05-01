@@ -5,6 +5,7 @@ package cn.starboot.mqtt.codec;
  *
  * @author netty
  * @author L.cm
+ * @author MDong
  */
 public interface MqttConstant {
 

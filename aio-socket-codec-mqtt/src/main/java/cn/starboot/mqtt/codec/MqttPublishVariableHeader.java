@@ -4,6 +4,8 @@ package cn.starboot.mqtt.codec;
  * Variable Header of the {@link MqttPublishMessage}
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttPublishVariableHeader {
 	private final String topicName;

@@ -5,7 +5,9 @@ import java.util.*;
 /**
  * MQTT Properties container
  *
- * @author netty, mica
+ * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttProperties {
 

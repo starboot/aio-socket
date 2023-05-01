@@ -5,6 +5,8 @@ package cn.starboot.mqtt.codec;
  * This is part of the {@link MqttSubscribePayload}
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttTopicSubscription {
 

@@ -7,6 +7,8 @@ import java.util.List;
  * Payload of the {@link MqttSubscribeMessage}
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttSubscribePayload {
 

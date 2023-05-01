@@ -7,6 +7,8 @@ import java.util.List;
  * Payload of the {@link MqttUnsubscribeMessage}
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttUnsubscribePayload {
 	private final List<String> topics;

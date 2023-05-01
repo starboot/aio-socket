@@ -7,6 +7,8 @@ import cn.starboot.socket.codec.DecoderResult;
  * Base class for all MQTT message types.
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public class MqttMessage extends Packet {
 	private final MqttFixedHeader mqttFixedHeader;

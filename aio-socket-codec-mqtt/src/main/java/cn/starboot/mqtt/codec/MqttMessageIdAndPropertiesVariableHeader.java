@@ -4,6 +4,8 @@ package cn.starboot.mqtt.codec;
  * Variable Header containing, Packet Id and Properties as in MQTT v5 spec.
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttMessageIdAndPropertiesVariableHeader extends MqttMessageIdVariableHeader {
 	private final MqttProperties properties;

@@ -4,6 +4,8 @@ package cn.starboot.mqtt.codec;
  * Return Code of {@link MqttConnAckMessage}
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public enum MqttConnectReasonCode implements MqttReasonCode {
 	/**

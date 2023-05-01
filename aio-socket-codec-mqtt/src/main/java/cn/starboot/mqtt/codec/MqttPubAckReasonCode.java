@@ -4,6 +4,9 @@ package cn.starboot.mqtt.codec;
  * Reason codes for PUBACK MQTT message
  *
  * @author vertx-mqtt
+ * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public enum MqttPubAckReasonCode implements MqttReasonCode {
 

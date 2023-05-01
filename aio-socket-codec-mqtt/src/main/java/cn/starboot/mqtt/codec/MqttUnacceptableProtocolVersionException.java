@@ -5,6 +5,10 @@ import cn.starboot.socket.codec.DecoderException;
 /**
  * A {@link MqttUnacceptableProtocolVersionException} which is thrown when
  * a CONNECT request contains unacceptable protocol version.
+ *
+ * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttUnacceptableProtocolVersionException extends DecoderException {
 

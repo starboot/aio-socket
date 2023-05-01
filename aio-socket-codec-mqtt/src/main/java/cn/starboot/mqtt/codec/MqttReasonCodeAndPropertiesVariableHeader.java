@@ -2,6 +2,10 @@ package cn.starboot.mqtt.codec;
 
 /**
  * Variable Header for AUTH and DISCONNECT messages represented by {@link MqttMessage}
+ *
+ * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttReasonCodeAndPropertiesVariableHeader {
 

@@ -16,6 +16,10 @@ package cn.starboot.mqtt.codec;
 
 /**
  * Mqtt QoS
+ *
+ * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public enum  MqttQoS {
 	/**

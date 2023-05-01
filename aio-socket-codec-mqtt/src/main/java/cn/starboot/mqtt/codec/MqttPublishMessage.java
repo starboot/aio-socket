@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
  * See <a href="https://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/mqtt-v3r1.html#publish">MQTTV3.1/publish</a>
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public class MqttPublishMessage extends MqttMessage {
 	public MqttPublishMessage(

@@ -4,6 +4,8 @@ package cn.starboot.mqtt.codec;
  * Model the SubscriptionOption used in Subscribe MQTT v5 packet
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttSubscriptionOption {
 

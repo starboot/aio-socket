@@ -4,6 +4,8 @@ package cn.starboot.mqtt.codec;
  * Variable Header containing Packet Id, reason code and Properties as in MQTT v5 spec.
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttPubReplyMessageVariableHeader extends MqttMessageIdVariableHeader {
 	private final byte reasonCode;

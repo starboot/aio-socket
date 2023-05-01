@@ -4,6 +4,10 @@ package cn.starboot.mqtt.codec;
  * Utilities for MQTT message codes enums
  *
  * @author vertx-mqtt
+ *
+ * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public class ReasonCodeUtils {
 

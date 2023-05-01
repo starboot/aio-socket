@@ -4,6 +4,8 @@ package cn.starboot.mqtt.codec;
  * MQTT Message Types.
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public enum MqttMessageType {
 	/**

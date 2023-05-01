@@ -7,6 +7,8 @@ import java.util.Arrays;
  * Payload of {@link MqttConnectMessage}
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttConnectPayload {
 	private final String clientIdentifier;

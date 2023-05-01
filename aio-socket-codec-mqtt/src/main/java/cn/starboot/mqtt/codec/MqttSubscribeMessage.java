@@ -5,6 +5,8 @@ package cn.starboot.mqtt.codec;
  * MQTTV3.1/subscribe</a>
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttSubscribeMessage extends MqttMessage {
 

@@ -9,6 +9,8 @@ import java.util.Objects;
  * Payload of the {@link MqttSubAckMessage}
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public class MqttSubAckPayload {
 	private final List<Integer> reasonCodes;

@@ -13,6 +13,8 @@ import java.util.List;
  * mqtt 消息构造器
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttMessageBuilders {
 

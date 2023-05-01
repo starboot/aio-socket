@@ -21,6 +21,7 @@ import static cn.starboot.mqtt.codec.MqttConstant.DEFAULT_MAX_CLIENT_ID_LENGTH;
  *
  * @author netty
  * @author L.cm
+ * @author MDong
  */
 public final class MqttEncoder {
 

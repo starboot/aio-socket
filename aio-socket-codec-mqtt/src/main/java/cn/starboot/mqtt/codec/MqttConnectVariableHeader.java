@@ -4,6 +4,8 @@ package cn.starboot.mqtt.codec;
  * Variable Header for the {@link MqttConnectMessage}
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttConnectVariableHeader {
 

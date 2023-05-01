@@ -3,6 +3,13 @@ package cn.starboot.mqtt.codec;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+/**
+ * matt version
+ *
+ * @author netty
+ * @author L.cm
+ * @author MDong
+ */
 public enum MqttVersion {
 	MQTT_3_1("MQIsdp", (byte) 3),
 	MQTT_3_1_1("MQTT", (byte) 4),

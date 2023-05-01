@@ -9,6 +9,7 @@ import static cn.starboot.mqtt.codec.MqttConstant.MIN_CLIENT_ID_LENGTH;
  *
  * @author netty
  * @author L.cm
+ * @author MDong
  */
 public final class MqttCodecUtil {
 	public static final char TOPIC_WILDCARDS_ONE = '+';

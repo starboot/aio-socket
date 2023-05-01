@@ -4,6 +4,8 @@ package cn.starboot.mqtt.codec;
  * Reason codes for DISCONNECT MQTT message
  *
  * @author vertx-mqtt
+ * @author L.cm
+ * @author MDong
  */
 public enum MqttDisconnectReasonCode implements MqttReasonCode {
 

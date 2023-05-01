@@ -9,6 +9,8 @@ import java.util.Objects;
  * Payload for MQTT unsuback message as in V5.
  *
  * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public final class MqttUnsubAckPayload {
 

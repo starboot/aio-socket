@@ -24,6 +24,7 @@ import static cn.starboot.mqtt.codec.MqttConstant.*;
  *
  * @author netty
  * @author L.cm
+ * @author MDong
  */
 public final class MqttDecoder {
 

@@ -4,6 +4,9 @@ package cn.starboot.mqtt.codec;
  * Common interface for MQTT messages reason codes enums
  *
  * @author vertx-mqtt
+ * @author netty
+ * @author L.cm
+ * @author MDong
  */
 public interface MqttReasonCode {
 
