@@ -78,6 +78,6 @@ aio-socket还在快速迭代中，功能并未完善，大家尽情期待....
 
 ## 上层应用开源项目链接
    
-   t-im：基于aio-socket开发的高性能IM通讯框架，官网：  https://gitee.com/mxd_2022/t-im  <br>  
-   WeChat：为t-im 提供基本的UI功能，官网：  https://gitee.com/mxd_2022/we-chat  <br>  
+   t-im：基于aio-socket开发的高性能IM通讯框架，官网：  https://gitee.com/starboot/t-im  <br>  
+   WeChat：为t-im 提供基本的UI功能，官网：  https://gitee.com/starboot/we-chat  <br>  
    本项目如有侵犯到任何个人或组织的权益请联系邮箱：1191998028@qq.com （如有侵权请联系删除）
