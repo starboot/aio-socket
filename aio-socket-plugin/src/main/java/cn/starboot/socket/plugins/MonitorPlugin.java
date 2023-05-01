@@ -152,20 +152,22 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
 		totalProcessMsgNum += curProcessMsgNum;
 		totalConnect += connectCount;
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("\r\n\t\t-------------------in " + seconds + " sec --------------------"
-					+ "\r\n\t\t|inflow:\t\t\t|" + curInFlow * 1.0 / (1024 * 1024) + "(MB)"
-					+ "\r\n\t\t|outflow:\t\t\t|" + curOutFlow * 1.0 / (1024 * 1024) + "(MB)"
-					+ "\r\n\t\t|process fail:\t\t|" + curDiscardNum
-					+ "\r\n\t\t|process count:\t\t|" + curProcessMsgNum
-					+ "\r\n\t\t|process total:\t\t|" + totalProcessMsgNum
-					+ "\r\n\t\t|read count:\t\t|" + curReadCount
-					+ "\r\n\t\t|write count:\t\t|" + curWriteCount
-					+ "\r\n\t\t|connect count:\t\t|" + connectCount
-					+ "\r\n\t\t|disconnect count:\t|" + disConnectCount
-					+ "\r\n\t\t|online count:\t\t|" + onlineCount
-					+ "\r\n\t\t|connected total:\t|" + totalConnect
-					+ "\r\n\t\t|Requests/sec:\t\t|" + curProcessMsgNum * 1.0 / seconds
-					+ "\r\n\t\t|Transfer/sec:\t\t|" + (curInFlow * 1.0 / (1024 * 1024) / seconds) + "(MB)"
+			LOGGER.debug("\r\n\t\t------------------------------------------------"
+					+ "\r\n\t\t\t\t\taio-socket performance"
+					+ "\r\n\t\t-------------------in " + seconds + " sec --------------------"
+					+ "\r\n\t\tinflow:\t\t\t\t" + curInFlow * 1.0 / (1024 * 1024) + "(MB)"
+					+ "\r\n\t\toutflow:\t\t\t" + curOutFlow * 1.0 / (1024 * 1024) + "(MB)"
+					+ "\r\n\t\tprocess fail:\t\t" + curDiscardNum
+					+ "\r\n\t\tprocess count:\t\t" + curProcessMsgNum
+					+ "\r\n\t\tprocess total:\t\t" + totalProcessMsgNum
+					+ "\r\n\t\tread count:\t\t\t" + curReadCount
+					+ "\r\n\t\twrite count:\t\t" + curWriteCount
+					+ "\r\n\t\tconnect count:\t\t" + connectCount
+					+ "\r\n\t\tdisconnect count:\t" + disConnectCount
+					+ "\r\n\t\tonline count:\t\t" + onlineCount
+					+ "\r\n\t\tconnected total:\t" + totalConnect
+					+ "\r\n\t\tRequests/sec:\t\t" + curProcessMsgNum * 1.0 / seconds
+					+ "\r\n\t\tTransfer/sec:\t\t" + (curInFlow * 1.0 / (1024 * 1024) / seconds) + "(MB)"
 					+ "\r\n\t\t------------------------------------------------");
 		}
 	}

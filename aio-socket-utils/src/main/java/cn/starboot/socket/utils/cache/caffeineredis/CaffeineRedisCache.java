@@ -23,11 +23,9 @@ import cn.starboot.socket.utils.cache.caffeine.CaffeineCache;
 import cn.starboot.socket.utils.cache.redis.RedisCache;
 import cn.starboot.socket.utils.cache.redis.RedisExpireUpdateTask;
 import cn.starboot.socket.utils.lock.LockUtils;
-import org.redisson.api.RTopic;
-import org.redisson.api.RedissonClient;
-import org.redisson.api.listener.MessageListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -42,7 +40,7 @@ public class CaffeineRedisCache extends AbsCache {
 
 	public static Map<String, CaffeineRedisCache>	map					= new HashMap<>();
 
-	public static RTopic							topic;
+//	public static RTopic							topic;
 
 	private static boolean							inited				= false;
 
@@ -63,55 +61,55 @@ public class CaffeineRedisCache extends AbsCache {
 		return getCache(cacheName, false);
 	}
 
-	private static void init(RedissonClient redisson) {
+	private static void init(Jedis jedis) {
 		if (!inited) {
 			synchronized (CaffeineRedisCache.class) {
 				if (!inited) {
-					topic = redisson.getTopic(CACHE_CHANGE_TOPIC);
-					topic.addListener(CacheChangedVo.class, new MessageListener<CacheChangedVo>() {
-						@Override
-						public void onMessage(CharSequence channel, CacheChangedVo cacheChangedVo) {
-							String clientid = cacheChangedVo.getClientId();
-							if (StringUtils.isBlank(clientid)) {
-								log.error("clientid is null");
-								return;
-							}
-							if (Objects.equals(CacheChangedVo.CLIENTID, clientid)) {
-								log.debug("自己发布的消息,{}", clientid);
-								return;
-							}
-
-							String cacheName = cacheChangedVo.getCacheName();
-							CaffeineRedisCache caffeineRedisCache = CaffeineRedisCache.getCache(cacheName);
-							if (caffeineRedisCache == null) {
-								log.info("不能根据cacheName[{}]找到CaffeineRedisCache对象", cacheName);
-								return;
-							}
-
-							CacheChangeType type = cacheChangedVo.getType();
-							if (type == CacheChangeType.PUT || type == CacheChangeType.UPDATE || type == CacheChangeType.REMOVE) {
-								String key = cacheChangedVo.getKey();
-								caffeineRedisCache.localCache.remove(key);
-							} else if (type == CacheChangeType.CLEAR) {
-								caffeineRedisCache.localCache.clear();
-							}
-						}
-					});
+//					topic = redisson.getTopic(CACHE_CHANGE_TOPIC);
+//					topic.addListener(CacheChangedVo.class, new MessageListener<CacheChangedVo>() {
+//						@Override
+//						public void onMessage(CharSequence channel, CacheChangedVo cacheChangedVo) {
+//							String clientid = cacheChangedVo.getClientId();
+//							if (StringUtils.isBlank(clientid)) {
+//								log.error("clientid is null");
+//								return;
+//							}
+//							if (Objects.equals(CacheChangedVo.CLIENTID, clientid)) {
+//								log.debug("自己发布的消息,{}", clientid);
+//								return;
+//							}
+//
+//							String cacheName = cacheChangedVo.getCacheName();
+//							CaffeineRedisCache caffeineRedisCache = CaffeineRedisCache.getCache(cacheName);
+//							if (caffeineRedisCache == null) {
+//								log.info("不能根据cacheName[{}]找到CaffeineRedisCache对象", cacheName);
+//								return;
+//							}
+//
+//							CacheChangeType type = cacheChangedVo.getType();
+//							if (type == CacheChangeType.PUT || type == CacheChangeType.UPDATE || type == CacheChangeType.REMOVE) {
+//								String key = cacheChangedVo.getKey();
+//								caffeineRedisCache.localCache.remove(key);
+//							} else if (type == CacheChangeType.CLEAR) {
+//								caffeineRedisCache.localCache.clear();
+//							}
+//						}
+//					});
 					inited = true;
 				}
 			}
 		}
 	}
 
-	public static CaffeineRedisCache register(RedissonClient redisson, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
-		init(redisson);
+	public static CaffeineRedisCache register(Jedis jedis, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+		init(jedis);
 
 		CaffeineRedisCache caffeineRedisCache = map.get(cacheName);
 		if (caffeineRedisCache == null) {
 			synchronized (CaffeineRedisCache.class) {
 				caffeineRedisCache = map.get(cacheName);
 				if (caffeineRedisCache == null) {
-					RedisCache redisCache = RedisCache.register(redisson, cacheName, timeToLiveSeconds, timeToIdleSeconds);
+					RedisCache redisCache = RedisCache.register(jedis, cacheName, timeToLiveSeconds, timeToIdleSeconds);
 
 					Long timeToLiveSecondsForCaffeine = timeToLiveSeconds;
 					Long timeToIdleSecondsForCaffeine = timeToIdleSeconds;
@@ -148,7 +146,7 @@ public class CaffeineRedisCache extends AbsCache {
 		distCache.clear();
 
 		CacheChangedVo cacheChangedVo = new CacheChangedVo(cacheName, CacheChangeType.CLEAR);
-		topic.publish(cacheChangedVo);
+//		topic.publish(cacheChangedVo);
 	}
 
 	@Override
@@ -201,7 +199,7 @@ public class CaffeineRedisCache extends AbsCache {
 		distCache.put(key, value);
 
 		CacheChangedVo cacheChangedVo = new CacheChangedVo(cacheName, key, CacheChangeType.PUT);
-		topic.publish(cacheChangedVo);
+//		topic.publish(cacheChangedVo);
 	}
 
 	@Override
@@ -220,7 +218,7 @@ public class CaffeineRedisCache extends AbsCache {
 		distCache.remove(key);
 
 		CacheChangedVo cacheChangedVo = new CacheChangedVo(cacheName, key, CacheChangeType.REMOVE);
-		topic.publish(cacheChangedVo);
+//		topic.publish(cacheChangedVo);
 	}
 
 	@Override

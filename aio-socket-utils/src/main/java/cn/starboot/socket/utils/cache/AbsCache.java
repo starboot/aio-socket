@@ -22,8 +22,9 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 
 public abstract class AbsCache implements ICache {
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(AbsCache.class);
+
+
+	private static final Logger log = LoggerFactory.getLogger(AbsCache.class);
 
 	protected String cacheName = null;
 

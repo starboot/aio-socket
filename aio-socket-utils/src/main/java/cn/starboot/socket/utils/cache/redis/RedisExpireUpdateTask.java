@@ -16,7 +16,7 @@
 package cn.starboot.socket.utils.cache.redis;
 
 import cn.starboot.socket.utils.lock.SetWithLock;
-import org.redisson.api.RBucket;
+//import org.redisson.api.RBucket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +67,8 @@ public class RedisExpireUpdateTask {
 							log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}", expireVo.getCacheName(), expireVo.getKey(), expireVo.getTimeToIdleSeconds());
 
 							RedisCache redisCache = RedisCache.getCache(expireVo.getCacheName());
-							RBucket<Serializable> bucket = redisCache.getBucket(expireVo.getKey());
-							bucket.expireAsync(expireVo.getTimeToIdleSeconds(), TimeUnit.SECONDS);
+//							RBucket<Serializable> bucket = redisCache.getBucket(expireVo.getKey());
+//							bucket.expireAsync(expireVo.getTimeToIdleSeconds(), TimeUnit.SECONDS);
 						}
 						set.clear();
 					} catch (Throwable e) {

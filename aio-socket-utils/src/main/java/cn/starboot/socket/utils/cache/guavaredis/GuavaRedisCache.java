@@ -22,11 +22,9 @@ import cn.starboot.socket.utils.cache.CacheChangedVo;
 import cn.starboot.socket.utils.cache.guava.GuavaCache;
 import cn.starboot.socket.utils.cache.redis.RedisCache;
 import cn.starboot.socket.utils.cache.redis.RedisExpireUpdateTask;
-import org.redisson.api.RTopic;
-import org.redisson.api.RedissonClient;
-import org.redisson.api.listener.MessageListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -41,7 +39,7 @@ public class GuavaRedisCache extends AbsCache {
 
 	public static Map<String, GuavaRedisCache>	map	= new HashMap<>();
 
-	static RTopic topic;
+//	static RTopic topic;
 
 	private static boolean inited = false;
 
@@ -53,55 +51,55 @@ public class GuavaRedisCache extends AbsCache {
 		return guavaRedisCache;
 	}
 
-	private static void init(RedissonClient redisson) {
+	private static void init(Jedis jedis) {
 		if (!inited) {
 			synchronized (GuavaRedisCache.class) {
 				if (!inited) {
-					topic = redisson.getTopic(CACHE_CHANGE_TOPIC);
-					topic.addListener(CacheChangedVo.class, new MessageListener<CacheChangedVo>() {
-						@Override
-						public void onMessage(CharSequence channel, CacheChangedVo cacheChangedVo) {
-							String clientid = cacheChangedVo.getClientId();
-							if (StringUtils.isBlank(clientid)) {
-								log.error("clientid is null");
-								return;
-							}
-							if (Objects.equals(CacheChangedVo.CLIENTID, clientid)) {
-								log.debug("自己发布的消息,{}", clientid);
-								return;
-							}
-
-							String cacheName = cacheChangedVo.getCacheName();
-							GuavaRedisCache guavaRedisCache = GuavaRedisCache.getCache(cacheName);
-							if (guavaRedisCache == null) {
-								log.info("不能根据cacheName[{}]找到GuavaRedisCache对象", cacheName);
-								return;
-							}
-
-							CacheChangeType type = cacheChangedVo.getType();
-							if (type == CacheChangeType.PUT || type == CacheChangeType.UPDATE || type == CacheChangeType.REMOVE) {
-								String key = cacheChangedVo.getKey();
-								guavaRedisCache.guavaCache.remove(key);
-							} else if (type == CacheChangeType.CLEAR) {
-								guavaRedisCache.guavaCache.clear();
-							}
-						}
-					});
+//					topic = redisson.getTopic(CACHE_CHANGE_TOPIC);
+//					topic.addListener(CacheChangedVo.class, new MessageListener<CacheChangedVo>() {
+//						@Override
+//						public void onMessage(CharSequence channel, CacheChangedVo cacheChangedVo) {
+//							String clientid = cacheChangedVo.getClientId();
+//							if (StringUtils.isBlank(clientid)) {
+//								log.error("clientid is null");
+//								return;
+//							}
+//							if (Objects.equals(CacheChangedVo.CLIENTID, clientid)) {
+//								log.debug("自己发布的消息,{}", clientid);
+//								return;
+//							}
+//
+//							String cacheName = cacheChangedVo.getCacheName();
+//							GuavaRedisCache guavaRedisCache = GuavaRedisCache.getCache(cacheName);
+//							if (guavaRedisCache == null) {
+//								log.info("不能根据cacheName[{}]找到GuavaRedisCache对象", cacheName);
+//								return;
+//							}
+//
+//							CacheChangeType type = cacheChangedVo.getType();
+//							if (type == CacheChangeType.PUT || type == CacheChangeType.UPDATE || type == CacheChangeType.REMOVE) {
+//								String key = cacheChangedVo.getKey();
+//								guavaRedisCache.guavaCache.remove(key);
+//							} else if (type == CacheChangeType.CLEAR) {
+//								guavaRedisCache.guavaCache.clear();
+//							}
+//						}
+//					});
 					inited = true;
 				}
 			}
 		}
 	}
 
-	public static GuavaRedisCache register(RedissonClient redisson, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
-		init(redisson);
+	public static GuavaRedisCache register(Jedis jedis, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+		init(jedis);
 
 		GuavaRedisCache guavaRedisCache = map.get(cacheName);
 		if (guavaRedisCache == null) {
 			synchronized (GuavaRedisCache.class) {
 				guavaRedisCache = map.get(cacheName);
 				if (guavaRedisCache == null) {
-					RedisCache redisCache = RedisCache.register(redisson, cacheName, timeToLiveSeconds, timeToIdleSeconds);
+					RedisCache redisCache = RedisCache.register(jedis, cacheName, timeToLiveSeconds, timeToIdleSeconds);
 
 					Long timeToLiveSecondsForGuava = timeToLiveSeconds;
 					Long timeToIdleSecondsForGuava = timeToIdleSeconds;
@@ -142,7 +140,7 @@ public class GuavaRedisCache extends AbsCache {
 		redisCache.clear();
 
 		CacheChangedVo cacheChangedVo = new CacheChangedVo(cacheName, CacheChangeType.CLEAR);
-		topic.publish(cacheChangedVo);
+//		topic.publish(cacheChangedVo);
 	}
 
 	@Override
@@ -178,7 +176,7 @@ public class GuavaRedisCache extends AbsCache {
 		redisCache.put(key, value);
 
 		CacheChangedVo cacheChangedVo = new CacheChangedVo(cacheName, key, CacheChangeType.PUT);
-		topic.publish(cacheChangedVo);
+//		topic.publish(cacheChangedVo);
 	}
 
 	@Override
@@ -197,7 +195,7 @@ public class GuavaRedisCache extends AbsCache {
 		redisCache.remove(key);
 
 		CacheChangedVo cacheChangedVo = new CacheChangedVo(cacheName, key, CacheChangeType.REMOVE);
-		topic.publish(cacheChangedVo);
+//		topic.publish(cacheChangedVo);
 	}
 
 	@Override

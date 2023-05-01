@@ -18,9 +18,9 @@ package cn.starboot.socket.utils.cache;
 import cn.starboot.socket.utils.lock.LockUtils;
 import cn.starboot.socket.utils.cache.caffeine.CaffeineCache;
 import cn.starboot.socket.utils.cache.caffeineredis.CaffeineRedisCache;
-import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 
 import java.io.Serializable;
 
@@ -160,14 +160,14 @@ public abstract class CacheUtils {
 		return caffeineCache;
 	}
 
-	public static CaffeineRedisCache getCaffeineRedisCache(RedissonClient redisson, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public static CaffeineRedisCache getCaffeineRedisCache(Jedis jedis, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		String cacheName = getCacheName(timeToLiveSeconds, timeToIdleSeconds);
 		CaffeineRedisCache caffeineCache = CaffeineRedisCache.getCache(cacheName, true);
 		if (caffeineCache == null) {
 			synchronized (LOCK_FOR_GETCACHE) {
 				caffeineCache = CaffeineRedisCache.getCache(cacheName, true);
 				if (caffeineCache == null) {
-					caffeineCache = CaffeineRedisCache.register(redisson, cacheName, timeToLiveSeconds, timeToIdleSeconds);
+					caffeineCache = CaffeineRedisCache.register(jedis, cacheName, timeToLiveSeconds, timeToIdleSeconds);
 				}
 			}
 		}
