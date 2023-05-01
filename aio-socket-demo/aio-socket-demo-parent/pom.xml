@@ -16,7 +16,6 @@
 		<fileupload.version>1.4</fileupload.version>
 		<slf4j.version>1.7.36</slf4j.version>
 		<logback.version>1.2.9</logback.version>
-		<lombok.version>1.18.20</lombok.version>
 		<hutool.version>5.8.18</hutool.version>
 		<protobuff.version>3.21.4</protobuff.version>
 		<grpc.version>1.27.2</grpc.version>

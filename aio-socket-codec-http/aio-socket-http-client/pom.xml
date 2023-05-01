@@ -12,5 +12,11 @@
 
     <artifactId>aio-socket-http-client</artifactId>
 
+	<dependencies>
+		<dependency>
+			<groupId>cn.starboot.socket</groupId>
+			<artifactId>aio-socket-http-common</artifactId>
+		</dependency>
+	</dependencies>
 
 </project>

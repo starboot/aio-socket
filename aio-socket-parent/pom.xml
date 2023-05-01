@@ -55,8 +55,6 @@
     <properties>
         <aio-socket.version>1.2.3</aio-socket.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <logback.version>1.2.9</logback.version>
-        <lombok.version>1.18.20</lombok.version>
         <protobuff.version>3.21.4</protobuff.version>
         <grpc.version>1.27.2</grpc.version>
         <redisson.version>3.17.6</redisson.version>
@@ -138,11 +136,6 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.protobuf</groupId>
