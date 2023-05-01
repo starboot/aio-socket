@@ -26,6 +26,7 @@ import static cn.starboot.mqtt.codec.MqttConstant.*;
  * @author L.cm
  */
 public final class MqttDecoder {
+
 	private final int maxBytesInMessage;
 	private final int maxClientIdLength;
 

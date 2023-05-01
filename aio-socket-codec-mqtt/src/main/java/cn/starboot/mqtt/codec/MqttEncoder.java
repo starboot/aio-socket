@@ -9,6 +9,7 @@ import cn.starboot.socket.exception.AioEncoderException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 
 import static cn.starboot.mqtt.codec.MqttConstant.DEFAULT_MAX_CLIENT_ID_LENGTH;
 
@@ -22,9 +23,17 @@ import static cn.starboot.mqtt.codec.MqttConstant.DEFAULT_MAX_CLIENT_ID_LENGTH;
  * @author L.cm
  */
 public final class MqttEncoder {
-	public static final MqttEncoder INSTANCE = new MqttEncoder();
+
+	private static MqttEncoder mqttEncoder = null;
 
 	private MqttEncoder() {
+	}
+
+	public synchronized static MqttEncoder getInstance() {
+		if (Objects.isNull(mqttEncoder)){
+			mqttEncoder = new MqttEncoder();
+		}
+		return mqttEncoder;
 	}
 
 	/**
