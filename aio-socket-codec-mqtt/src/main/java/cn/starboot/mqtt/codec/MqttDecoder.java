@@ -59,8 +59,11 @@ public final class MqttDecoder {
 	}
 
 	private MqttMessage decode(ChannelContext ctx, ByteBuffer buffer, int readableLength) throws AioDecoderException {
+		buffer.mark();
+//		System.out.println(buffer.remaining());
 		// 1. 首先判断缓存中协议头是否读完（MQTT协议头为2字节）
 		if (readableLength < MQTT_PROTOCOL_LENGTH) {
+//			System.out.println("1");
 			return null;
 		}
 		// 2. 解析 FixedHeader 2~5 个字节
@@ -72,8 +75,11 @@ public final class MqttDecoder {
 		}
 		// 包长度不够解析
 		if (mqttFixedHeader == null) {
+//			System.out.println("2");
+			buffer.reset();
 			return null;
 		}
+//		System.out.println(buffer.remaining());
 		// 包长度计算
 		int headLength = mqttFixedHeader.headLength();
 		int bytesRemainingInVariablePart = mqttFixedHeader.remainingLength();
@@ -82,9 +88,13 @@ public final class MqttDecoder {
 			throw new AioDecoderException("too large message: " + messageLength + " bytes but maxBytesInMessage is " + maxBytesInMessage);
 		}
 		// 3. 长度不够，直接返回 null
+//		System.out.println(readableLength + "<------>" + messageLength);
 		if (readableLength < messageLength) {
+//			System.out.println("3");
+			buffer.reset();
 			return null;
 		}
+//		buffer.reset();
 		// 4. 解析头信息
 		Object variableHeader = null;
 		try {
@@ -92,8 +102,10 @@ public final class MqttDecoder {
 			variableHeader = decodedVariableHeader.value;
 			bytesRemainingInVariablePart -= decodedVariableHeader.numberOfBytesConsumed;
 		} catch (Exception cause) {
+//			System.out.println("头解析失败");
 			return MqttMessageFactory.newInvalidMessage(mqttFixedHeader, variableHeader, cause);
 		}
+//		System.out.println("头解析完成");
 		// 5. 解析消息体
 		final Result<?> decodedPayload;
 		try {
@@ -101,9 +113,11 @@ public final class MqttDecoder {
 					bytesRemainingInVariablePart, variableHeader);
 			bytesRemainingInVariablePart -= decodedPayload.numberOfBytesConsumed;
 			if (bytesRemainingInVariablePart != 0) {
+//				System.out.println("体解析失败");
 				throw new DecoderException("non-zero remaining payload bytes: " +
 						bytesRemainingInVariablePart + " (" + mqttFixedHeader.messageType() + ')');
 			}
+//			System.out.println("消息体解析完成");
 			return MqttMessageFactory.newMessage(mqttFixedHeader, variableHeader, decodedPayload.value);
 		} catch (Throwable cause) {
 			return MqttMessageFactory.newInvalidMessage(mqttFixedHeader, variableHeader, cause);
@@ -534,8 +548,11 @@ public final class MqttDecoder {
 			numberOfBytesConsumed += size;
 			return new Result<>(null, numberOfBytesConsumed);
 		}
-		String s = new String(buffer.array(), buffer.position(), size, StandardCharsets.UTF_8);
-		ByteBufferUtil.skipBytes(buffer, size);
+		// aio-socket 由于是直接内存所以这样处理
+		byte[] bytes = new byte[size];
+		buffer.get(bytes);
+		String s = new String(bytes, StandardCharsets.UTF_8);
+//		ByteBufferUtil.skipBytes(buffer, size);
 		numberOfBytesConsumed += size;
 		return new Result<>(s, numberOfBytesConsumed);
 	}

@@ -13,14 +13,18 @@
     <artifactId>aio-socket-demo-common</artifactId>
 
     <dependencies>
+		<dependency>
+			<groupId>cn.starboot.socket</groupId>
+			<artifactId>aio-socket-codec</artifactId>
+		</dependency>
         <dependency>
             <groupId>cn.starboot.socket</groupId>
             <artifactId>aio-socket-http-server</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.starboot.socket</groupId>
-            <artifactId>aio-socket-codec</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>cn.starboot.socket</groupId>
+			<artifactId>aio-socket-codec-mqtt</artifactId>
+		</dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
 
 	<properties>
-		<aio-socket.version>1.2.2</aio-socket.version>
+		<aio-socket.version>1.2.3</aio-socket.version>
 		<fileupload.version>1.4</fileupload.version>
 		<slf4j.version>1.7.36</slf4j.version>
 		<logback.version>1.2.9</logback.version>
@@ -42,6 +42,11 @@
 			<dependency>
 				<groupId>cn.starboot.socket</groupId>
 				<artifactId>aio-socket-http-server</artifactId>
+				<version>${aio-socket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>cn.starboot.socket</groupId>
+				<artifactId>aio-socket-codec-mqtt</artifactId>
 				<version>${aio-socket.version}</version>
 			</dependency>
 			<dependency>
