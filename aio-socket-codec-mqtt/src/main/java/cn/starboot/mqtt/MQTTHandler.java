@@ -74,7 +74,7 @@ public abstract class MQTTHandler implements AioHandler {
 
 	@Override
 	public ProtocolEnum name() {
-		return ProtocolEnum.MQTT_v5_0;
+		return ProtocolEnum.MQTT;
 	}
 
 	public abstract Packet handle(ChannelContext channelContext, MqttMessage mqttMessage);

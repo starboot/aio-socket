@@ -56,19 +56,9 @@ public enum ProtocolEnum {
     PROTOBUF(1006, "protobuf protocol"),
 
 	/**
-	 * mqtt v3.1 协议
+	 * mqtt v3.1 协议, v3.1.1 协议, v5.0 协议
 	 */
-	MQTT_v3_1(1007, "mqtt v3.1 protocol"),
-
-	/**
-	 * mqtt v3.1.1 协议
-	 */
-	MQTT_v3_1_1(1008, "mqtt v3.1.1 protocol"),
-
-	/**
-	 * mqtt v5.0 协议
-	 */
-	MQTT_v5_0(1009, "mqtt v5.0 protocol"),
+	MQTT(1007, "mqtt protocol"),
 
     // ---------------------以下是留给用户的私有化TCP协议枚举类，共五个---------------------
 
