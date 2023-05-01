@@ -68,7 +68,7 @@ public abstract class StringHandler implements AioHandler {
             buffer.reset();
             return null;
         }
-        byte[] b = AIOUtil.getBytesFromByteBuffer(length, memoryUnit, channelContext);
+        byte[] b = AIOUtil.getBytesFromByteBuffer(memoryUnit, length, Integer.BYTES, channelContext);
         if (b == null) {
             buffer.reset();
             return null;

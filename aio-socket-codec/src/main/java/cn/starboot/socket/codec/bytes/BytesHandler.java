@@ -47,7 +47,7 @@ public abstract class BytesHandler implements AioHandler {
 		}
 		buffer.mark();
 		int length = buffer.getInt();
-		byte[] b = AIOUtil.getBytesFromByteBuffer(length, readBuffer, channelContext);
+		byte[] b = AIOUtil.getBytesFromByteBuffer(readBuffer, length, Integer.BYTES, channelContext);
 		if (b == null) {
 			buffer.reset();
 			return null;
