@@ -15,7 +15,7 @@
 		<aio-socket.version>1.2.3</aio-socket.version>
 		<fileupload.version>1.4</fileupload.version>
 		<slf4j.version>2.0.7</slf4j.version>
-		<logback.version>1.4.7</logback.version>
+		<logback.version>1.2.9</logback.version>
 		<hutool.version>5.8.18</hutool.version>
 		<protobuff.version>3.21.4</protobuff.version>
 		<grpc.version>1.27.2</grpc.version>

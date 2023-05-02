@@ -17,7 +17,6 @@
             <groupId>cn.starboot.socket</groupId>
             <artifactId>aio-socket-demo-common</artifactId>
         </dependency>
-
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
