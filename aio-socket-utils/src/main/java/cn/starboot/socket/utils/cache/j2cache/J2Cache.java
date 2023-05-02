@@ -29,8 +29,7 @@ public class J2Cache extends AbsCache {
 	}
 
 	private static CacheChannel getChannel() {
-		CacheChannel cache = net.oschina.j2cache.J2Cache.getChannel();
-		return cache;
+		return net.oschina.j2cache.J2Cache.getChannel();
 	}
 
 	@Override

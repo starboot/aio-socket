@@ -43,6 +43,7 @@ import java.util.function.Consumer;
  * 		   如果需要返回结果：Boolean b = Aio.bindBsId(bsId, channelContext);
  *
  * @author MDong
+ * @author t-io
  * @version 2.10.1.v20211002-RELEASE
  */
 public class Aio {

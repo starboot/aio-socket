@@ -37,15 +37,15 @@ public abstract class Base64Handler implements AioHandler {
 
 	private final Base64Dialect dialect;
 
-	public Base64Handler() {
+	private Base64Handler() {
 		this(true);
 	}
 
-	public Base64Handler(boolean breakLines) {
+	private Base64Handler(boolean breakLines) {
 		this(breakLines, Base64Dialect.STANDARD);
 	}
 
-	public Base64Handler(boolean breakLines, Base64Dialect dialect) {
+	private Base64Handler(boolean breakLines, Base64Dialect dialect) {
 		this.breakLines = breakLines;
 		this.dialect = ObjUtils.checkNotNull(dialect, "dialect");
 		System.out.println("Base64 Codec functionality is not yet fully developed");
