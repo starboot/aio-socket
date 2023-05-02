@@ -16,12 +16,15 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
         </dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
-			<version>4.3.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.fastjson2</groupId>
+			<artifactId>fastjson2</artifactId>
 		</dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -43,11 +46,6 @@
                     <artifactId>caffeine</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>

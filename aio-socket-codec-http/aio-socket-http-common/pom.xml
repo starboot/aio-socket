@@ -18,10 +18,6 @@
             <artifactId>aio-socket-kernel</artifactId>
         </dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>cn.starboot.socket</groupId>
 			<artifactId>aio-socket-plugin</artifactId>
 		</dependency>

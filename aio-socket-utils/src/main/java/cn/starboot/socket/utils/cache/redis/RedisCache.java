@@ -7,6 +7,7 @@ import cn.starboot.socket.utils.SystemTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.args.FlushMode;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -76,15 +77,7 @@ public class RedisCache extends AbsCache {
 
 	@Override
 	public void clear() {
-		long start = SystemTimer.currTime;
-
-//		RKeys keys = redisson.getKeys();
-
-//		keys.deleteByPatternAsync(keyPrefix(cacheName) + "*");
-
-		long end = SystemTimer.currTime;
-		long iv = end - start;
-		log.info("clear cache {}, cost {}ms", cacheName, iv);
+		jedis.flushDB(FlushMode.valueOf(keyPrefix(cacheName) + "*"));
 	}
 
 	@Override
@@ -92,19 +85,16 @@ public class RedisCache extends AbsCache {
 		if (StringUtils.isBlank(key)) {
 			return null;
 		}
-//		RBucket<Serializable> bucket = getBucket(key);
-//		if (bucket == null) {
-//			log.error("bucket is null, key:{}", key);
-//			return null;
-//		}
-//		Serializable ret = bucket.get();
+
+		String s = jedis.get(key);
+
 		if (timeToIdleSeconds != null) {
 //			if (ret != null) {
 				// bucket.expire(timeout, TimeUnit.SECONDS);
 				RedisExpireUpdateTask.add(cacheName, key, timeout);
 //			}
 		}
-		return null;
+		return s;
 	}
 
 	public String getBucket(String key) {
@@ -131,10 +121,7 @@ public class RedisCache extends AbsCache {
 
 	@Override
 	public Iterable<String> keys() {
-//		RKeys keys = redisson.getKeys();
-		Set<String> keys = jedis.keys("*");
-//		Iterable<String> allkey = keys.getKeysByPattern(keyPrefix(cacheName) + "*");//.findKeysByPattern(keyPrefix(cacheName) + "*");
-		return null;
+		return jedis.keys(keyPrefix(cacheName) + "*");
 	}
 
 	@Override

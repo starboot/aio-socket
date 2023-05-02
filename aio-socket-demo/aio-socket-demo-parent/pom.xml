@@ -7,15 +7,15 @@
 
 	<groupId>cn.starboot.socket</groupId>
     <artifactId>aio-socket-demo-parent</artifactId>
-	<version>1.2.1</version>
+	<version>1.2.3</version>
 
     <packaging>pom</packaging>
 
 	<properties>
 		<aio-socket.version>1.2.3</aio-socket.version>
 		<fileupload.version>1.4</fileupload.version>
-		<slf4j.version>1.7.36</slf4j.version>
-		<logback.version>1.2.9</logback.version>
+		<slf4j.version>2.0.7</slf4j.version>
+		<logback.version>1.4.7</logback.version>
 		<hutool.version>5.8.18</hutool.version>
 		<protobuff.version>3.21.4</protobuff.version>
 		<grpc.version>1.27.2</grpc.version>
@@ -31,7 +31,7 @@
             <dependency>
                 <groupId>cn.starboot.socket</groupId>
                 <artifactId>aio-socket-demo-common</artifactId>
-                <version>1.2.1</version>
+                <version>${aio-socket.version}</version>
             </dependency>
 			<dependency>
 				<groupId>commons-fileupload</groupId>
@@ -56,6 +56,12 @@
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 				<version>${logback.version}</version>
 			</dependency>
 			<dependency>
