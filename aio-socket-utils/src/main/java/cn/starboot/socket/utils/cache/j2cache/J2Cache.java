@@ -39,7 +39,7 @@ public class J2Cache extends AbsCache {
 	}
 
 	@Override
-	public Serializable _get(String key) {
+	protected Serializable get0(String key) {
 		CacheChannel cache = getChannel();
 		CacheObject cacheObject = cache.get(cacheName, key);
 		if (cacheObject != null) {
@@ -55,7 +55,7 @@ public class J2Cache extends AbsCache {
 	}
 
 	@Override
-	public void put(String key, Serializable value) {
+	public void put(String key, Object value) {
 		CacheChannel cache = getChannel();
 		cache.set(cacheName, key, value);
 	}
@@ -67,7 +67,7 @@ public class J2Cache extends AbsCache {
 	}
 
 	@Override
-	public void putTemporary(String key, Serializable value) {
+	public void putTemporary(String key, Object value) {
 		throw new RuntimeException("不支持防缓存穿透");
 	}
 

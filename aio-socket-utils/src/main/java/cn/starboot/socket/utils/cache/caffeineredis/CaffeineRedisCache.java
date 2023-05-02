@@ -150,7 +150,7 @@ public class CaffeineRedisCache extends AbsCache {
 	}
 
 	@Override
-	public Serializable _get(String key) {
+	protected Serializable get0(String key) {
 		if (StringUtils.isBlank(key)) {
 			return null;
 		}
@@ -194,7 +194,7 @@ public class CaffeineRedisCache extends AbsCache {
 	}
 
 	@Override
-	public void put(String key, Serializable value) {
+	public void put(String key, Object value) {
 		localCache.put(key, value);
 		distCache.put(key, value);
 
@@ -203,7 +203,7 @@ public class CaffeineRedisCache extends AbsCache {
 	}
 
 	@Override
-	public void putTemporary(String key, Serializable value) {
+	public void putTemporary(String key, Object value) {
 		localCache.putTemporary(key, value);
 		distCache.putTemporary(key, value);
 	}

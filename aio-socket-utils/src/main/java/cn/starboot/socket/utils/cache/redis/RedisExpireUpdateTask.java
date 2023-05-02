@@ -64,11 +64,14 @@ public class RedisExpireUpdateTask {
 					try {
 						Set<ExpireVo> set = setWithLock.getObj();
 						for (ExpireVo expireVo : set) {
+
 							log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}", expireVo.getCacheName(), expireVo.getKey(), expireVo.getTimeToIdleSeconds());
 
 							RedisCache redisCache = RedisCache.getCache(expireVo.getCacheName());
-//							RBucket<Serializable> bucket = redisCache.getBucket(expireVo.getKey());
-//							bucket.expireAsync(expireVo.getTimeToIdleSeconds(), TimeUnit.SECONDS);
+							String key = expireVo.getKey();
+							if (redisCache.ttl(key) > 0) {
+								redisCache.updateTimeout(key, expireVo.getTimeToIdleSeconds());
+							}
 						}
 						set.clear();
 					} catch (Throwable e) {

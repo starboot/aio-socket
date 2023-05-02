@@ -18,6 +18,7 @@ package cn.starboot.socket.utils.cache.caffeine;
 import cn.starboot.socket.utils.StringUtils;
 import cn.starboot.socket.utils.cache.AbsCache;
 import cn.starboot.socket.utils.caffeine.CaffeineUtils;
+import cn.starboot.socket.utils.json.JsonUtil;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.benmanes.caffeine.cache.RemovalListener;
 import org.slf4j.Logger;
@@ -97,7 +98,7 @@ public class CaffeineCache extends AbsCache {
 	}
 
 	@Override
-	public Serializable _get(String key) {
+	protected Serializable get0(String key) {
 		if (StringUtils.isBlank(key)) {
 			return null;
 		}
@@ -116,19 +117,19 @@ public class CaffeineCache extends AbsCache {
 	}
 
 	@Override
-	public void put(String key, Serializable value) {
+	public void put(String key, Object value) {
 		if (StringUtils.isBlank(key)) {
 			return;
 		}
-		loadingCache.put(key, value);
+		loadingCache.put(key, JsonUtil.toJSONString(value));
 	}
 
 	@Override
-	public void putTemporary(String key, Serializable value) {
+	public void putTemporary(String key, Object value) {
 		if (StringUtils.isBlank(key)) {
 			return;
 		}
-		temporaryLoadingCache.put(key, value);
+		temporaryLoadingCache.put(key, JsonUtil.toJSONString(value));
 	}
 
 	@Override

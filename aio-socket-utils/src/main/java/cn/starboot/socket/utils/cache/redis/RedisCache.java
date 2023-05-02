@@ -2,8 +2,8 @@ package cn.starboot.socket.utils.cache.redis;
 
 import cn.starboot.socket.utils.StringUtils;
 import cn.starboot.socket.utils.cache.AbsCache;
-import cn.starboot.socket.utils.SystemTimer;
 
+import cn.starboot.socket.utils.json.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -12,12 +12,11 @@ import redis.clients.jedis.args.FlushMode;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
 
 public class RedisCache extends AbsCache {
 
-	private static final Logger log = LoggerFactory.getLogger(RedisCache.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RedisCache.class);
 
 	private static final Map<String, RedisCache> map = new HashMap<>();
 
@@ -30,7 +29,7 @@ public class RedisCache extends AbsCache {
 	public static RedisCache getCache(String cacheName) {
 		RedisCache redisCache = map.get(cacheName);
 		if (redisCache == null) {
-			log.error("cacheName[{}]还没注册，请初始化时调用：{}.register(redisson, cacheName, timeToLiveSeconds, timeToIdleSeconds)", cacheName, RedisCache.class.getSimpleName());
+			LOGGER.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)", cacheName, RedisCache.class.getSimpleName());
 		}
 		return redisCache;
 	}
@@ -48,7 +47,6 @@ public class RedisCache extends AbsCache {
 				redisCache = map.get(cacheName);
 				if (redisCache == null) {
 					redisCache = new RedisCache(jedis, cacheName, timeToLiveSeconds, timeToIdleSeconds);
-
 					redisCache.setTimeToIdleSeconds(timeToIdleSeconds);
 					redisCache.setTimeToLiveSeconds(timeToLiveSeconds);
 					map.put(cacheName, redisCache);
@@ -81,26 +79,21 @@ public class RedisCache extends AbsCache {
 	}
 
 	@Override
-	public Serializable _get(String key) {
+	protected Serializable get0(String key) {
 		if (StringUtils.isBlank(key)) {
 			return null;
 		}
-
-		String s = jedis.get(key);
-
+		String s = getBucket(key);
 		if (timeToIdleSeconds != null) {
-//			if (ret != null) {
-				// bucket.expire(timeout, TimeUnit.SECONDS);
+			if (s != null && s.length() > 0) {
 				RedisExpireUpdateTask.add(cacheName, key, timeout);
-//			}
+			}
 		}
 		return s;
 	}
 
-	public String getBucket(String key) {
-		key = cacheKey(cacheName, key);
-//		RBucket<Serializable> bucket = redisson.getBucket(key);
-		return jedis.get(key);
+	private String getBucket(String key) {
+		return jedis.get(cacheKey(cacheName, key));
 	}
 
 	public Jedis getJedis() {
@@ -119,36 +112,34 @@ public class RedisCache extends AbsCache {
 		return timeToLiveSeconds;
 	}
 
+	public void updateTimeout(String key, long timeout) {
+		jedis.expire(key, timeout);
+	}
+
 	@Override
 	public Iterable<String> keys() {
 		return jedis.keys(keyPrefix(cacheName) + "*");
 	}
 
 	@Override
-	public void put(String key, Serializable value) {
-		if (StringUtils.isBlank(key)) {
+	public void put(String key, Object value) {
+		if (StringUtils.isBlank(key) && Objects.isNull(value)) {
 			return;
 		}
-//		RBucket<Serializable> bucket = getBucket(key);
-
-		long _timeout = timeout;
-		if (timeToLiveSeconds != null && timeToLiveSeconds > 0) { //是按timeToLiveSeconds来的
-			long ttl = ttl(key);
-			if (ttl > 0) {
-				_timeout = ttl / 1000;
-			}
-		}
-
-//		bucket.set(value, _timeout, TimeUnit.SECONDS);
+		key = cacheKey(cacheName, key);
+		String s = JsonUtil.toJSONString(value);
+		jedis.set(key, s);
+		jedis.expire(key, timeout);
 	}
 
 	@Override
-	public void putTemporary(String key, Serializable value) {
+	public void putTemporary(String key, Object value) {
 		if (StringUtils.isBlank(key)) {
 			return;
 		}
-//		RBucket<Serializable> bucket = getBucket(key);
-//		bucket.set(value, 10, TimeUnit.SECONDS);
+		key = cacheKey(cacheName, key);
+		jedis.set(key, JsonUtil.toJSONString(value));
+		jedis.expire(key, 10L);
 	}
 
 	@Override
@@ -156,18 +147,14 @@ public class RedisCache extends AbsCache {
 		if (StringUtils.isBlank(key)) {
 			return;
 		}
-//		RBucket<Serializable> bucket = getBucket(key);
-//		bucket.delete();
+		key = cacheKey(cacheName, key);
+		jedis.move(key, 1);
 	}
 
 	@Override
 	public long ttl(String key) {
-//		RBucket<Serializable> bucket = getBucket(key);
-//		if (bucket == null) {
-//			return -2L;
-//		}
-//		long remainTimeToLive = bucket.remainTimeToLive();
-		return 5L;
+		key = cacheKey(cacheName, key);
+		return jedis.exists(key) ? jedis.ttl(key) : -2L;
 	}
 
 }

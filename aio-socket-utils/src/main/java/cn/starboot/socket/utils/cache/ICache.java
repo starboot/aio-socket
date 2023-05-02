@@ -17,6 +17,11 @@ package cn.starboot.socket.utils.cache;
 
 import java.io.Serializable;
 
+/**
+ * 对缓存进行封装
+ *
+ * @author MDong
+ */
 public interface ICache {
 
 	/**
@@ -46,11 +51,11 @@ public interface ICache {
 
 	Iterable<String> keys();
 
-	void put(String key, Serializable value);
+	void put(String key, Object value);
 
 	void remove(String key);
 
-	void putTemporary(String key, Serializable value);
+	void putTemporary(String key, Object value);
 
 	/**
 	 * 对象还会存活多久。
@@ -63,4 +68,6 @@ public interface ICache {
 	Long getTimeToLiveSeconds();
 
 	Long getTimeToIdleSeconds();
+
+//	<T> T getCache();
 }

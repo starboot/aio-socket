@@ -16,6 +16,7 @@
 package cn.starboot.socket.utils.cache;
 
 import cn.starboot.socket.utils.StringUtils;
+import cn.starboot.socket.utils.json.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +24,7 @@ import java.io.Serializable;
 
 public abstract class AbsCache implements ICache {
 
-
-	private static final Logger log = LoggerFactory.getLogger(AbsCache.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbsCache.class);
 
 	protected String cacheName = null;
 
@@ -73,18 +73,17 @@ public abstract class AbsCache implements ICache {
 	}
 
 	public Serializable get(String key) {
-		Serializable obj = _get(key);
+		Serializable obj = get0(key);
 		if (obj instanceof NullClass) {
 			return null;
 		}
 		return obj;
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> T get(String key, Class<T> clazz) {
-		return (T) get(key);
+		return JsonUtil.toBean((String) get(key), clazz);
 	}
 
-	public abstract Serializable _get(String key);
+	protected abstract Serializable get0(String key);
 
 }
