@@ -18,4 +18,21 @@ package cn.starboot.socket.codec.base64;
 import cn.starboot.socket.Packet;
 
 public class Base64Packet extends Packet {
+
+	private final int length;
+
+	private final byte[] data;
+
+	public Base64Packet(int length, byte[] data) {
+		this.length = length;
+		this.data = data;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public byte[] getData() {
+		return data;
+	}
 }
