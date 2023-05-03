@@ -16,7 +16,7 @@
 package cn.starboot.socket.utils.cache.caffeine;
 
 import cn.starboot.socket.utils.StringUtils;
-import cn.starboot.socket.utils.cache.AbsCache;
+import cn.starboot.socket.utils.cache.AbstractCache;
 import cn.starboot.socket.utils.json.JsonUtil;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.benmanes.caffeine.cache.RemovalListener;
@@ -35,15 +35,15 @@ import java.util.concurrent.ConcurrentMap;
  * @author t-io
  * @author MDong
  */
-public class CaffeineCache extends AbsCache {
+public class CaffeineCache extends AbstractCache {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CaffeineCache.class);
 
-	public static Map<String, CaffeineCache> map = new HashMap<>();
+	private static final Map<String, CaffeineCache> MAP = new HashMap<>();
 
 	public static CaffeineCache getCache(String cacheName,
 										 boolean skipNull) {
-		CaffeineCache caffeineCache = map.get(cacheName);
+		CaffeineCache caffeineCache = MAP.get(cacheName);
 		if (caffeineCache == null && !skipNull && LOGGER.isErrorEnabled()) {
 			LOGGER.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)",
 					cacheName,
@@ -66,10 +66,10 @@ public class CaffeineCache extends AbsCache {
 										 Long timeToLiveSeconds,
 										 Long timeToIdleSeconds,
 										 RemovalListener<String, Serializable> removalListener) {
-		CaffeineCache caffeineCache = map.get(cacheName);
+		CaffeineCache caffeineCache = MAP.get(cacheName);
 		if (caffeineCache == null) {
 			synchronized (CaffeineCache.class) {
-				caffeineCache = map.get(cacheName);
+				caffeineCache = MAP.get(cacheName);
 				if (caffeineCache == null) {
 					Integer initialCapacity = 10;
 					Integer maximumSize = 5000000;
@@ -94,7 +94,7 @@ public class CaffeineCache extends AbsCache {
 					caffeineCache = new CaffeineCache(cacheName, loadingCache, temporaryLoadingCache);
 					caffeineCache.setTimeToIdleSeconds(timeToIdleSeconds);
 					caffeineCache.setTimeToLiveSeconds(timeToLiveSeconds);
-					map.put(cacheName, caffeineCache);
+					MAP.put(cacheName, caffeineCache);
 				}
 			}
 		}

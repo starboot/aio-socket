@@ -17,14 +17,16 @@ package cn.starboot.socket.utils.cache;
 
 import cn.starboot.socket.utils.StringUtils;
 import cn.starboot.socket.utils.json.JsonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
-public abstract class AbsCache implements ICache {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbsCache.class);
+/**
+ * 抽象缓存
+ *
+ * @author t-io
+ * @author MDong
+ */
+public abstract class AbstractCache implements ICache {
 
 	protected String cacheName = null;
 
@@ -32,14 +34,14 @@ public abstract class AbsCache implements ICache {
 
 	private Long timeToIdleSeconds;
 
-	public AbsCache(String cacheName) {
+	public AbstractCache(String cacheName) {
 		if (StringUtils.isBlank(cacheName)) {
 			throw new RuntimeException("cacheName不允许为空");
 		}
 		this.setCacheName(cacheName);
 	}
 
-	public AbsCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public AbstractCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		if (StringUtils.isBlank(cacheName)) {
 			throw new RuntimeException("cacheName不允许为空");
 		}

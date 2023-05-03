@@ -6,7 +6,8 @@ import net.oschina.j2cache.CacheChannel;
 public class CacheTest {
 
 	public static void main(String[] args) {
-		J2Cache j2 = new J2Cache("J2");
+
+		J2Cache j2 = J2Cache.register("J2");
 
 		j2.put("testKey", new TestObj("mxd", "男", "哈哈哈哈"));
 

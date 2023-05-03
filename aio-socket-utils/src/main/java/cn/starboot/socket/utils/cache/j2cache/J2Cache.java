@@ -15,12 +15,18 @@
  */
 package cn.starboot.socket.utils.cache.j2cache;
 
-import cn.starboot.socket.utils.cache.AbsCache;
+import cn.starboot.socket.utils.cache.AbstractCache;
+import cn.starboot.socket.utils.cache.caffeine.CaffeineCache;
 import net.oschina.j2cache.CacheChannel;
 import net.oschina.j2cache.CacheObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * J2Cache
@@ -28,11 +34,39 @@ import java.util.Collection;
  * @author t-io
  * @author MDong
  */
-public class J2Cache extends AbsCache {
+public class J2Cache extends AbstractCache {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(J2Cache.class);
+
+	private static final Map<String, J2Cache> MAP = new HashMap<>();
+
+	public static J2Cache getCache(String cacheName) {
+		J2Cache j2Cache = MAP.get(cacheName);
+		if (Objects.isNull(j2Cache) && LOGGER.isErrorEnabled()) {
+			LOGGER.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)",
+					cacheName,
+					CaffeineCache.class.getSimpleName());
+		}
+		return j2Cache;
+	}
+
+	public static J2Cache register(String cacheName) {
+		J2Cache j2Cache = MAP.get(cacheName);
+		if (Objects.isNull(j2Cache)) {
+			synchronized (J2Cache.class) {
+				j2Cache = MAP.get(cacheName);
+				if (Objects.isNull(j2Cache)) {
+					j2Cache = new J2Cache(cacheName);
+				}
+				MAP.put(cacheName, j2Cache);
+			}
+		}
+		return j2Cache;
+	}
 
 	private final CacheChannel cacheChannel;
 
-	public J2Cache(String cacheName) {
+	private J2Cache(String cacheName) {
 		super(cacheName);
 		this.cacheChannel = net.oschina.j2cache.J2Cache.getChannel();
 	}

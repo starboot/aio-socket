@@ -1,7 +1,7 @@
 package cn.starboot.socket.utils.cache.redis;
 
 import cn.starboot.socket.utils.StringUtils;
-import cn.starboot.socket.utils.cache.AbsCache;
+import cn.starboot.socket.utils.cache.AbstractCache;
 
 import cn.starboot.socket.utils.json.JsonUtil;
 import org.slf4j.Logger;
@@ -19,56 +19,55 @@ import java.util.Objects;
  * @author t-io
  * @author MDong
  */
-public class RedisCache extends AbsCache {
+public class RedisCache extends AbstractCache {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedisCache.class);
 
-	private static final Map<String, RedisCache> map = new HashMap<>();
+	private static final Map<String, RedisCache> MAP = new HashMap<>();
 
 	public static final String SPLIT_FOR_CACHE_NAME = ":";
 
-	public static String cacheKey(String cacheName, String key) {
-		return keyPrefix(cacheName) + key;
-	}
-
 	public static RedisCache getCache(String cacheName) {
-		RedisCache redisCache = map.get(cacheName);
+		RedisCache redisCache = MAP.get(cacheName);
 		if (redisCache == null && LOGGER.isErrorEnabled()) {
-			LOGGER.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)", cacheName, RedisCache.class.getSimpleName());
+			LOGGER.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)",
+					cacheName,
+					RedisCache.class.getSimpleName());
 		}
 		return redisCache;
 	}
 
-	public static String keyPrefix(String cacheName) {
-		return cacheName + SPLIT_FOR_CACHE_NAME;
-	}
-
-	public static RedisCache register(Jedis jedis, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public static RedisCache register(Jedis jedis,
+									  String cacheName,
+									  Long timeToLiveSeconds,
+									  Long timeToIdleSeconds) {
 		RedisExpireUpdateTask.start();
-		RedisCache redisCache = map.get(cacheName);
+		RedisCache redisCache = MAP.get(cacheName);
 		if (redisCache == null) {
 			synchronized (RedisCache.class) {
-				redisCache = map.get(cacheName);
+				redisCache = MAP.get(cacheName);
 				if (redisCache == null) {
 					redisCache = new RedisCache(jedis, cacheName, timeToLiveSeconds, timeToIdleSeconds);
 					redisCache.setTimeToIdleSeconds(timeToIdleSeconds);
 					redisCache.setTimeToLiveSeconds(timeToLiveSeconds);
-					map.put(cacheName, redisCache);
+					MAP.put(cacheName, redisCache);
 				}
 			}
 		}
 		return redisCache;
 	}
 
+	public static String cacheKey(String cacheName, String key) {
+		return keyPrefix(cacheName) + key;
+	}
+
+	public static String keyPrefix(String cacheName) {
+		return cacheName + SPLIT_FOR_CACHE_NAME;
+	}
+
 	private final Jedis jedis;
 
 	private final Integer timeout;
-
-	public RedisCache(String cacheName, Jedis jedis, Integer timeout) {
-		super(cacheName);
-		this.jedis = jedis;
-		this.timeout = timeout;
-	}
 
 	private RedisCache(Jedis jedis, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		super(cacheName, timeToLiveSeconds, timeToIdleSeconds);
