@@ -22,26 +22,33 @@ import net.oschina.j2cache.CacheObject;
 import java.io.Serializable;
 import java.util.Collection;
 
+/**
+ * J2Cache
+ *
+ * @author t-io
+ * @author MDong
+ */
 public class J2Cache extends AbsCache {
+
+	private final CacheChannel cacheChannel;
 
 	public J2Cache(String cacheName) {
 		super(cacheName);
+		this.cacheChannel = net.oschina.j2cache.J2Cache.getChannel();
 	}
 
-	private static CacheChannel getChannel() {
-		return net.oschina.j2cache.J2Cache.getChannel();
+	private CacheChannel getChannel() {
+		return this.cacheChannel;
 	}
 
 	@Override
 	public void clear() {
-		CacheChannel cache = getChannel();
-		cache.clear(cacheName);
+		getChannel().clear(cacheName);
 	}
 
 	@Override
 	protected Serializable get0(String key) {
-		CacheChannel cache = getChannel();
-		CacheObject cacheObject = cache.get(cacheName, key);
+		CacheObject cacheObject = getChannel().get(cacheName, key);
 		if (cacheObject != null) {
 			return (Serializable) cacheObject.getValue();
 		}
@@ -50,30 +57,27 @@ public class J2Cache extends AbsCache {
 
 	@Override
 	public Collection<String> keys() {
-		CacheChannel cache = getChannel();
-		return cache.keys(cacheName);
+		return getChannel().keys(cacheName);
 	}
 
 	@Override
 	public void put(String key, Object value) {
-		CacheChannel cache = getChannel();
-		cache.set(cacheName, key, value);
+		getChannel().set(cacheName, key, value);
 	}
 
 	@Override
 	public void remove(String key) {
-		CacheChannel cache = getChannel();
-		cache.evict(cacheName, key);
+		getChannel().evict(cacheName, key);
 	}
 
 	@Override
 	public void putTemporary(String key, Object value) {
-		throw new RuntimeException("不支持防缓存穿透");
+		throw new UnsupportedOperationException("不支持防缓存穿透");
 	}
 
 	@Override
 	public long ttl(String key) {
-		throw new RuntimeException("不支持ttl");
+		throw new UnsupportedOperationException("不支持ttl");
 	}
 
 }

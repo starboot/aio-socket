@@ -48,30 +48,34 @@ public abstract class AbsCache implements ICache {
 		this.setTimeToIdleSeconds(timeToIdleSeconds);
 	}
 
+	@Override
 	public String getCacheName() {
 		return cacheName;
 	}
 
-	public void setCacheName(String cacheName) {
+	void setCacheName(String cacheName) {
 		this.cacheName = cacheName;
 	}
 
+	@Override
 	public Long getTimeToLiveSeconds() {
 		return timeToLiveSeconds;
 	}
 
-	public void setTimeToLiveSeconds(Long timeToLiveSeconds) {
+	protected void setTimeToLiveSeconds(Long timeToLiveSeconds) {
 		this.timeToLiveSeconds = timeToLiveSeconds;
 	}
 
+	@Override
 	public Long getTimeToIdleSeconds() {
 		return timeToIdleSeconds;
 	}
 
-	public void setTimeToIdleSeconds(Long timeToIdleSeconds) {
+	protected void setTimeToIdleSeconds(Long timeToIdleSeconds) {
 		this.timeToIdleSeconds = timeToIdleSeconds;
 	}
 
+	@Override
 	public Serializable get(String key) {
 		Serializable obj = get0(key);
 		if (obj instanceof NullClass) {
@@ -80,6 +84,7 @@ public abstract class AbsCache implements ICache {
 		return obj;
 	}
 
+	@Override
 	public <T> T get(String key, Class<T> clazz) {
 		return JsonUtil.toBean((String) get(key), clazz);
 	}

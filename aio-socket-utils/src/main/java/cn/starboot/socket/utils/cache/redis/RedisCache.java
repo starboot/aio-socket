@@ -33,7 +33,7 @@ public class RedisCache extends AbsCache {
 
 	public static RedisCache getCache(String cacheName) {
 		RedisCache redisCache = map.get(cacheName);
-		if (redisCache == null) {
+		if (redisCache == null && LOGGER.isErrorEnabled()) {
 			LOGGER.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)", cacheName, RedisCache.class.getSimpleName());
 		}
 		return redisCache;
@@ -62,18 +62,18 @@ public class RedisCache extends AbsCache {
 
 	private final Jedis jedis;
 
-	private final Long timeToLiveSeconds;
-
-	private final Long timeToIdleSeconds;
-
 	private final Integer timeout;
 
-	private RedisCache(Jedis jedis, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public RedisCache(String cacheName, Jedis jedis, Integer timeout) {
 		super(cacheName);
 		this.jedis = jedis;
-		this.timeToLiveSeconds = timeToLiveSeconds;
-		this.timeToIdleSeconds = timeToIdleSeconds;
-		this.timeout = Math.toIntExact(this.timeToLiveSeconds == null ? this.timeToIdleSeconds : this.timeToLiveSeconds);
+		this.timeout = timeout;
+	}
+
+	private RedisCache(Jedis jedis, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+		super(cacheName, timeToLiveSeconds, timeToIdleSeconds);
+		this.jedis = jedis;
+		this.timeout = Math.toIntExact(timeToLiveSeconds == null ? timeToIdleSeconds : timeToLiveSeconds);
 
 	}
 
@@ -88,7 +88,7 @@ public class RedisCache extends AbsCache {
 			return null;
 		}
 		String s = getBucket(key);
-		if (timeToIdleSeconds != null) {
+		if (getTimeToIdleSeconds() != null) {
 			if (s != null && s.length() > 0) {
 				RedisExpireUpdateTask.add(cacheName, key, timeout);
 			}
@@ -106,14 +106,6 @@ public class RedisCache extends AbsCache {
 
 	public Integer getTimeout() {
 		return timeout;
-	}
-
-	public Long getTimeToIdleSeconds() {
-		return timeToIdleSeconds;
-	}
-
-	public Long getTimeToLiveSeconds() {
-		return timeToLiveSeconds;
 	}
 
 	public void updateTimeout(String key, int timeout) {

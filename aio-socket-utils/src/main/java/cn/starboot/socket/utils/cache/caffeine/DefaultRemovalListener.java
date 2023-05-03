@@ -20,9 +20,17 @@ import com.github.benmanes.caffeine.cache.RemovalListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * DefaultRemovalListener
+ *
+ * @param <K>
+ * @param <V>
+ * @author t-io
+ * @author MDong
+ */
 public class DefaultRemovalListener<K, V> implements RemovalListener<K, V> {
 
-	private static final Logger log = LoggerFactory.getLogger(DefaultRemovalListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRemovalListener.class);
 
 	private final String cacheName;
 
@@ -32,8 +40,8 @@ public class DefaultRemovalListener<K, V> implements RemovalListener<K, V> {
 
 	@Override
 	public void onRemoval(K key, V value, RemovalCause cause) {
-		if (log.isDebugEnabled()) {
-			log.debug("cacheName:{}, key:{}, value:{} was removed", cacheName, key, value);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("cacheName:{}, key:{}, value:{} was removed", cacheName, key, value);
 		}
 	}
 }

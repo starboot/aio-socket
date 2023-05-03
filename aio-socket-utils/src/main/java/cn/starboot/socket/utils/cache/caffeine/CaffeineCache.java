@@ -29,16 +29,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Caffeine
+ *
+ * @author t-io
+ * @author MDong
+ */
 public class CaffeineCache extends AbsCache {
 
-	private static final Logger log = LoggerFactory.getLogger(CaffeineCache.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CaffeineCache.class);
 
 	public static Map<String, CaffeineCache> map = new HashMap<>();
 
-	public static CaffeineCache getCache(String cacheName, boolean skipNull) {
+	public static CaffeineCache getCache(String cacheName,
+										 boolean skipNull) {
 		CaffeineCache caffeineCache = map.get(cacheName);
-		if (caffeineCache == null && !skipNull) {
-			log.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)", cacheName, CaffeineCache.class.getSimpleName());
+		if (caffeineCache == null && !skipNull && LOGGER.isErrorEnabled()) {
+			LOGGER.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)",
+					cacheName,
+					CaffeineCache.class.getSimpleName());
 		}
 		return caffeineCache;
 	}
@@ -47,11 +56,16 @@ public class CaffeineCache extends AbsCache {
 		return getCache(cacheName, false);
 	}
 
-	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+	public static CaffeineCache register(String cacheName,
+										 Long timeToLiveSeconds,
+										 Long timeToIdleSeconds) {
 		return register(cacheName, timeToLiveSeconds, timeToIdleSeconds, null);
 	}
 
-	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, RemovalListener<String, Serializable> removalListener) {
+	public static CaffeineCache register(String cacheName,
+										 Long timeToLiveSeconds,
+										 Long timeToIdleSeconds,
+										 RemovalListener<String, Serializable> removalListener) {
 		CaffeineCache caffeineCache = map.get(cacheName);
 		if (caffeineCache == null) {
 			synchronized (CaffeineCache.class) {
@@ -60,17 +74,26 @@ public class CaffeineCache extends AbsCache {
 					Integer initialCapacity = 10;
 					Integer maximumSize = 5000000;
 					boolean recordStats = false;
-					LoadingCache<String, Serializable> loadingCache = CaffeineUtils.createLoadingCache(cacheName, timeToLiveSeconds, timeToIdleSeconds, initialCapacity,
-					        maximumSize, recordStats, removalListener);
-
+					LoadingCache<String, Serializable> loadingCache = CaffeineUtils
+							.createLoadingCache(cacheName,
+									timeToLiveSeconds,
+									timeToIdleSeconds,
+									initialCapacity,
+									maximumSize,
+									recordStats,
+									removalListener);
 					Integer temporaryMaximumSize = 500000;
-					LoadingCache<String, Serializable> temporaryLoadingCache = CaffeineUtils.createLoadingCache(cacheName, 10L, (Long) null, initialCapacity, temporaryMaximumSize,
-					        recordStats, removalListener);
+					LoadingCache<String, Serializable> temporaryLoadingCache = CaffeineUtils
+							.createLoadingCache(cacheName,
+									10L,
+									null,
+									initialCapacity,
+									temporaryMaximumSize,
+									recordStats,
+									removalListener);
 					caffeineCache = new CaffeineCache(cacheName, loadingCache, temporaryLoadingCache);
-
 					caffeineCache.setTimeToIdleSeconds(timeToIdleSeconds);
 					caffeineCache.setTimeToLiveSeconds(timeToLiveSeconds);
-
 					map.put(cacheName, caffeineCache);
 				}
 			}
@@ -82,7 +105,9 @@ public class CaffeineCache extends AbsCache {
 
 	private final LoadingCache<String, Serializable> temporaryLoadingCache;
 
-	private CaffeineCache(String cacheName, LoadingCache<String, Serializable> loadingCache, LoadingCache<String, Serializable> temporaryLoadingCache) {
+	private CaffeineCache(String cacheName,
+						  LoadingCache<String, Serializable> loadingCache,
+						  LoadingCache<String, Serializable> temporaryLoadingCache) {
 		super(cacheName);
 		this.loadingCache = loadingCache;
 		this.temporaryLoadingCache = temporaryLoadingCache;
@@ -109,8 +134,7 @@ public class CaffeineCache extends AbsCache {
 
 	@Override
 	public Collection<String> keys() {
-		ConcurrentMap<String, Serializable> map = loadingCache.asMap();
-		return map.keySet();
+		return loadingCache.asMap().keySet();
 	}
 
 	@Override
@@ -148,6 +172,6 @@ public class CaffeineCache extends AbsCache {
 
 	@Override
 	public long ttl(String key) {
-		throw new RuntimeException("不支持ttl");
+		throw new UnsupportedOperationException("不支持ttl");
 	}
 }

@@ -20,6 +20,7 @@ import java.io.Serializable;
 /**
  * 对缓存进行封装
  *
+ * @author t-io
  * @author MDong
  */
 public interface ICache {
