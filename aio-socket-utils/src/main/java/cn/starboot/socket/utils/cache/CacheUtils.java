@@ -17,7 +17,6 @@ package cn.starboot.socket.utils.cache;
 
 import cn.starboot.socket.utils.lock.LockUtils;
 import cn.starboot.socket.utils.cache.caffeine.CaffeineCache;
-import cn.starboot.socket.utils.cache.caffeineredis.CaffeineRedisCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -160,21 +159,6 @@ public abstract class CacheUtils {
 		return caffeineCache;
 	}
 
-	public static CaffeineRedisCache getCaffeineRedisCache(Jedis jedis, Long timeToLiveSeconds, Long timeToIdleSeconds) {
-		String cacheName = getCacheName(timeToLiveSeconds, timeToIdleSeconds);
-		CaffeineRedisCache caffeineCache = CaffeineRedisCache.getCache(cacheName, true);
-		if (caffeineCache == null) {
-			synchronized (LOCK_FOR_GETCACHE) {
-				caffeineCache = CaffeineRedisCache.getCache(cacheName, true);
-				if (caffeineCache == null) {
-					caffeineCache = CaffeineRedisCache.register(jedis, cacheName, timeToLiveSeconds, timeToIdleSeconds);
-				}
-			}
-		}
-
-		return caffeineCache;
-	}
-
 	private static String getCacheName(Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		if (timeToLiveSeconds != null) {
 			return PREFIX_TIMETOLIVESECONDS + timeToLiveSeconds;
@@ -183,9 +167,6 @@ public abstract class CacheUtils {
 		} else {
 			throw new RuntimeException("timeToLiveSeconds和timeToIdleSeconds不允许同时为空");
 		}
-	}
-
-	public static void main(String[] args) {
 	}
 
 }

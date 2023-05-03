@@ -17,7 +17,6 @@ package cn.starboot.socket.utils.cache.caffeine;
 
 import cn.starboot.socket.utils.StringUtils;
 import cn.starboot.socket.utils.cache.AbsCache;
-import cn.starboot.socket.utils.caffeine.CaffeineUtils;
 import cn.starboot.socket.utils.json.JsonUtil;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.benmanes.caffeine.cache.RemovalListener;

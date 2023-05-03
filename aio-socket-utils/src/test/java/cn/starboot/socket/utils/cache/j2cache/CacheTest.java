@@ -23,6 +23,5 @@ public class CacheTest {
 		CacheChannel channel = net.oschina.j2cache.J2Cache.getChannel();
 
 
-
 	}
 }
