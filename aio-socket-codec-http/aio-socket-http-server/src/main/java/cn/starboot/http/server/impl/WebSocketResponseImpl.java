@@ -30,9 +30,13 @@ import java.util.Arrays;
  * @version 2.10.1.v20211002-RELEASE
  */
 public class WebSocketResponseImpl extends AbstractResponse implements WebSocketResponse {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketResponseImpl.class);
 
-    public WebSocketResponseImpl(WebSocketRequestImpl webSocketRequest, HttpRequestPacket HTTPRequestPacket) {
+	/* uid */
+	private static final long serialVersionUID = -7526835040483188106L;
+
+	public WebSocketResponseImpl(WebSocketRequestImpl webSocketRequest, HttpRequestPacket HTTPRequestPacket) {
         init(webSocketRequest, new WebSocketOutputStream(webSocketRequest, this, HTTPRequestPacket));
     }
 

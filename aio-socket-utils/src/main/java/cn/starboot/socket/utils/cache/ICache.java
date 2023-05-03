@@ -28,7 +28,8 @@ public interface ICache {
 	 * 有时候需要放一个空对象到缓存中
 	 */
 	class NullClass implements Serializable {
-		private static final long serialVersionUID = -2298613658358477523L;
+		/* uid */
+		private static final long serialVersionUID = -443954143541528578L;
 	}
 
 	/**

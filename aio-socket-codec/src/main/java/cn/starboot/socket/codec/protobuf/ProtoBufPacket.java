@@ -19,6 +19,9 @@ import cn.starboot.socket.Packet;
 
 public class ProtoBufPacket extends Packet {
 
+	/* uid */
+	private static final long serialVersionUID = 6532594053983752270L;
+
 	private final int length;
 
 	private final byte[] data;

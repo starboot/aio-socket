@@ -22,7 +22,10 @@ package cn.starboot.http.server.impl;
  */
 class HttpResponseImpl extends AbstractResponse {
 
-    public HttpResponseImpl(HttpRequestImpl httpRequest, HttpRequestPacket HTTPRequestPacket) {
+	/* uid */
+	private static final long serialVersionUID = -1563035926880261214L;
+
+	public HttpResponseImpl(HttpRequestImpl httpRequest, HttpRequestPacket HTTPRequestPacket) {
         init(httpRequest, new HttpOutputStream(httpRequest, this, HTTPRequestPacket));
     }
 }

@@ -19,6 +19,9 @@ import cn.starboot.socket.Packet;
 
 public class Base64Packet extends Packet {
 
+	/* uid */
+	private static final long serialVersionUID = -7714821752025331906L;
+
 	private final int length;
 
 	private final byte[] data;

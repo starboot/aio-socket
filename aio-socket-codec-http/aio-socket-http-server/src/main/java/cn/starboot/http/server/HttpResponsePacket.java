@@ -22,6 +22,9 @@ import cn.starboot.socket.Packet;
  */
 public class HttpResponsePacket extends Packet {
 
+	/* uid */
+	private static final long serialVersionUID = 8933782815134212600L;
+
 	private HttpResponse response;
 
 	private HttpRequest request;

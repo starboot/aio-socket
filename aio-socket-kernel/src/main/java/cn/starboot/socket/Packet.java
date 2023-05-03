@@ -28,9 +28,10 @@ import java.io.Serializable;
  */
 public class Packet implements Serializable {
 
-    private static final long serialVersionUID = -4108736058242170393L;
+	/* uid */
+	private static final long serialVersionUID = -1862775872908377468L;
 
-    /**
+	/**
      * TCP报文版本号
      */
     private byte versionID;

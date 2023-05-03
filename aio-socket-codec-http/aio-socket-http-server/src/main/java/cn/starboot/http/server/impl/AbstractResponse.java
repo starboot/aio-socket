@@ -40,7 +40,9 @@ import java.util.Vector;
  * @version 2.10.1.v20211002-RELEASE
  */
 class AbstractResponse extends Packet implements HttpResponse, Reset {
-    /**
+	/* uid */
+	private static final long serialVersionUID = 1887996841717197093L;
+	/**
      * 输入流
      */
     private AbstractOutputStream outputStream;

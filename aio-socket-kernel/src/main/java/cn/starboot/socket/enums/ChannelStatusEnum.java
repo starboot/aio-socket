@@ -36,5 +36,4 @@ public enum ChannelStatusEnum {
 	通道可用
 	 */
 	CHANNEL_STATUS_ENABLED
-	;
 }

@@ -10,6 +10,10 @@ import java.nio.ByteBuffer;
  * @author MDong
  */
 public class MqttPublishMessage extends MqttMessage {
+
+	/* uid */
+	private static final long serialVersionUID = 7313984585190688814L;
+
 	public MqttPublishMessage(
 			MqttFixedHeader mqttFixedHeader,
 			MqttPublishVariableHeader variableHeader,

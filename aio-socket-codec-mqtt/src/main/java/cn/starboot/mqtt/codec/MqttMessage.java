@@ -11,6 +11,9 @@ import cn.starboot.socket.codec.DecoderResult;
  * @author MDong
  */
 public class MqttMessage extends Packet {
+
+	/* uid */
+	private static final long serialVersionUID = -8815948557760775994L;
 	private final MqttFixedHeader mqttFixedHeader;
 	private final Object variableHeader;
 	private final Object payload;

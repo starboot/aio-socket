@@ -26,6 +26,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HttpResponsePacket extends Packet {
 
+	/* uid */
+	private static final long serialVersionUID = -8865330985514520428L;
+
 	private static final Map<String, byte[]> HEADER_NAME_EXT_MAP = new ConcurrentHashMap<>();
 
 	private final HttpResponse response;

@@ -4,6 +4,9 @@ import cn.starboot.socket.Packet;
 
 public class TestPacket extends Packet {
 
+	/* uid */
+	private static final long serialVersionUID = -1659962481777885842L;
+
 	private String data;
 
 	public TestPacket(String data) {

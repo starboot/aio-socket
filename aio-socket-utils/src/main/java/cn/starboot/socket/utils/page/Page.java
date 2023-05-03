@@ -8,11 +8,11 @@ import java.util.List;
 
 public class Page<T> implements Serializable {
 
-	private List<T> list				= null;					//当前页的数据
-	private Integer				pageNumber;									//当前页码，从1开始，如果值小于等于0，则视为1
-	private Integer				pageSize;									//每页记录数
-	private Integer				totalRow;									//总条数
-	private Integer				totalPage;									//总页数
+	private List<T> list = null;                    //当前页的数据
+	private Integer pageNumber;                                    //当前页码，从1开始，如果值小于等于0，则视为1
+	private Integer pageSize;                                    //每页记录数
+	private Integer totalRow;                                    //总条数
+	private Integer totalPage;                                    //总页数
 
 	public Page() {
 
@@ -72,8 +72,8 @@ public class Page<T> implements Serializable {
 	}
 
 	public Integer getTotalPage() {
-		Double result = Math.ceil(((double) (totalRow) / pageSize));
-		totalPage = result.intValue();
+		double result = Math.ceil(((double) (totalRow) / pageSize));
+		totalPage = (int) result;
 		return totalPage;
 	}
 

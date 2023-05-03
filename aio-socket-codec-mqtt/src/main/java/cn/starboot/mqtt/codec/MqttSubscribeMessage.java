@@ -10,6 +10,9 @@ package cn.starboot.mqtt.codec;
  */
 public final class MqttSubscribeMessage extends MqttMessage {
 
+	/* uid */
+	private static final long serialVersionUID = -78467029556792979L;
+
 	public MqttSubscribeMessage(
 			MqttFixedHeader mqttFixedHeader,
 			MqttMessageIdAndPropertiesVariableHeader variableHeader,

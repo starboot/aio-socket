@@ -4,7 +4,10 @@ import cn.starboot.socket.Packet;
 
 public class UDPPacket extends Packet {
 
-    private final String data;
+	/* uid */
+	private static final long serialVersionUID = 2869517132259909209L;
+
+	private final String data;
 
     public UDPPacket(String data) {
         this.data = data;

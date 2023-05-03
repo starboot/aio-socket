@@ -48,10 +48,13 @@ import java.util.function.Function;
  * @version 2.10.1.v20211002-RELEASE
  */
 public final class HttpRequestPacket extends Packet implements HttpRequest, Reset {
+	/* uid */
+	private static final long serialVersionUID = 5721785516310014641L;
+
     private static final Locale defaultLocale = Locale.getDefault();
     private static final int INIT_CONTENT_LENGTH = -2;
     private static final int NONE_CONTENT_LENGTH = -1;
-    private final ChannelContext channelContext;
+	private final ChannelContext channelContext;
     /**
      * Http请求头
      */

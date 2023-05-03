@@ -19,7 +19,10 @@ import cn.starboot.socket.Packet;
 
 public class StringPacket extends Packet {
 
-    private String data;
+	/* uid */
+	private static final long serialVersionUID = 3180115942670553061L;
+
+	private String data;
 
     public StringPacket(String data) {
         this.data = data;
