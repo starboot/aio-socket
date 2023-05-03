@@ -1,5 +1,6 @@
-package cn.starboot.socket.utils.cache;
+package cn.starboot.socket.utils.cache.redis;
 
+import cn.starboot.socket.utils.cache.TestObj;
 import cn.starboot.socket.utils.cache.redis.RedisCache;
 import redis.clients.jedis.Jedis;
 

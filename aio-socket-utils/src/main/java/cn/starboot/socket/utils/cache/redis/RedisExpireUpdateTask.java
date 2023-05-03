@@ -68,7 +68,7 @@ public class RedisExpireUpdateTask {
 								expireVo.getTimeToIdleSeconds());
 						RedisCache
 								.getCache(expireVo.getCacheName())
-								.updateTimeout(expireVo.getKey(), 0L);
+								.updateTimeout(expireVo.getKey(), 0);
 					}
 					set.clear();
 				} catch (Throwable e) {

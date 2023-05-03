@@ -7,7 +7,6 @@ import cn.starboot.socket.utils.json.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.args.FlushMode;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -67,20 +66,20 @@ public class RedisCache extends AbsCache {
 
 	private final Long timeToIdleSeconds;
 
-	private final Long timeout;
+	private final Integer timeout;
 
 	private RedisCache(Jedis jedis, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		super(cacheName);
 		this.jedis = jedis;
 		this.timeToLiveSeconds = timeToLiveSeconds;
 		this.timeToIdleSeconds = timeToIdleSeconds;
-		this.timeout = this.timeToLiveSeconds == null ? this.timeToIdleSeconds : this.timeToLiveSeconds;
+		this.timeout = Math.toIntExact(this.timeToLiveSeconds == null ? this.timeToIdleSeconds : this.timeToLiveSeconds);
 
 	}
 
 	@Override
 	public void clear() {
-		jedis.flushDB(FlushMode.valueOf(keyPrefix(cacheName) + "*"));
+		jedis.flushDB();
 	}
 
 	@Override
@@ -105,7 +104,7 @@ public class RedisCache extends AbsCache {
 		return jedis;
 	}
 
-	public Long getTimeout() {
+	public Integer getTimeout() {
 		return timeout;
 	}
 
@@ -117,7 +116,7 @@ public class RedisCache extends AbsCache {
 		return timeToLiveSeconds;
 	}
 
-	public void updateTimeout(String key, long timeout) {
+	public void updateTimeout(String key, int timeout) {
 		if (timeout > 0) {
 			jedis.expire(key, timeout);
 		} else {
@@ -158,7 +157,7 @@ public class RedisCache extends AbsCache {
 		}
 		key = cacheKey(cacheName, key);
 		jedis.set(key, JsonUtil.toJSONString(value));
-		updateTimeout(key, 10L);
+		updateTimeout(key, 10);
 	}
 
 	@Override

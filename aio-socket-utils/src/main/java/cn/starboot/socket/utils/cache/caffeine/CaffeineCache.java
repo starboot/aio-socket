@@ -24,7 +24,6 @@ import com.github.benmanes.caffeine.cache.RemovalListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,7 +39,7 @@ public class CaffeineCache extends AbsCache {
 	public static CaffeineCache getCache(String cacheName, boolean skipNull) {
 		CaffeineCache caffeineCache = map.get(cacheName);
 		if (caffeineCache == null && !skipNull) {
-			log.error("cacheName[{}]还没注册，请初始化时调用：{}.register(cacheName, timeToLiveSeconds, timeToIdleSeconds)", cacheName, CaffeineCache.class.getSimpleName());
+			log.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)", cacheName, CaffeineCache.class.getSimpleName());
 		}
 		return caffeineCache;
 	}
@@ -50,8 +49,7 @@ public class CaffeineCache extends AbsCache {
 	}
 
 	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
-		CaffeineCache CaffeineCache = register(cacheName, timeToLiveSeconds, timeToIdleSeconds, null);
-		return CaffeineCache;
+		return register(cacheName, timeToLiveSeconds, timeToIdleSeconds, null);
 	}
 
 	public static CaffeineCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, RemovalListener<String, Serializable> removalListener) {

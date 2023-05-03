@@ -1,6 +1,11 @@
 package cn.starboot.socket.utils.cache;
 
-public class TestObj {
+import java.io.Serializable;
+
+public class TestObj implements Serializable {
+
+	/* uid */
+	private static final long serialVersionUID = 4406309863986237239L;
 
 	private String name;
 

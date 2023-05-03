@@ -34,15 +34,15 @@ import java.util.Objects;
 
 public class CaffeineRedisCache extends AbsCache {
 
-	public static final String						CACHE_CHANGE_TOPIC	= "AIO_CACHE_CHANGE_TOPIC_CAFFEINE";
+	public static final String CACHE_CHANGE_TOPIC = "AIO_CACHE_CHANGE_TOPIC_CAFFEINE";
 
-	private static final Logger							log					= LoggerFactory.getLogger(CaffeineRedisCache.class);
+	private static final Logger log = LoggerFactory.getLogger(CaffeineRedisCache.class);
 
-	public static Map<String, CaffeineRedisCache>	map					= new HashMap<>();
+	public static Map<String, CaffeineRedisCache> map = new HashMap<>();
 
 //	public static RTopic							topic;
 
-	private static boolean							inited				= false;
+	private static boolean inited = false;
 
 	CaffeineCache localCache;
 
@@ -52,7 +52,7 @@ public class CaffeineRedisCache extends AbsCache {
 	public static CaffeineRedisCache getCache(String cacheName, boolean skipNull) {
 		CaffeineRedisCache caffeineRedisCache = map.get(cacheName);
 		if (caffeineRedisCache == null && !skipNull) {
-			log.warn("cacheName[{}]还没注册，请初始化时调用：{}.register(cacheName, timeToLiveSeconds, timeToIdleSeconds)", cacheName, CaffeineRedisCache.class.getSimpleName());
+			log.warn("cacheName[{}]还没注册，请初始化时调用：{}.register(...)", cacheName, CaffeineRedisCache.class.getSimpleName());
 		}
 		return caffeineRedisCache;
 	}
@@ -166,12 +166,12 @@ public class CaffeineRedisCache extends AbsCache {
 //					@Override
 //					public void write() {
 //						Serializable ret = localCache.get(key);
-						if (localCache.get(key) == null) {
-							Serializable ret1 = distCache.get(key);
-							if (ret1 != null) {
-								localCache.put(key, ret1);
-							}
+					if (localCache.get(key) == null) {
+						Serializable ret1 = distCache.get(key);
+						if (ret1 != null) {
+							localCache.put(key, ret1);
 						}
+					}
 //					}
 				});
 			} catch (Exception e) {

@@ -58,10 +58,8 @@
 		<fastjson2.version>2.0.29</fastjson2.version>
         <protobuff.version>3.21.4</protobuff.version>
         <commons-codec.version>1.15</commons-codec.version>
-		<jedis.version>4.3.2</jedis.version>
 		<j2cache.version>2.8.5-release</j2cache.version>
-		<caffeine.version>2.9.3</caffeine.version>
-        <commons-configuration2.version>2.9.0</commons-configuration2.version>
+		<lang3.version>3.12.0</lang3.version>
         <javacpp.platform.android-arm>android-arm</javacpp.platform.android-arm>
         <javacpp.platform.android-arm64>android-arm64</javacpp.platform.android-arm64>
         <javacpp.platform.android-x86>android-x86</javacpp.platform.android-x86>
@@ -152,20 +150,10 @@
                 <version>${protobuff.version}</version>
                 <scope>runtime</scope>
             </dependency>
-			<dependency>
-				<groupId>redis.clients</groupId>
-				<artifactId>jedis</artifactId>
-				<version>${jedis.version}</version>
-			</dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-configuration2</artifactId>
-                <version>${commons-configuration2.version}</version>
             </dependency>
 			<dependency>
 				<groupId>net.oschina.j2cache</groupId>
@@ -173,9 +161,9 @@
 				<version>${j2cache.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.ben-manes.caffeine</groupId>
-				<artifactId>caffeine</artifactId>
-				<version>${caffeine.version}</version>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${lang3.version}</version>
 			</dependency>
         </dependencies>
     </dependencyManagement>
