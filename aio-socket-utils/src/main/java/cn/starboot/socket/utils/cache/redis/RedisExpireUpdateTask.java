@@ -55,38 +55,34 @@ public class RedisExpireUpdateTask {
 			started = true;
 		}
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (true) {
-					WriteLock writeLock = setWithLock.writeLock();
-					writeLock.lock();
+		new Thread(() -> {
+			while (true) {
+				WriteLock writeLock = setWithLock.writeLock();
+				writeLock.lock();
+				try {
+					Set<ExpireVo> set = setWithLock.getObj();
+					for (ExpireVo expireVo : set) {
+						log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}",
+								expireVo.getCacheName(),
+								expireVo.getKey(),
+								expireVo.getTimeToIdleSeconds());
+						RedisCache
+								.getCache(expireVo.getCacheName())
+								.updateTimeout(expireVo.getKey(), 0L);
+					}
+					set.clear();
+				} catch (Throwable e) {
+					log.error(e.getMessage(), e);
+				} finally {
+					writeLock.unlock();
 					try {
-						Set<ExpireVo> set = setWithLock.getObj();
-						for (ExpireVo expireVo : set) {
-
-							log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}", expireVo.getCacheName(), expireVo.getKey(), expireVo.getTimeToIdleSeconds());
-
-							RedisCache redisCache = RedisCache.getCache(expireVo.getCacheName());
-							String key = expireVo.getKey();
-							if (redisCache.ttl(key) > 0) {
-								redisCache.updateTimeout(key, expireVo.getTimeToIdleSeconds());
-							}
-						}
-						set.clear();
-					} catch (Throwable e) {
-						log.error(e.getMessage(), e);
-					} finally {
-						writeLock.unlock();
-						try {
-							Thread.sleep(1000 * 10);
-						} catch (InterruptedException e) {
-							log.error(e.toString(), e);
-						}
+						Thread.sleep(10000L);
+					} catch (InterruptedException e) {
+						log.error(e.toString(), e);
 					}
 				}
-
 			}
+
 		}, RedisExpireUpdateTask.class.getName()).start();
 	}
 

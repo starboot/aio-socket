@@ -20,7 +20,8 @@ import java.util.UUID;
 
 public class CacheChangedVo implements Serializable {
 
-	private static final long serialVersionUID = 1546804469064012259L;
+	/* uid */
+	private static final long serialVersionUID = -7450265707561339052L;
 
 	public static final String CLIENTID = UUID.randomUUID().toString();
 

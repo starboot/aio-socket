@@ -22,23 +22,26 @@ public class CacheTest {
 
 		testCache.put("testKey11", new TestObj("mxd", "男", "哈哈哈哈111"));
 
+		System.out.println(testCache.getTimeout());
 		Thread.sleep(5000);
 		System.out.println(testCache.ttl("testKey11"));
-		Thread.sleep(5000);
+
 		TestObj testKey11 = testCache.get("testKey11", TestObj.class);
 
 		System.out.println(testKey11);
 
-		System.out.println(testCache.ttl("testKey11"));
-
 		System.out.println(testCache.keys());
 
-		testCache.remove("testKey11");
+		testCache.remove("testKey");
 
+		Thread.sleep(1000);
 		System.out.println(testCache.keys());
 
 		testCacheY.put("key1", new TestObj("mxd", "男", "哈哈哈哈"));
 		testCacheY.put("key2", new TestObj("mxd", "男1", "哈哈哈哈"));
 
+		Thread.sleep(10000);
+
+		System.out.println(testCache.ttl("testKey11"));
 	}
 }

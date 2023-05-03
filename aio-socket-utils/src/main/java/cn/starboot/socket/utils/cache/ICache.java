@@ -69,6 +69,4 @@ public interface ICache {
 	Long getTimeToLiveSeconds();
 
 	Long getTimeToIdleSeconds();
-
-//	<T> T getCache();
 }

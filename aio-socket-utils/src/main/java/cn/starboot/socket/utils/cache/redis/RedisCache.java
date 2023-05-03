@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * RedisCache
+ *
+ * @author t-io
+ * @author MDong
+ */
 public class RedisCache extends AbsCache {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedisCache.class);
@@ -40,7 +46,6 @@ public class RedisCache extends AbsCache {
 
 	public static RedisCache register(Jedis jedis, String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		RedisExpireUpdateTask.start();
-
 		RedisCache redisCache = map.get(cacheName);
 		if (redisCache == null) {
 			synchronized (RedisCache.class) {
@@ -96,7 +101,7 @@ public class RedisCache extends AbsCache {
 		return jedis.get(cacheKey(cacheName, key));
 	}
 
-	public Jedis getJedis() {
+	public Jedis getRedis() {
 		return jedis;
 	}
 
@@ -113,7 +118,14 @@ public class RedisCache extends AbsCache {
 	}
 
 	public void updateTimeout(String key, long timeout) {
-		jedis.expire(key, timeout);
+		if (timeout > 0) {
+			jedis.expire(key, timeout);
+		} else {
+			Serializable serializable = get(key);
+			if (Objects.nonNull(serializable)) {
+				put(key, serializable);
+			}
+		}
 	}
 
 	@Override
@@ -127,9 +139,16 @@ public class RedisCache extends AbsCache {
 			return;
 		}
 		key = cacheKey(cacheName, key);
-		String s = JsonUtil.toJSONString(value);
-		jedis.set(key, s);
-		jedis.expire(key, timeout);
+		if (value instanceof String) {
+			put0(key, (String) value);
+		} else
+			put0(key, JsonUtil.toJSONString(value));
+
+	}
+
+	private void put0(String key, String value) {
+		jedis.set(key, value);
+		updateTimeout(key, timeout);
 	}
 
 	@Override
@@ -139,7 +158,7 @@ public class RedisCache extends AbsCache {
 		}
 		key = cacheKey(cacheName, key);
 		jedis.set(key, JsonUtil.toJSONString(value));
-		jedis.expire(key, 10L);
+		updateTimeout(key, 10L);
 	}
 
 	@Override
