@@ -9,7 +9,7 @@ import cn.starboot.socket.utils.json.serializer.IJsonSerializer;
 public class JSONFactory {
 
     //创建序列化器
-    public static IJsonSerializer createSerializer(){
+    protected static IJsonSerializer createSerializer(){
         return new FastJsonSerializer();
     }
 }

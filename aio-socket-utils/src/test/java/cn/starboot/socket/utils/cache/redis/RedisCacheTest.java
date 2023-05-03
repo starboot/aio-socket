@@ -49,6 +49,6 @@ public class RedisCacheTest {
 
 		System.out.println(testKey111);
 
-		Thread.sleep(10000);
+		Thread.sleep(5000);
 	}
 }

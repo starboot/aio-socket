@@ -1,23 +1,31 @@
 package cn.starboot.socket.utils.exception;
 
-public class ScannerClassException extends RuntimeException{
-    public ScannerClassException() {
-        super();
-    }
+public class ScannerClassException extends RuntimeException {
 
-    public ScannerClassException(String message) {
-        super(message);
-    }
+	/* uid */
+	private static final long serialVersionUID = 5150394334878098214L;
 
-    public ScannerClassException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public ScannerClassException() {
+		super();
+	}
 
-    public ScannerClassException(Throwable cause) {
-        super(cause);
-    }
+	public ScannerClassException(String message) {
+		super(message);
+	}
 
-    protected ScannerClassException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+	public ScannerClassException(String message,
+								 Throwable cause) {
+		super(message, cause);
+	}
+
+	public ScannerClassException(Throwable cause) {
+		super(cause);
+	}
+
+	protected ScannerClassException(String message,
+									Throwable cause,
+									boolean enableSuppression,
+									boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
 }

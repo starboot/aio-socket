@@ -172,6 +172,6 @@ public class CaffeineCache extends AbstractCache {
 
 	@Override
 	public long ttl(String key) {
-		throw new UnsupportedOperationException("不支持ttl");
+		throw new UnsupportedOperationException("unsupported ttl");
 	}
 }

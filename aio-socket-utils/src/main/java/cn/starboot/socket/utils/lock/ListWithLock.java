@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
  */
 public class ListWithLock<T> extends ObjWithLock<List<T>> {
 
-	/* uid */
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListWithLock.class);
 
+	/* uid */
 	private static final long serialVersionUID = -7543949226901252162L;
 
 	public ListWithLock(List<T> list) {

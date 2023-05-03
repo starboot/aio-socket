@@ -37,6 +37,7 @@ public final class ObjUtils {
 	 * If it is, throws {@link NullPointerException}.
 	 * Otherwise, returns the argument.
 	 */
+	@SafeVarargs
 	public static <T> T[] deepCheckNotNull(String text, T... varargs) {
 		if (varargs == null) {
 			throw new NullPointerException(text);

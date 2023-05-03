@@ -36,14 +36,14 @@ public abstract class AbstractCache implements ICache {
 
 	public AbstractCache(String cacheName) {
 		if (StringUtils.isBlank(cacheName)) {
-			throw new RuntimeException("cacheName不允许为空");
+			throw new RuntimeException("cacheName not null");
 		}
 		this.setCacheName(cacheName);
 	}
 
 	public AbstractCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
 		if (StringUtils.isBlank(cacheName)) {
-			throw new RuntimeException("cacheName不允许为空");
+			throw new RuntimeException("cacheName not null");
 		}
 		this.setCacheName(cacheName);
 		this.setTimeToLiveSeconds(timeToLiveSeconds);

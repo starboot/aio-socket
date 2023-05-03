@@ -67,7 +67,7 @@ public class RedisExpireUpdateTask extends QuickTimerTask {
 		setWithLock.handle((WriteLockHandler<Set<ExpireEntity>>) expireVos -> {
 			for (ExpireEntity expireEntity : expireVos) {
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("更新缓存过期时间, cacheName:{}, key:{}",
+					LOGGER.debug("update cache live time, cacheName:{}, key:{}",
 							expireEntity.getCacheName(),
 							expireEntity.getKey());
 				}

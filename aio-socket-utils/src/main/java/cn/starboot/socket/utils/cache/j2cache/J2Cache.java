@@ -105,12 +105,12 @@ public class J2Cache extends AbstractCache {
 
 	@Override
 	public void putTemporary(String key, Object value) {
-		throw new UnsupportedOperationException("不支持防缓存穿透");
+		throw new UnsupportedOperationException("unsupported put temporary");
 	}
 
 	@Override
 	public long ttl(String key) {
-		throw new UnsupportedOperationException("不支持ttl");
+		throw new UnsupportedOperationException("unsupported ttl");
 	}
 
 }

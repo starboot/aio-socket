@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author MDong
  */
 public class LockUtils {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(LockUtils.class);
 
 	private static final String LOCK_TYPE_OBJ = "OBJ";
@@ -96,10 +97,10 @@ public class LockUtils {
 	 * <br>
 	 * <strong>注意：对于一些需要判断null等其它条件才执行的操作，在write()方法中建议再检查一次，这个跟double check的原理是一样的</strong><br>
 	 *
-	 * @param key
+	 * @param key .
 	 * @param myLock               获取ReentrantReadWriteLock的锁，可以为null
 	 * @param readWriteLockHandler 小心：该对象的write()方法并不一定会被执行
-	 * @throws Exception
+	 * @throws Exception .
 	 */
 	public static void runWriteOrWaitRead(String key, Object myLock, ReadWriteLockHandler readWriteLockHandler) throws Exception {
 		runWriteOrWaitRead(key, myLock, readWriteLockHandler, 180L);
@@ -113,12 +114,11 @@ public class LockUtils {
 	 * <br>
 	 * <strong>注意：对于一些需要判断null等其它条件才执行的操作，在write()方法中建议再检查一次，这个跟double check的原理是一样的</strong><br>
 	 *
-	 * @param key
+	 * @param key .
 	 * @param myLock               获取ReentrantReadWriteLock的锁，可以为null
 	 * @param readWriteLockHandler 小心：该对象的write()方法并不一定会被执行
 	 * @param readWaitTimeInSecond 没拿到写锁的线程，等读锁的时间，单位：秒
-	 * @return
-	 * @throws Exception
+	 * @throws Exception .
 	 */
 	public static void runWriteOrWaitRead(String key, Object myLock, ReadWriteLockHandler readWriteLockHandler, Long readWaitTimeInSecond) throws Exception {
 		ReentrantReadWriteLock rwLock = getReentrantReadWriteLock(key, myLock);

@@ -8,11 +8,14 @@ import java.util.List;
 
 public class Page<T> implements Serializable {
 
-	private List<T> list = null;                    //当前页的数据
-	private Integer pageNumber;                                    //当前页码，从1开始，如果值小于等于0，则视为1
-	private Integer pageSize;                                    //每页记录数
-	private Integer totalRow;                                    //总条数
-	private Integer totalPage;                                    //总页数
+	/* uid */
+	private static final long serialVersionUID = -683881545722557505L;
+
+	private List<T> list = null;//当前页的数据
+	private Integer pageNumber; //当前页码，从1开始，如果值小于等于0，则视为1
+	private Integer pageSize;   //每页记录数
+	private Integer totalRow;   //总条数
+	private Integer totalPage;  //总页数
 
 	public Page() {
 

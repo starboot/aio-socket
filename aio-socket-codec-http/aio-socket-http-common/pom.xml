@@ -30,6 +30,10 @@
 					<artifactId>j2cache-core</artifactId>
 				</exclusion>
 				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-lang3</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>redis.clients</groupId>
 					<artifactId>jedis</artifactId>
 				</exclusion>
