@@ -108,8 +108,8 @@ public final class MemoryPool {
                 }
             } else {
                 if (memoryBlocks != null) {
-                    for (MemoryBlock page : memoryBlocks) {
-                        page.release();
+                    for (MemoryBlock memoryBlock : memoryBlocks) {
+						memoryBlock.release();
                     }
                     memoryBlocks = null;
                 }
