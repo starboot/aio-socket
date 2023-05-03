@@ -25,9 +25,10 @@ import org.slf4j.LoggerFactory;
 
 public class SetWithLock<T> extends ObjWithLock<Set<T>> {
 
-	private static final long	serialVersionUID	= -2305909960649321346L;
-
 	private static final Logger	log					= LoggerFactory.getLogger(SetWithLock.class);
+
+	/* uid */
+	private static final long serialVersionUID = -4231418816389081137L;
 
 	public SetWithLock(Set<T> set) {
 		super(set);

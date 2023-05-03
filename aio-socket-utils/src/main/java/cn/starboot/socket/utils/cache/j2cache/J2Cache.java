@@ -16,7 +16,6 @@
 package cn.starboot.socket.utils.cache.j2cache;
 
 import cn.starboot.socket.utils.cache.AbstractCache;
-import cn.starboot.socket.utils.cache.caffeine.CaffeineCache;
 import net.oschina.j2cache.CacheChannel;
 import net.oschina.j2cache.CacheObject;
 import org.slf4j.Logger;
@@ -45,7 +44,7 @@ public class J2Cache extends AbstractCache {
 		if (Objects.isNull(j2Cache) && LOGGER.isErrorEnabled()) {
 			LOGGER.error("cacheName[{}]还没注册，请初始化时调用：{}.register(...)",
 					cacheName,
-					CaffeineCache.class.getSimpleName());
+					J2Cache.class.getSimpleName());
 		}
 		return j2Cache;
 	}
@@ -84,7 +83,7 @@ public class J2Cache extends AbstractCache {
 	protected Serializable get0(String key) {
 		CacheObject cacheObject = getChannel().get(cacheName, key);
 		if (cacheObject != null) {
-			return (Serializable) cacheObject.getValue();
+			return cacheObject.getValue().toString();
 		}
 		return null;
 	}

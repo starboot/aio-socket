@@ -37,11 +37,20 @@ public class RedisCache extends AbstractCache {
 		return redisCache;
 	}
 
+
 	public static RedisCache register(Jedis jedis,
 									  String cacheName,
 									  Long timeToLiveSeconds,
 									  Long timeToIdleSeconds) {
-		RedisExpireUpdateTask.start();
+		return register(jedis, cacheName, timeToLiveSeconds, timeToIdleSeconds, null);
+	}
+
+	public static RedisCache register(Jedis jedis,
+									  String cacheName,
+									  Long timeToLiveSeconds,
+									  Long timeToIdleSeconds,
+									  Long millis) {
+		RedisExpireUpdateTask.start(millis);
 		RedisCache redisCache = MAP.get(cacheName);
 		if (redisCache == null) {
 			synchronized (RedisCache.class) {
@@ -88,8 +97,8 @@ public class RedisCache extends AbstractCache {
 		}
 		String s = getBucket(key);
 		if (getTimeToIdleSeconds() != null) {
-			if (s != null && s.length() > 0) {
-				RedisExpireUpdateTask.add(cacheName, key, timeout);
+			if (s != null && s.length() > 0 && RedisExpireUpdateTask.getStatus()) {
+				RedisExpireUpdateTask.add(cacheName, key, s, timeout);
 			}
 		}
 		return s;
@@ -105,17 +114,6 @@ public class RedisCache extends AbstractCache {
 
 	public Integer getTimeout() {
 		return timeout;
-	}
-
-	public void updateTimeout(String key, int timeout) {
-		if (timeout > 0) {
-			jedis.expire(key, timeout);
-		} else {
-			Serializable serializable = get(key);
-			if (Objects.nonNull(serializable)) {
-				put(key, serializable);
-			}
-		}
 	}
 
 	@Override
@@ -138,7 +136,7 @@ public class RedisCache extends AbstractCache {
 
 	private void put0(String key, String value) {
 		jedis.set(key, value);
-		updateTimeout(key, timeout);
+		jedis.expire(key, timeout);
 	}
 
 	@Override
@@ -148,7 +146,7 @@ public class RedisCache extends AbstractCache {
 		}
 		key = cacheKey(cacheName, key);
 		jedis.set(key, JsonUtil.toJSONString(value));
-		updateTimeout(key, 10);
+		jedis.expire(key, 10);
 	}
 
 	@Override

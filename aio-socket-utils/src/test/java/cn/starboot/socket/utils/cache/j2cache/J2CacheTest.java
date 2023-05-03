@@ -3,7 +3,7 @@ package cn.starboot.socket.utils.cache.j2cache;
 import cn.starboot.socket.utils.cache.TestObj;
 import net.oschina.j2cache.CacheChannel;
 
-public class CacheTest {
+public class J2CacheTest {
 
 	public static void main(String[] args) {
 
@@ -16,6 +16,8 @@ public class CacheTest {
 		System.out.println(j2.keys());
 
 		System.out.println(j2.get("testKey"));
+
+		System.out.println(j2.get("testKey", TestObj.class));
 
 		j2.remove("testKey");
 

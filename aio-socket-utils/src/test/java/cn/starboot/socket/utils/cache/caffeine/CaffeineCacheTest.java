@@ -21,6 +21,8 @@ public class CaffeineCacheTest {
 
 		System.out.println(testCaffeineCache.get("testKey11"));
 
+		System.out.println(testCaffeineCache.get("testKey11", TestObj.class));
+
 		testCaffeineCache.remove("testKey11");
 
 		System.out.println(testCaffeineCache.keys());

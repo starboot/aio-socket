@@ -25,9 +25,10 @@ import org.slf4j.LoggerFactory;
 
 public class ListWithLock<T> extends ObjWithLock<List<T>> {
 
-	private static final long	serialVersionUID	= 8549668315606224029L;
-
+	/* uid */
 	private static final Logger	log					= LoggerFactory.getLogger(ListWithLock.class);
+
+	private static final long serialVersionUID = -7543949226901252162L;
 
 	public ListWithLock(List<T> list) {
 		super(list);

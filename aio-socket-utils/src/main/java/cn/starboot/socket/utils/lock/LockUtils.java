@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * 锁对象工具类
  */
 public class LockUtils {
-	private static Logger				log						= LoggerFactory.getLogger(LockUtils.class);
+	private static final Logger				log						= LoggerFactory.getLogger(LockUtils.class);
 
 	private static final String			LOCK_TYPE_OBJ			= "OBJ";
 

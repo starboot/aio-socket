@@ -28,9 +28,10 @@ import org.slf4j.LoggerFactory;
  */
 public class ObjWithLock<T> implements Serializable {
 
-	private static final long serialVersionUID = -3048283373239453901L;
-
 	private static final Logger log = LoggerFactory.getLogger(ObjWithLock.class);
+
+	/* uid */
+	private static final long serialVersionUID = 1259405044641449753L;
 
 	private T obj;
 

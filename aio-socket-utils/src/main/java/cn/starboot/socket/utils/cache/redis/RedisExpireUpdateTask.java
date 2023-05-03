@@ -16,14 +16,12 @@
 package cn.starboot.socket.utils.cache.redis;
 
 import cn.starboot.socket.utils.lock.SetWithLock;
-//import org.redisson.api.RBucket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 /**
@@ -31,21 +29,19 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
  */
 public class RedisExpireUpdateTask {
 
-	private static final Logger log = LoggerFactory.getLogger(RedisExpireUpdateTask.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RedisExpireUpdateTask.class);
 
 	private static boolean started = false;
 
-	private static final Set<ExpireVo> set = new HashSet<>();
+	private static final SetWithLock<ExpireVo> setWithLock = new SetWithLock<>(new HashSet<>());
 
-	private static final SetWithLock<ExpireVo> setWithLock = new SetWithLock<>(set);
-
-	public static void add(String cacheName, String key, long expire) {
-		ExpireVo expireVo = new ExpireVo(cacheName, key, expire);
+	public static void add(String cacheName, String key, String value, long expire) {
+		ExpireVo expireVo = new ExpireVo(cacheName, key, value, expire);
 		setWithLock.add(expireVo);
 	}
 
-	public static void start() {
-		if (started) {
+	public static void start(Long millis) {
+		if (started || Objects.isNull(millis) || millis <= 0L) {
 			return;
 		}
 		synchronized (RedisExpireUpdateTask.class) {
@@ -62,28 +58,35 @@ public class RedisExpireUpdateTask {
 				try {
 					Set<ExpireVo> set = setWithLock.getObj();
 					for (ExpireVo expireVo : set) {
-						log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}",
-								expireVo.getCacheName(),
-								expireVo.getKey(),
-								expireVo.getTimeToIdleSeconds());
-						RedisCache
-								.getCache(expireVo.getCacheName())
-								.updateTimeout(expireVo.getKey(), 0);
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}",
+									expireVo.getCacheName(),
+									expireVo.getKey(),
+									expireVo.getTimeToIdleSeconds());
+						}
+						RedisCache cache = RedisCache.getCache(expireVo.getCacheName());
+						if (cache.ttl(expireVo.getKey()) > 0) {
+							cache.put(expireVo.getKey(), expireVo.getValue());
+						}
 					}
 					set.clear();
 				} catch (Throwable e) {
-					log.error(e.getMessage(), e);
+					LOGGER.error(e.getMessage(), e);
 				} finally {
 					writeLock.unlock();
 					try {
-						Thread.sleep(10000L);
+						Thread.sleep(millis);
 					} catch (InterruptedException e) {
-						log.error(e.toString(), e);
+						e.printStackTrace();
 					}
 				}
 			}
 
 		}, RedisExpireUpdateTask.class.getName()).start();
+	}
+
+	public static boolean getStatus() {
+		return started;
 	}
 
 	private RedisExpireUpdateTask() {

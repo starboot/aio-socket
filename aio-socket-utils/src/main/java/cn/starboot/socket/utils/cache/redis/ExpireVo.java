@@ -23,12 +23,14 @@ public class ExpireVo {
 
 	private String key;
 
+	private String value;
+
 	private long timeToIdleSeconds;
 
-	public ExpireVo(String cacheName, String key, long timeToIdleSeconds) {
-		super();
+	public ExpireVo(String cacheName, String key, String value, long timeToIdleSeconds) {
 		this.cacheName = cacheName;
 		this.key = key;
+		this.value = value;
 		this.timeToIdleSeconds = timeToIdleSeconds;
 	}
 
@@ -58,6 +60,10 @@ public class ExpireVo {
 
 	public String getKey() {
 		return key;
+	}
+
+	public String getValue() {
+		return value;
 	}
 
 	@Override

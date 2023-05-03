@@ -25,8 +25,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
-	private static final long	serialVersionUID	= -652862323697152866L;
+
 	private static final Logger	log					= LoggerFactory.getLogger(MapWithLock.class);
+
+	/* uid */
+	private static final long serialVersionUID = 2373683472310466729L;
 
 	public MapWithLock() {
 		this(new HashMap<>());

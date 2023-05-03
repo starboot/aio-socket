@@ -1,8 +1,10 @@
 package cn.starboot.socket.utils.cache;
 
+import cn.starboot.socket.utils.json.JsonUtil;
+
 import java.io.Serializable;
 
-public class TestObj implements Serializable {
+public class TestObj extends CacheObj {
 
 	/* uid */
 	private static final long serialVersionUID = 4406309863986237239L;
@@ -43,12 +45,8 @@ public class TestObj implements Serializable {
 		this.test = test;
 	}
 
-	@Override
-	public String toString() {
-		return "TestObj{" +
-				"name='" + name + '\'' +
-				", sex='" + sex + '\'' +
-				", test='" + test + '\'' +
-				'}';
-	}
+//	@Override
+//	public String toString() {
+//		return JsonUtil.toJSONString(this);
+//	}
 }
