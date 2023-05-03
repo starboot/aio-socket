@@ -27,6 +27,8 @@ public class RedisCache extends AbstractCache {
 
 	public static final String SPLIT_FOR_CACHE_NAME = ":";
 
+	private static RedisExpireUpdateTask redisExpireUpdateTask;
+
 	public static RedisCache getCache(String cacheName) {
 		RedisCache redisCache = MAP.get(cacheName);
 		if (redisCache == null && LOGGER.isErrorEnabled()) {
@@ -49,8 +51,10 @@ public class RedisCache extends AbstractCache {
 									  String cacheName,
 									  Long timeToLiveSeconds,
 									  Long timeToIdleSeconds,
-									  Long millis) {
-		RedisExpireUpdateTask.start(millis);
+									  Integer seconds) {
+		if (Objects.nonNull(seconds)) {
+			redisExpireUpdateTask = RedisExpireUpdateTask.getInstance(seconds);
+		}
 		RedisCache redisCache = MAP.get(cacheName);
 		if (redisCache == null) {
 			synchronized (RedisCache.class) {
@@ -97,8 +101,8 @@ public class RedisCache extends AbstractCache {
 		}
 		String s = getBucket(key);
 		if (getTimeToIdleSeconds() != null) {
-			if (s != null && s.length() > 0 && RedisExpireUpdateTask.getStatus()) {
-				RedisExpireUpdateTask.add(cacheName, key, s, timeout);
+			if (s != null && s.length() > 0 && redisExpireUpdateTask.getStatus()) {
+				redisExpireUpdateTask.add(cacheName, key, s);
 			}
 		}
 		return s;

@@ -5,7 +5,7 @@ import cn.starboot.socket.utils.json.JsonUtil;
 import java.io.Serializable;
 
 /**
- * 所有使用缓存的都要继承此对象
+ * 所有使用缓存的都要继承此对象，或者重写自己的对象中toString方法，按照如下模版
  *
  * @author MDong
  */

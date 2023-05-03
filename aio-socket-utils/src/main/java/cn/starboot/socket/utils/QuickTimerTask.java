@@ -32,7 +32,14 @@ public abstract class QuickTimerTask implements Runnable {
                 return thread;
             });
 
-    public QuickTimerTask() {
+
+	private final long delay;
+
+	private final long period;
+
+    public QuickTimerTask(long delay, long period) {
+    	this.delay = delay;
+    	this.period = period;
         SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(this, getDelay(), getPeriod(), TimeUnit.MILLISECONDS);
     }
 
@@ -45,8 +52,10 @@ public abstract class QuickTimerTask implements Runnable {
     }
 
     protected long getDelay() {
-        return 0;
-    }
+    	return this.delay;
+	}
 
-    protected abstract long getPeriod();
+    protected long getPeriod() {
+    	return this.period;
+	}
 }

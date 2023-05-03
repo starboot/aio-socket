@@ -23,10 +23,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 带有锁结构的LIST集合
+ *
+ * @param <T> 对象类型
+ * @author t-io
+ * @author MDong
+ */
 public class ListWithLock<T> extends ObjWithLock<List<T>> {
 
 	/* uid */
-	private static final Logger	log					= LoggerFactory.getLogger(ListWithLock.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ListWithLock.class);
 
 	private static final long serialVersionUID = -7543949226901252162L;
 
@@ -45,7 +52,7 @@ public class ListWithLock<T> extends ObjWithLock<List<T>> {
 			List<T> list = this.getObj();
 			return list.add(t);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -59,7 +66,7 @@ public class ListWithLock<T> extends ObjWithLock<List<T>> {
 			List<T> list = this.getObj();
 			list.clear();
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -72,7 +79,7 @@ public class ListWithLock<T> extends ObjWithLock<List<T>> {
 			List<T> list = this.getObj();
 			return list.remove(t);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}

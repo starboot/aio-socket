@@ -17,7 +17,7 @@ public class RedisCacheTest {
 
 	private static void testRedis() throws InterruptedException {
 		Jedis jedis = new Jedis("localhost", 6379);
-		RedisCache testCache = RedisCache.register(jedis, "TestCache", 60L, 30L, 10L);
+		RedisCache testCache = RedisCache.register(jedis, "TestCache", 60L, 30L, 10);
 		RedisCache testCacheY = RedisCache.register(jedis, "TestCacheY", 60L, 30L);
 		testCache.put("testKey", new TestObj("mxd", "男", "哈哈哈哈"));
 
@@ -48,5 +48,7 @@ public class RedisCacheTest {
 		TestObj testKey111 = testCache.get("testKey11", TestObj.class);
 
 		System.out.println(testKey111);
+
+		Thread.sleep(10000);
 	}
 }

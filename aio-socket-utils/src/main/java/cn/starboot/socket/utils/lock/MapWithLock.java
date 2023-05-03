@@ -24,9 +24,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 带有锁结构的MAP集合
+ *
+ * @param <K> K
+ * @param <V> K
+ * @author t-io
+ * @author MDong
+ */
 public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 
-	private static final Logger	log					= LoggerFactory.getLogger(MapWithLock.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MapWithLock.class);
 
 	/* uid */
 	private static final long serialVersionUID = 2373683472310466729L;
@@ -54,7 +62,7 @@ public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 			Map<K, V> map = this.getObj();
 			return map.put(key, value);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -64,9 +72,10 @@ public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 	/**
 	 * 如果key值已经存在，则不会把新value put进去
 	 * 如果key值不存在，此方法同put(key, value)
-	 * @param key
-	 * @param value
-	 * @return
+	 *
+	 * @param key .
+	 * @param value .
+	 * @return .
 	 */
 	public V putIfAbsent(K key, V value) {
 		WriteLock writeLock = this.writeLock();
@@ -80,7 +89,7 @@ public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 				return oldValue;
 			}
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -98,7 +107,7 @@ public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 			Map<K, V> map = this.getObj();
 			map.putAll(otherMap);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -111,7 +120,7 @@ public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 			Map<K, V> map = this.getObj();
 			return map.remove(key);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -125,7 +134,7 @@ public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 			Map<K, V> map = this.getObj();
 			map.clear();
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -138,7 +147,7 @@ public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 			Map<K, V> map = this.getObj();
 			return map.get(key);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			readLock.unlock();
 		}
@@ -157,7 +166,6 @@ public class MapWithLock<K, V> extends ObjWithLock<Map<K, V>> {
 	}
 
 	/**
-	 *
 	 * @return 如果没值，则返回null，否则返回一个新map
 	 */
 	public Map<K, V> copy() {

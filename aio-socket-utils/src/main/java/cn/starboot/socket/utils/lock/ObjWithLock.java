@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ObjWithLock<T> implements Serializable {
 
-	private static final Logger log = LoggerFactory.getLogger(ObjWithLock.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ObjWithLock.class);
 
 	/* uid */
 	private static final long serialVersionUID = 1259405044641449753L;
@@ -69,6 +69,7 @@ public class ObjWithLock<T> implements Serializable {
 
 	/**
 	 * 操作obj时，带上读锁
+	 *
 	 * @param readLockHandler 处理器
 	 */
 	public void handle(ReadLockHandler<T> readLockHandler) {
@@ -77,7 +78,7 @@ public class ObjWithLock<T> implements Serializable {
 		try {
 			readLockHandler.handler(obj);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			readLock.unlock();
 		}
@@ -85,6 +86,7 @@ public class ObjWithLock<T> implements Serializable {
 
 	/**
 	 * 操作obj时，带上写锁
+	 *
 	 * @param writeLockHandler 写处理器
 	 */
 	public void handle(WriteLockHandler<T> writeLockHandler) {
@@ -93,7 +95,7 @@ public class ObjWithLock<T> implements Serializable {
 		try {
 			writeLockHandler.handler(obj);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}

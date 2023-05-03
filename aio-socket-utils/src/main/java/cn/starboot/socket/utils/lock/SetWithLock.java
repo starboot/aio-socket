@@ -23,9 +23,16 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 带有锁结构的SET集合
+ *
+ * @param <T> 对象类型
+ * @author t-io
+ * @author MDong
+ */
 public class SetWithLock<T> extends ObjWithLock<Set<T>> {
 
-	private static final Logger	log					= LoggerFactory.getLogger(SetWithLock.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SetWithLock.class);
 
 	/* uid */
 	private static final long serialVersionUID = -4231418816389081137L;
@@ -45,7 +52,7 @@ public class SetWithLock<T> extends ObjWithLock<Set<T>> {
 			Set<T> set = this.getObj();
 			return set.add(t);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -59,7 +66,7 @@ public class SetWithLock<T> extends ObjWithLock<Set<T>> {
 			Set<T> set = this.getObj();
 			set.clear();
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -72,7 +79,7 @@ public class SetWithLock<T> extends ObjWithLock<Set<T>> {
 			Set<T> set = this.getObj();
 			return set.remove(t);
 		} catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			writeLock.unlock();
 		}

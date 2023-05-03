@@ -27,21 +27,24 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 锁对象工具类
+ *
+ * @author t-io
+ * @author MDong
  */
 public class LockUtils {
-	private static final Logger				log						= LoggerFactory.getLogger(LockUtils.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LockUtils.class);
 
-	private static final String			LOCK_TYPE_OBJ			= "OBJ";
+	private static final String LOCK_TYPE_OBJ = "OBJ";
 
-	private static final String			LOCK_TYPE_RW			= "RW";
+	private static final String LOCK_TYPE_RW = "RW";
 
-	private static final Object			defaultLockObjForObj	= new Object();
+	private static final Object defaultLockObjForObj = new Object();
 
-	private static final Object			defaultLockObjForRw		= new Object();
+	private static final Object defaultLockObjForRw = new Object();
 
-	private static final CaffeineCache LOCAL_LOCKS				= CaffeineCache.register(LockUtils.class.getName() + LOCK_TYPE_OBJ, null, 3600L);
+	private static final CaffeineCache LOCAL_LOCKS = CaffeineCache.register(LockUtils.class.getName() + LOCK_TYPE_OBJ, null, 3600L);
 
-	private static final CaffeineCache	LOCAL_READWRITE_LOCKS	= CaffeineCache.register(LockUtils.class.getName() + LOCK_TYPE_RW, null, 3600L);
+	private static final CaffeineCache LOCAL_READWRITE_LOCKS = CaffeineCache.register(LockUtils.class.getName() + LOCK_TYPE_RW, null, 3600L);
 
 	public static Serializable getLockObj(String key) {
 		return getLockObj(key, null);
@@ -92,8 +95,9 @@ public class LockUtils {
 	 * 3、当一段代码只允许被一个线程执行时，才用本函数，不要理解成同步等待了<br>
 	 * <br>
 	 * <strong>注意：对于一些需要判断null等其它条件才执行的操作，在write()方法中建议再检查一次，这个跟double check的原理是一样的</strong><br>
+	 *
 	 * @param key
-	 * @param myLock 获取ReentrantReadWriteLock的锁，可以为null
+	 * @param myLock               获取ReentrantReadWriteLock的锁，可以为null
 	 * @param readWriteLockHandler 小心：该对象的write()方法并不一定会被执行
 	 * @throws Exception
 	 */
@@ -108,8 +112,9 @@ public class LockUtils {
 	 * 3、当一段代码只允许被一个线程执行时，才用本函数，不要理解成同步等待了<br>
 	 * <br>
 	 * <strong>注意：对于一些需要判断null等其它条件才执行的操作，在write()方法中建议再检查一次，这个跟double check的原理是一样的</strong><br>
+	 *
 	 * @param key
-	 * @param myLock 获取ReentrantReadWriteLock的锁，可以为null
+	 * @param myLock               获取ReentrantReadWriteLock的锁，可以为null
 	 * @param readWriteLockHandler 小心：该对象的write()方法并不一定会被执行
 	 * @param readWaitTimeInSecond 没拿到写锁的线程，等读锁的时间，单位：秒
 	 * @return
@@ -139,11 +144,11 @@ public class LockUtils {
 //						ret.readRet = readRet;
 //					} finally {
 //						ret.isReadRunned = true;
-						readLock.unlock();
+					readLock.unlock();
 //					}
 				}
 			} catch (InterruptedException e) {
-				log.error(e.toString(), e);
+				LOGGER.error(e.toString(), e);
 			}
 		}
 //		return ret;
