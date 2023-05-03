@@ -5,7 +5,7 @@
     <parent>
         <artifactId>aio-socket-demo-parent</artifactId>
         <groupId>cn.starboot.socket</groupId>
-        <version>1.2.3</version>
+        <version>1.3.0</version>
         <relativePath>../aio-socket-demo-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
