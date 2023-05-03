@@ -21,6 +21,24 @@
 			<groupId>cn.starboot.socket</groupId>
 			<artifactId>aio-socket-plugin</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>cn.starboot.socket</groupId>
+			<artifactId>aio-socket-utils</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>net.oschina.j2cache</groupId>
+					<artifactId>j2cache-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>redis.clients</groupId>
+					<artifactId>jedis</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.ben-manes.caffeine</groupId>
+					<artifactId>caffeine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
     </dependencies>
 
 </project>

@@ -152,23 +152,23 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
 		totalProcessMsgNum += curProcessMsgNum;
 		totalConnect += connectCount;
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("\r\n\t\t------------------------------------------------"
-					+ "\r\n\t\t\t\t\taio-socket performance"
-					+ "\r\n\t\t-------------------in " + seconds + " sec --------------------"
-					+ "\r\n\t\tinflow:\t\t\t\t" + curInFlow * 1.0 / (1024 * 1024) + "(MB)"
-					+ "\r\n\t\toutflow:\t\t\t" + curOutFlow * 1.0 / (1024 * 1024) + "(MB)"
-					+ "\r\n\t\tprocess fail:\t\t" + curDiscardNum
-					+ "\r\n\t\tprocess count:\t\t" + curProcessMsgNum
-					+ "\r\n\t\tprocess total:\t\t" + totalProcessMsgNum
-					+ "\r\n\t\tread count:\t\t\t" + curReadCount
-					+ "\r\n\t\twrite count:\t\t" + curWriteCount
-					+ "\r\n\t\tconnect count:\t\t" + connectCount
-					+ "\r\n\t\tdisconnect count:\t" + disConnectCount
-					+ "\r\n\t\tonline count:\t\t" + onlineCount
-					+ "\r\n\t\tconnected total:\t" + totalConnect
-					+ "\r\n\t\tRequests/sec:\t\t" + curProcessMsgNum * 1.0 / seconds
-					+ "\r\n\t\tTransfer/sec:\t\t" + (curInFlow * 1.0 / (1024 * 1024) / seconds) + "(MB)"
-					+ "\r\n\t\t------------------------------------------------");
+			LOGGER.debug("\r\n------------------------------------------------"
+					+ "\r\n\t\t\taio-socket performance"
+					+ "\r\n-------------------in " + seconds + " sec --------------------"
+					+ "\r\ninflow:\t\t\t\t" + curInFlow * 1.0 / (1024 * 1024) + "(MB)"
+					+ "\r\noutflow:\t\t\t" + curOutFlow * 1.0 / (1024 * 1024) + "(MB)"
+					+ "\r\nprocess fail:\t\t" + curDiscardNum
+					+ "\r\nprocess count:\t\t" + curProcessMsgNum
+					+ "\r\nprocess total:\t\t" + totalProcessMsgNum
+					+ "\r\nread count:\t\t\t" + curReadCount
+					+ "\r\nwrite count:\t\t" + curWriteCount
+					+ "\r\nconnect count:\t\t" + connectCount
+					+ "\r\ndisconnect count:\t" + disConnectCount
+					+ "\r\nonline count:\t\t" + onlineCount
+					+ "\r\nconnected total:\t" + totalConnect
+					+ "\r\nRequests/sec:\t\t" + curProcessMsgNum * 1.0 / seconds
+					+ "\r\nTransfer/sec:\t\t" + (curInFlow * 1.0 / (1024 * 1024) / seconds) + "(MB)"
+					+ "\r\n------------------------------------------------");
 		}
 	}
 

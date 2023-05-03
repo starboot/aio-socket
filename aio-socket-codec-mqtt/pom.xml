@@ -22,5 +22,6 @@
 			<artifactId>aio-socket-kernel</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
 	</dependencies>
 </project>
