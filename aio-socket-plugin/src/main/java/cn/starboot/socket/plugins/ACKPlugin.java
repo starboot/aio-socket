@@ -18,7 +18,7 @@ package cn.starboot.socket.plugins;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.utils.QuickTimerTask;
+import cn.starboot.socket.utils.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,80 +30,83 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by DELL(mxd) on 2022/7/28 17:48
  */
-public class ACKPlugin extends AbstractPlugin{
+public class ACKPlugin extends AbstractPlugin {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ACKPlugin.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ACKPlugin.class);
 
-    private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (packet, lastTime) -> LOGGER.info(packet.getReq() + " : has timeout");
+	private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (packet, lastTime) -> LOGGER.info(packet.getReq() + " : has timeout");
 
-    private final Map<String, Packet> idToPacket = new HashMap<>();
+	private final Map<String, Packet> idToPacket = new HashMap<>();
 
-    private final Map<String, Long> timePacket = new HashMap<>();
+	private final Map<String, Long> timePacket = new HashMap<>();
 
-    private final long timeout;
+	private final long timeout;
 
-    private final TimeoutCallback timeoutCallback;
+	private final long period;
 
-    public ACKPlugin(int timeout, TimeUnit timeUnit) {
-        this(timeout, timeUnit, DEFAULT_TIMEOUT_CALLBACK);
-    }
+	private final TimeoutCallback timeoutCallback;
 
-    public ACKPlugin(int timeout, TimeUnit timeUnit, TimeoutCallback timeoutCallback) {
-        if (timeout <= 0) {
-            throw new IllegalArgumentException("timeout should bigger than zero");
-        }
-        this.timeout = timeUnit.toMillis(timeout);
-        this.timeoutCallback = timeoutCallback;
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's ACK plugin added successfully");
-        }
-    }
+	public ACKPlugin(int timeout, int period, TimeUnit timeUnit) {
+		this(timeout, period, timeUnit, DEFAULT_TIMEOUT_CALLBACK);
+	}
 
-    @Override
-    public void afterDecode(Packet packet, ChannelContext channelContext) {
-        // 解码后得到的数据进行处理ACK确认
-        String resp = packet.getResp();
-        if (resp != null && resp.length() != 0) {
-            idToPacket.remove(resp);
-        }
-    }
+	public ACKPlugin(int timeout, int period, TimeUnit timeUnit, TimeoutCallback timeoutCallback) {
+		if (timeout <= 0) {
+			throw new IllegalArgumentException("timeout should bigger than zero");
+		}
+		this.timeout = timeUnit.toMillis(timeout);
+		this.period =  timeUnit.toMillis(period);
+		this.timeoutCallback = timeoutCallback;
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's ACK plugin added successfully");
+		}
+	}
 
-    @Override
-    public void beforeEncode(Packet packet, ChannelContext channelContext) {
-        // 编码前对数据进行ACK码计时
-        String req = packet.getReq();
-        if (req != null && req.length() != 0) {
-            idToPacket.put(req, packet);
-            timePacket.put(req, System.currentTimeMillis());
-            registerACK(req, packet);
-        }
-    }
+	@Override
+	public void afterDecode(Packet packet, ChannelContext channelContext) {
+		// 解码后得到的数据进行处理ACK确认
+		String resp = packet.getResp();
+		if (resp != null && resp.length() != 0) {
+			idToPacket.remove(resp);
+		}
+	}
 
-    private void registerACK(final String key, Packet packet) {
-        QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (idToPacket.get(key) == null) {
-                    return;
-                }
-                Long lastTime = timePacket.get(key);
-                if (lastTime == null) {
-                    lastTime = System.currentTimeMillis();
-                    timePacket.put(key, lastTime);
-                }
-                long current = System.currentTimeMillis();
-                //超时未收到消息，关闭连接
-                if (timeout > 0 && (current - lastTime) > timeout) {
-                    timeoutCallback.callback(packet, lastTime);
-                    return;
-                }
-                registerACK(key, packet);
-            }
-        }, 3000, TimeUnit.MILLISECONDS);
-    }
+	@Override
+	public void beforeEncode(Packet packet, ChannelContext channelContext) {
+		// 编码前对数据进行ACK码计时
+		String req = packet.getReq();
+		if (req != null && req.length() != 0) {
+			idToPacket.put(req, packet);
+			timePacket.put(req, System.currentTimeMillis());
+			registerACK(req, packet);
+		}
+	}
 
-    public interface TimeoutCallback {
+	private void registerACK(final String key, Packet packet) {
+		TimerService.getInstance().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (idToPacket.get(key) == null) {
+					return;
+				}
+				Long lastTime = timePacket.get(key);
+				if (lastTime == null) {
+					lastTime = System.currentTimeMillis();
+					timePacket.put(key, lastTime);
+				}
+				long current = System.currentTimeMillis();
+				//超时未收到消息，关闭连接
+				if (timeout > 0 && (current - lastTime) > timeout) {
+					timeoutCallback.callback(packet, lastTime);
+					return;
+				}
+				registerACK(key, packet);
+			}
+		}, this.period, TimeUnit.MILLISECONDS);
+	}
 
-        void callback(Packet packet, long lastTime);
-    }
+	public interface TimeoutCallback {
+
+		void callback(Packet packet, long lastTime);
+	}
 }

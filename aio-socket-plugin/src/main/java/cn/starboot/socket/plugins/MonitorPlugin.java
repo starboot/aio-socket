@@ -19,7 +19,7 @@ import cn.starboot.socket.Packet;
 import cn.starboot.socket.StateMachineEnum;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.utils.QuickTimerTask;
+import cn.starboot.socket.utils.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +103,7 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
 	public MonitorPlugin(int seconds) {
 		this.seconds = seconds;
 		long mills = TimeUnit.SECONDS.toMillis(seconds);
-		QuickTimerTask.scheduleAtFixedRate(this, mills, mills);
+		TimerService.scheduleAtFixedRate(this, mills, mills);
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's monitor plugin added successfully");
 		}

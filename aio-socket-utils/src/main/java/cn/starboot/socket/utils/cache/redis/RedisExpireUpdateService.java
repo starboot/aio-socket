@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.utils.cache.redis;
 
-import cn.starboot.socket.utils.QuickTimerTask;
+import cn.starboot.socket.utils.TimerService;
 import cn.starboot.socket.utils.lock.SetWithLock;
 import cn.starboot.socket.utils.lock.WriteLockHandler;
 import org.slf4j.Logger;
@@ -31,26 +31,26 @@ import java.util.concurrent.TimeUnit;
  *
  * @author MDong
  */
-public class RedisExpireUpdateTask extends QuickTimerTask {
+public class RedisExpireUpdateService extends TimerService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RedisExpireUpdateTask.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RedisExpireUpdateService.class);
 
 	private static boolean started = false;
 
-	private static RedisExpireUpdateTask redisExpireUpdateTask;
+	private static RedisExpireUpdateService redisExpireUpdateTask;
 
 	private static final SetWithLock<ExpireEntity> setWithLock = new SetWithLock<>(new HashSet<>());
 
-	public synchronized static RedisExpireUpdateTask getInstance(Integer seconds) {
+	public synchronized static RedisExpireUpdateService getInstance(Integer seconds) {
 		long mills = TimeUnit.SECONDS.toMillis(seconds);
 		if (Objects.isNull(redisExpireUpdateTask)) {
-			redisExpireUpdateTask = new RedisExpireUpdateTask(mills, mills);
+			redisExpireUpdateTask = new RedisExpireUpdateService(mills, mills);
 			started = true;
 		}
 		return redisExpireUpdateTask;
 	}
 
-	private RedisExpireUpdateTask(long delay, long period) {
+	private RedisExpireUpdateService(long delay, long period) {
 		super(delay, period);
 	}
 

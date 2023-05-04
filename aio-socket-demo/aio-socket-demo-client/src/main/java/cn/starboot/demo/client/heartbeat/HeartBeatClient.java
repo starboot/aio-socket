@@ -25,7 +25,7 @@ public class HeartBeatClient {
 				// 重连插件
 				.addPlugin(new ReconnectPlugin(bootstrap))
 				// ACK收到确认插件
-				.addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
+				.addPlugin(new ACKPlugin(5, 3, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
 				// 设置内存池工厂
 				.setBufferFactory(() -> new MemoryPool(1024 * 1024, 1, true))
 				// 启动

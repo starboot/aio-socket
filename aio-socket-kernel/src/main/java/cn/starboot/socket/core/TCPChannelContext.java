@@ -304,9 +304,8 @@ public final class TCPChannelContext extends ChannelContext {
 	 */
 	private void setAioExecutor(ExecutorService aioThreadPoolExecutor) {
 		if (aioThreadPoolExecutor != null) {
-			Consumer<Boolean> consumer = b -> flush();
 			this.handlerTask = new HandlerTask(this, aioThreadPoolExecutor);
-			this.sendTask = new SendTask(this, aioThreadPoolExecutor, consumer);
+			this.sendTask = new SendTask(this, aioThreadPoolExecutor, b -> flush());
 			this.decodeTask = new DecodeTask(this, aioThreadPoolExecutor);
 		}
 	}

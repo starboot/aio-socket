@@ -21,6 +21,7 @@ import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.maintain.AbstractMaintain;
 import cn.starboot.socket.maintain.MaintainEnum;
 import cn.starboot.socket.maintain.MaintainManager;
+import cn.starboot.socket.plugins.ACKPlugin;
 import cn.starboot.socket.plugins.HeartPlugin;
 import cn.starboot.socket.plugins.StreamMonitorPlugin;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
@@ -60,7 +61,7 @@ public class Server {
 //                .addPlugin(new StreamMonitorPlugin())
                 .addPlugin(new MonitorPlugin(5))
 				.addAioHandler(new MyServerHandler(5))
-//                .addPlugin(new HeartPlugin(30, TimeUnit.SECONDS) {
+//                .addPlugin(new HeartPlugin(30, 20, TimeUnit.SECONDS) {
 //                    @Override
 //                    public boolean isHeartMessage(Packet packet) {
 //                        if (packet instanceof StringPacket) {
@@ -70,7 +71,7 @@ public class Server {
 //                        return false;
 //                    }
 //                })
-//                .addPlugin(new ACKPlugin(30, TimeUnit.SECONDS, (context, lastTime) -> System.out.println("超时了：..." + lastTime)))
+//                .addPlugin(new ACKPlugin(30, 10, TimeUnit.SECONDS, (context, lastTime) -> System.out.println("超时了：..." + lastTime)))
                 .start();
 
 //		MaintainManager maintainManager = bootstrap.getConfig().getMaintainManager();

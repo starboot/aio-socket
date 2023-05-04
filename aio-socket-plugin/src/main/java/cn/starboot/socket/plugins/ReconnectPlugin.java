@@ -19,7 +19,7 @@ import cn.starboot.socket.StateMachineEnum;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.ClientBootstrap;
-import cn.starboot.socket.utils.QuickTimerTask;
+import cn.starboot.socket.utils.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +41,19 @@ public class ReconnectPlugin extends AbstractPlugin {
 
     private final ClientBootstrap client;
 
+	private final long period;
+
     public ReconnectPlugin(ClientBootstrap client) {
-        this(client, null);
+        this(client, 2, TimeUnit.SECONDS);
     }
 
-    public ReconnectPlugin(ClientBootstrap client, AsynchronousChannelGroup asynchronousChannelGroup) {
+	public ReconnectPlugin(ClientBootstrap client, int period, TimeUnit timeUnit) {
+		this(client, period, timeUnit, null);
+	}
+
+    public ReconnectPlugin(ClientBootstrap client, int period, TimeUnit timeUnit, AsynchronousChannelGroup asynchronousChannelGroup) {
         this.client = client;
+		this.period =  timeUnit.toMillis(period);
         this.asynchronousChannelGroup = asynchronousChannelGroup;
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's reconnect plugin added successfully");
@@ -61,7 +68,7 @@ public class ReconnectPlugin extends AbstractPlugin {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("aio-socket "+"version: " + AioConfig.VERSION + "; client kernel starting reconnect");
         }
-        QuickTimerTask.SCHEDULED_EXECUTOR_SERVICE.schedule(new TimerTask() {
+        TimerService.getInstance().schedule(new TimerTask() {
             @Override
             public void run() {
                 try {
@@ -75,6 +82,6 @@ public class ReconnectPlugin extends AbstractPlugin {
                     e.printStackTrace();
                 }
             }
-        }, 2000, TimeUnit.MILLISECONDS);
+        }, this.period, TimeUnit.MILLISECONDS);
     }
 }
