@@ -32,42 +32,43 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 性能：870万/秒 232MB/sec
+ * 性能：
+ * 消息处理量：1000万/秒
+ * 流量流动量：270MB/sec (input, output)
  * ------------------------------------------------
  * 			aio-socket performance
  * -------------------in 5 sec --------------------
- * inflow:				831.9873046875(MB)
- * outflow:			    829.9357376098633(MB)
+ * inflow:				953.9854431152344(MB)
+ * outflow:			    954.1552276611328(MB)
  * process fail:		0
- * process count:		43512534
- * process total:		151447973
- * read count:			832
- * write count:		    212800
+ * process count:		50028818
+ * process total:		425383048
+ * read count:			954
+ * write count:		    331813
  * connect count:		0
  * disconnect count:	0
  * online count:		10
  * connected total:	    10
- * Requests/sec:		8702506.8
- * Transfer/sec:		166.3974609375(MB)
- * ------------------------------------------------
+ * Requests/sec:		10005763.6
+ * Transfer/sec:		190.79708862304688(MB)
  *
- * ******************流量篇************************
+ * ***********************流量篇*****************************
  * ------------------------------------------------
  * 			aio-socket performance
  * -------------------in 5 sec --------------------
- * inflow:				1160.8688230514526(MB)
- * outflow:			1157.9078330993652(MB)
+ * inflow:				1355.9301261901855(MB)
+ * outflow:			    1356.981243133545(MB)
  * process fail:		0
- * process count:		6545725
- * process total:		50531330
- * read count:			1161
- * write count:		296859
+ * process count:		15455294
+ * process total:		48235737
+ * read count:			1355
+ * write count:		    298008
  * connect count:		0
  * disconnect count:	0
- * online count:		10
- * connected total:	10
- * Requests/sec:		1309145.0
- * Transfer/sec:		232.17376461029053(MB)
+ * online count:		6
+ * connected total:	    10
+ * Requests/sec:		3091058.8
+ * Transfer/sec:		271.18602523803713(MB)
  * ------------------------------------------------
  */
 public class Server {

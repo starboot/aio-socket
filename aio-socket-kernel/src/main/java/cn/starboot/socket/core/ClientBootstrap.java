@@ -126,11 +126,11 @@ public class ClientBootstrap {
 	/**
 	 * 启动客户端。
 	 * 本方法会构建线程数为threadNum的{@code asynchronousChannelGroup}
-	 * 并通过调用{@link ClientBootstrap#start(AsynchronousChannelGroup)}启动服务。
+	 * 并通过调用{@link cn.starboot.socket.core.ClientBootstrap#start(AsynchronousChannelGroup)}启动服务。
 	 *
 	 * @return 建立连接后的会话对象
 	 * @throws IOException IOException
-	 * @see ClientBootstrap#start(AsynchronousChannelGroup)
+	 * @see cn.starboot.socket.core.ClientBootstrap#start(AsynchronousChannelGroup)
 	 */
 	public final ChannelContext start() throws IOException {
 		this.asynchronousChannelGroup = AsynchronousChannelGroup.withFixedThreadPool(threadNum, Thread::new);
