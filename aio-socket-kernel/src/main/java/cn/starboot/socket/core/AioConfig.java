@@ -98,8 +98,6 @@ public abstract class AioConfig {
 
     private int maxWaitNum = 50;
 
-    private boolean multilevelModel = false;
-
 	/**
 	 * 启用用户连接保存
 	 */
@@ -215,17 +213,6 @@ public abstract class AioConfig {
 
     public void setMaxOnlineNum(int maxOnlineNum) {
         this.maxOnlineNum = maxOnlineNum;
-    }
-
-    public boolean isMultilevelModel() {
-        return multilevelModel;
-    }
-
-    public void setMultilevelModel(boolean multilevelModel) {
-        if (!isServer()) {
-            throw new UnsupportedOperationException("ClientBootstrap does not support Setting MultilevelModel");
-        }
-        this.multilevelModel = multilevelModel;
     }
 
 	protected MaintainManager getMaintainManager() {

@@ -31,7 +31,7 @@ final class ReadCompletionHandler implements CompletionHandler<Integer, TCPChann
     @Override
     public void completed(Integer result, TCPChannelContext channelContext) {
         // 读取完成,result:实际读取的字节数。如果对方关闭连接则result=-1。
-        if (channelContext.runDecodeRunnable(result)) {
+        if (channelContext.aioDecoder(result)) {
             return;
         }
         try {

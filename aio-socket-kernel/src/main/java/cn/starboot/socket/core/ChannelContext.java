@@ -16,9 +16,7 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ChannelStatusEnum;
-import cn.starboot.socket.task.DecodeTask;
-import cn.starboot.socket.task.HandlerTask;
-import cn.starboot.socket.task.SendTask;
+import cn.starboot.socket.task.AioWorker;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.utils.queue.AioFullWaitQueue;
 import cn.starboot.socket.utils.queue.AioQueue;
@@ -231,11 +229,7 @@ public abstract class ChannelContext {
         return status != ChannelStatusEnum.CHANNEL_STATUS_ENABLED;
     }
 
-    protected abstract DecodeTask getDecodeTaskRunnable();
-
-	protected abstract HandlerTask getHandlerTaskRunnable();
-
-	protected abstract SendTask getSendTaskRunnable();
+    protected abstract AioWorker getAioWorker();
     /**
      * 获取附件对象
      *
@@ -286,7 +280,7 @@ public abstract class ChannelContext {
     /**
      * 发送器
      */
-    protected abstract boolean sendPacket(Packet packet, boolean isBlock);
+    protected abstract boolean aioEncoder(Packet packet, boolean isBlock);
 
 	/**
 	 * 同步等待读

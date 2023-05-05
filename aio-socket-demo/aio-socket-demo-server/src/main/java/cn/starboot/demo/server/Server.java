@@ -32,19 +32,43 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- *  -----5seconds ----
- *  inflow:		771.9616775512695(MB)
- *  outflow:	773.6727828979492(MB)
- *  process fail:	0
- *  process count:	40514816
- *  process total:	82435765
- *  read count:	1038	write count:	198011
- *  connect count:	0
- *  disconnect count:	0
- *  online count:	10
- *  connected total:	10
- *  Requests/sec:	8102963.2
- *  Transfer/sec:	154.3923355102539(MB)
+ * 性能：870万/秒 232MB/sec
+ * ------------------------------------------------
+ * 			aio-socket performance
+ * -------------------in 5 sec --------------------
+ * inflow:				831.9873046875(MB)
+ * outflow:			    829.9357376098633(MB)
+ * process fail:		0
+ * process count:		43512534
+ * process total:		151447973
+ * read count:			832
+ * write count:		    212800
+ * connect count:		0
+ * disconnect count:	0
+ * online count:		10
+ * connected total:	    10
+ * Requests/sec:		8702506.8
+ * Transfer/sec:		166.3974609375(MB)
+ * ------------------------------------------------
+ *
+ * ******************流量篇************************
+ * ------------------------------------------------
+ * 			aio-socket performance
+ * -------------------in 5 sec --------------------
+ * inflow:				1160.8688230514526(MB)
+ * outflow:			1157.9078330993652(MB)
+ * process fail:		0
+ * process count:		6545725
+ * process total:		50531330
+ * read count:			1161
+ * write count:		296859
+ * connect count:		0
+ * disconnect count:	0
+ * online count:		10
+ * connected total:	10
+ * Requests/sec:		1309145.0
+ * Transfer/sec:		232.17376461029053(MB)
+ * ------------------------------------------------
  */
 public class Server {
 

@@ -498,9 +498,10 @@ public class Aio {
 		// 从各个关系中移除
 		Boolean aBoolean = unbindFromAll(channelContext);
 		// 停止各种处理器的运行
-		channelContext.getDecodeTaskRunnable().setCanceled(true);
-		channelContext.getHandlerTaskRunnable().setCanceled(true);
-		channelContext.getSendTaskRunnable().setCanceled(true);
+//		channelContext.getDecodeTaskRunnable().setCanceled(true);
+//		channelContext.getHandlerTaskRunnable().setCanceled(true);
+//		channelContext.getSendTaskRunnable().setCanceled(true);
+		channelContext.getAioWorker().setCanceled(true);
 		// 设置关闭码
 		if (Objects.isNull(closeCode)) {
 			if (Objects.equals(channelContext.getCloseCode(), CloseCode.INIT_STATUS)) {
@@ -1537,7 +1538,7 @@ public class Aio {
 	private static Boolean send0(ChannelContext channelContext,
 								 Packet packet,
 								 boolean isBlock) {
-		return channelContext.sendPacket(packet, isBlock);
+		return channelContext.aioEncoder(packet, isBlock);
 	}
 
 	/**

@@ -22,9 +22,7 @@ import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.StateMachineEnum;
 import cn.starboot.socket.exception.AioDecoderException;
-import cn.starboot.socket.task.DecodeTask;
-import cn.starboot.socket.task.HandlerTask;
-import cn.starboot.socket.task.SendTask;
+import cn.starboot.socket.task.AioWorker;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.intf.Handler;
 import cn.starboot.socket.utils.AIOUtil;
@@ -100,19 +98,9 @@ public final class TCPChannelContext extends ChannelContext {
 	private MemoryUnit writeBuffer;
 
 	/**
-	 * 消息处理逻辑执行器
-	 */
-	private HandlerTask handlerTask;
-
-	/**
-	 * 消息发送逻辑执行器
-	 */
-	private SendTask sendTask;
-
-	/**
 	 * 消息解码逻辑执行器
 	 */
-	private DecodeTask decodeTask;
+	private AioWorker aioWorker;
 
 	TCPChannelContext(AsynchronousSocketChannel channel,
 					  final AioConfig config,
@@ -303,10 +291,8 @@ public final class TCPChannelContext extends ChannelContext {
 	 * @param aioThreadPoolExecutor 线程池
 	 */
 	private void setAioExecutor(ExecutorService aioThreadPoolExecutor) {
-		if (aioThreadPoolExecutor != null) {
-			this.handlerTask = new HandlerTask(this, aioThreadPoolExecutor);
-			this.sendTask = new SendTask(this, aioThreadPoolExecutor, b -> flush());
-			this.decodeTask = new DecodeTask(this, aioThreadPoolExecutor);
+		if (getAioConfig().isServer() && aioThreadPoolExecutor != null) {
+			this.aioWorker = new AioWorker(this, aioThreadPoolExecutor);
 		}
 	}
 
@@ -316,13 +302,9 @@ public final class TCPChannelContext extends ChannelContext {
 	 * @param packet 消息包
 	 */
 	private void aioHandler(Packet packet) {
-		if (getAioConfig().isMultilevelModel() && handlerTask != null && handlerTask.addTask(packet)) {
-			handlerTask.execute();
-		} else {
-			Packet handle = getAioConfig().getHandler().handle(this, packet);
-			if (handle != null) {
-				sendPacket(handle, false);
-			}
+		Packet handle = getAioConfig().getHandler().handle(this, packet);
+		if (handle != null) {
+			aioEncoder(handle, false);
 		}
 	}
 
@@ -332,9 +314,9 @@ public final class TCPChannelContext extends ChannelContext {
 	 * @param integer 读结果
 	 * @return 如果不存在解码处理器则返回false
 	 */
-	protected boolean runDecodeRunnable(Integer integer) {
-		if (this.decodeTask != null && this.decodeTask.addTask(integer)) {
-			this.decodeTask.execute();
+	protected boolean aioDecoder(Integer integer) {
+		if (this.aioWorker != null && this.aioWorker.addTask(integer)) {
+			this.aioWorker.execute();
 			return true;
 		} else {
 			return false;
@@ -380,18 +362,8 @@ public final class TCPChannelContext extends ChannelContext {
 	}
 
 	@Override
-	protected DecodeTask getDecodeTaskRunnable() {
-		return this.decodeTask;
-	}
-
-	@Override
-	protected HandlerTask getHandlerTaskRunnable() {
-		return this.handlerTask;
-	}
-
-	@Override
-	protected SendTask getSendTaskRunnable() {
-		return this.sendTask;
+	protected AioWorker getAioWorker() {
+		return this.aioWorker;
 	}
 
 	@Override
@@ -400,19 +372,15 @@ public final class TCPChannelContext extends ChannelContext {
 	}
 
 	@Override
-	protected boolean sendPacket(Packet packet, boolean isBlock) {
-		if (!isBlock && this.sendTask != null && this.sendTask.addTask(packet)) {
-			this.sendTask.execute();
-		} else {
-			try {
-				synchronized (this) {
-					getAioConfig().getHandler().encode(packet, this);
-				}
-			} catch (AioEncoderException e) {
-				Aio.close(this);
-				return false;
+	protected boolean aioEncoder(Packet packet, boolean isBlock) {
+		try {
+			synchronized (this) {
+				getAioConfig().getHandler().encode(packet, this);
 			}
 			flush();
+		} catch (AioEncoderException e) {
+			Aio.close(this);
+			return false;
 		}
 		return true;
 	}

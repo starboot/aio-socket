@@ -79,7 +79,7 @@ public final class MemoryPool extends TimerService {
 			if (LOGGER.isInfoEnabled()) {
 				LOGGER.info("The Memory pool is not turned on");
 			}
-			release();
+//			release();
 			shutdown();
 		}
 	}
