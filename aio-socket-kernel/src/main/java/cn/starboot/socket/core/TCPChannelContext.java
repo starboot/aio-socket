@@ -35,6 +35,8 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -46,6 +48,8 @@ import java.util.function.Supplier;
  * @version 2.10.1.v20211002-RELEASE
  */
 public final class TCPChannelContext extends ChannelContext {
+
+	private final Lock lock = new ReentrantLock();
 
 	/**
 	 * 底层通信channel对象
@@ -374,6 +378,7 @@ public final class TCPChannelContext extends ChannelContext {
 	@Override
 	protected boolean aioEncoder(Packet packet, boolean isBlock) {
 		try {
+//			lock.lock();
 			synchronized (this) {
 				getAioConfig().getHandler().encode(packet, this);
 			}

@@ -17,6 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.ProtocolEnum;
 import cn.starboot.socket.core.config.AioClientConfig;
+import cn.starboot.socket.utils.ThreadUtils;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.intf.AioHandler;
@@ -37,6 +38,7 @@ import java.net.SocketOption;
 import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -133,7 +135,8 @@ public class ClientBootstrap {
 	 * @see cn.starboot.socket.core.ClientBootstrap#start(AsynchronousChannelGroup)
 	 */
 	public final ChannelContext start() throws IOException {
-		this.asynchronousChannelGroup = AsynchronousChannelGroup.withFixedThreadPool(threadNum, Thread::new);
+		AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
+		this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(threadNum), threadNum);
 		return start(this.asynchronousChannelGroup);
 	}
 

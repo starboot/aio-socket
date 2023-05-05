@@ -59,7 +59,7 @@ public class Client {
 //        demoPacket.setReq("177");   设置同步位
         ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors());
         AsynchronousChannelGroup asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(groupExecutor);
-        MemoryPoolFactory poolFactory = () -> new MemoryPool(10 * 1024 * 1024, 10, true);
+        MemoryPoolFactory poolFactory = () -> new MemoryPool(32 * 1024 * 1024, 10, true);
         ClientHandler clientHandler = new ClientHandler();
         // 5000
         for (int i = 0; i < 10; i++) {
@@ -68,7 +68,7 @@ public class Client {
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
                 bootstrap.setBufferFactory(poolFactory)
                         .setReadBufferSize(1024 * 1024)
-                        .setWriteBufferSize(1024 * 4, 512)
+                        .setWriteBufferSize(1024 * 1024, 512)
 //                        .addHeartPacket(new DemoPacket("heartbeat message"))
 //                        .addPlugin(new MonitorPlugin(5))
 //                        .addPlugin(new ACKPlugin(5, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))

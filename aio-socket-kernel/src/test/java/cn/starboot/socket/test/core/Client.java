@@ -33,8 +33,8 @@ public class Client {
                 .setWriteBufferSize(1024 * 2, 512)
                 .start();
         // 发送消息
-        Aio.send(channelContext, demoPacket);
-        Thread.sleep(1000);
+		Boolean send = Aio.send(channelContext, demoPacket);
+		Thread.sleep(1000);
         // 关机
         bootstrap.shutdown();
     }

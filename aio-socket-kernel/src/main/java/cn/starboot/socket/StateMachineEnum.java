@@ -49,9 +49,9 @@ public enum StateMachineEnum {
     INPUT_EXCEPTION,
 
     /**
-     * 写操作异常。
+     * 协议编码异常。
      */
-    OUTPUT_EXCEPTION,
+    ENCODE_EXCEPTION,
 
     /**
      * 会话正在关闭中。

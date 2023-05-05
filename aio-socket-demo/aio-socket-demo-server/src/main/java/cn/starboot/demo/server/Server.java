@@ -33,24 +33,25 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 性能：
- * 消息处理量：1000万/秒
+ * 消息处理量：1103万/秒
  * 流量流动量：270MB/sec (input, output)
  * ------------------------------------------------
  * 			aio-socket performance
  * -------------------in 5 sec --------------------
- * inflow:				953.9854431152344(MB)
- * outflow:			    954.1552276611328(MB)
+ * inflow:				1052.9839324951172(MB)
+ * outflow:			    1052.727939605713(MB)
  * process fail:		0
- * process count:		50028818
- * process total:		425383048
- * read count:			954
- * write count:		    331813
+ * process count:		55193411
+ * process total:		122439811
+ * read count:			1053
+ * write count:		    270496
  * connect count:		0
  * disconnect count:	0
  * online count:		10
  * connected total:	    10
- * Requests/sec:		10005763.6
- * Transfer/sec:		190.79708862304688(MB)
+ * Requests/sec:		11038682.2
+ * Transfer/sec:		210.59678649902344(MB)
+ * ------------------------------------------------
  *
  * ***********************流量篇*****************************
  * ------------------------------------------------
@@ -85,7 +86,7 @@ public class Server {
                 // 注册流量监控插件
 //                .addPlugin(new StreamMonitorPlugin())
                 .addPlugin(new MonitorPlugin(5))
-				.addAioHandler(new MyServerHandler(5))
+//				.addAioHandler(new MyServerHandler(5))
 //                .addPlugin(new HeartPlugin(30, 20, TimeUnit.SECONDS) {
 //                    @Override
 //                    public boolean isHeartMessage(Packet packet) {

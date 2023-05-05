@@ -44,7 +44,7 @@ final class WriteCompletionHandler implements CompletionHandler<Integer, TCPChan
     @Override
     public void failed(Throwable exc, TCPChannelContext channelContext) {
         try {
-            channelContext.getAioConfig().getHandler().stateEvent(channelContext, StateMachineEnum.OUTPUT_EXCEPTION, exc);
+            channelContext.getAioConfig().getHandler().stateEvent(channelContext, StateMachineEnum.ENCODE_EXCEPTION, exc);
             channelContext.close();
         } catch (Exception e) {
             e.printStackTrace();

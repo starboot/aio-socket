@@ -19,12 +19,26 @@ import cn.starboot.socket.Packet;
 import cn.starboot.socket.codec.string.StringHandler;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.core.WriteBuffer;
+import cn.starboot.socket.exception.AioEncoderException;
 
 public class ClientHandler extends StringHandler {
 
+	private static final byte[] data = "hello aio-socket".getBytes();
+
+	private static final int len = data.length;
+
     @Override
     public Packet handle(ChannelContext channelContext, StringPacket packet) {
-		System.out.println(packet.getData());
+//		System.out.println(packet.getData());
         return null;
     }
+
+	@Override
+	public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
+		WriteBuffer writeBuffer = channelContext.getWriteBuffer();
+		writeBuffer.writeInt(len);
+		writeBuffer.write(data);
+
+	}
 }
