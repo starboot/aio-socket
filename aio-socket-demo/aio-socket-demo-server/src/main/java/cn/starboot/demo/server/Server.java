@@ -33,24 +33,24 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 性能：
- * 消息处理量：1103万/秒
+ * 消息处理量：1158万/秒
  * 流量流动量：270MB/sec (input, output)
  * ------------------------------------------------
  * 			aio-socket performance
  * -------------------in 5 sec --------------------
- * inflow:				1052.9839324951172(MB)
- * outflow:			    1052.727939605713(MB)
+ * inflow:				1104.983139038086(MB)
+ * outflow:			    1104.6816596984863(MB)
  * process fail:		0
- * process count:		55193411
- * process total:		122439811
- * read count:			1053
- * write count:		    270496
+ * process count:		57917126
+ * process total:		732974447
+ * read count:			1105
+ * write count:		    283043
  * connect count:		0
  * disconnect count:	0
  * online count:		10
  * connected total:	    10
- * Requests/sec:		11038682.2
- * Transfer/sec:		210.59678649902344(MB)
+ * Requests/sec:		1.15834252E7
+ * Transfer/sec:		220.9966278076172(MB)
  * ------------------------------------------------
  *
  * ***********************流量篇*****************************
@@ -66,7 +66,7 @@ import java.util.concurrent.TimeUnit;
  * write count:		    298008
  * connect count:		0
  * disconnect count:	0
- * online count:		6
+ * online count:		10
  * connected total:	    10
  * Requests/sec:		3091058.8
  * Transfer/sec:		271.18602523803713(MB)

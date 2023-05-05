@@ -378,14 +378,17 @@ public final class TCPChannelContext extends ChannelContext {
 	@Override
 	protected boolean aioEncoder(Packet packet, boolean isBlock) {
 		try {
-//			lock.lock();
-			synchronized (this) {
+			lock.lock();
+//			synchronized (this) {
 				getAioConfig().getHandler().encode(packet, this);
-			}
-			flush();
+//			}
+//			flush();
 		} catch (AioEncoderException e) {
 			Aio.close(this);
 			return false;
+		} finally {
+			lock.unlock();
+			flush();
 		}
 		return true;
 	}
