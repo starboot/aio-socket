@@ -16,7 +16,6 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ChannelStatusEnum;
-import cn.starboot.socket.task.AioWorker;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.utils.queue.AioFullWaitQueue;
 import cn.starboot.socket.utils.queue.AioQueue;
@@ -229,7 +228,7 @@ public abstract class ChannelContext {
         return status != ChannelStatusEnum.CHANNEL_STATUS_ENABLED;
     }
 
-    protected abstract AioWorker getAioWorker();
+    protected abstract AsyAioWorker getAioWorker();
     /**
      * 获取附件对象
      *

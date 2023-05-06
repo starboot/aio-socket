@@ -28,6 +28,25 @@ import java.io.IOException;
 import java.nio.channels.AsynchronousChannelGroup;
 import java.util.concurrent.ExecutorService;
 
+/**
+ * ------------------------------------------------
+ * 			aio-socket performance
+ * -------------------in 5 sec --------------------
+ * inflow:				1422.926399230957(MB)
+ * outflow:			    1421.8663444519043(MB)
+ * process fail:		0
+ * process count:		16207917
+ * process total:		141181524
+ * read count:			1423
+ * write count:		    364174
+ * connect count:		0
+ * disconnect count:	0
+ * online count:		10
+ * connected total:	    10
+ * Requests/sec:		3241583.4
+ * Transfer/sec:		284.5852798461914(MB)
+ * ------------------------------------------------
+ */
 public class Client {
 
     public static void main(String[] args) throws IOException {

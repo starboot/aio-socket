@@ -21,7 +21,7 @@ import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.exception.AioEncoderException;
-import cn.starboot.socket.task.AioWorker;
+import cn.starboot.socket.core.AsyAioWorker;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
@@ -84,7 +84,7 @@ final class UDPChannelContext extends ChannelContext {
 	}
 
 	@Override
-	protected AioWorker getAioWorker() {
+	protected AsyAioWorker getAioWorker() {
 		throw new UnsupportedOperationException();
 	}
 

@@ -22,7 +22,6 @@ import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.StateMachineEnum;
 import cn.starboot.socket.exception.AioDecoderException;
-import cn.starboot.socket.task.AioWorker;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.intf.Handler;
 import cn.starboot.socket.utils.AIOUtil;
@@ -104,7 +103,7 @@ public final class TCPChannelContext extends ChannelContext {
 	/**
 	 * 消息解码逻辑执行器
 	 */
-	private AioWorker aioWorker;
+	private AsyAioWorker aioWorker;
 
 	TCPChannelContext(AsynchronousSocketChannel channel,
 					  final AioConfig config,
@@ -296,7 +295,8 @@ public final class TCPChannelContext extends ChannelContext {
 	 */
 	private void setAioExecutor(ExecutorService aioThreadPoolExecutor) {
 		if (getAioConfig().isServer() && aioThreadPoolExecutor != null) {
-			this.aioWorker = new AioWorker(this, aioThreadPoolExecutor);
+//			this.aioWorker = new AioWorker(this, aioThreadPoolExecutor);
+			this.aioWorker = new AsyAioWorker(this, aioThreadPoolExecutor);
 		}
 	}
 
@@ -319,8 +319,8 @@ public final class TCPChannelContext extends ChannelContext {
 	 * @return 如果不存在解码处理器则返回false
 	 */
 	protected boolean aioDecoder(Integer integer) {
-		if (this.aioWorker != null && this.aioWorker.addTask(integer)) {
-			this.aioWorker.execute();
+		if (this.aioWorker != null) {
+			this.aioWorker.setResult(integer).execute();
 			return true;
 		} else {
 			return false;
@@ -366,7 +366,7 @@ public final class TCPChannelContext extends ChannelContext {
 	}
 
 	@Override
-	protected AioWorker getAioWorker() {
+	protected AsyAioWorker getAioWorker() {
 		return this.aioWorker;
 	}
 
