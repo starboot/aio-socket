@@ -20,22 +20,60 @@
 		<dependency>
 			<groupId>cn.starboot.socket</groupId>
 			<artifactId>aio-socket-http-common</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>cn.starboot.socket</groupId>
+					<artifactId>aio-socket-plugin</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>cn.starboot.socket</groupId>
+					<artifactId>aio-socket-kernel</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>cn.starboot.socket</groupId>
+					<artifactId>aio-socket-utils</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>cn.starboot.socket</groupId>
 			<artifactId>aio-socket-http-server</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>cn.starboot.socket</groupId>
+					<artifactId>aio-socket-http-common</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>cn.starboot.socket</groupId>
 			<artifactId>aio-socket-http-client</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>cn.starboot.socket</groupId>
+					<artifactId>aio-socket-http-common</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>cn.starboot.socket</groupId>
 			<artifactId>aio-socket-codec-mqtt</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>cn.starboot.socket</groupId>
+					<artifactId>aio-socket-codec</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>cn.starboot.socket</groupId>
 			<artifactId>aio-socket-kernel</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>cn.starboot.socket</groupId>
+					<artifactId>aio-socket-utils</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>cn.starboot.socket</groupId>
