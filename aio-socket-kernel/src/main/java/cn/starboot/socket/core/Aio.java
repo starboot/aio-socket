@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.ChannelContextFilter;
 import cn.starboot.socket.Node;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.enums.CloseCode;
@@ -261,7 +262,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -320,7 +321,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId 集群ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -352,7 +353,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId 群组ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -398,7 +399,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip IP
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -430,7 +431,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token TOKEN
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -462,7 +463,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user USER
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -1559,7 +1560,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -1575,7 +1576,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @param isBlock 是否采用同步等待发送
@@ -1690,7 +1691,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId 集群ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -1708,7 +1709,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId 集群ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @param isBlock 是否采用同步等待发送
@@ -1752,7 +1753,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId 群ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -1770,7 +1771,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId 群ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @param isBlock 是否采用同步等待发送
@@ -1845,7 +1846,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip IP
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -1863,7 +1864,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip IP
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @param isBlock 是否采用同步等待发送
@@ -1907,7 +1908,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param setWithLock 带有锁结构的SET集合
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -1925,7 +1926,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param setWithLock 带有锁结构的SET集合
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @param isBlock 是否采用同步等待发送
@@ -1993,7 +1994,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token TOKEN
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -2011,7 +2012,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token TOKEN
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @param isBlock 是否采用同步等待发送
@@ -2055,7 +2056,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user USER
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @return 发送状态
@@ -2073,7 +2074,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user USER
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param channelContextFilter 规则过滤器 {@link cn.starboot.socket.core.ChannelContextFilter}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
 	 * @param isBlock 是否采用同步等待发送

@@ -1,4 +1,4 @@
-package cn.starboot.socket.core.config;
+package cn.starboot.socket.config;
 
 import cn.starboot.socket.core.AioConfig;
 

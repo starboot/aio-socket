@@ -1,4 +1,6 @@
-package cn.starboot.socket.core;
+package cn.starboot.socket;
+
+import cn.starboot.socket.core.ChannelContext;
 
 /**
  * 过滤器

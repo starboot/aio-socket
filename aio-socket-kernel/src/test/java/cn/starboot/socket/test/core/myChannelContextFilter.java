@@ -1,7 +1,7 @@
 package cn.starboot.socket.test.core;
 
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.ChannelContextFilter;
+import cn.starboot.socket.ChannelContextFilter;
 
 public class myChannelContextFilter implements ChannelContextFilter {
 

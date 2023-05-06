@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.core;
 
-import cn.starboot.socket.core.config.AioServerConfig;
+import cn.starboot.socket.config.AioServerConfig;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;

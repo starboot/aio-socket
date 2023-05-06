@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.udp;
 
-import cn.starboot.socket.core.config.AioServerConfig;
+import cn.starboot.socket.config.AioServerConfig;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
