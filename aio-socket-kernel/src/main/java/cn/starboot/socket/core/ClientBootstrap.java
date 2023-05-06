@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.core;
 
-import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.core.config.AioClientConfig;
 import cn.starboot.socket.utils.ThreadUtils;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;

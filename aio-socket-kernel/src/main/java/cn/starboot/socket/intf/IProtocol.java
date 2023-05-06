@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.intf;
 
-import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.enums.ProtocolEnum;
 
 /**
  * 协议接口

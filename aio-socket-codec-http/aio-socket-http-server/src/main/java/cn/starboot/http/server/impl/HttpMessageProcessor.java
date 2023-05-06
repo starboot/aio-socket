@@ -22,7 +22,7 @@ import cn.starboot.http.server.HttpRequest;
 import cn.starboot.http.server.HttpServerConfiguration;
 import cn.starboot.http.server.HttpServerHandler;
 import cn.starboot.http.server.WebSocketHandler;
-import cn.starboot.socket.StateMachineEnum;
+import cn.starboot.socket.enums.StateMachineEnum;
 import cn.starboot.socket.core.ChannelContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

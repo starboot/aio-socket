@@ -16,11 +16,12 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ChannelStatusEnum;
+import cn.starboot.socket.enums.CloseCode;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.utils.queue.AioFullWaitQueue;
 import cn.starboot.socket.utils.queue.AioQueue;
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;

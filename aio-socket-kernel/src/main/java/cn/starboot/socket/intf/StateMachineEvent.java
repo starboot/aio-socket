@@ -16,7 +16,7 @@
 package cn.starboot.socket.intf;
 
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.StateMachineEnum;
+import cn.starboot.socket.enums.StateMachineEnum;
 
 public interface StateMachineEvent {
 

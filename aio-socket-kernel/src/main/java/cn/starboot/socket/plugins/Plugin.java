@@ -18,7 +18,7 @@ package cn.starboot.socket.plugins;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.StateMachineEnum;
+import cn.starboot.socket.enums.StateMachineEnum;
 import cn.starboot.socket.intf.Handler;
 
 /**

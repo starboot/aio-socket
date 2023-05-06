@@ -22,7 +22,7 @@ import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.utils.AIOUtil;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.exception.AioDecoderException;
 
 import java.nio.ByteBuffer;

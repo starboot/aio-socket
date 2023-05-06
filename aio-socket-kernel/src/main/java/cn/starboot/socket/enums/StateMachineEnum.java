@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package cn.starboot.socket;
+package cn.starboot.socket.enums;
 
 /**
  * 列举了当前aio-socket Channel通道所关注的各类状态枚举。

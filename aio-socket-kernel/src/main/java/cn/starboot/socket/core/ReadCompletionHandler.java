@@ -16,7 +16,7 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.Monitor;
-import cn.starboot.socket.StateMachineEnum;
+import cn.starboot.socket.enums.StateMachineEnum;
 
 import java.nio.channels.CompletionHandler;
 

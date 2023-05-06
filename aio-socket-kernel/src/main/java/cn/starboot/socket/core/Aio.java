@@ -17,6 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.Node;
 import cn.starboot.socket.Packet;
+import cn.starboot.socket.enums.CloseCode;
 import cn.starboot.socket.maintain.MaintainEnum;
 import cn.starboot.socket.utils.lock.ReadLockHandler;
 import cn.starboot.socket.utils.lock.SetWithLock;
@@ -488,7 +489,7 @@ public class Aio {
 	 * 关闭指定通道的连接，并提供关闭码
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void close(ChannelContext channelContext,
 							 CloseCode closeCode) {
@@ -530,7 +531,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param bsId 业务ID
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeBsId(AioConfig aioConfig,
 								 String bsId,
@@ -554,7 +555,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param node 客户端 {@link cn.starboot.socket.Node}
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeClientNode(AioConfig aioConfig,
 									   Node node,
@@ -578,7 +579,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId 集群ID
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeClu(AioConfig aioConfig,
 								String cluId,
@@ -602,7 +603,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId 群组
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeGroup(AioConfig aioConfig,
 								  String groupId,
@@ -626,7 +627,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param id ID
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeId(AioConfig aioConfig,
 							   String id,
@@ -650,7 +651,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip IP
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeIp(AioConfig aioConfig,
 							   String ip,
@@ -674,7 +675,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token TOKEN
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeToken(AioConfig aioConfig,
 								  String token,
@@ -698,7 +699,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user USER
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeUser(AioConfig aioConfig,
 								 String user,
@@ -711,7 +712,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param setWithLock 带有锁结构的SET集合
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeSet(AioConfig aioConfig,
 								SetWithLock<ChannelContext> setWithLock,
@@ -1298,7 +1299,7 @@ public class Aio {
 	 * 移除连接(与关闭一个道理)
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void remove(ChannelContext channelContext,
 							  CloseCode closeCode) {
@@ -1321,7 +1322,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param bsId 业务ID
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeBsId(AioConfig aioConfig,
 								  String bsId,
@@ -1345,7 +1346,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param node 客户端 {@link cn.starboot.socket.Node}
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeClientNode(AioConfig aioConfig,
 										Node node,
@@ -1369,7 +1370,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param cluId 集群组ID
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeClu(AioConfig aioConfig,
 								 String cluId,
@@ -1393,7 +1394,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param groupId 群组ID
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeGroup(AioConfig aioConfig,
 								   String groupId,
@@ -1417,7 +1418,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param id ID
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeId(AioConfig aioConfig,
 								String id,
@@ -1441,7 +1442,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param ip IP
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeIp(AioConfig aioConfig,
 								String ip,
@@ -1465,7 +1466,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param token TOKEN
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeToken(AioConfig aioConfig,
 								   String token,
@@ -1489,7 +1490,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param user USER
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeUser(AioConfig aioConfig,
 								  String user,
@@ -1502,7 +1503,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param setWithLock 带有锁结构的SET集合
-	 * @param closeCode 关闭状态码 {@link cn.starboot.socket.core.CloseCode}
+	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeSet(AioConfig aioConfig,
 								 SetWithLock<ChannelContext> setWithLock,

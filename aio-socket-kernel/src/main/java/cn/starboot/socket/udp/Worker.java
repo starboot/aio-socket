@@ -20,7 +20,7 @@ import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.StateMachineEnum;
+import cn.starboot.socket.enums.StateMachineEnum;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.exception.AioDecoderException;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;

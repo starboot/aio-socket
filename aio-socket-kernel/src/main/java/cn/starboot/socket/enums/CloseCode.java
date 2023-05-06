@@ -1,4 +1,4 @@
-package cn.starboot.socket.core;
+package cn.starboot.socket.enums;
 
 import java.util.Objects;
 

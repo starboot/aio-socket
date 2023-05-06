@@ -16,7 +16,7 @@
 package cn.starboot.socket.udp;
 
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.StateMachineEnum;
+import cn.starboot.socket.enums.StateMachineEnum;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;

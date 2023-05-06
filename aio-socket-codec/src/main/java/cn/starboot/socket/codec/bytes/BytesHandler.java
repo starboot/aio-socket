@@ -15,7 +15,6 @@
  */
 package cn.starboot.socket.codec.bytes;
 
-import cn.starboot.socket.codec.protobuf.ProtoBufPacket;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.exception.AioEncoderException;
@@ -24,7 +23,7 @@ import cn.starboot.socket.utils.AIOUtil;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.exception.AioDecoderException;
-import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.enums.ProtocolEnum;
 
 import java.nio.ByteBuffer;
 

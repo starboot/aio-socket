@@ -4,7 +4,7 @@ import cn.starboot.mqtt.codec.MqttDecoder;
 import cn.starboot.mqtt.codec.MqttEncoder;
 import cn.starboot.mqtt.codec.MqttMessage;
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.exception.AioDecoderException;
 import cn.starboot.socket.exception.AioEncoderException;

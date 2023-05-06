@@ -1,7 +1,7 @@
 package cn.starboot.socket.demo.mutiproto;
 
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.ProtocolEnum;
+import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.demo.DemoPacket;
