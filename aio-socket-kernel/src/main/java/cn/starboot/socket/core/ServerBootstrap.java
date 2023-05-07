@@ -16,6 +16,7 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.config.AioServerConfig;
+import cn.starboot.socket.enhance.EnhanceAsynchronousChannelProvider;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
@@ -39,6 +40,7 @@ import java.nio.channels.CompletionHandler;
 import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -148,9 +150,20 @@ public class ServerBootstrap {
             if (this.memoryPool == null) {
                 this.memoryPool = getConfig().getMemoryPoolFactory().create();
             }
+            // jdk自带接口
             AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
-            this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(this.bossExecutorService, 0);
-            this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
+			this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(this.bossExecutorService, 0);
+			this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
+			// smart-socket 增强版接口
+//			this.asynchronousChannelGroup = new EnhanceAsynchronousChannelProvider(true).openAsynchronousChannelGroup(9, new ThreadFactory() {
+//				private byte index = 0;
+//
+//				@Override
+//				public Thread newThread(Runnable r) {
+//					return new Thread(r, "smart-socket:Thread-" + (++index));
+//				}
+//			});
+//			this.serverSocketChannel = AsynchronousServerSocketChannel.open(this.asynchronousChannelGroup);
             if (getConfig().getSocketOptions() != null) {
                 for (Map.Entry<SocketOption<Object>, Object> entry : getConfig().getSocketOptions().entrySet()) {
                     this.serverSocketChannel.setOption(entry.getKey(), entry.getValue());
