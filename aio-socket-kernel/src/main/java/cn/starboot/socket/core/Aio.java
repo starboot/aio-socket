@@ -19,7 +19,7 @@ import cn.starboot.socket.ChannelContextFilter;
 import cn.starboot.socket.Node;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.enums.CloseCode;
-import cn.starboot.socket.maintain.MaintainEnum;
+import cn.starboot.socket.enums.MaintainEnum;
 import cn.starboot.socket.utils.lock.ReadLockHandler;
 import cn.starboot.socket.utils.lock.SetWithLock;
 import cn.starboot.socket.utils.page.Page;

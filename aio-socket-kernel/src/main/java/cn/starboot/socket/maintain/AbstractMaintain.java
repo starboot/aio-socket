@@ -1,6 +1,7 @@
 package cn.starboot.socket.maintain;
 
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.enums.MaintainEnum;
 import cn.starboot.socket.utils.lock.SetWithLock;
 
 public abstract class AbstractMaintain implements Maintain{

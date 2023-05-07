@@ -16,7 +16,7 @@
 package cn.starboot.socket.maintain.impl;
 
 import cn.starboot.socket.maintain.AbstractMultiMaintain;
-import cn.starboot.socket.maintain.MaintainEnum;
+import cn.starboot.socket.enums.MaintainEnum;
 
 /**
  * 群组业务逻辑类

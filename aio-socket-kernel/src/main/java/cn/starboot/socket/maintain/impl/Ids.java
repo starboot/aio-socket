@@ -16,7 +16,7 @@
 package cn.starboot.socket.maintain.impl;
 
 import cn.starboot.socket.maintain.AbstractSingleMaintain;
-import cn.starboot.socket.maintain.MaintainEnum;
+import cn.starboot.socket.enums.MaintainEnum;
 
 /**
  * ID业务逻辑类(一对一)

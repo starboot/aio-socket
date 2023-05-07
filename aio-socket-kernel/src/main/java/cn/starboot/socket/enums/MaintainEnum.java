@@ -1,4 +1,4 @@
-package cn.starboot.socket.maintain;
+package cn.starboot.socket.enums;
 
 /**
  * aio-socket通道关系维护枚举类

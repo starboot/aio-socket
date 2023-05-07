@@ -1,4 +1,4 @@
-package cn.starboot.socket.factory;
+package cn.starboot.socket.utils.config;
 
 import java.util.Properties;
 

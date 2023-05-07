@@ -1,7 +1,7 @@
 package cn.starboot.socket.maintain.impl;
 
 import cn.starboot.socket.maintain.AbstractMultiMaintain;
-import cn.starboot.socket.maintain.MaintainEnum;
+import cn.starboot.socket.enums.MaintainEnum;
 
 /**
  * IP业务逻辑类(一对多)
