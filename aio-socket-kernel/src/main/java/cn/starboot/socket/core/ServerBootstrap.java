@@ -154,7 +154,7 @@ public class ServerBootstrap {
             AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
 			this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(this.bossExecutorService, 0);
 			this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
-			// smart-socket 增强版接口
+			// 三刀前辈 增强版接口
 //			this.asynchronousChannelGroup = new EnhanceAsynchronousChannelProvider(true).openAsynchronousChannelGroup(9, new ThreadFactory() {
 //				private byte index = 0;
 //
