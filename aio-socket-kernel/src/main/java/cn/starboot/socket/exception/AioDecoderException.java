@@ -23,7 +23,10 @@ package cn.starboot.socket.exception;
  */
 public class AioDecoderException extends Exception{
 
-    public AioDecoderException() {
+	/* uid */
+	private static final long serialVersionUID = -2580073532772063717L;
+
+	public AioDecoderException() {
         super();
     }
 

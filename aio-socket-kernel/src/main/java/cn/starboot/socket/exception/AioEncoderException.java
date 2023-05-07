@@ -15,14 +15,15 @@
  */
 package cn.starboot.socket.exception;
 
-import java.io.IOException;
-
 /**
  * aio-socket编码异常处理
  */
 public class AioEncoderException extends Exception {
 
-    public AioEncoderException() {
+	/* uid */
+	private static final long serialVersionUID = 7021199862501354906L;
+
+	public AioEncoderException() {
         super();
     }
 

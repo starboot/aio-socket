@@ -2,7 +2,7 @@ package cn.starboot.socket.maintain;
 
 import cn.starboot.socket.core.ChannelContext;
 
-public interface Maintain {
+interface Maintain {
 
 	boolean join(String id, ChannelContext context);
 

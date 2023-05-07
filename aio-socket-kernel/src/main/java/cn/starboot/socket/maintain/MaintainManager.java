@@ -20,7 +20,7 @@ public class MaintainManager {
 	 */
 	private static final Map<MaintainEnum, AbstractMaintain> handlerMap = new HashMap<>();
 
-	private static MaintainManager maintainManager;
+	private static final MaintainManager maintainManager = new MaintainManager();
 
 	public Map<MaintainEnum, AbstractMaintain> getHandlerMap() {
 		return handlerMap;
@@ -29,10 +29,11 @@ public class MaintainManager {
 	private MaintainManager() {
 	}
 
-	public static synchronized MaintainManager getInstance() {
-		if (maintainManager == null) {
-			maintainManager = new MaintainManager();
-		}
+	/**
+	 * 单例设计模式
+	 * @return 关系维护管理类
+	 */
+	public static MaintainManager getInstance() {
 		return maintainManager;
 	}
 

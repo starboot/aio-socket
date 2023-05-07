@@ -46,7 +46,7 @@ import java.util.function.Supplier;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public final class TCPChannelContext extends ChannelContext {
+final class TCPChannelContext extends ChannelContext {
 
 	private final Lock lock = new ReentrantLock();
 

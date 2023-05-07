@@ -20,7 +20,7 @@ import cn.starboot.socket.enums.ProtocolEnum;
 /**
  * 协议接口
  */
-public interface IProtocol {
+interface IProtocol {
 
     /**
      * 协议枚举类

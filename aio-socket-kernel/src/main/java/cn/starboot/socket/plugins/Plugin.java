@@ -19,7 +19,6 @@ import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.enums.StateMachineEnum;
-import cn.starboot.socket.intf.Handler;
 
 /**
  * aio-socket 插件接口
@@ -62,7 +61,7 @@ public interface Plugin extends Monitor {
      * @param stateMachineEnum 机器状态
      * @param channelContext   通道上下文
      * @param throwable        异常处理
-     * @see Handler#stateEvent(ChannelContext, StateMachineEnum, Throwable)
+     * @see cn.starboot.socket.intf.StateMachineEvent#stateEvent(ChannelContext, StateMachineEnum, Throwable)
      */
     void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable);
 

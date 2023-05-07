@@ -47,6 +47,9 @@ public abstract class ChannelContext {
      */
     private Object attachment;
 
+	/**
+	 * 通道关闭原因
+	 */
 	private CloseCode closeCode;
 
     /**
