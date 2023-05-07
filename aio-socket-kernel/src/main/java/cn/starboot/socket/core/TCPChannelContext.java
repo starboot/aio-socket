@@ -388,8 +388,8 @@ final class TCPChannelContext extends ChannelContext {
 			return false;
 		} finally {
 			lock.unlock();
-			flush();
 		}
+		flush();
 		return true;
 	}
 

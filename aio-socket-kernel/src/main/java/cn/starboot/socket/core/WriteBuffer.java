@@ -19,7 +19,6 @@ import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
@@ -120,7 +119,7 @@ public final class WriteBuffer {
     /**
      * 输出short
      * @param v short数值
-     * @throws IOException 写异常
+     * @throws AioEncoderException 写异常
      */
     public void writeShort(short v) throws AioEncoderException {
         byte[] bytes = initCacheBytes();
@@ -144,7 +143,7 @@ public final class WriteBuffer {
     /**
      * 写Int
      * @param v int数值
-     * @throws IOException 写异常
+     * @throws AioEncoderException 写异常
      */
     public void writeInt(int v) throws AioEncoderException {
         byte[] bytes = initCacheBytes();
@@ -159,7 +158,7 @@ public final class WriteBuffer {
      * 输出long数值,占用8个字节
      *
      * @param v long数值
-     * @throws IOException IO异常
+     * @throws AioEncoderException IO异常
      */
     public void writeLong(long v) throws AioEncoderException {
         byte[] bytes = initCacheBytes();
@@ -186,7 +185,7 @@ public final class WriteBuffer {
      * @param b                 待输出的byte数组
      * @param off               相对位置
      * @param len               有效长度
-     * @throws IOException      IO异常
+     * @throws AioEncoderException      IO异常
      */
     public synchronized void write(byte[] b, int off, int len) throws AioEncoderException {
         if (writeInBuf == null) {
