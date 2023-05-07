@@ -43,12 +43,12 @@ public final class MemoryBlock {
     /**
      * 待回收的虚拟Buffer
      */
-    private final ConcurrentLinkedQueue<MemoryUnit> cleanBuffers = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<MemoryUnit> cleanMemoryUnits = new ConcurrentLinkedQueue<>();
 
     /**
      * 当前空闲的虚拟Buffer
      */
-    private final List<MemoryUnit> availableBuffers;
+    private final List<MemoryUnit> availableMemoryUnits;
 
     /**
      * 内存页是否处于空闲状态
@@ -62,9 +62,9 @@ public final class MemoryBlock {
      * @param direct 是否使用堆外内存
      */
     MemoryBlock(int size, boolean direct) {
-        availableBuffers = new LinkedList<>();
+		availableMemoryUnits = new LinkedList<>();
         this.buffer = allocate0(size, direct);
-        availableBuffers.add(new MemoryUnit(this, null, buffer.position(), buffer.limit()));
+		availableMemoryUnits.add(new MemoryUnit(this, null, buffer.position(), buffer.limit()));
     }
 
     /**
@@ -97,7 +97,7 @@ public final class MemoryBlock {
      */
     private MemoryUnit allocate0(final int size) {
         idle = false;
-        MemoryUnit cleanBuffer = cleanBuffers.poll();
+        MemoryUnit cleanBuffer = cleanMemoryUnits.poll();
         if (cleanBuffer != null && cleanBuffer.getCapacity() >= size) {
             cleanBuffer.buffer().clear();
             cleanBuffer.buffer(cleanBuffer.buffer());
@@ -107,7 +107,7 @@ public final class MemoryBlock {
         try {
             if (cleanBuffer != null) {
                 clean0(cleanBuffer);
-                while ((cleanBuffer = cleanBuffers.poll()) != null) {
+                while ((cleanBuffer = cleanMemoryUnits.poll()) != null) {
                     if (cleanBuffer.getCapacity() >= size) {
                         cleanBuffer.buffer().clear();
                         cleanBuffer.buffer(cleanBuffer.buffer());
@@ -118,7 +118,7 @@ public final class MemoryBlock {
                 }
             }
 
-            int count = availableBuffers.size();
+            int count = availableMemoryUnits.size();
             MemoryUnit bufferChunk = null;
             //仅剩一个可用内存块的时候使用快速匹配算法
             if (count == 1) {
@@ -139,10 +139,10 @@ public final class MemoryBlock {
      * @return     申请到的内存块, 若空间不足则范围null
      */
     private MemoryUnit fastAllocate(int size) {
-        MemoryUnit freeChunk = availableBuffers.get(0);
+        MemoryUnit freeChunk = availableMemoryUnits.get(0);
         MemoryUnit bufferChunk = allocate(size, freeChunk);
         if (freeChunk == bufferChunk) {
-            availableBuffers.clear();
+			availableMemoryUnits.clear();
         }
         return bufferChunk;
     }
@@ -154,7 +154,7 @@ public final class MemoryBlock {
      * @return     申请到的内存块, 若空间不足则范围null
      */
     private MemoryUnit slowAllocate(int size) {
-        Iterator<MemoryUnit> iterator = availableBuffers.listIterator(0);
+        Iterator<MemoryUnit> iterator = availableMemoryUnits.listIterator(0);
         MemoryUnit bufferChunk;
         while (iterator.hasNext()) {
             MemoryUnit freeChunk = iterator.next();
@@ -206,7 +206,7 @@ public final class MemoryBlock {
      * @param cleanBuffer 待回收的虚拟内存
      */
     void clean(MemoryUnit cleanBuffer) {
-        cleanBuffers.offer(cleanBuffer);
+		cleanMemoryUnits.offer(cleanBuffer);
     }
 
     /**
@@ -216,10 +216,10 @@ public final class MemoryBlock {
         //下个周期依旧处于空闲则触发回收任务
         if (!idle) {
             idle = true;
-        } else if (!cleanBuffers.isEmpty() && lock.tryLock()) {
+        } else if (!cleanMemoryUnits.isEmpty() && lock.tryLock()) {
             try {
                 MemoryUnit cleanBuffer;
-                while ((cleanBuffer = cleanBuffers.poll()) != null) {
+                while ((cleanBuffer = cleanMemoryUnits.poll()) != null) {
                     clean0(cleanBuffer);
                 }
             } finally {
@@ -234,7 +234,7 @@ public final class MemoryBlock {
      * @param cleanBuffer 虚拟缓冲区
      */
     private void clean0(MemoryUnit cleanBuffer) {
-        ListIterator<MemoryUnit> iterator = availableBuffers.listIterator(0);
+        ListIterator<MemoryUnit> iterator = availableMemoryUnits.listIterator(0);
         while (iterator.hasNext()) {
             MemoryUnit freeBuffer = iterator.next();
             //cleanBuffer在freeBuffer之前并且形成连续块
@@ -280,6 +280,6 @@ public final class MemoryBlock {
 
     @Override
     public String toString() {
-        return "BufferPage{availableBuffers=" + availableBuffers + ", cleanBuffers=" + cleanBuffers + '}';
+        return "MemoryBlock{availableMemoryUnits=" + availableMemoryUnits + ", cleanMemoryUnits=" + cleanMemoryUnits + '}';
     }
 }
