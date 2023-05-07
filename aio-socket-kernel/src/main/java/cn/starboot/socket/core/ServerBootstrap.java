@@ -16,7 +16,6 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.config.AioServerConfig;
-import cn.starboot.socket.enhance.EnhanceAsynchronousChannelProvider;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
@@ -154,16 +153,6 @@ public class ServerBootstrap {
             AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
 			this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(this.bossExecutorService, 0);
 			this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
-			// 三刀前辈 增强版接口
-//			this.asynchronousChannelGroup = new EnhanceAsynchronousChannelProvider(true).openAsynchronousChannelGroup(9, new ThreadFactory() {
-//				private byte index = 0;
-//
-//				@Override
-//				public Thread newThread(Runnable r) {
-//					return new Thread(r, "smart-socket:Thread-" + (++index));
-//				}
-//			});
-//			this.serverSocketChannel = AsynchronousServerSocketChannel.open(this.asynchronousChannelGroup);
             if (getConfig().getSocketOptions() != null) {
                 for (Map.Entry<SocketOption<Object>, Object> entry : getConfig().getSocketOptions().entrySet()) {
                     this.serverSocketChannel.setOption(entry.getKey(), entry.getValue());

@@ -68,15 +68,11 @@ public class Client {
                         .setWriteBufferSize(1024 * 1024, 512);
                 try {
                     ChannelContext start = bootstrap.start(asynchronousChannelGroup);
-                    long num = 0;
-                    long startTime = System.currentTimeMillis();
-                    while (num++ < Integer.MAX_VALUE) {
+                    while (true) {
                         Aio.send(start, demoPacket);
                     }
-                    System.out.println("安全消息结束" + (System.currentTimeMillis() - startTime));
-                    Thread.sleep(5000);
-                    bootstrap.shutdown();
-                } catch (IOException | InterruptedException e) {
+//                    bootstrap.shutdown();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
