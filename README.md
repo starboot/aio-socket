@@ -60,7 +60,7 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 </dependency>
 ~~~
 #### 起步
-aio-socket还在快速迭代中
+aio-socket
 ## 联系方式
 
    官方QQ群号：867691377 
