@@ -16,16 +16,17 @@
 package cn.starboot.socket.demo.ack;
 
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.codec.string.StringHandler;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.ChannelContext;
 
-public class ServerHandler extends StringHandler {
+public class ServerHandler extends ACKStringHandler {
 
 	@Override
     public Packet handle(ChannelContext channelContext, StringPacket packet) {
+		System.out.println(packet.getReq());
 		if (packet.getReq() != null)  {
 			packet.setResp(packet.getReq());
+			packet.setReq(null);
 		}
         return packet;
     }
