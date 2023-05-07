@@ -60,8 +60,7 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 </dependency>
 ~~~
 #### 起步
-https://mxd888.github.io <br>
-aio-socket还在快速迭代中，功能并未完善，大家尽情期待....
+aio-socket还在快速迭代中
 ## 联系方式
 
    官方QQ群号：867691377 
