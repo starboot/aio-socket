@@ -23,10 +23,6 @@
 					<artifactId>j2cache-core</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>com.alibaba.fastjson2</groupId>
-					<artifactId>fastjson2</artifactId>
-				</exclusion>
-				<exclusion>
 					<groupId>redis.clients</groupId>
 					<artifactId>jedis</artifactId>
 				</exclusion>

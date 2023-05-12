@@ -15,8 +15,11 @@
  */
 package cn.starboot.socket;
 
+import cn.starboot.socket.utils.json.JsonUtil;
+import com.alibaba.fastjson2.JSONObject;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * TCP报文数据包
@@ -56,6 +59,10 @@ public class Packet implements Serializable {
      */
     private String toId;
 
+	/**
+	 * 扩展参数字段
+	 */
+    private JSONObject extras;
 
     public byte getVersionID() {
         return versionID;
@@ -97,4 +104,41 @@ public class Packet implements Serializable {
         this.toId = toId;
     }
 
+	public JSONObject getExtras() {
+		return extras;
+	}
+
+	public void setExtras(JSONObject extras) {
+		this.extras = extras;
+	}
+
+	public String toJsonString() {
+		return JsonUtil.toJSONString(this);
+	}
+
+	public abstract static class Builder<T extends Packet, B extends Builder<T, B>> {
+
+		protected JSONObject extras;
+
+		private final B theBuilder = this.getThis();
+
+		protected abstract B getThis();
+
+		public B addExtra(String key, Object value) {
+			if (Objects.nonNull(key) && key.length() > 0 && Objects.nonNull(value)) {
+				if (Objects.isNull(this.extras)) {
+					this.extras = new JSONObject();
+				}
+				this.extras.put(key, value);
+			}
+			return this.theBuilder;
+		}
+
+		public abstract T build();
+	}
+
+	@Override
+	public String toString() {
+		return toJsonString();
+	}
 }
