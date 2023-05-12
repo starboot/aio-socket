@@ -61,26 +61,14 @@
         <commons-codec.version>1.15</commons-codec.version>
 		<j2cache.version>2.8.5-release</j2cache.version>
 		<lang3.version>3.12.0</lang3.version>
-        <javacpp.platform.android-arm>android-arm</javacpp.platform.android-arm>
-        <javacpp.platform.android-arm64>android-arm64</javacpp.platform.android-arm64>
-        <javacpp.platform.android-x86>android-x86</javacpp.platform.android-x86>
-        <javacpp.platform.android-x86_64>android-x86_64</javacpp.platform.android-x86_64>
-        <javacpp.platform.ios-arm>ios-arm</javacpp.platform.ios-arm>
-        <javacpp.platform.ios-arm64>ios-arm64</javacpp.platform.ios-arm64>
-        <javacpp.platform.ios-x86>ios-x86</javacpp.platform.ios-x86>
-        <javacpp.platform.ios-x86_64>ios-x86_64</javacpp.platform.ios-x86_64>
-        <javacpp.platform.linux-armhf>linux-armhf</javacpp.platform.linux-armhf>
-        <javacpp.platform.linux-arm64>linux-arm64</javacpp.platform.linux-arm64>
-        <javacpp.platform.linux-ppc64le>linux-ppc64le</javacpp.platform.linux-ppc64le>
-        <javacpp.platform.linux-x86>linux-x86</javacpp.platform.linux-x86>
-        <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
-        <javacpp.platform.macosx-x86_64>macosx-x86_64</javacpp.platform.macosx-x86_64>
-        <javacpp.platform.windows-x86>windows-x86</javacpp.platform.windows-x86>
-        <javacpp.platform.windows-x86_64>windows-x86_64</javacpp.platform.windows-x86_64>
-        <javacpp.platform.dependencies>${javacpp.platform.windows-x86_64}</javacpp.platform.dependencies>
-        <javacpp.version>1.4.4</javacpp.version>
-        <ffmpeg.version>4.1-${javacpp.version}</ffmpeg.version>
-        <opencv.version>4.0.1-${javacpp.version}</opencv.version>
+		<Automatic-Module-Name>cn.starboot</Automatic-Module-Name>
+		<compile.version>1.8</compile.version>
+		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+		<maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -186,6 +174,94 @@
 
     <build>
 
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${compile.version}</source>
+					<target>${compile.version}</target>
+					<compilerArgument>-Xlint:unchecked</compilerArgument>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Build-OS>${os.name}</Build-OS>
+							<Built-By>${user.name}</Built-By>
+							<Build-Jdk>${java.version}</Build-Jdk>
+							<Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
+							<Automatic-Module-Name>${Automatic-Module-Name}</Automatic-Module-Name>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<!-- Javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!--自动发布插件-->
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>${nexus-staging-maven-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<!-- Source -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven-source-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>ossrh</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- GPG -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>${maven-gpg-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>ossrh</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
         <!-- 适配idea下生成不了配置文件问题 -->
         <resources>
             <resource>
@@ -208,34 +284,44 @@
 
     <profiles>
         <profile>
-            <id>jdk-1.8</id>
+            <id>jdk-${compile.version}</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
-                <jdk>1.8</jdk>
+                <jdk>${compile.version}</jdk>
             </activation>
             <properties>
-                <maven.compiler.source>1.8</maven.compiler.source>
-                <maven.compiler.target>1.8</maven.compiler.target>
-                <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+                <maven.compiler.source>${compile.version}</maven.compiler.source>
+                <maven.compiler.target>${compile.version}</maven.compiler.target>
+                <maven.compiler.compilerVersion>${compile.version}</maven.compiler.compilerVersion>
             </properties>
         </profile>
         <profile>
             <id>release</id>
             <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/java</directory>
-                        <includes>
-                            <include>**/*.properties</include>
-                        </includes>
-                    </resource>
-                </resources>
+				<!-- 适配idea下生成不了配置文件问题 -->
+				<resources>
+					<resource>
+						<directory>src/main/java</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+						<includes>
+							<include>**/*.properties</include>
+						</includes>
+					</resource>
+					<resource>
+						<directory>src/main/resources</directory>
+						<includes>
+							<include>**/*.properties</include>
+						</includes>
+					</resource>
+				</resources>
                 <plugins>
                     <!--自动发布插件-->
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
+                        <version>${nexus-staging-maven-plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -243,76 +329,35 @@
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
-
-                    <!-- Source -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- Javadoc -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <configuration>
-                            <show>private</show>
-                            <nohelp>true</nohelp>
-                            <charset>UTF-8</charset>
-                            <encoding>UTF-8</encoding>
-                            <docencoding>UTF-8</docencoding>
-                            <additionalparam>-Xdoclint:none</additionalparam>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+					<!-- Source -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>${maven-source-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>ossrh</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
                     <!-- GPG -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
+								<id>ossrh</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <!--Compiler -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.1</version>
-                        <configuration>
-                            <source>1.8</source>
-                            <target>1.8</target>
-                            <fork>true</fork>
-                            <verbose>true</verbose>
-                            <encoding>UTF-8</encoding>
-                            <showWarnings>false</showWarnings>
-                        </configuration>
-                    </plugin>
-                    <!--Release -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>2.5</version>
                     </plugin>
                 </plugins>
             </build>
