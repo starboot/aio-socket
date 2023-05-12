@@ -4,38 +4,20 @@ import java.util.Properties;
 
 public final class Configuration {
 
-	private int code;
+	private final String name;
 
-	private  String path;
+	private final String[] value;
 
-	public Configuration(String cmd, Properties prop) {
-		this.code = Integer.parseInt(cmd);
-		String[] values = prop.getProperty(cmd).split(",");
-		if(values.length > 0){
-			path = values[0];
-			if(values.length >1){
-				for(int i = 0 ; i < values.length ; i++){
-					if(i > 0) {
-//                        cmdProcessors.add(values[i]);
-					}
-				}
-			}
-		}
+	protected Configuration(String name, Properties prop) {
+		this.name = name;
+		this.value = prop.getProperty(name).split(",");
 	}
 
-	public int getCode() {
-		return code;
+	public String getName() {
+		return name;
 	}
 
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
+	public String[] getValue() {
+		return value;
 	}
 }

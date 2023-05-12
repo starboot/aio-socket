@@ -37,34 +37,50 @@ public class Packet implements Serializable {
 	/**
      * TCP报文版本号
      */
-    private byte versionID;
+    protected byte versionID;
 
     /**
      * 同步消息唯一ID
      */
-    private String req;
+	protected String req;
 
     /**
      * 同步消息响应ID
      */
-    private String resp;
+	protected String resp;
 
     /**
      * 发送者ID
      */
-    private String fromId;
+	protected String fromId;
 
     /**
      * 接受者ID
      */
-    private String toId;
+	protected String toId;
 
 	/**
 	 * 扩展参数字段
 	 */
-    private JSONObject extras;
+	protected JSONObject extras;
 
-    public byte getVersionID() {
+	public Packet() {
+	}
+
+	private Packet(byte versionID, String req, String resp, String fromId, String toId) {
+		this(versionID, req, resp, fromId, toId, null);
+	}
+
+	private Packet(byte versionID, String req, String resp, String fromId, String toId, JSONObject extras) {
+		this.versionID = versionID;
+		this.req = req;
+		this.resp = resp;
+		this.fromId = fromId;
+		this.toId = toId;
+		this.extras = extras;
+	}
+
+	public byte getVersionID() {
         return versionID;
     }
 
@@ -118,11 +134,64 @@ public class Packet implements Serializable {
 
 	public abstract static class Builder<T extends Packet, B extends Builder<T, B>> {
 
+		/**
+		 * TCP报文版本号
+		 */
+		protected byte versionID;
+
+		/**
+		 * 同步消息唯一ID
+		 */
+		protected String req;
+
+		/**
+		 * 同步消息响应ID
+		 */
+		protected String resp;
+
+		/**
+		 * 发送者ID
+		 */
+		protected String fromId;
+
+		/**
+		 * 接受者ID
+		 */
+		protected String toId;
+
+		/**
+		 * 扩展参数字段
+		 */
 		protected JSONObject extras;
 
 		private final B theBuilder = this.getThis();
 
 		protected abstract B getThis();
+
+		public B setVersionID(byte versionID) {
+			this.versionID = versionID;
+			return this.theBuilder;
+		}
+
+		public B setReq(String req) {
+			this.req = req;
+			return this.theBuilder;
+		}
+
+		public B setResp(String resp) {
+			this.resp = resp;
+			return this.theBuilder;
+		}
+
+		public B setFromId(String fromId) {
+			this.fromId = fromId;
+			return this.theBuilder;
+		}
+
+		public B setToId(String toId) {
+			this.toId = toId;
+			return this.theBuilder;
+		}
 
 		public B addExtra(String key, Object value) {
 			if (Objects.nonNull(key) && key.length() > 0 && Objects.nonNull(value)) {
@@ -135,6 +204,19 @@ public class Packet implements Serializable {
 		}
 
 		public abstract T build();
+
+		@Override
+		public String toString() {
+			return "Packet.Builder{" +
+					"versionID=" + versionID +
+					", req='" + req + '\'' +
+					", resp='" + resp + '\'' +
+					", fromId='" + fromId + '\'' +
+					", toId='" + toId + '\'' +
+					", extras=" + extras +
+					", theBuilder=" + theBuilder +
+					'}';
+		}
 	}
 
 	@Override

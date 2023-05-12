@@ -22,10 +22,6 @@ public class MaintainManager {
 
 	private static final MaintainManager maintainManager = new MaintainManager();
 
-	public Map<MaintainEnum, AbstractMaintain> getHandlerMap() {
-		return handlerMap;
-	}
-
 	private MaintainManager() {
 	}
 
@@ -54,7 +50,7 @@ public class MaintainManager {
 
 	private static void init(List<Configuration> configurations) throws Exception {
 		for (Configuration configuration : configurations) {
-			AbstractMaintain cmdHandler = (AbstractMaintain) (Class.forName(configuration.getPath())).newInstance();
+			AbstractMaintain cmdHandler = (AbstractMaintain) (Class.forName(configuration.getValue()[0])).newInstance();
 			registerCommand(cmdHandler);
 		}
 	}
