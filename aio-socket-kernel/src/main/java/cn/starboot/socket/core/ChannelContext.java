@@ -86,7 +86,7 @@ public abstract class ChannelContext {
         if (oldByteBufferQueue != null) {
             return oldByteBufferQueue;
         }
-        synchronized (ChannelContext.class) {
+        synchronized (this) {
             if (oldByteBufferQueue != null) {
                 return oldByteBufferQueue;
             }

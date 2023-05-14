@@ -100,10 +100,7 @@ public class Plugins implements Handler, Monitor {
                 flag = false;
             }
         }
-        if (flag) {
-            return handlers.get(channelContext.getProtocol()).handle(channelContext, packet);
-        }
-        return null;
+        return flag ? handlers.get(channelContext.getProtocol()).handle(channelContext, packet) : null;
     }
 
     @Override
