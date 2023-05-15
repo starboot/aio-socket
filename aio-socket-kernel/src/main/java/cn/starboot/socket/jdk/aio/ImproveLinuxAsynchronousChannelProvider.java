@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.channels.IllegalChannelGroupException;
 import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -47,7 +46,16 @@ public final class ImproveLinuxAsynchronousChannelProvider extends AsynchronousC
 		return (ImproveAsynchronousChannelGroup) group;
 	}
 
+	private static volatile ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup;
+
 	private ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup() {
-		return null;
+		if (defaultAsynchronousChannelGroup == null) {
+			synchronized (ImproveLinuxAsynchronousChannelProvider.class) {
+				if (defaultAsynchronousChannelGroup == null) {
+					defaultAsynchronousChannelGroup = new ImproveAsynchronousChannelGroup(null);
+				}
+			}
+		}
+		return defaultAsynchronousChannelGroup;
 	}
 }
