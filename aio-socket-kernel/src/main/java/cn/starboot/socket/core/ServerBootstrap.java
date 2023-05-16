@@ -39,7 +39,6 @@ import java.nio.channels.CompletionHandler;
 import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -149,7 +148,6 @@ public class ServerBootstrap {
             if (this.memoryPool == null) {
                 this.memoryPool = getConfig().getMemoryPoolFactory().create();
             }
-            // jdk自带接口
             AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
 			this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(this.bossExecutorService, 0);
 			this.serverSocketChannel = provider.openAsynchronousServerSocketChannel(this.asynchronousChannelGroup);
