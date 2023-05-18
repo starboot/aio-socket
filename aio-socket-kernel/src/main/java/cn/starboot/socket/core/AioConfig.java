@@ -285,4 +285,25 @@ public abstract class AioConfig {
 	public abstract int getBossThreadNumber();
 
 	public abstract int getWorkerThreadNumber();
+
+	@Override
+	public String toString() {
+		return "AioConfig{" +
+				", serverName=" + getName() +
+				", isServer=" + isServer() +
+				", readBufferSize=" + readBufferSize +
+				", writeBufferSize=" + writeBufferSize +
+				", host='" + host + '\'' +
+				", port=" + port +
+				", backlog=" + backlog +
+				", maxOnlineNum=" + maxOnlineNum +
+				", maxWaitNum=" + maxWaitNum +
+				", useConnections=" + useConnections +
+				", direct=" + direct +
+				", memoryBlockNum=" + memoryBlockNum +
+				", memoryBlockSize=" + memoryBlockSize +
+				", bossThreadNum=" + getBossThreadNumber() +
+				", workerThreadNum=" + getWorkerThreadNumber() +
+				'}';
+	}
 }

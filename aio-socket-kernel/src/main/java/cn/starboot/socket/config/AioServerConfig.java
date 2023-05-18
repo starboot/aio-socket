@@ -44,4 +44,13 @@ public class AioServerConfig extends AioConfig {
 	public int getWorkerThreadNumber() {
 		return this.workerThreadNum;
 	}
+
+	@Override
+	public String toString() {
+		
+		return "AioServerConfig{" +
+				"bossThreadNum=" + bossThreadNum +
+				", workerThreadNum=" + workerThreadNum +
+				'}';
+	}
 }
