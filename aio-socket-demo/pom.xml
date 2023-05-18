@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>cn.starboot.socket</groupId>
 			<artifactId>aio-socket-all</artifactId>
-			<version>2.0.2</version>
+			<version>2.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
