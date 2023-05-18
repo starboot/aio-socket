@@ -31,9 +31,8 @@ public class AioServerConfig extends AioConfig {
 	}
 
 	@Override
-	public AioConfig setWorkerThreadNumber(int workerThreadNumber) {
+	public void setWorkerThreadNumber(int workerThreadNumber) {
 		this.workerThreadNum = workerThreadNumber;
-		return this;
 	}
 
 	@Override

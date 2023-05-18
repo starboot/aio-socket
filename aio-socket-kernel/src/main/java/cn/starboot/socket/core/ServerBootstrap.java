@@ -304,7 +304,7 @@ public class ServerBootstrap {
      * @return                ServerBootstrap 对象
      */
     public ServerBootstrap setThreadNum(int bossThreadNum, int workerThreadNum) {
-        getConfig().setWorkerThreadNumber(workerThreadNum).setBossThreadNumber(bossThreadNum);
+        getConfig().setBossThreadNumber(bossThreadNum).setWorkerThreadNumber(workerThreadNum);
         return this;
     }
 

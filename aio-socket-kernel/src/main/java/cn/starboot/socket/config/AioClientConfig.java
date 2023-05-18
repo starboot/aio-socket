@@ -26,8 +26,7 @@ public class AioClientConfig extends AioConfig {
 	}
 
 	@Override
-	public AioConfig setWorkerThreadNumber(int workerThreadNumber) {
-		return this;
+	public void setWorkerThreadNumber(int workerThreadNumber) {
 	}
 
 	@Override

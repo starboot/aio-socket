@@ -261,9 +261,8 @@ public abstract class AioConfig {
 		return memoryBlockNum;
 	}
 
-	public AioConfig setMemoryBlockNum(int memoryBlockNum) {
+	public void setMemoryBlockNum(int memoryBlockNum) {
 		this.memoryBlockNum = memoryBlockNum;
-		return this;
 	}
 
 	public int getMemoryBlockSize() {
@@ -281,7 +280,7 @@ public abstract class AioConfig {
 
 	public abstract AioConfig setBossThreadNumber(int bossThreadNumber);
 
-	public abstract AioConfig setWorkerThreadNumber(int workerThreadNumber);
+	public abstract void setWorkerThreadNumber(int workerThreadNumber);
 
 	public abstract int getBossThreadNumber();
 
