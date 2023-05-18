@@ -32,7 +32,7 @@ public class Client {
 
 		ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
 
-		bootstrap.setBufferFactory(() -> new MemoryPool(2 * 1024 * 1024, 2, true))
+		bootstrap.setBufferFactory(2 * 1024 * 1024, 2, true)
 				.setReadBufferSize(1024 * 1024)
 				.setWriteBufferSize(1024 * 1024, 512);
 

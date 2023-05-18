@@ -28,7 +28,7 @@ public class Server {
     public static void main(String[] args) {
 
         ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
-        bootstrap.setMemoryPoolFactory(() -> new MemoryPool(10 * 1024 * 1024, 10, true))
+        bootstrap.setMemoryPoolFactory(2 * 1024 * 1024, 2, true)
                 .setReadBufferSize(1024 * 1024)
                 .setWriteBufferSize(1024 * 4, 512)
                 .addPlugin(new HeartPlugin(30, 20, TimeUnit.SECONDS) {

@@ -63,7 +63,7 @@ public class Client {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
-                bootstrap.setBufferFactory(poolFactory)
+                bootstrap.setBufferFactory(1024 * 1024, 1, true)
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 1024, 512);
                 try {

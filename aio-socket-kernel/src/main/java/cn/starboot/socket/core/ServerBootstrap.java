@@ -54,16 +54,6 @@ public class ServerBootstrap {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerBootstrap.class);
 
     /**
-     * 内核IO线程池线程数量
-     */
-    private int bossThreadNum;
-
-    /**
-     * 作业任务线程池线程数量
-     */
-    private int workerThreadNum;
-
-    /**
      * 内存池
      */
     private MemoryPool memoryPool;
@@ -130,6 +120,7 @@ public class ServerBootstrap {
      */
     public void start() {
         startExecutorService();
+        getConfig().initMemoryPoolFactory();
         start0(channel -> new TCPChannelContext(channel, getConfig(), this.aioReadCompletionHandler,
                 this.aioWriteCompletionHandler, this.memoryPool.allocateBufferPage(), this.workerExecutorService));
     }
@@ -242,13 +233,13 @@ public class ServerBootstrap {
      * 启动内核线程池
      */
     private void startExecutorService() {
-        if (this.bossThreadNum > 0) {
-            this.bossExecutorService = ThreadUtils.getGroupExecutor(this.bossThreadNum);
+        if (getConfig().getBossThreadNumber() > 0) {
+            this.bossExecutorService = ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber());
         }else {
             this.bossExecutorService = ThreadUtils.getGroupExecutor();
         }
-        if (this.workerThreadNum > 0) {
-            this.workerExecutorService = ThreadUtils.getAioExecutor(this.workerThreadNum);
+        if (getConfig().getWorkerThreadNumber() > 0) {
+            this.workerExecutorService = ThreadUtils.getAioExecutor(getConfig().getWorkerThreadNumber());
         }else {
             this.workerExecutorService = ThreadUtils.getAioExecutor();
         }
@@ -313,19 +304,20 @@ public class ServerBootstrap {
      * @return                ServerBootstrap 对象
      */
     public ServerBootstrap setThreadNum(int bossThreadNum, int workerThreadNum) {
-        this.bossThreadNum = bossThreadNum;
-        this.workerThreadNum = workerThreadNum;
+        getConfig().setWorkerThreadNumber(workerThreadNum).setBossThreadNumber(bossThreadNum);
         return this;
     }
 
-    /**
-     * 设置内存池工厂
-     *
-     * @param memoryPoolFactory 内存池工厂
-     * @return                  ServerBootstrap 对象
-     */
-    public ServerBootstrap setMemoryPoolFactory(MemoryPoolFactory memoryPoolFactory) {
-        getConfig().setMemoryPoolFactory(memoryPoolFactory);
+	/**
+	 * 设置内存池工厂
+	 *
+	 * @param size 内存页大小
+	 * @param num 内存页个数
+	 * @param useDirect 是否开启堆外内存
+	 * @return this
+	 */
+    public ServerBootstrap setMemoryPoolFactory(int size, int num, boolean useDirect) {
+        getConfig().setDirect(useDirect).setMemoryBlockSize(size).setMemoryBlockNum(num);
         return this;
     }
 

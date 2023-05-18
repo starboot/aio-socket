@@ -16,7 +16,7 @@ public class MultiProtocolClient2 {
 		ClientBootstrap bootstrap = new ClientBootstrap("127.0.0.1", 8888, new MyClientHandler());
 		ChannelContext context = bootstrap
 
-				.setBufferFactory(() -> new MemoryPool(1024 * 1024, 1, true))
+				.setBufferFactory(1024 * 1024, 1, true)
 				.start();
 		Thread.sleep(1000);
 		Aio.send(context, packet);

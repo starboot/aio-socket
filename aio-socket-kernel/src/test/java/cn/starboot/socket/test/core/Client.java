@@ -28,7 +28,7 @@ public class Client {
 
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
         ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
-        ChannelContext channelContext = bootstrap.setBufferFactory(() -> new MemoryPool(1024 * 1024, 1, true))
+        ChannelContext channelContext = bootstrap.setBufferFactory(1024 * 1024, 1, true)
                 .setReadBufferSize(1024 * 2)
                 .setWriteBufferSize(1024 * 2, 512)
                 .start();

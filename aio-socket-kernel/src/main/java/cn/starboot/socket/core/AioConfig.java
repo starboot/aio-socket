@@ -18,6 +18,7 @@ package cn.starboot.socket.core;
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.maintain.*;
 import cn.starboot.socket.utils.lock.SetWithLock;
+import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.intf.Handler;
 import cn.starboot.socket.plugins.Plugins;
@@ -76,6 +77,34 @@ public abstract class AioConfig {
      */
     private Handler handler;
 
+	/**
+	 * 单台aio-socket最大在线用户量；再启动MonitorPlugin时才生效（通过触发状态机来通知应用层处理）
+	 */
+	private int maxOnlineNum;
+
+	private int maxWaitNum = 50;
+
+	/**
+	 * 启用用户连接保存
+	 */
+	private boolean useConnections;
+
+	/**
+	 * 是否启用零拷贝
+	 */
+	private boolean direct;
+
+	private int memoryBlockNum;
+
+	private int memoryBlockSize;
+
+	private SetWithLock<ChannelContext> connections;
+
+	/**
+	 * 插件
+	 */
+	private final Plugins plugins = new Plugins();
+
     /**
      * Socket 配置
      */
@@ -90,25 +119,6 @@ public abstract class AioConfig {
 	 * 关系维持管理器
 	 */
 	private final MaintainManager maintainManager = MaintainManager.getInstance();
-
-    /**
-     * 单台aio-socket最大在线用户量；再启动MonitorPlugin时才生效（通过触发状态机来通知应用层处理）
-     */
-    private int maxOnlineNum;
-
-    private int maxWaitNum = 50;
-
-	/**
-	 * 启用用户连接保存
-	 */
-	private boolean useConnections;
-
-    private SetWithLock<ChannelContext> connections;
-
-    /**
-     * 插件
-     */
-    private final Plugins plugins = new Plugins();
 
     public int getMaxWaitNum() {
         return maxWaitNum;
@@ -203,6 +213,10 @@ public abstract class AioConfig {
         this.memoryPoolFactory = memoryPoolFactory;
     }
 
+    protected void initMemoryPoolFactory() {
+    	this.memoryPoolFactory = () -> new MemoryPool(getMemoryBlockSize(), getMemoryBlockNum(), isDirect());
+	}
+
     public Plugins getPlugins() {
         return plugins;
     }
@@ -234,7 +248,42 @@ public abstract class AioConfig {
 		return connections;
 	}
 
+	public boolean isDirect() {
+		return direct;
+	}
+
+	public AioConfig setDirect(boolean direct) {
+		this.direct = direct;
+		return this;
+	}
+
+	public int getMemoryBlockNum() {
+		return memoryBlockNum;
+	}
+
+	public AioConfig setMemoryBlockNum(int memoryBlockNum) {
+		this.memoryBlockNum = memoryBlockNum;
+		return this;
+	}
+
+	public int getMemoryBlockSize() {
+		return memoryBlockSize;
+	}
+
+	public AioConfig setMemoryBlockSize(int memoryBlockSize) {
+		this.memoryBlockSize = memoryBlockSize;
+		return this;
+	}
+
 	public abstract String getName();
 
 	public abstract boolean isServer();
+
+	public abstract AioConfig setBossThreadNumber(int bossThreadNumber);
+
+	public abstract AioConfig setWorkerThreadNumber(int workerThreadNumber);
+
+	public abstract int getBossThreadNumber();
+
+	public abstract int getWorkerThreadNumber();
 }

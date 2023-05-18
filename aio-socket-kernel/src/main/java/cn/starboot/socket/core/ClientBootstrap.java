@@ -56,11 +56,6 @@ public class ClientBootstrap {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientBootstrap.class);
 
 	/**
-	 * 客户端线程数默认为2;就够用了
-	 */
-	private int threadNum = 2;
-
-	/**
 	 * 重连插件使用
 	 */
 	private boolean isCheck = true;
@@ -136,7 +131,7 @@ public class ClientBootstrap {
 	 */
 	public final ChannelContext start() throws IOException {
 		AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
-		this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(threadNum), threadNum);
+		this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
 		return start(this.asynchronousChannelGroup);
 	}
 
@@ -313,7 +308,7 @@ public class ClientBootstrap {
 	 * @return this
 	 */
 	public ClientBootstrap setThreadNum(int threadNum) {
-		this.threadNum = threadNum;
+		getConfig().setBossThreadNumber(threadNum);
 		return this;
 	}
 
@@ -338,11 +333,13 @@ public class ClientBootstrap {
 	/**
 	 * 设置内存池工厂
 	 *
-	 * @param memoryPoolFactory 内存池工厂
+	 * @param size 内存页大小
+	 * @param num 内存页个数
+	 * @param useDirect 是否开启堆外内存
 	 * @return this
 	 */
-	public ClientBootstrap setBufferFactory(MemoryPoolFactory memoryPoolFactory) {
-		getConfig().setMemoryPoolFactory(memoryPoolFactory);
+	public ClientBootstrap setBufferFactory(int size, int num, boolean useDirect) {
+		getConfig().setDirect(useDirect).setMemoryBlockSize(size).setMemoryBlockNum(num);
 		return this;
 	}
 
