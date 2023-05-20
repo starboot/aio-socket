@@ -377,6 +377,9 @@ final class TCPChannelContext extends ChannelContext {
 
 	@Override
 	protected boolean aioEncoder(Packet packet, boolean isBlock) {
+		if (isInvalid()) {
+			return false;
+		}
 		try {
 			lock.lock();
 //			synchronized (this) {
