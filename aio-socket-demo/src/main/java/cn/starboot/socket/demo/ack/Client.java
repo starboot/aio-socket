@@ -21,7 +21,6 @@ import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.plugins.ACKPlugin;
-import cn.starboot.socket.utils.pool.memory.MemoryPool;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -33,14 +32,14 @@ public class Client {
         Packet demoPacket = new StringPacket("hello aio-socket");
 
         // 设置同部位
-        demoPacket.setReq("test-ack");
+        demoPacket.setReq(111);
 
 		ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
 
 		bootstrap.setBufferFactory(2 * 1024 * 1024, 2, true)
 				.setReadBufferSize(1024 * 1024)
 				.setWriteBufferSize(1024 * 1024, 512)
-				.addPlugin(new ACKPlugin(6, 2, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")));
+				.addPlugin(new ACKPlugin(6, 2, TimeUnit.SECONDS));
 
 		ChannelContext start = bootstrap.start();
 

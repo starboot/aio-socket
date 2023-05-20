@@ -36,7 +36,7 @@ public class ACKPlugin extends AbstractPlugin {
 
 	private final Map<ChannelContext, Set<Packet>> idToPacket = new HashMap<>();
 
-	private final Semaphore semaphore = new Semaphore(1);
+	private static final Semaphore semaphore = new Semaphore(1);
 
 	private final long timeout;
 
@@ -56,8 +56,8 @@ public class ACKPlugin extends AbstractPlugin {
 	@Override
 	public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
 		// 解码后得到的数据进行处理ACK确认
-		String resp = packet.getResp();
-		if (resp != null && resp.length() != 0) {
+		Integer resp = packet.getResp();
+		if (resp != null) {
 			Set<Packet> packets = idToPacket.get(channelContext);
 			if (Objects.nonNull(packets) && packets.size() > 0) {
 				packets.remove(packet);
@@ -73,8 +73,8 @@ public class ACKPlugin extends AbstractPlugin {
 	@Override
 	public void beforeEncode(Packet packet, ChannelContext channelContext) {
 		// 编码前对数据进行ACK码计时
-		String req = packet.getReq();
-		if (req != null && req.length() != 0) {
+		Integer req = packet.getReq();
+		if (req != null) {
 			packet.setLatestTime(System.currentTimeMillis());
 			Set<Packet> packets = idToPacket.get(channelContext);
 			if (Objects.isNull(packets)) {

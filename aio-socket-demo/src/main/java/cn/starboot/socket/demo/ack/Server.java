@@ -18,7 +18,6 @@ package cn.starboot.socket.demo.ack;
 import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.plugins.ACKPlugin;
 import cn.starboot.socket.plugins.MonitorPlugin;
-import cn.starboot.socket.utils.pool.memory.MemoryPool;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +30,7 @@ public class Server {
                 .setReadBufferSize(1024 * 1024)
                 .setWriteBufferSize(1024 * 4, 512)
 				.addPlugin(new MonitorPlugin(5))
-				.addPlugin(new ACKPlugin(6, 2, TimeUnit.SECONDS, (packet, lastTime) -> System.out.println(packet.getReq() + " 超时了")))
+				.addPlugin(new ACKPlugin(6, 2, TimeUnit.SECONDS))
                 .start();
 
     }

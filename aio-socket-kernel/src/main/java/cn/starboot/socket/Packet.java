@@ -42,12 +42,12 @@ public class Packet implements Serializable {
     /**
      * 同步消息唯一ID
      */
-	protected String req;
+	protected Integer req;
 
     /**
      * 同步消息响应ID
      */
-	protected String resp;
+	protected Integer resp;
 
     /**
      * 发送者ID
@@ -72,11 +72,7 @@ public class Packet implements Serializable {
 	public Packet() {
 	}
 
-	private Packet(byte versionID, String req, String resp, String fromId, String toId) {
-		this(versionID, req, resp, fromId, toId, 0L, null);
-	}
-
-	private Packet(byte versionID, String req, String resp, String fromId, String toId, long latestTime, JSONObject extras) {
+	private Packet(byte versionID, Integer req, Integer resp, String fromId, String toId, long latestTime, JSONObject extras) {
 		this.versionID = versionID;
 		this.req = req;
 		this.resp = resp;
@@ -94,19 +90,19 @@ public class Packet implements Serializable {
         this.versionID = versionID;
     }
 
-    public String getReq() {
+    public Integer getReq() {
         return req;
     }
 
-    public void setReq(String req) {
+    public void setReq(Integer req) {
         this.req = req;
     }
 
-    public String getResp() {
+    public Integer getResp() {
         return resp;
     }
 
-    public void setResp(String resp) {
+    public void setResp(Integer resp) {
         this.resp = resp;
     }
 
@@ -156,12 +152,12 @@ public class Packet implements Serializable {
 		/**
 		 * 同步消息唯一ID
 		 */
-		protected String req;
+		protected Integer req;
 
 		/**
 		 * 同步消息响应ID
 		 */
-		protected String resp;
+		protected Integer resp;
 
 		/**
 		 * 发送者ID
@@ -189,12 +185,12 @@ public class Packet implements Serializable {
 			return this.theBuilder;
 		}
 
-		public B setReq(String req) {
+		public B setReq(Integer req) {
 			this.req = req;
 			return this.theBuilder;
 		}
 
-		public B setResp(String resp) {
+		public B setResp(Integer resp) {
 			this.resp = resp;
 			return this.theBuilder;
 		}

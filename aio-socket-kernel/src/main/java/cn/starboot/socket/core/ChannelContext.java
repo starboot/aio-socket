@@ -30,6 +30,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -233,6 +234,7 @@ public abstract class ChannelContext {
     }
 
     protected abstract AsyAioWorker getAioWorker();
+
     /**
      * 获取附件对象
      *
