@@ -16,15 +16,15 @@
 package cn.starboot.socket.plugins;
 
 import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.utils.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -34,41 +34,40 @@ public class ACKPlugin extends AbstractPlugin {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ACKPlugin.class);
 
-	private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (packet, lastTime) -> LOGGER.info(packet.getReq() + " : has timeout");
+	private final Map<ChannelContext, Set<Packet>> idToPacket = new HashMap<>();
 
-	private final Map<String, Packet> idToPacket = new HashMap<>();
-
-	private final Map<String, Long> timePacket = new HashMap<>();
+	private final Semaphore semaphore = new Semaphore(1);
 
 	private final long timeout;
 
 	private final long period;
 
-	private final TimeoutCallback timeoutCallback;
-
 	public ACKPlugin(int timeout, int period, TimeUnit timeUnit) {
-		this(timeout, period, timeUnit, DEFAULT_TIMEOUT_CALLBACK);
-	}
-
-	public ACKPlugin(int timeout, int period, TimeUnit timeUnit, TimeoutCallback timeoutCallback) {
 		if (timeout <= 0) {
 			throw new IllegalArgumentException("timeout should bigger than zero");
 		}
 		this.timeout = timeUnit.toMillis(timeout);
 		this.period =  timeUnit.toMillis(period);
-		this.timeoutCallback = timeoutCallback;
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("aio-socket version: " + AioConfig.VERSION + "; server kernel's ACK plugin added successfully");
 		}
 	}
 
 	@Override
-	public void afterDecode(Packet packet, ChannelContext channelContext) {
+	public boolean beforeProcess(ChannelContext channelContext, Packet packet) {
 		// 解码后得到的数据进行处理ACK确认
 		String resp = packet.getResp();
 		if (resp != null && resp.length() != 0) {
-			idToPacket.remove(resp);
+			Set<Packet> packets = idToPacket.get(channelContext);
+			if (Objects.nonNull(packets) && packets.size() > 0) {
+				packets.remove(packet);
+				if (packets.size() == 0) {
+					idToPacket.remove(channelContext);
+				}
+			} else
+				idToPacket.remove(channelContext);
 		}
+		return true;
 	}
 
 	@Override
@@ -76,37 +75,46 @@ public class ACKPlugin extends AbstractPlugin {
 		// 编码前对数据进行ACK码计时
 		String req = packet.getReq();
 		if (req != null && req.length() != 0) {
-			idToPacket.put(req, packet);
-			timePacket.put(req, System.currentTimeMillis());
-			registerACK(req, packet);
+			packet.setLatestTime(System.currentTimeMillis());
+			Set<Packet> packets = idToPacket.get(channelContext);
+			if (Objects.isNull(packets)) {
+				packets = new HashSet<>();
+			}
+			packets.add(packet);
+			idToPacket.put(channelContext, packets);
+			if (semaphore.tryAcquire()) {
+				registerACK();
+			}
 		}
 	}
 
-	private void registerACK(final String key, Packet packet) {
+	private void registerACK() {
 		TimerService.getInstance().schedule(new TimerTask() {
 			@Override
 			public void run() {
-				if (idToPacket.get(key) == null) {
+				if (idToPacket.size() == 0) {
+					semaphore.release();
 					return;
 				}
-				Long lastTime = timePacket.get(key);
-				if (lastTime == null) {
-					lastTime = System.currentTimeMillis();
-					timePacket.put(key, lastTime);
-				}
-				long current = System.currentTimeMillis();
-				//超时未收到消息，关闭连接
-				if (timeout > 0 && (current - lastTime) > timeout) {
-					timeoutCallback.callback(packet, lastTime);
-					return;
-				}
-				registerACK(key, packet);
+				idToPacket.forEach((channelContext, packets) -> {
+					if (channelContext.isInvalid()) {
+						idToPacket.remove(channelContext);
+					} else {
+						packets.forEach(packet -> {
+							long lastTime = packet.getLatestTime();
+							long current = System.currentTimeMillis();
+							//超时未收到消息，重新发送
+							if (timeout > 0 && (current - lastTime) > timeout) {
+								if (LOGGER.isDebugEnabled()) {
+									LOGGER.debug("ChannelContextId {} -> messageId:{} has timeout ,retry to send...", channelContext.getId(), packet.getReq());
+								}
+								Aio.send(channelContext, packet);
+							}
+						});
+					}
+				});
+				registerACK();
 			}
 		}, this.period, TimeUnit.MILLISECONDS);
-	}
-
-	public interface TimeoutCallback {
-
-		void callback(Packet packet, long lastTime);
 	}
 }

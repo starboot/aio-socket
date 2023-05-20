@@ -273,6 +273,15 @@ public abstract class ChannelContext {
         attr.put(s, o);
     }
 
+	/**
+	 * 移除属性
+	 *
+	 * @param s key
+	 */
+	public void removeAttr(String s) {
+		attr.remove(s);
+	}
+
     /**
      * 获取配置文件
      *

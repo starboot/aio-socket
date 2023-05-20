@@ -60,6 +60,11 @@ public class Packet implements Serializable {
 	protected String toId;
 
 	/**
+	 * 最后一次发送时间
+	 */
+	protected long latestTime;
+
+	/**
 	 * 扩展参数字段
 	 */
 	protected JSONObject extras;
@@ -68,15 +73,16 @@ public class Packet implements Serializable {
 	}
 
 	private Packet(byte versionID, String req, String resp, String fromId, String toId) {
-		this(versionID, req, resp, fromId, toId, null);
+		this(versionID, req, resp, fromId, toId, 0L, null);
 	}
 
-	private Packet(byte versionID, String req, String resp, String fromId, String toId, JSONObject extras) {
+	private Packet(byte versionID, String req, String resp, String fromId, String toId, long latestTime, JSONObject extras) {
 		this.versionID = versionID;
 		this.req = req;
 		this.resp = resp;
 		this.fromId = fromId;
 		this.toId = toId;
+		this.latestTime = latestTime;
 		this.extras = extras;
 	}
 
@@ -120,6 +126,14 @@ public class Packet implements Serializable {
         this.toId = toId;
     }
 
+	public long getLatestTime() {
+		return latestTime;
+	}
+
+	public void setLatestTime(long latestTime) {
+		this.latestTime = latestTime;
+	}
+
 	public JSONObject getExtras() {
 		return extras;
 	}
@@ -159,6 +173,8 @@ public class Packet implements Serializable {
 		 */
 		protected String toId;
 
+		protected long latestTime;
+
 		/**
 		 * 扩展参数字段
 		 */
@@ -193,6 +209,11 @@ public class Packet implements Serializable {
 			return this.theBuilder;
 		}
 
+		public B setToLatestTime(long latestTime) {
+			this.latestTime = latestTime;
+			return this.theBuilder;
+		}
+
 		public B addExtra(String key, Object value) {
 			if (Objects.nonNull(key) && key.length() > 0 && Objects.nonNull(value)) {
 				if (Objects.isNull(this.extras)) {
@@ -213,6 +234,7 @@ public class Packet implements Serializable {
 					", resp='" + resp + '\'' +
 					", fromId='" + fromId + '\'' +
 					", toId='" + toId + '\'' +
+					", latestTime='" + latestTime + '\'' +
 					", extras=" + extras +
 					", theBuilder=" + theBuilder +
 					'}';
