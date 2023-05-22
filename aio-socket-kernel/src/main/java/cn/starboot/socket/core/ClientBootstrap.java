@@ -134,6 +134,7 @@ public class ClientBootstrap {
 		this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
 		do {
 			start(this.asynchronousChannelGroup);
+
 		} while (this.channelContext == null);
 		return this.channelContext;
 	}
@@ -245,7 +246,7 @@ public class ClientBootstrap {
 					if (socketChannel != null) {
 						AIOUtil.close(socketChannel);
 					}
-					shutdownNow();
+//					shutdownNow();
 				}
 			}
 		});
@@ -255,6 +256,7 @@ public class ClientBootstrap {
 	 * 检查配置项
 	 */
 	private void checkAndResetConfig() {
+		this.isCheck = false;
 		getConfig().initMemoryPoolFactory();
 		Plugins plugins = getConfig().getPlugins();
 		getConfig().setMonitor(plugins)
