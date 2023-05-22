@@ -132,11 +132,7 @@ public class ClientBootstrap {
 	public final ChannelContext start() throws IOException {
 		AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
 		this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
-		do {
-			start(this.asynchronousChannelGroup);
-
-		} while (this.channelContext == null);
-		return this.channelContext;
+		return start(this.asynchronousChannelGroup);
 	}
 
 	/**
@@ -186,7 +182,7 @@ public class ClientBootstrap {
 			}
 		} catch (Exception e) {
 			future.cancel(false);
-//			shutdownNow();
+			shutdownNow();
 //			throw new IOException(e);
 			LOGGER.error("aio-socket version: {}; client kernel started failed because of {}. Starting retry...", AioConfig.VERSION, e.getMessage());
 			return null;
@@ -246,7 +242,7 @@ public class ClientBootstrap {
 					if (socketChannel != null) {
 						AIOUtil.close(socketChannel);
 					}
-//					shutdownNow();
+					shutdownNow();
 				}
 			}
 		});
