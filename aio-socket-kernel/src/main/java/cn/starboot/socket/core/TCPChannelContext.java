@@ -336,7 +336,10 @@ final class TCPChannelContext extends ChannelContext {
 		if (immediate) {
 			try {
 				this.byteBuf.close();
-				readBuffer.clean();
+				if (readBuffer != null) {
+					readBuffer.clean();
+					readBuffer = null;
+				}
 				if (writeBuffer != null) {
 					writeBuffer.clean();
 					writeBuffer = null;
