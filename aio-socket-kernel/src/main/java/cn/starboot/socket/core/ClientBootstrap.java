@@ -255,8 +255,7 @@ public class ClientBootstrap {
 		this.isCheck = false;
 		getConfig().initMemoryPoolFactory();
 		Plugins plugins = getConfig().getPlugins();
-		getConfig().setMonitor(plugins)
-				.setHandler(plugins);
+		getConfig().setMonitor(plugins).setHandler(plugins);
 	}
 
 	/**
@@ -323,15 +322,6 @@ public class ClientBootstrap {
 	 */
 	public AioConfig getConfig() {
 		return this.config;
-	}
-
-	/**
-	 * 重连访问项
-	 *
-	 * @param isCheck bool
-	 */
-	public void setCheck(boolean isCheck) {
-		this.isCheck = isCheck;
 	}
 
 	/**

@@ -72,7 +72,6 @@ public class ReconnectPlugin extends AbstractPlugin {
             @Override
             public void run() {
                 try {
-                    client.setCheck(false);
                     if (asynchronousChannelGroup == null) {
                         client.start();
                     } else {
