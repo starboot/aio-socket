@@ -40,7 +40,7 @@ public abstract class AioConfig {
     /**
      * 当前aio-socket版本号
      */
-    public static final String VERSION = "v2.0.2";
+    public static final String VERSION = "v2.0.3";
 
     /**
      * 消息体缓存大小,字节

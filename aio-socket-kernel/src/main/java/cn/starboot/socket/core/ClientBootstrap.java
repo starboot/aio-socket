@@ -250,6 +250,7 @@ public class ClientBootstrap {
 	 * 检查配置项
 	 */
 	private void checkAndResetConfig() {
+		getConfig().initMemoryPoolFactory();
 		Plugins plugins = getConfig().getPlugins();
 		getConfig().setMonitor(plugins)
 				.setHandler(plugins);

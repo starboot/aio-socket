@@ -22,16 +22,16 @@ public abstract class ACKStringHandler extends StringHandler {
 		WriteBuffer writeBuffer = channelContext.getWriteBuffer();
 		// 写同步位
 		if (packet.getReq() != null && !packet.getReq().equals("")) {
-			byte[] bytes = packet.getReq().getBytes();
+//			byte[] bytes = packet.getReq().getBytes();
 			writeBuffer.write(reqMark);
-			writeBuffer.writeInt(bytes.length);
-			writeBuffer.write(bytes);
+//			writeBuffer.writeInt(bytes.length);
+//			writeBuffer.write(bytes);
 		}
 		if (packet.getResp() != null && !packet.getResp().equals("")) {
-			byte[] bytes = packet.getResp().getBytes();
+//			byte[] bytes = packet.getResp().getBytes();
 			writeBuffer.write(respMark);
-			writeBuffer.writeInt(bytes.length);
-			writeBuffer.write(bytes);
+//			writeBuffer.writeInt(bytes.length);
+//			writeBuffer.write(bytes);
 		}
 
 	}
@@ -59,13 +59,13 @@ public abstract class ACKStringHandler extends StringHandler {
 		int anInt = buffer.getInt();
 		byte[] bytes = new byte[anInt];
 		buffer.get(bytes);
-		decode.setReq(new String(bytes));
+//		decode.setReq(new String(bytes));
 	}
 
 	private void setRespMark(ByteBuffer buffer, Packet decode) {
 		int anInt = buffer.getInt();
 		byte[] bytes = new byte[anInt];
 		buffer.get(bytes);
-		decode.setResp(new String(bytes));
+//		decode.setResp(new String(bytes));
 	}
 }
