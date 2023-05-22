@@ -58,7 +58,7 @@ public class ClientBootstrap {
 	/**
 	 * 重连插件使用
 	 */
-	private boolean isCheck = true;
+	private boolean isInit = true;
 
 	/**
 	 * 心跳包
@@ -146,7 +146,7 @@ public class ClientBootstrap {
 	 * @see AsynchronousSocketChannel#connect(SocketAddress)
 	 */
 	public ChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
-		if (isCheck) {
+		if (isInit) {
 			checkAndResetConfig();
 		}
 		CompletableFuture<ChannelContext> future = new CompletableFuture<>();
@@ -252,7 +252,7 @@ public class ClientBootstrap {
 	 * 检查配置项
 	 */
 	private void checkAndResetConfig() {
-		this.isCheck = false;
+		this.isInit = false;
 		getConfig().initMemoryPoolFactory();
 		Plugins plugins = getConfig().getPlugins();
 		getConfig().setMonitor(plugins).setHandler(plugins);
