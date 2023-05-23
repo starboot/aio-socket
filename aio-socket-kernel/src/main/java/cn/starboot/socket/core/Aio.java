@@ -1523,9 +1523,6 @@ public class Aio {
 	 */
 	public static Boolean send(ChannelContext channelContext,
 							   Packet packet) {
-		if (Objects.isNull(channelContext)) {
-			return false;
-		}
 		return send0(channelContext, packet, false);
 	}
 
@@ -1540,6 +1537,9 @@ public class Aio {
 	private static Boolean send0(ChannelContext channelContext,
 								 Packet packet,
 								 boolean isBlock) {
+		if (Objects.isNull(channelContext)) {
+			return false;
+		}
 		return channelContext.aioEncoder(packet, isBlock);
 	}
 
