@@ -16,7 +16,7 @@ public class AioServerConfig extends AioConfig {
 
 	@Override
 	public String getName() {
-		return "aio-socket: AioServerConfig";
+		return "Server Configuration";
 	}
 
 	@Override

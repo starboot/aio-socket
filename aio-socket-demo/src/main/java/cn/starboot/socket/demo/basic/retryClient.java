@@ -32,9 +32,8 @@ public class retryClient {
 			ChannelContext start;
 			do {
 				start = bootstrap.start();
-				Thread.sleep(1000L);
 			} while (start == null);
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -75,9 +74,8 @@ public class retryClient {
 			try {
 				do {
 					clientChannelContext = clientBootstrap.start();
-					Thread.sleep(1000L);
 				} while (clientChannelContext == null);
-			} catch (IOException | InterruptedException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
