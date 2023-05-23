@@ -26,8 +26,7 @@ public class retryClient {
 //					.addPlugin(new ReconnectPlugin(clientBootstrap))
 //                    .addHeartPacket()
 				.setWriteBufferSize(32 * 1024, 128)
-				.setReadBufferSize(32 * 1024)
-				.setThreadNum(2);
+				.setReadBufferSize(32 * 1024);
 
 		try {
 			ChannelContext start;
@@ -89,8 +88,7 @@ public class retryClient {
 //					.addPlugin(new ReconnectPlugin(clientBootstrap))
 //                    .addHeartPacket()
 					.setWriteBufferSize(32 * 1024, 128)
-					.setReadBufferSize(32 * 1024)
-					.setThreadNum(2);
+					.setReadBufferSize(32 * 1024);
 		}
 	}
 }

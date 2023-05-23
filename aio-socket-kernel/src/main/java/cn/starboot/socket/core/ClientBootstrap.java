@@ -303,6 +303,8 @@ public class ClientBootstrap {
 
 	/**
 	 * 设置线程数
+	 * 不懂通讯的同学就别设置线程数，容易产生死锁
+	 * 客户端默认两个线程，刚刚好
 	 *
 	 * @param threadNum 线程数
 	 * @return this
