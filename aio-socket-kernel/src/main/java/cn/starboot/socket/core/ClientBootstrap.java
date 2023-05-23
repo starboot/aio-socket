@@ -143,7 +143,7 @@ public class ClientBootstrap {
 	 * @param asynchronousChannelGroup IO事件处理线程组
 	 * @return 建立连接后的会话对象
 	 * @throws IOException IOException
-	 * @see AsynchronousSocketChannel#connect(SocketAddress)
+	 * @see java.nio.channels.AsynchronousSocketChannel#connect(SocketAddress)
 	 */
 	public ChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
 		if (isInit) {
@@ -175,11 +175,7 @@ public class ClientBootstrap {
 			}
 		});
 		try {
-			if (connectTimeout > 0) {
-				return future.get(connectTimeout, TimeUnit.MILLISECONDS);
-			} else {
-				return future.get();
-			}
+			return future.get(connectTimeout, TimeUnit.MILLISECONDS);
 		} catch (Exception e) {
 			future.cancel(false);
 			shutdownNow();
@@ -199,6 +195,7 @@ public class ClientBootstrap {
 	 */
 	private void start(AsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
 					   CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
+
 		AsynchronousSocketChannel socketChannel = AsynchronousSocketChannel.open(asynchronousChannelGroup);
 		if (this.memoryPool == null) {
 			this.memoryPool = getConfig().getMemoryPoolFactory().create();

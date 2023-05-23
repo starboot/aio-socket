@@ -16,6 +16,7 @@
 package cn.starboot.socket.demo.basic;
 
 import cn.starboot.socket.core.ServerBootstrap;
+import cn.starboot.socket.plugins.MonitorPlugin;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 
 public class Server {
@@ -26,6 +27,7 @@ public class Server {
         ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
         bootstrap.setMemoryPoolFactory(2 * 1024 * 1024, 2, true)
                 .setReadBufferSize(1024 * 1024)
+				.addPlugin(new MonitorPlugin(5))
                 .setWriteBufferSize(1024 * 4, 512)
                 .start();
 
