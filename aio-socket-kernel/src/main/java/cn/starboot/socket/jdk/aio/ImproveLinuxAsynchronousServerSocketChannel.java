@@ -9,20 +9,19 @@ import java.net.SocketOption;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.Set;
 import java.util.concurrent.Future;
 
-final class ImproveUnixAsynchronousServerSocketChannel extends AsynchronousServerSocketChannel {
+final class ImproveLinuxAsynchronousServerSocketChannel extends AsynchronousServerSocketChannel {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveUnixAsynchronousServerSocketChannel.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveLinuxAsynchronousServerSocketChannel.class);
 
 	/**
 	 * Initializes a new instance of this class.
 	 *
 	 * @param improveAsynchronousChannelGroup The provider that created this channel
 	 */
-	protected ImproveUnixAsynchronousServerSocketChannel(ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup) {
+	protected ImproveLinuxAsynchronousServerSocketChannel(ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup) {
 		super(improveAsynchronousChannelGroup.provider());
 	}
 
