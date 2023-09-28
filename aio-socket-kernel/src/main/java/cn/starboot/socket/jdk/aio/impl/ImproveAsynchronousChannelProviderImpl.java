@@ -13,9 +13,9 @@ import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
 
-public final class ImproveAsynchronousChannelProvider extends AsynchronousChannelProvider {
+public final class ImproveAsynchronousChannelProviderImpl extends AsynchronousChannelProvider {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousChannelProvider.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousChannelProviderImpl.class);
 
 	@Override
 	public AsynchronousChannelGroup openAsynchronousChannelGroup(int nThreads, ThreadFactory threadFactory) throws IOException {
@@ -51,7 +51,7 @@ public final class ImproveAsynchronousChannelProvider extends AsynchronousChanne
 
 	private ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup() {
 		if (defaultAsynchronousChannelGroup == null) {
-			synchronized (ImproveAsynchronousChannelProvider.class) {
+			synchronized (ImproveAsynchronousChannelProviderImpl.class) {
 				if (defaultAsynchronousChannelGroup == null) {
 					defaultAsynchronousChannelGroup = new ImproveAsynchronousChannelGroup(null);
 				}
