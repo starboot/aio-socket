@@ -12,7 +12,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.Set;
 import java.util.concurrent.Future;
 
-final class ImproveLinuxAsynchronousServerSocketChannel extends AsynchronousServerSocketChannel {
+public final class ImproveLinuxAsynchronousServerSocketChannel extends AsynchronousServerSocketChannel {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveLinuxAsynchronousServerSocketChannel.class);
 
@@ -21,7 +21,7 @@ final class ImproveLinuxAsynchronousServerSocketChannel extends AsynchronousServ
 	 *
 	 * @param improveAsynchronousChannelGroup The provider that created this channel
 	 */
-	protected ImproveLinuxAsynchronousServerSocketChannel(ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup) {
+	public ImproveLinuxAsynchronousServerSocketChannel(ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup) {
 		super(improveAsynchronousChannelGroup.provider());
 	}
 

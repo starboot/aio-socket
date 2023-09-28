@@ -8,7 +8,7 @@ import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.concurrent.TimeUnit;
 
-final class ImproveAsynchronousChannelGroup extends AsynchronousChannelGroup {
+public final class ImproveAsynchronousChannelGroup extends AsynchronousChannelGroup {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousChannelGroup.class);
 
@@ -17,7 +17,7 @@ final class ImproveAsynchronousChannelGroup extends AsynchronousChannelGroup {
 	 *
 	 * @param provider The asynchronous channel provider for this group
 	 */
-	protected ImproveAsynchronousChannelGroup(AsynchronousChannelProvider provider) {
+	public ImproveAsynchronousChannelGroup(AsynchronousChannelProvider provider) {
 		super(provider);
 	}
 
