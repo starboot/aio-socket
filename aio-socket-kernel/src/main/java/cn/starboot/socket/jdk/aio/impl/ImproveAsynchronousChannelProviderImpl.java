@@ -71,6 +71,7 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 	@Override
 	public ImproveAsynchronousSocketChannel
 	openImproveAsynchronousSocketChannel(ImproveAsynchronousChannelGroup group) throws IOException {
-		throw new UnsupportedEncodingException("unsupported");
+//		throw new UnsupportedEncodingException("unsupported");
+		return new ImproveAsynchronousSocketChannelImpl(toPort(group));
 	}
 }
