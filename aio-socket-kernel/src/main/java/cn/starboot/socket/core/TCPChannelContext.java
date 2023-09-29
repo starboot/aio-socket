@@ -17,6 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ChannelStatusEnum;
 import cn.starboot.socket.exception.AioEncoderException;
+import cn.starboot.socket.jdk.aio.ApplyAndRegister;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
@@ -156,10 +157,11 @@ final class TCPChannelContext extends ChannelContext {
 	 * 初始化TCPChannelContext
 	 */
 	void initTCPChannelContext(Supplier<MemoryUnit> supplier) {
-//		Supplier<MemoryUnit> unitSupplier = () -> {
-//			readBuffer = supplier.get();
-//			return readBuffer;
-//		};
+
+		Consumer<MemoryUnit> consumer = memoryUnit -> readBuffer = memoryUnit;
+		ApplyAndRegister<MemoryUnit> applyAndRegister = supplier::get;
+		Supplier<MemoryUnit> supplier1 = applyAndRegister.andRegister(consumer);
+
 		this.readBuffer = supplier.get();
 		this.readBuffer.buffer().flip();
 		signalRead(false);
