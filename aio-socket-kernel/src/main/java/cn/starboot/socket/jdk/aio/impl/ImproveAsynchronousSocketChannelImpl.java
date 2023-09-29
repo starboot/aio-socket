@@ -2,6 +2,7 @@ package cn.starboot.socket.jdk.aio.impl;
 
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
+import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -12,6 +13,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSocketChannel {
 
@@ -93,8 +95,8 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> void read(ByteBuffer dst, long timeout, TimeUnit unit, A attachment, CompletionHandler<Integer, ? super A> handler) {
-
+	public <A> MemoryUnit read(Supplier<MemoryUnit> dst, long timeout, TimeUnit unit, A attachment, CompletionHandler<Integer, ? super A> handler) {
+		return dst.get();
 	}
 
 	@Override
@@ -108,7 +110,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> void write(ByteBuffer src, long timeout, TimeUnit unit, A attachment, CompletionHandler<Integer, ? super A> handler) {
+	public <A> void write(MemoryUnit src, long timeout, TimeUnit unit, A attachment, CompletionHandler<Integer, ? super A> handler) {
 
 	}
 
