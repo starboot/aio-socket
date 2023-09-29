@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.channels.IllegalChannelGroupException;
 import java.util.concurrent.*;
 
@@ -71,7 +70,6 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 	@Override
 	public ImproveAsynchronousSocketChannel
 	openImproveAsynchronousSocketChannel(ImproveAsynchronousChannelGroup group) throws IOException {
-//		throw new UnsupportedEncodingException("unsupported");
 		return new ImproveAsynchronousSocketChannelImpl(toPort(group));
 	}
 }
