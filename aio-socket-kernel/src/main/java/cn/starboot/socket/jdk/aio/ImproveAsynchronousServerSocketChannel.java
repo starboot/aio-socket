@@ -6,7 +6,8 @@ import java.net.SocketOption;
 import java.nio.channels.*;
 import java.util.concurrent.Future;
 
-public abstract class ImproveAsynchronousServerSocketChannel implements AsynchronousChannel, NetworkChannel {
+public abstract class ImproveAsynchronousServerSocketChannel
+		implements AsynchronousChannel, NetworkChannel {
 	private final ImproveAsynchronousChannelProvider provider;
 
 	/**

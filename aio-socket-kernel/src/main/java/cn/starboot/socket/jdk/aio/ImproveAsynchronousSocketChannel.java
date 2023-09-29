@@ -8,7 +8,8 @@ import java.nio.channels.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-public abstract class ImproveAsynchronousSocketChannel implements AsynchronousByteChannel, NetworkChannel {
+public abstract class ImproveAsynchronousSocketChannel
+		implements AsynchronousByteChannel, NetworkChannel {
 	private final ImproveAsynchronousChannelProvider provider;
 
 	/**
@@ -16,7 +17,8 @@ public abstract class ImproveAsynchronousSocketChannel implements AsynchronousBy
 	 *
 	 * @param provider The provider that created this channel
 	 */
-	protected ImproveAsynchronousSocketChannel(ImproveAsynchronousChannelProvider provider) {
+	protected ImproveAsynchronousSocketChannel(ImproveAsynchronousChannelProvider provider)
+	{
 		this.provider = provider;
 	}
 
@@ -25,7 +27,8 @@ public abstract class ImproveAsynchronousSocketChannel implements AsynchronousBy
 	 *
 	 * @return The provider that created this channel
 	 */
-	public final ImproveAsynchronousChannelProvider provider() {
+	public final ImproveAsynchronousChannelProvider provider()
+	{
 		return provider;
 	}
 
@@ -66,7 +69,8 @@ public abstract class ImproveAsynchronousSocketChannel implements AsynchronousBy
 	 * @throws IOException If an I/O error occurs
 	 */
 	public static ImproveAsynchronousSocketChannel open()
-			throws IOException {
+			throws IOException
+	{
 		return open(null);
 	}
 
