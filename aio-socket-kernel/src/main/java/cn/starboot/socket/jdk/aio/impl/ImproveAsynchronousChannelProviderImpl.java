@@ -14,7 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.channels.IllegalChannelGroupException;
 import java.util.concurrent.*;
 
-public final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousChannelProvider {
+final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousChannelProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousChannelProviderImpl.class);
 
@@ -51,7 +51,8 @@ public final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchr
 		return new ImproveAsynchronousChannelGroupImpl(this, executor, initialSize);
 	}
 
-	private ImproveAsynchronousChannelGroup toPort(ImproveAsynchronousChannelGroup group) throws IOException {
+	private ImproveAsynchronousChannelGroup toPort(ImproveAsynchronousChannelGroup group)
+			throws IOException {
 		if (group == null) {
 			return defaultAsynchronousChannelGroup();
 		} else {
