@@ -161,6 +161,8 @@ final class TCPChannelContext extends ChannelContext {
 
 		readSupplier = ((ApplyAndRegister<MemoryUnit>) supplier::get).andRegister(memoryUnit -> readBuffer = memoryUnit);
 
+//		readSupplier = () -> { readBuffer = supplier.get(); return readBuffer; };
+
 		this.readBuffer = supplier.get();
 		this.readBuffer.buffer().flip();
 		signalRead(false);
