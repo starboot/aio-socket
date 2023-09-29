@@ -17,6 +17,8 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousChannelProviderImpl.class);
 
+	// 单例模式
+
 	private static volatile ImproveAsynchronousChannelGroup defaultImproveAsynchronousChannelGroup;
 
 	private ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup() {
