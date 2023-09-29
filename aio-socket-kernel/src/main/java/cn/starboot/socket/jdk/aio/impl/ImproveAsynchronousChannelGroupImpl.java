@@ -4,6 +4,7 @@ import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelProvider;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChannelGroup {
@@ -13,7 +14,7 @@ public class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChan
 	 *
 	 * @param provider The asynchronous channel provider for this group
 	 */
-	protected ImproveAsynchronousChannelGroupImpl(ImproveAsynchronousChannelProvider provider) {
+	protected ImproveAsynchronousChannelGroupImpl(ImproveAsynchronousChannelProvider provider, ExecutorService executorService, int threadNum) {
 		super(provider);
 	}
 
