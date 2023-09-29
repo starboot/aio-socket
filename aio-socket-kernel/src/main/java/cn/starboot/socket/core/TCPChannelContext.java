@@ -158,9 +158,9 @@ final class TCPChannelContext extends ChannelContext {
 	 */
 	void initTCPChannelContext(Supplier<MemoryUnit> supplier) {
 
-		Consumer<MemoryUnit> consumer = memoryUnit -> readBuffer = memoryUnit;
+		Consumer<MemoryUnit> register = memoryUnit -> readBuffer = memoryUnit;
 		ApplyAndRegister<MemoryUnit> applyAndRegister = supplier::get;
-		Supplier<MemoryUnit> supplier1 = applyAndRegister.andRegister(consumer);
+		Supplier<MemoryUnit> supplier1 = applyAndRegister.andRegister(register);
 
 		this.readBuffer = supplier.get();
 		this.readBuffer.buffer().flip();
