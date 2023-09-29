@@ -370,7 +370,7 @@ public abstract class ImproveAsynchronousSocketChannel
 	 * @throws NotYetConnectedException      If this channel is not yet connected
 	 * @throws ShutdownChannelGroupException If the channel group has terminated
 	 */
-	public abstract <A> void write(ByteBuffer src,
+	public abstract <A> void write(MemoryUnit src,
 								   long timeout,
 								   TimeUnit unit,
 								   A attachment,
@@ -382,7 +382,7 @@ public abstract class ImproveAsynchronousSocketChannel
 	 * @throws ShutdownChannelGroupException If the channel group has terminated
 	 */
 	@Override
-	public final <A> void write(ByteBuffer src,
+	public final <A> void write(MemoryUnit src,
 								A attachment,
 								CompletionHandler<Integer, ? super A> handler) {
 		write(src, 0L, TimeUnit.MILLISECONDS, attachment, handler);

@@ -141,7 +141,7 @@ public interface ImproveAsynchronousByteChannel
 	 *          If the channel is associated with a {@link AsynchronousChannelGroup
 	 *          group} that has terminated
 	 */
-	<A> void write(ByteBuffer src,
+	<A> void write(MemoryUnit src,
 				   A attachment,
 				   CompletionHandler<Integer,? super A> handler);
 
@@ -151,7 +151,7 @@ public interface ImproveAsynchronousByteChannel
 	 * <p> This method initiates an asynchronous write operation to write a
 	 * sequence of bytes to this channel from the given buffer. The method
 	 * behaves in exactly the same manner as the {@link
-	 * #write(ByteBuffer,Object,CompletionHandler)
+	 * #write(MemoryUnit,Object,CompletionHandler)
 	 * write(ByteBuffer,Object,CompletionHandler)} method except that instead
 	 * of specifying a completion handler, this method returns a {@code Future}
 	 * representing the pending result. The {@code Future}'s {@link Future#get()
