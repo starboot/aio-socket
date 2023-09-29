@@ -28,18 +28,21 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		this(group, false);
 	}
 
-	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group, boolean isServerCreate) {
+	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group,
+												   boolean isServerCreate) {
 		super(group.provider());
 		this.isServerCreate = isServerCreate;
 	}
 
 	@Override
-	public ImproveAsynchronousSocketChannel bind(SocketAddress local) throws IOException {
+	public ImproveAsynchronousSocketChannel bind(SocketAddress local)
+			throws IOException {
 		return null;
 	}
 
 	@Override
-	public <T> ImproveAsynchronousSocketChannel setOption(SocketOption<T> name, T value) throws IOException {
+	public <T> ImproveAsynchronousSocketChannel setOption(SocketOption<T> name, T value)
+			throws IOException {
 		return null;
 	}
 
@@ -83,7 +86,10 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> void connect(SocketAddress remote, A attachment, CompletionHandler<Void, ? super A> handler) {
+	public <A> void connect(SocketAddress remote,
+							A attachment,
+							CompletionHandler<Void, ? super A> handler)
+	{
 		if (handler == null)
 			throw new NullPointerException("'handler' is null");
 		implConnect(remote, attachment, handler);
@@ -95,7 +101,12 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> MemoryUnit read(Supplier<MemoryUnit> dst, long timeout, TimeUnit unit, A attachment, CompletionHandler<Integer, ? super A> handler) {
+	public <A> MemoryUnit read(Supplier<MemoryUnit> dst,
+							   long timeout,
+							   TimeUnit unit,
+							   A attachment,
+							   CompletionHandler<Integer, ? super A> handler)
+	{
 		return dst.get();
 	}
 
@@ -105,12 +116,24 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> void read(ByteBuffer[] dsts, int offset, int length, long timeout, TimeUnit unit, A attachment, CompletionHandler<Long, ? super A> handler) {
+	public <A> void read(ByteBuffer[] dsts,
+						 int offset,
+						 int length,
+						 long timeout,
+						 TimeUnit unit,
+						 A attachment,
+						 CompletionHandler<Long, ? super A> handler)
+	{
 
 	}
 
 	@Override
-	public <A> void write(MemoryUnit src, long timeout, TimeUnit unit, A attachment, CompletionHandler<Integer, ? super A> handler) {
+	public <A> void write(MemoryUnit src,
+						  long timeout,
+						  TimeUnit unit,
+						  A attachment,
+						  CompletionHandler<Integer, ? super A> handler)
+	{
 
 	}
 
@@ -120,7 +143,14 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> void write(ByteBuffer[] srcs, int offset, int length, long timeout, TimeUnit unit, A attachment, CompletionHandler<Long, ? super A> handler) {
+	public <A> void write(ByteBuffer[] srcs,
+						  int offset,
+						  int length,
+						  long timeout,
+						  TimeUnit unit,
+						  A attachment,
+						  CompletionHandler<Long, ? super A> handler)
+	{
 
 	}
 
