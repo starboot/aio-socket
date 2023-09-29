@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChannelGroup {
+final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChannelGroup {
 
 	/**
 	 * Initialize a new instance of this class.
