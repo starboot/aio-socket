@@ -1,5 +1,7 @@
 package cn.starboot.socket.jdk.aio;
 
+import cn.starboot.socket.utils.pool.memory.MemoryUnit;
+
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.net.SocketOption;
@@ -7,9 +9,10 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public abstract class ImproveAsynchronousSocketChannel
-		implements AsynchronousByteChannel, NetworkChannel {
+		implements ImproveAsynchronousByteChannel, NetworkChannel {
 	private final ImproveAsynchronousChannelProvider provider;
 
 	/**
@@ -238,7 +241,7 @@ public abstract class ImproveAsynchronousSocketChannel
 	 * @throws NotYetConnectedException      If this channel is not yet connected
 	 * @throws ShutdownChannelGroupException If the channel group has terminated
 	 */
-	public abstract <A> void read(ByteBuffer dst,
+	public abstract <A> MemoryUnit read(Supplier<MemoryUnit> dst,
 								  long timeout,
 								  TimeUnit unit,
 								  A attachment,
@@ -251,10 +254,10 @@ public abstract class ImproveAsynchronousSocketChannel
 	 * @throws ShutdownChannelGroupException If the channel group has terminated
 	 */
 	@Override
-	public final <A> void read(ByteBuffer dst,
-							   A attachment,
-							   CompletionHandler<Integer, ? super A> handler) {
-		read(dst, 0L, TimeUnit.MILLISECONDS, attachment, handler);
+	public final <A> MemoryUnit read(Supplier<MemoryUnit> dst,
+									 A attachment,
+									 CompletionHandler<Integer, ? super A> handler) {
+		return read(dst, 0L, TimeUnit.MILLISECONDS, attachment, handler);
 	}
 
 	/**
