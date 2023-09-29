@@ -1,10 +1,10 @@
 package cn.starboot.socket.jdk.aio.impl;
 
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
-import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelProvider;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.SocketAddress;
 import java.net.SocketOption;
 import java.nio.ByteBuffer;
@@ -15,13 +15,20 @@ import java.util.concurrent.TimeUnit;
 
 final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSocketChannel {
 
+	private final boolean isServerCreate;
+
 	/**
 	 * Initializes a new instance of this class.
 	 *
 	 * @param group The provider that created this channel
 	 */
 	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group) {
+		this(group, false);
+	}
+
+	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group, boolean isServerCreate) {
 		super(group.provider());
+		this.isServerCreate = isServerCreate;
 	}
 
 	@Override
@@ -59,14 +66,30 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		return null;
 	}
 
+	<A> Future<Void> implConnect(SocketAddress remote,
+								 A attachment,
+								 CompletionHandler<Void,? super A> handler) {
+		if (isServerCreate) {
+			try {
+				throw new UnsupportedEncodingException("unsupported");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		// 实现连接
+		return null;
+	}
+
 	@Override
 	public <A> void connect(SocketAddress remote, A attachment, CompletionHandler<Void, ? super A> handler) {
-
+		if (handler == null)
+			throw new NullPointerException("'handler' is null");
+		implConnect(remote, attachment, handler);
 	}
 
 	@Override
 	public Future<Void> connect(SocketAddress remote) {
-		return null;
+		return implConnect(remote, null, null);
 	}
 
 	@Override
