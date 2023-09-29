@@ -101,13 +101,13 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> MemoryUnit read(Supplier<MemoryUnit> dst,
+	public <A> void read(Supplier<MemoryUnit> supplier,
 							   long timeout,
 							   TimeUnit unit,
 							   A attachment,
 							   CompletionHandler<Integer, ? super A> handler)
 	{
-		return dst.get();
+		supplier.get();
 	}
 
 	@Override

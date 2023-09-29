@@ -46,7 +46,7 @@ public interface ImproveAsynchronousByteChannel
 	 *
 	 * @param   <A>
 	 *          The type of the attachment
-	 * @param   dst
+	 * @param   supplier
 	 *          The buffer into which bytes are to be transferred
 	 * @param   attachment
 	 *          The object to attach to the I/O operation; can be {@code null}
@@ -62,7 +62,7 @@ public interface ImproveAsynchronousByteChannel
 	 *          If the channel is associated with a {@link AsynchronousChannelGroup
 	 *          group} that has terminated
 	 */
-	<A> MemoryUnit read(Supplier<MemoryUnit> dst,
+	<A> void read(Supplier<MemoryUnit> supplier,
 						A attachment,
 						CompletionHandler<Integer,? super A> handler);
 

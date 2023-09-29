@@ -156,6 +156,10 @@ final class TCPChannelContext extends ChannelContext {
 	 * 初始化TCPChannelContext
 	 */
 	void initTCPChannelContext(Supplier<MemoryUnit> supplier) {
+//		Supplier<MemoryUnit> unitSupplier = () -> {
+//			readBuffer = supplier.get();
+//			return readBuffer;
+//		};
 		this.readBuffer = supplier.get();
 		this.readBuffer.buffer().flip();
 		signalRead(false);
