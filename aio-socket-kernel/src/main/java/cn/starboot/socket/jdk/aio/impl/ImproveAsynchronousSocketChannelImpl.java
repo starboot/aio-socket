@@ -1,5 +1,6 @@
 package cn.starboot.socket.jdk.aio.impl;
 
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelProvider;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 
@@ -12,15 +13,15 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-public class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSocketChannel {
+final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSocketChannel {
 
 	/**
 	 * Initializes a new instance of this class.
 	 *
-	 * @param provider The provider that created this channel
+	 * @param group The provider that created this channel
 	 */
-	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelProvider provider) {
-		super(provider);
+	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group) {
+		super(group.provider());
 	}
 
 	@Override

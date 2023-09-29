@@ -13,7 +13,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.Set;
 import java.util.concurrent.Future;
 
-public final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchronousServerSocketChannel {
+final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchronousServerSocketChannel {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousServerSocketChannelImpl.class);
 
