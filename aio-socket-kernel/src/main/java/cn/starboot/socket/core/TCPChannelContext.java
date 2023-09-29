@@ -153,14 +153,13 @@ final class TCPChannelContext extends ChannelContext {
 		getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
 	}
 
+	private Supplier<MemoryUnit> readSupplier;
 	/**
 	 * 初始化TCPChannelContext
 	 */
 	void initTCPChannelContext(Supplier<MemoryUnit> supplier) {
 
-		Consumer<MemoryUnit> register = memoryUnit -> readBuffer = memoryUnit;
-		ApplyAndRegister<MemoryUnit> applyAndRegister = supplier::get;
-		Supplier<MemoryUnit> supplier1 = applyAndRegister.andRegister(register);
+		readSupplier = ((ApplyAndRegister<MemoryUnit>) supplier::get).andRegister(memoryUnit -> readBuffer = memoryUnit);
 
 		this.readBuffer = supplier.get();
 		this.readBuffer.buffer().flip();
