@@ -57,6 +57,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		this.readWorkers = new Worker[threadNum];
 		for (int i = 0; i < threadNum; i++) {
 			readWorkers[i] = new Worker(Selector.open(), selectionKey -> {
+				System.out.println("准备读.");
 				ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
 				asynchronousSocketChannel.doRead();
 			});

@@ -209,7 +209,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			throw new ReadPendingException();
 		}
 		this.readBuffer = readBuffer;
-		this.readBuffer.flip();
+//		this.readBuffer.flip();
 		this.readAttachment = attachment;
 		this.readCompletionHandler = (CompletionHandler<Number, Object>) handler;
 		doRead();
@@ -315,11 +315,11 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 
 			int readSize = 0;
 			boolean hasRemain = true;
-//			if (directRead) {
+			if (directRead) {
 				readSize = socketChannel.read(readBuffer);
 				hasRemain = readBuffer.hasRemaining();
-//			}
-			System.out.println(readSize + "***********" + hasRemain);
+			}
+			System.out.println(Thread.currentThread().getName() + "----" + readSize + "***********" + hasRemain + " " + readBuffer.position() + "-" + readBuffer.limit());
 			if (readSize != 0 || !hasRemain) {
 				CompletionHandler<Number, Object> completionHandler = readCompletionHandler;
 				Object attach = readAttachment;
@@ -330,8 +330,10 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 					ImproveAsynchronousChannelGroupImpl.removeOps(readSelectionKey, SelectionKey.OP_READ);
 				}
 			} else if (readSelectionKey == null) {
+				System.out.println("首次注册");
 				readWorker.addRegister(selector -> {
 					try {
+						System.out.println("易主次");
 						readSelectionKey = socketChannel.register(selector, SelectionKey.OP_READ, ImproveAsynchronousSocketChannelImpl.this);
 					} catch (ClosedChannelException e) {
 						System.out.println("...............");
@@ -353,6 +355,8 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			} else {
 				readCompletionHandler.failed(e, readAttachment);
 			}
+		} finally {
+			readInvoker = 0;
 		}
 	}
 
