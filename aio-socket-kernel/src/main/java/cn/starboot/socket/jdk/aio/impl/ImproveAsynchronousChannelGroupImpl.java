@@ -57,8 +57,8 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		this.readWorkers = new Worker[threadNum];
 		for (int i = 0; i < threadNum; i++) {
 			readWorkers[i] = new Worker(Selector.open(), selectionKey -> {
-//				EnhanceAsynchronousServerChannel asynchronousSocketChannel = (EnhanceAsynchronousServerChannel) selectionKey.attachment();
-//				asynchronousSocketChannel.doRead(true);
+				ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
+				asynchronousSocketChannel.doRead(true);
 			});
 			this.readExecutorService.execute(readWorkers[i]);
 		}
@@ -71,21 +71,21 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		for (int i = 0; i < commonThreadNum; i++) {
 			commonWorkers[i] = new Worker(Selector.open(), selectionKey -> {
 				if (selectionKey.isWritable()) {
-//					EnhanceAsynchronousServerChannel asynchronousSocketChannel = (EnhanceAsynchronousServerChannel) selectionKey.attachment();
+					ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
 					//直接调用interestOps的效果比 removeOps(selectionKey, SelectionKey.OP_WRITE) 更好
 					selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
-//					while (asynchronousSocketChannel.doWrite()) ;
+					while (asynchronousSocketChannel.doWrite()) ;
 				} else if (selectionKey.isAcceptable()) {
-//					EnhanceAsynchronousServerSocketChannel serverSocketChannel = (EnhanceAsynchronousServerSocketChannel) selectionKey.attachment();
-//					serverSocketChannel.doAccept();
+					ImproveAsynchronousServerSocketChannelImpl serverSocketChannel = (ImproveAsynchronousServerSocketChannelImpl) selectionKey.attachment();
+					serverSocketChannel.doAccept();
 				} else if (selectionKey.isConnectable()) {
 					Runnable runnable = (Runnable) selectionKey.attachment();
 					runnable.run();
 				} else if (selectionKey.isReadable()) {
 					//仅同步read会用到此线程资源
-//					EnhanceAsynchronousServerChannel asynchronousSocketChannel = (EnhanceAsynchronousServerChannel) selectionKey.attachment();
+					ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
 					removeOps(selectionKey, SelectionKey.OP_READ);
-//					asynchronousSocketChannel.doRead(true);
+					asynchronousSocketChannel.doRead(true);
 				}
 			});
 			commonExecutorService.execute(commonWorkers[i]);

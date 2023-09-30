@@ -57,7 +57,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	 */
 	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group, SocketChannel socketChannel)
 			throws IOException {
-		this(group, socketChannel, false);
+		this(group, SocketChannel.open(), false);
 	}
 
 	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group,
@@ -225,5 +225,12 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		if (exception != null) {
 			throw exception;
 		}
+	}
+
+	public void doRead(boolean b) {
+	}
+
+	public boolean doWrite() {
+		return true;
 	}
 }
