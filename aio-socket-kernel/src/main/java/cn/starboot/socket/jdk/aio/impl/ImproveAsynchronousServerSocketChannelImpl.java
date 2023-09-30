@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.net.SocketOption;
 import java.nio.channels.CompletionHandler;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.ServerSocketChannel;
 import java.util.Set;
 import java.util.concurrent.Future;
 
@@ -17,34 +19,48 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousServerSocketChannelImpl.class);
 
+	private final ServerSocketChannel serverSocketChannel;
+	private final ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup;
+	private CompletionHandler<ImproveAsynchronousSocketChannel, Object> acceptCompletionHandler;
+	private Object attachment;
+	private SelectionKey selectionKey;
+	private boolean acceptPending;
+
+	private int acceptInvoker;
+
 	/**
 	 * Initializes a new instance of this class.
 	 *
 	 * @param group The provider that created this channel
 	 */
-	protected ImproveAsynchronousServerSocketChannelImpl(ImproveAsynchronousChannelGroup group) {
+	protected ImproveAsynchronousServerSocketChannelImpl(ImproveAsynchronousChannelGroup group) throws IOException {
 		super(group.provider());
+		this.improveAsynchronousChannelGroup = group;
+		this.serverSocketChannel = ServerSocketChannel.open();
+		this.serverSocketChannel.configureBlocking(false);
 	}
 
 
 	@Override
 	public ImproveAsynchronousServerSocketChannel bind(SocketAddress local, int backlog) throws IOException {
-		return null;
+		this.serverSocketChannel.bind(local, backlog);
+		return this;
 	}
 
 	@Override
 	public <T> ImproveAsynchronousServerSocketChannel setOption(SocketOption<T> name, T value) throws IOException {
-		return null;
+		this.serverSocketChannel.setOption(name, value);
+		return this;
 	}
 
 	@Override
 	public <T> T getOption(SocketOption<T> name) throws IOException {
-		return null;
+		return this.serverSocketChannel.getOption(name);
 	}
 
 	@Override
 	public Set<SocketOption<?>> supportedOptions() {
-		return null;
+		return this.serverSocketChannel.supportedOptions();
 	}
 
 	@Override
@@ -59,16 +75,16 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 
 	@Override
 	public SocketAddress getLocalAddress() throws IOException {
-		return null;
+		return this.serverSocketChannel.getLocalAddress();
 	}
 
 	@Override
 	public boolean isOpen() {
-		return false;
+		return this.serverSocketChannel.isOpen();
 	}
 
 	@Override
 	public void close() throws IOException {
-
+		this.serverSocketChannel.close();
 	}
 }
