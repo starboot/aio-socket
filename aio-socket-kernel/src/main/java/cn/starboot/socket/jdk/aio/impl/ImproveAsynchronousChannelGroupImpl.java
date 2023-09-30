@@ -65,7 +65,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 
 		//init threadPool for write and connect
 		final int commonThreadNum = 1;
-		commonExecutorService = getSingleThreadExecutor("smart-socket:common");
+		commonExecutorService = getSingleThreadExecutor("aio-socket:common");
 		this.commonWorkers = new Worker[commonThreadNum];
 
 		for (int i = 0; i < commonThreadNum; i++) {
