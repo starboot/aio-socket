@@ -55,18 +55,19 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	 *
 	 * @param group The provider that created this channel
 	 */
-	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group)
+	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group, SocketChannel socketChannel)
 			throws IOException {
-		this(group, false);
+		this(group, socketChannel, false);
 	}
 
 	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group,
+												   SocketChannel socketChannel,
 												   boolean isServerCreate)
 			throws IOException {
 		super(group.provider());
 		this.isServerCreate = isServerCreate;
 
-		this.socketChannel = SocketChannel.open();
+		this.socketChannel = socketChannel;
 	}
 
 	@Override

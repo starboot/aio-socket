@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.net.SocketOption;
-import java.nio.channels.CompletionHandler;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.*;
 import java.util.Set;
 import java.util.concurrent.Future;
 
@@ -21,7 +19,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 
 	private final ServerSocketChannel serverSocketChannel;
 	private final ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup;
-	private final ImproveAsynchronousChannelGroupImpl.Worker acceptWorker = null;
+	private final ImproveAsynchronousChannelGroupImpl.Worker acceptWorker;
 	private CompletionHandler<ImproveAsynchronousSocketChannel, Object> acceptCompletionHandler;
 	private Object attachment;
 	private SelectionKey selectionKey;
@@ -39,7 +37,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 		this.improveAsynchronousChannelGroup = group;
 		this.serverSocketChannel = ServerSocketChannel.open();
 		this.serverSocketChannel.configureBlocking(false);
-//		acceptWorker = improveAsynchronousChannelGroup.getCommonWorker();
+		acceptWorker = ((ImproveAsynchronousChannelGroupImpl) improveAsynchronousChannelGroup).getCommonWorker();
 	}
 
 
@@ -67,7 +65,58 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 
 	@Override
 	public <A> void accept(A attachment, CompletionHandler<ImproveAsynchronousSocketChannel, ? super A> handler) {
+		if (acceptPending) {
+			throw new AcceptPendingException();
+		}
+		acceptPending = true;
+		this.acceptCompletionHandler = (CompletionHandler<ImproveAsynchronousSocketChannel, Object>) handler;
+		this.attachment = attachment;
+		doAccept();
+	}
 
+	public void doAccept() {
+		try {
+			SocketChannel socketChannel = null;
+			if (acceptInvoker++ < ImproveAsynchronousChannelGroupImpl.MAX_INVOKER) {
+				socketChannel = serverSocketChannel.accept();
+			}
+			if (socketChannel != null) {
+				ImproveAsynchronousSocketChannel asynchronousSocketChannel = new ImproveAsynchronousSocketChannelImpl(improveAsynchronousChannelGroup, socketChannel, true);
+				//这行代码不要乱动
+				socketChannel.configureBlocking(false);
+				socketChannel.finishConnect();
+				CompletionHandler<ImproveAsynchronousSocketChannel, Object> completionHandler = acceptCompletionHandler;
+				Object attach = attachment;
+				resetAccept();
+				completionHandler.completed(asynchronousSocketChannel, attach);
+				if (!acceptPending && selectionKey != null) {
+					ImproveAsynchronousChannelGroupImpl.removeOps(selectionKey, SelectionKey.OP_ACCEPT);
+				}
+			}
+			//首次注册selector
+			else if (selectionKey == null) {
+				acceptWorker.addRegister(selector -> {
+					try {
+						selectionKey = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT, ImproveAsynchronousServerSocketChannelImpl.this);
+//                        selectionKey.attach(EnhanceAsynchronousServerSocketChannel.this);
+					} catch (ClosedChannelException e) {
+						acceptCompletionHandler.failed(e, attachment);
+					}
+				});
+			} else {
+				ImproveAsynchronousChannelGroupImpl.interestOps(acceptWorker, selectionKey, SelectionKey.OP_ACCEPT);
+			}
+		} catch (IOException e) {
+			this.acceptCompletionHandler.failed(e, attachment);
+		} finally {
+			acceptInvoker = 0;
+		}
+	}
+
+	private void resetAccept() {
+		acceptPending = false;
+		acceptCompletionHandler = null;
+		attachment = null;
 	}
 
 	@Override
