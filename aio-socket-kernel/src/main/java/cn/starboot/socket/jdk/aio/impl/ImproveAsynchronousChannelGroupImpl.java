@@ -183,7 +183,6 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		public final void run() {
 			workerThread = Thread.currentThread();
 			// 优先获取SelectionKey,若无关注事件触发则阻塞在selector.select(),减少select被调用次数
-			// 优先获取SelectionKey,若无关注事件触发则阻塞在selector.select(),减少select被调用次数
 			Set<SelectionKey> keySet = selector.selectedKeys();
 			try {
 				while (running) {
