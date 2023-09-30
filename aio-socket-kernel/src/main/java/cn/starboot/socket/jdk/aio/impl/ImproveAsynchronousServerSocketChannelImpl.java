@@ -81,6 +81,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 				socketChannel = serverSocketChannel.accept();
 			}
 			if (socketChannel != null) {
+				System.out.println("连接成功");
 				ImproveAsynchronousSocketChannel asynchronousSocketChannel = new ImproveAsynchronousSocketChannelImpl(improveAsynchronousChannelGroup, socketChannel, true);
 				//这行代码不要乱动
 				socketChannel.configureBlocking(false);

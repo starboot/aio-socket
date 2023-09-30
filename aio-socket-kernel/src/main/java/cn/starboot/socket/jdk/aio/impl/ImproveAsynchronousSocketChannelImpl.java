@@ -315,10 +315,11 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 
 			int readSize = 0;
 			boolean hasRemain = true;
-			if (directRead) {
+//			if (directRead) {
 				readSize = socketChannel.read(readBuffer);
 				hasRemain = readBuffer.hasRemaining();
-			}
+//			}
+			System.out.println(readSize + "***********" + hasRemain);
 			if (readSize != 0 || !hasRemain) {
 				CompletionHandler<Number, Object> completionHandler = readCompletionHandler;
 				Object attach = readAttachment;

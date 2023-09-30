@@ -69,6 +69,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		this.commonWorkers = new Worker[commonThreadNum];
 
 		for (int i = 0; i < commonThreadNum; i++) {
+			System.out.println("创建...boss");
 			commonWorkers[i] = new Worker(Selector.open(), selectionKey -> {
 				if (selectionKey.isWritable()) {
 					ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
@@ -170,6 +171,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		Worker(Selector selector, Consumer<SelectionKey> consumer) {
 			this.selector = selector;
 			this.consumer = consumer;
+			System.out.println(Thread.currentThread().getName());
 		}
 
 		/**
@@ -183,15 +185,19 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		@Override
 		public final void run() {
 			workerThread = Thread.currentThread();
+			System.out.println(workerThread.getName());
 			// 优先获取SelectionKey,若无关注事件触发则阻塞在selector.select(),减少select被调用次数
 			Set<SelectionKey> keySet = selector.selectedKeys();
 			try {
 				while (running) {
+					System.out.println(22);
 					Consumer<Selector> selectorConsumer;
 					while ((selectorConsumer = consumers.poll()) != null) {
 						selectorConsumer.accept(selector);
 					}
-					selector.select();
+					System.out.println("select 一次： " + workerThread.getName() + "-" + workerThread.getId());
+					int select = selector.select();
+					System.out.println(select + "---");
 
 					// 执行本次已触发待处理的事件
 					for (SelectionKey key : keySet) {
