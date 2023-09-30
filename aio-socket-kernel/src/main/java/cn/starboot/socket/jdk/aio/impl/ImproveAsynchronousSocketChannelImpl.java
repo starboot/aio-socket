@@ -10,6 +10,8 @@ import java.net.SocketAddress;
 import java.net.SocketOption;
 import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -19,56 +21,93 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 
 	private final boolean isServerCreate;
 
+	protected final SocketChannel socketChannel;
+
+	/**
+	 * 用于接收 read 通道数据的缓冲区，经解码后腾出缓冲区以供下一批数据的读取
+	 */
+	private ByteBuffer readBuffer;
+	/**
+	 * 存放待输出数据的缓冲区
+	 */
+	private ByteBuffer writeBuffer;
+
+	/**
+	 * read 回调事件处理器
+	 */
+	private CompletionHandler<Number, Object> readCompletionHandler;
+	/**
+	 * write 回调事件处理器
+	 */
+	private CompletionHandler<Number, Object> writeCompletionHandler;
+	/**
+	 * read 回调事件关联绑定的附件对象
+	 */
+	private Object readAttachment;
+	/**
+	 * write 回调事件关联绑定的附件对象
+	 */
+	private Object writeAttachment;
+	private SelectionKey readSelectionKey;
+
 	/**
 	 * Initializes a new instance of this class.
 	 *
 	 * @param group The provider that created this channel
 	 */
-	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group) {
+	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group)
+			throws IOException {
 		this(group, false);
 	}
 
 	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group,
-												   boolean isServerCreate) {
+												   boolean isServerCreate)
+			throws IOException {
 		super(group.provider());
 		this.isServerCreate = isServerCreate;
+
+		this.socketChannel = SocketChannel.open();
 	}
 
 	@Override
 	public ImproveAsynchronousSocketChannel bind(SocketAddress local)
 			throws IOException {
-		return null;
+		this.socketChannel.bind(local);
+		return this;
 	}
 
 	@Override
 	public <T> ImproveAsynchronousSocketChannel setOption(SocketOption<T> name, T value)
 			throws IOException {
-		return null;
+		this.socketChannel.setOption(name, value);
+		return this;
 	}
 
 	@Override
 	public <T> T getOption(SocketOption<T> name) throws IOException {
-		return null;
+		return this.socketChannel.getOption(name);
 	}
 
 	@Override
 	public Set<SocketOption<?>> supportedOptions() {
-		return null;
+		return this.socketChannel.supportedOptions();
 	}
 
 	@Override
 	public ImproveAsynchronousSocketChannel shutdownInput() throws IOException {
-		return null;
+		this.socketChannel.shutdownInput();
+		return this;
 	}
 
 	@Override
 	public ImproveAsynchronousSocketChannel shutdownOutput() throws IOException {
-		return null;
+		this.socketChannel.shutdownOutput();
+		return this;
 	}
 
 	@Override
 	public SocketAddress getRemoteAddress() throws IOException {
-		return null;
+		return this.socketChannel.getRemoteAddress();
 	}
 
 	<A> Future<Void> implConnect(SocketAddress remote,
@@ -156,16 +195,34 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 
 	@Override
 	public SocketAddress getLocalAddress() throws IOException {
-		return null;
+		return this.socketChannel.getLocalAddress();
 	}
 
 	@Override
 	public boolean isOpen() {
-		return false;
+		return this.socketChannel.isOpen();
 	}
 
 	@Override
 	public void close() throws IOException {
-
+		IOException exception = null;
+		try {
+			if (this.socketChannel.isOpen()) {
+				this.socketChannel.close();
+			}
+		} catch (IOException e) {
+			exception = e;
+		}
+		if (this.readSelectionKey != null) {
+			this.readSelectionKey.cancel();
+			this.readSelectionKey = null;
+		}
+//		SelectionKey key = this.socketChannel.keyFor(commonWorker.selector);
+//		if (key != null) {
+//			key.cancel();
+//		}
+		if (exception != null) {
+			throw exception;
+		}
 	}
 }
