@@ -21,7 +21,7 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 
 	private static volatile ImproveAsynchronousChannelGroup defaultImproveAsynchronousChannelGroup;
 
-	private ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup() {
+	private ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup() throws IOException {
 		if (defaultImproveAsynchronousChannelGroup == null) {
 			synchronized (ImproveAsynchronousChannelProviderImpl.class) {
 				if (defaultImproveAsynchronousChannelGroup == null) {

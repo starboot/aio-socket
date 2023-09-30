@@ -21,6 +21,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 
 	private final ServerSocketChannel serverSocketChannel;
 	private final ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup;
+	private final ImproveAsynchronousChannelGroupImpl.Worker acceptWorker = null;
 	private CompletionHandler<ImproveAsynchronousSocketChannel, Object> acceptCompletionHandler;
 	private Object attachment;
 	private SelectionKey selectionKey;
@@ -38,6 +39,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 		this.improveAsynchronousChannelGroup = group;
 		this.serverSocketChannel = ServerSocketChannel.open();
 		this.serverSocketChannel.configureBlocking(false);
+//		acceptWorker = improveAsynchronousChannelGroup.getCommonWorker();
 	}
 
 
