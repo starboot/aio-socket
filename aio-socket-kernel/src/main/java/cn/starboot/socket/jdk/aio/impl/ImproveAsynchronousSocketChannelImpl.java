@@ -9,9 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.SocketAddress;
 import java.net.SocketOption;
 import java.nio.ByteBuffer;
-import java.nio.channels.CompletionHandler;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +20,15 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	private final boolean isServerCreate;
 
 	protected final SocketChannel socketChannel;
+
+	/**
+	 * 处理 read 事件的线程资源
+	 */
+	private final ImproveAsynchronousChannelGroupImpl.Worker readWorker;
+	/**
+	 * 处理 write 事件的线程资源
+	 */
+	protected final ImproveAsynchronousChannelGroupImpl.Worker commonWorker;
 
 	/**
 	 * 用于接收 read 通道数据的缓冲区，经解码后腾出缓冲区以供下一批数据的读取
@@ -51,6 +58,11 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	private SelectionKey readSelectionKey;
 
 	/**
+	 * 中断写操作
+	 */
+	private boolean writeInterrupted;
+
+	/**
 	 * Initializes a new instance of this class.
 	 *
 	 * @param group The provider that created this channel
@@ -66,8 +78,9 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			throws IOException {
 		super(group.provider());
 		this.isServerCreate = isServerCreate;
-
 		this.socketChannel = socketChannel;
+		readWorker = ((ImproveAsynchronousChannelGroupImpl) group).getReadWorker();
+		commonWorker = ((ImproveAsynchronousChannelGroupImpl) group).getCommonWorker();
 	}
 
 	@Override
@@ -122,6 +135,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			}
 		}
 		// 实现连接
+		System.out.println("connection is failed");
 		return null;
 	}
 
@@ -147,12 +161,25 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 							   A attachment,
 							   CompletionHandler<Integer, ? super A> handler)
 	{
-		supplier.get();
+		if (timeout > 0) {
+			throw new UnsupportedOperationException();
+		}
+		read0(supplier.get().buffer(), attachment, handler);
+	}
+
+	private <V extends Number, A> void read0(ByteBuffer readBuffer, A attachment, CompletionHandler<V, ? super A> handler) {
+		if (this.readCompletionHandler != null) {
+			throw new ReadPendingException();
+		}
+		this.readBuffer = readBuffer;
+		this.readAttachment = attachment;
+		this.readCompletionHandler = (CompletionHandler<Number, Object>) handler;
+		doRead();
 	}
 
 	@Override
 	public Future<Integer> read(ByteBuffer dst) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -164,7 +191,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 						 A attachment,
 						 CompletionHandler<Long, ? super A> handler)
 	{
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -179,7 +206,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 
 	@Override
 	public Future<Integer> write(ByteBuffer src) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -191,7 +218,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 						  A attachment,
 						  CompletionHandler<Long, ? super A> handler)
 	{
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -218,16 +245,50 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			this.readSelectionKey.cancel();
 			this.readSelectionKey = null;
 		}
-//		SelectionKey key = this.socketChannel.keyFor(commonWorker.selector);
-//		if (key != null) {
-//			key.cancel();
-//		}
+		SelectionKey key = this.socketChannel.keyFor(commonWorker.selector);
+		if (key != null) {
+			key.cancel();
+		}
 		if (exception != null) {
 			throw exception;
 		}
 	}
 
-	public void doRead(boolean b) {
+	public void doRead() {
+		try {
+			if (readCompletionHandler == null) {
+				return;
+			}
+
+			if (readSelectionKey == null) {
+				readWorker.addRegister(selector -> {
+					try {
+						readSelectionKey = socketChannel.register(selector, SelectionKey.OP_READ, ImproveAsynchronousSocketChannelImpl.this);
+					} catch (ClosedChannelException e) {
+						readCompletionHandler.failed(e, readAttachment);
+					}
+				});
+			} else {
+				ImproveAsynchronousChannelGroupImpl.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
+			}
+		} catch (Throwable e) {
+			if (readCompletionHandler == null) {
+				e.printStackTrace();
+				try {
+					close();
+				} catch (IOException ioException) {
+					ioException.printStackTrace();
+				}
+			} else {
+				readCompletionHandler.failed(e, readAttachment);
+			}
+		}
+	}
+
+	private void resetRead() {
+		readCompletionHandler = null;
+		readAttachment = null;
+		readBuffer = null;
 	}
 
 	public boolean doWrite() {
