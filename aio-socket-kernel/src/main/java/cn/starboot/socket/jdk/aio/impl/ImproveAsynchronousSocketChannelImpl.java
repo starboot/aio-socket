@@ -253,14 +253,30 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			throw exception;
 		}
 	}
-
+	private byte readInvoker = ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
 	public void doRead() {
 		try {
 			if (readCompletionHandler == null) {
 				return;
 			}
+			boolean directRead = readInvoker++ < ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
 
-			if (readSelectionKey == null) {
+			int readSize = 0;
+			boolean hasRemain = true;
+			if (directRead) {
+				readSize = socketChannel.read(readBuffer);
+				hasRemain = readBuffer.hasRemaining();
+			}
+			if (readSize != 0 || !hasRemain) {
+				CompletionHandler<Number, Object> completionHandler = readCompletionHandler;
+				Object attach = readAttachment;
+				resetRead();
+				completionHandler.completed(readSize, attach);
+
+				if (readCompletionHandler == null && readSelectionKey != null) {
+					ImproveAsynchronousChannelGroupImpl.removeOps(readSelectionKey, SelectionKey.OP_READ);
+				}
+			} else if (readSelectionKey == null) {
 				readWorker.addRegister(selector -> {
 					try {
 						readSelectionKey = socketChannel.register(selector, SelectionKey.OP_READ, ImproveAsynchronousSocketChannelImpl.this);
