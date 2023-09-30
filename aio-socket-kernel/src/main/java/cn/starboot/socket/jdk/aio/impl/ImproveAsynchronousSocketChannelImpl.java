@@ -62,6 +62,8 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	 */
 	private boolean writeInterrupted;
 
+	private final ImproveAsynchronousChannelGroup group;
+
 	/**
 	 * Initializes a new instance of this class.
 	 *
@@ -79,6 +81,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		super(group.provider());
 		this.isServerCreate = isServerCreate;
 		this.socketChannel = socketChannel;
+		this.group = group;
 		readWorker = ((ImproveAsynchronousChannelGroupImpl) group).getReadWorker();
 		commonWorker = ((ImproveAsynchronousChannelGroupImpl) group).getCommonWorker();
 	}
@@ -124,9 +127,9 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		return this.socketChannel.getRemoteAddress();
 	}
 
-	<A> Future<Void> implConnect(SocketAddress remote,
-								 A attachment,
-								 CompletionHandler<Void,? super A> handler) {
+	<A> void implConnect(SocketAddress remote,
+						 A attachment,
+						 CompletionHandler<Void,? super A> handler) {
 		if (isServerCreate) {
 			try {
 				throw new UnsupportedEncodingException("unsupported");
@@ -136,7 +139,41 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		}
 		// 实现连接
 		System.out.println("connection is failed");
-		return null;
+		if (this.group.isTerminated()) {
+			throw new ShutdownChannelGroupException();
+		}
+		if (socketChannel.isConnected()) {
+			throw new AlreadyConnectedException();
+		}
+		if (socketChannel.isConnectionPending()) {
+			throw new ConnectionPendingException();
+		}
+		doConnect(remote, attachment, handler);
+	}
+
+	public <A> void doConnect(SocketAddress remote, A attachment, CompletionHandler<Void, ? super A> completionHandler) {
+		try {
+			boolean connected = socketChannel.isConnectionPending();
+			if (connected || socketChannel.connect(remote)) {
+				connected = socketChannel.finishConnect();
+			}
+			//这行代码不要乱动
+			socketChannel.configureBlocking(false);
+			if (connected) {
+				completionHandler.completed(null, attachment);
+			} else {
+				commonWorker.addRegister(selector -> {
+					try {
+						socketChannel.register(selector, SelectionKey.OP_CONNECT, (Runnable) () -> doConnect(remote, attachment, completionHandler));
+					} catch (ClosedChannelException e) {
+						completionHandler.failed(e, attachment);
+					}
+				});
+			}
+		} catch (IOException e) {
+			completionHandler.failed(e, attachment);
+		}
+
 	}
 
 	@Override
@@ -151,7 +188,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 
 	@Override
 	public Future<Void> connect(SocketAddress remote) {
-		return implConnect(remote, null, null);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -172,6 +209,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			throw new ReadPendingException();
 		}
 		this.readBuffer = readBuffer;
+		this.readBuffer.flip();
 		this.readAttachment = attachment;
 		this.readCompletionHandler = (CompletionHandler<Number, Object>) handler;
 		doRead();
@@ -295,6 +333,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 					try {
 						readSelectionKey = socketChannel.register(selector, SelectionKey.OP_READ, ImproveAsynchronousSocketChannelImpl.this);
 					} catch (ClosedChannelException e) {
+						System.out.println("...............");
 						readCompletionHandler.failed(e, readAttachment);
 					}
 				});
@@ -302,6 +341,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				ImproveAsynchronousChannelGroupImpl.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
 			}
 		} catch (Throwable e) {
+			System.out.println("出错......................");
 			if (readCompletionHandler == null) {
 				e.printStackTrace();
 				try {

@@ -16,8 +16,7 @@
 package cn.starboot.socket;
 
 import cn.starboot.socket.core.ChannelContext;
-
-import java.nio.channels.AsynchronousSocketChannel;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 
 /**
  * 网络监控器
@@ -33,7 +32,7 @@ public interface Monitor {
      * @param channel                    当前已经建立连接的通道对象
      * @return AsynchronousSocketChannel 非null:接受该连接,null:拒绝该连接
      */
-    AsynchronousSocketChannel shouldAccept(AsynchronousSocketChannel channel);
+	ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel channel);
 
     /**
      * 监控触发本次读回调ChannelContext的已读数据字节数

@@ -18,6 +18,7 @@ package cn.starboot.socket.core;
 import cn.starboot.socket.enums.ChannelStatusEnum;
 import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.jdk.aio.ApplyAndRegister;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
@@ -54,7 +55,7 @@ final class TCPChannelContext extends ChannelContext {
 	/**
 	 * 底层通信channel对象
 	 */
-	private final AsynchronousSocketChannel channel;
+	private final ImproveAsynchronousSocketChannel channel;
 
 	/**
 	 * 输出信号量,防止并发write导致异常
@@ -106,7 +107,7 @@ final class TCPChannelContext extends ChannelContext {
 	 */
 	private AsyAioWorker aioWorker;
 
-	TCPChannelContext(AsynchronousSocketChannel channel,
+	TCPChannelContext(ImproveAsynchronousSocketChannel channel,
 					  final AioConfig config,
 					  ReadCompletionHandler readCompletionHandler,
 					  WriteCompletionHandler writeCompletionHandler,
@@ -123,7 +124,7 @@ final class TCPChannelContext extends ChannelContext {
 	 * @param writeCompletionHandler 写回调
 	 * @param memoryBlock            绑定内存页
 	 */
-	TCPChannelContext(AsynchronousSocketChannel channel,
+	TCPChannelContext(ImproveAsynchronousSocketChannel channel,
 					  final AioConfig config,
 					  ReadCompletionHandler readCompletionHandler,
 					  WriteCompletionHandler writeCompletionHandler,
@@ -163,9 +164,10 @@ final class TCPChannelContext extends ChannelContext {
 
 //		readSupplier = () -> { readBuffer = supplier.get(); return readBuffer; };
 
-		this.readBuffer = supplier.get();
-		this.readBuffer.buffer().flip();
-		signalRead(false);
+//		this.readBuffer = supplier.get();
+//		this.readBuffer.buffer().flip();
+//		signalRead(false);
+		continueRead();
 	}
 
 	/**
@@ -174,11 +176,14 @@ final class TCPChannelContext extends ChannelContext {
 	@Override
 	public void signalRead(boolean isFlip) {
 		int modCount = this.modCount;
-		flipRead(isFlip);
+
+		if (isFlip)
+			flipRead(isFlip);
 		if (status == ChannelStatusEnum.CHANNEL_STATUS_CLOSED) {
 			return;
 		}
 		final ByteBuffer readBuffer = this.readBuffer.buffer();
+		System.out.println("------------------>" + readBuffer.limit() + "-" + readBuffer.position());
 		final Handler handler = getAioConfig().getHandler();
 		while (readBuffer.hasRemaining() && status == ChannelStatusEnum.CHANNEL_STATUS_ENABLED) {
 			Packet packet = null;
@@ -225,20 +230,19 @@ final class TCPChannelContext extends ChannelContext {
 		} else {
 			readBuffer.compact();
 		}
-		continueRead(this.readBuffer);
+		continueRead();
 	}
 
 	/**
 	 * 触发通道读方法
 	 *
-	 * @param readBuffer 存放读出的数据buffer
 	 */
-	private void continueRead(MemoryUnit readBuffer) {
+	private void continueRead() {
 		Monitor monitor = getAioConfig().getMonitor();
 		if (monitor != null) {
 			monitor.beforeRead(this);
 		}
-		channel.read(readBuffer.buffer(), 0L, TimeUnit.MILLISECONDS, this, readCompletionHandler);
+		channel.read(readSupplier, 0L, TimeUnit.MILLISECONDS, this, readCompletionHandler);
 	}
 
 	/**
@@ -276,7 +280,7 @@ final class TCPChannelContext extends ChannelContext {
 		if (monitor != null) {
 			monitor.beforeWrite(this);
 		}
-		channel.write(writeBuffer.buffer(), 0L, TimeUnit.MILLISECONDS, this, writeCompletionHandler);
+		channel.write(writeBuffer, 0L, TimeUnit.MILLISECONDS, this, writeCompletionHandler);
 	}
 
 	private void flipRead(boolean eof) {

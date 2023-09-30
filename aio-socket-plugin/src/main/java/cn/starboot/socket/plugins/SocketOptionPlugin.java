@@ -44,11 +44,11 @@ public class SocketOptionPlugin extends AbstractPlugin {
         }
     }
 
-    @Override
-    public final AsynchronousSocketChannel shouldAccept(AsynchronousSocketChannel channel) {
-        setOption(channel);
-        return super.shouldAccept(channel);
-    }
+//    @Override
+//    public final AsynchronousSocketChannel shouldAccept(AsynchronousSocketChannel channel) {
+//        setOption(channel);
+//        return super.shouldAccept(channel);
+//    }
 
     /**
      * 往socket channel中设置option值。

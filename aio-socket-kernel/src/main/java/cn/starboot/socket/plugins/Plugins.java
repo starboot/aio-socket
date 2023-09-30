@@ -23,6 +23,7 @@ import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.intf.Handler;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.exception.AioDecoderException;
 
@@ -53,8 +54,8 @@ public class Plugins implements Handler, Monitor {
     private final Map<ProtocolEnum, AioHandler> handlers = new HashMap<>();
 
     @Override
-    public AsynchronousSocketChannel shouldAccept(AsynchronousSocketChannel channel) {
-        AsynchronousSocketChannel acceptChannel = channel;
+    public ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel channel) {
+		ImproveAsynchronousSocketChannel acceptChannel = channel;
         for (Plugin plugin : plugins) {
             acceptChannel = plugin.shouldAccept(acceptChannel);
             if (acceptChannel == null) {

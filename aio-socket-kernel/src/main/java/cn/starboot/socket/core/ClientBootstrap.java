@@ -17,12 +17,13 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.config.AioClientConfig;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.utils.ThreadUtils;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
-import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.utils.pool.memory.MemoryUnitFactory;
 import cn.starboot.socket.plugins.Plugins;
@@ -35,10 +36,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.SocketOption;
-import java.nio.channels.AsynchronousChannelGroup;
-import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -94,7 +92,7 @@ public class ClientBootstrap {
 	 * IO事件处理线程组。
 	 * 作为客户端，该AsynchronousChannelGroup只需保证2个长度的线程池大小即可满足通信读写所需。
 	 */
-	private AsynchronousChannelGroup asynchronousChannelGroup;
+	private ImproveAsynchronousChannelGroup asynchronousChannelGroup;
 
 	/**
 	 * 客户端服务配置。
@@ -123,15 +121,14 @@ public class ClientBootstrap {
 	/**
 	 * 启动客户端。
 	 * 本方法会构建线程数为threadNum的{@code asynchronousChannelGroup}
-	 * 并通过调用{@link cn.starboot.socket.core.ClientBootstrap#start(AsynchronousChannelGroup)}启动服务。
+	 * 并通过调用{@link cn.starboot.socket.core.ClientBootstrap#start(ImproveAsynchronousChannelGroup)}启动服务。
 	 *
 	 * @return 建立连接后的会话对象
 	 * @throws IOException IOException
-	 * @see cn.starboot.socket.core.ClientBootstrap#start(AsynchronousChannelGroup)
+	 * @see cn.starboot.socket.core.ClientBootstrap#start(ImproveAsynchronousChannelGroup)
 	 */
 	public final ChannelContext start() throws IOException {
-		AsynchronousChannelProvider provider = AsynchronousChannelProvider.provider();
-		this.asynchronousChannelGroup = provider.openAsynchronousChannelGroup(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
+		this.asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
 		return start(this.asynchronousChannelGroup);
 	}
 
@@ -145,7 +142,7 @@ public class ClientBootstrap {
 	 * @throws IOException IOException
 	 * @see java.nio.channels.AsynchronousSocketChannel#connect(SocketAddress)
 	 */
-	public ChannelContext start(AsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
+	public ChannelContext start(ImproveAsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
 		if (isInit) {
 			checkAndResetConfig();
 		}
@@ -193,10 +190,10 @@ public class ClientBootstrap {
 	 * @param handler                  异步回调
 	 * @throws IOException 网络IO异常
 	 */
-	private void start(AsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
+	private void start(ImproveAsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
 					   CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
 
-		AsynchronousSocketChannel socketChannel = AsynchronousSocketChannel.open(asynchronousChannelGroup);
+		ImproveAsynchronousSocketChannel socketChannel = ImproveAsynchronousSocketChannel.open(asynchronousChannelGroup);
 		if (this.memoryPool == null) {
 			this.memoryPool = getConfig().getMemoryPoolFactory().create();
 		}
@@ -209,11 +206,11 @@ public class ClientBootstrap {
 		if (this.localAddress != null) {
 			socketChannel.bind(this.localAddress);
 		}
-		socketChannel.connect(new InetSocketAddress(config.getHost(), config.getPort()), socketChannel, new CompletionHandler<Void, AsynchronousSocketChannel>() {
+		socketChannel.connect(new InetSocketAddress(config.getHost(), config.getPort()), socketChannel, new CompletionHandler<Void, ImproveAsynchronousSocketChannel>() {
 			@Override
-			public void completed(Void result, AsynchronousSocketChannel socketChannel) {
+			public void completed(Void result, ImproveAsynchronousSocketChannel socketChannel) {
 				try {
-					AsynchronousSocketChannel connectedChannel = socketChannel;
+					ImproveAsynchronousSocketChannel connectedChannel = socketChannel;
 					if (config.getMonitor() != null) {
 						connectedChannel = config.getMonitor().shouldAccept(socketChannel);
 					}
@@ -230,7 +227,7 @@ public class ClientBootstrap {
 			}
 
 			@Override
-			public void failed(Throwable exc, AsynchronousSocketChannel socketChannel) {
+			public void failed(Throwable exc, ImproveAsynchronousSocketChannel socketChannel) {
 				try {
 					handler.failed(exc, future);
 				} catch (Exception e) {

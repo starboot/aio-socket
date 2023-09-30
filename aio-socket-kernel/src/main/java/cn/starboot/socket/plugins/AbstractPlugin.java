@@ -18,6 +18,7 @@ package cn.starboot.socket.plugins;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.enums.StateMachineEnum;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 
 import java.nio.channels.AsynchronousSocketChannel;
 
@@ -49,7 +50,7 @@ public abstract class AbstractPlugin implements Plugin {
     }
 
     @Override
-    public AsynchronousSocketChannel shouldAccept(AsynchronousSocketChannel channel) {
+    public ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel channel) {
         return channel;
     }
 

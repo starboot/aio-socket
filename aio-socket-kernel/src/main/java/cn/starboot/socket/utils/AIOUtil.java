@@ -16,6 +16,7 @@
 package cn.starboot.socket.utils;
 
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class AIOUtil {
      *
      * @param channel 用户通道
      */
-    public static void close(AsynchronousSocketChannel channel) {
+    public static void close(ImproveAsynchronousSocketChannel channel) {
         boolean connected = true;
         try {
             channel.shutdownInput();

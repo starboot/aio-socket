@@ -110,6 +110,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 	}
 
 	public Worker getReadWorker() {
+		System.out.println(readWorkers.length);
 		return readWorkers[(readIndex.getAndIncrement() & Integer.MAX_VALUE) % readWorkers.length];
 	}
 
@@ -199,6 +200,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 					keySet.clear();
 				}
 			} catch (Exception e) {
+				System.out.println("这...");
 				e.printStackTrace();
 			} finally {
 				try {

@@ -20,6 +20,7 @@ import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.ClientBootstrap;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.utils.ThreadUtils;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
@@ -57,7 +58,7 @@ public class Client {
 
         Packet demoPacket = new StringPacket("hello aio-socket");
         ExecutorService groupExecutor = ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors());
-        AsynchronousChannelGroup asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(groupExecutor);
+		ImproveAsynchronousChannelGroup asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withThreadPool(groupExecutor);
         MemoryPoolFactory poolFactory = () -> new MemoryPool(32 * 1024 * 1024, 10, true);
         ClientHandler clientHandler = new ClientHandler();
         for (int i = 0; i < 10; i++) {
