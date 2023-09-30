@@ -74,7 +74,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 					ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
 					//直接调用interestOps的效果比 removeOps(selectionKey, SelectionKey.OP_WRITE) 更好
 					selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
-					while (asynchronousSocketChannel.doWrite()) ;
+					while (asynchronousSocketChannel.doWrite());
 				} else if (selectionKey.isAcceptable()) {
 					ImproveAsynchronousServerSocketChannelImpl serverSocketChannel = (ImproveAsynchronousServerSocketChannelImpl) selectionKey.attachment();
 					serverSocketChannel.doAccept();

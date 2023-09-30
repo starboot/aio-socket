@@ -201,7 +201,20 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 						  A attachment,
 						  CompletionHandler<Integer, ? super A> handler)
 	{
+		if (timeout > 0) {
+			throw new UnsupportedOperationException();
+		}
+		write0(src.buffer(), attachment, handler);
+	}
 
+	private <V extends Number, A> void write0(ByteBuffer writeBuffer, A attachment, CompletionHandler<V, ? super A> handler) {
+		if (this.writeCompletionHandler != null) {
+			throw new WritePendingException();
+		}
+		this.writeBuffer = writeBuffer;
+		this.writeAttachment = attachment;
+		this.writeCompletionHandler = (CompletionHandler<Number, Object>) handler;
+		while (doWrite()) ;
 	}
 
 	@Override
@@ -253,8 +266,9 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			throw exception;
 		}
 	}
+
 	private byte readInvoker = ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
-	public void doRead() {
+	public final void doRead() {
 		try {
 			if (readCompletionHandler == null) {
 				return;
@@ -307,7 +321,55 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		readBuffer = null;
 	}
 
-	public boolean doWrite() {
-		return true;
+	public final boolean doWrite() {
+		if (writeInterrupted) {
+			writeInterrupted = false;
+			return false;
+		}
+		try {
+			int writeSize = socketChannel.write(writeBuffer);
+
+			if (writeSize != 0 || !writeBuffer.hasRemaining()) {
+				CompletionHandler<Number, Object> completionHandler = writeCompletionHandler;
+				Object attach = writeAttachment;
+				resetWrite();
+				writeInterrupted = true;
+				completionHandler.completed(writeSize, attach);
+				if (!writeInterrupted) {
+					return true;
+				}
+				writeInterrupted = false;
+			} else {
+				SelectionKey commonSelectionKey = socketChannel.keyFor(commonWorker.selector);
+				if (commonSelectionKey == null) {
+					commonWorker.addRegister(selector -> {
+						try {
+							socketChannel.register(selector, SelectionKey.OP_WRITE, ImproveAsynchronousSocketChannelImpl.this);
+						} catch (ClosedChannelException e) {
+							writeCompletionHandler.failed(e, writeAttachment);
+						}
+					});
+				} else {
+					ImproveAsynchronousChannelGroupImpl.interestOps(commonWorker, commonSelectionKey, SelectionKey.OP_WRITE);
+				}
+			}
+		} catch (Throwable e) {
+			if (writeCompletionHandler == null) {
+				e.printStackTrace();
+				try {
+					close();
+				} catch (IOException ioException) {
+					ioException.printStackTrace();
+				}
+			} else {
+				writeCompletionHandler.failed(e, writeAttachment);
+			}
+		}
+		return false;
+	}
+	private void resetWrite() {
+		writeAttachment = null;
+		writeCompletionHandler = null;
+		writeBuffer = null;
 	}
 }
