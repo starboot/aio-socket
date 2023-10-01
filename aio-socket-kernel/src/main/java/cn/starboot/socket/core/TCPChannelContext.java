@@ -177,8 +177,7 @@ final class TCPChannelContext extends ChannelContext {
 	public void signalRead(boolean isFlip) {
 		int modCount = this.modCount;
 
-		if (isFlip)
-			flipRead(isFlip);
+		flipRead(isFlip);
 		if (status == ChannelStatusEnum.CHANNEL_STATUS_CLOSED) {
 			return;
 		}

@@ -112,7 +112,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 	}
 
 	public Worker getReadWorker() {
-		System.out.println(readWorkers.length);
+		System.out.println("获取ReadWorker次数：" + readWorkers.length);
 		return readWorkers[(readIndex.getAndIncrement() & Integer.MAX_VALUE) % readWorkers.length];
 	}
 
@@ -172,7 +172,6 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		Worker(Selector selector, Consumer<SelectionKey> consumer) {
 			this.selector = selector;
 			this.consumer = consumer;
-			System.out.println(Thread.currentThread().getName());
 		}
 
 		/**
@@ -191,14 +190,13 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 			Set<SelectionKey> keySet = selector.selectedKeys();
 			try {
 				while (running) {
-					System.out.println(22);
 					Consumer<Selector> selectorConsumer;
 					while ((selectorConsumer = consumers.poll()) != null) {
 						selectorConsumer.accept(selector);
 					}
-					System.out.println("select 一次： " + workerThread.getName() + "-" + workerThread.getId());
+					System.out.println("select 一次： " + workerThread.getName());
 					int select = selector.select();
-					System.out.println(select + "---");
+					System.out.println("select 所选中的： " + select + "次");
 
 					// 执行本次已触发待处理的事件
 					for (SelectionKey key : keySet) {
