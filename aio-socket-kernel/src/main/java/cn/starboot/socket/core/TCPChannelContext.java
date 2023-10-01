@@ -182,7 +182,6 @@ final class TCPChannelContext extends ChannelContext {
 			return;
 		}
 		final ByteBuffer readBuffer = this.readBuffer.buffer();
-		System.out.println("------------------>" + readBuffer.limit() + "-" + readBuffer.position());
 		final Handler handler = getAioConfig().getHandler();
 		while (readBuffer.hasRemaining() && status == ChannelStatusEnum.CHANNEL_STATUS_ENABLED) {
 			Packet packet = null;

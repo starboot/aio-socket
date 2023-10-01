@@ -53,7 +53,7 @@ public class Server {
 				.setMemoryPoolFactory(16 * 1024 * 1024, 10, true)
                 .setReadBufferSize(1024 * 1024)
                 .setWriteBufferSize(1024 * 4, 512)
-//                .addPlugin(new MonitorPlugin(5))
+                .addPlugin(new MonitorPlugin(5))
 				.setThreadNum(8, 8)
                 .start();
 

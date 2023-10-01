@@ -318,7 +318,6 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				readSize = socketChannel.read(readBuffer);
 				hasRemain = readBuffer.hasRemaining();
 			}
-			System.out.println(Thread.currentThread().getName() + "----" + readSize + "***********" + hasRemain + " " + readBuffer.position() + "-" + readBuffer.limit());
 			if (readSize != 0 || !hasRemain) {
 				CompletionHandler<Number, Object> completionHandler = readCompletionHandler;
 				Object attach = readAttachment;
@@ -329,13 +328,10 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 					ImproveAsynchronousChannelGroupImpl.removeOps(readSelectionKey, SelectionKey.OP_READ);
 				}
 			} else if (readSelectionKey == null) {
-				System.out.println("首次注册");
 				readWorker.addRegister(selector -> {
 					try {
-						System.out.println("易主次");
 						readSelectionKey = socketChannel.register(selector, SelectionKey.OP_READ, ImproveAsynchronousSocketChannelImpl.this);
 					} catch (ClosedChannelException e) {
-						System.out.println("...............");
 						readCompletionHandler.failed(e, readAttachment);
 					}
 				});
@@ -344,6 +340,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			}
 		} catch (Throwable e) {
 			System.out.println("出错......................");
+			e.printStackTrace();
 			if (readCompletionHandler == null) {
 				e.printStackTrace();
 				try {
