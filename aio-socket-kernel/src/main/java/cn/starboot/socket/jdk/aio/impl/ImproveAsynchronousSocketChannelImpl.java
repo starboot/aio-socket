@@ -138,7 +138,6 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			}
 		}
 		// 实现连接
-		System.out.println("connection is failed");
 		if (this.group.isTerminated()) {
 			throw new ShutdownChannelGroupException();
 		}
@@ -209,7 +208,6 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			throw new ReadPendingException();
 		}
 		if (this.readMemoryUnit == null) {
-			System.out.println("设置buffer");
 			this.readMemoryUnit = supplier.get();
 		}
 		this.readAttachment = attachment;

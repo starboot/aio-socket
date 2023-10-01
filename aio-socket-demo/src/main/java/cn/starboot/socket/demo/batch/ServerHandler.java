@@ -27,6 +27,6 @@ public class ServerHandler extends StringHandler {
 //		if (packet.getReq() != null)  {
 //			packet.setResp(packet.getReq());
 //		}
-        return null;
+        return packet;
     }
 }
