@@ -374,7 +374,7 @@ final class TCPChannelContext extends ChannelContext {
 			lock.unlock();
 		}
 		if (isFlush) {
-			flush();
+//			flush();
 		}
 		return true;
 	}
