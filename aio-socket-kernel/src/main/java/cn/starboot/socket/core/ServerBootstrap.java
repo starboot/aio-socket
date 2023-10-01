@@ -120,7 +120,7 @@ public class ServerBootstrap {
         startExecutorService();
         getConfig().initMemoryPoolFactory();
         start0(channel -> new TCPChannelContext(channel, getConfig(), this.aioReadCompletionHandler,
-                this.aioWriteCompletionHandler, this.memoryPool.allocateBufferPage(), null));
+                this.aioWriteCompletionHandler, this.memoryPool.allocateBufferPage()));
     }
 
     /**

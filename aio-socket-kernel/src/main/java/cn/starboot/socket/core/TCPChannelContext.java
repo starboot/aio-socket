@@ -107,14 +107,6 @@ final class TCPChannelContext extends ChannelContext {
 	 */
 	private AsyAioWorker aioWorker;
 
-	TCPChannelContext(ImproveAsynchronousSocketChannel channel,
-					  final AioConfig config,
-					  ReadCompletionHandler readCompletionHandler,
-					  WriteCompletionHandler writeCompletionHandler,
-					  MemoryBlock memoryBlock) {
-		this(channel, config, readCompletionHandler, writeCompletionHandler, memoryBlock, null);
-	}
-
 	/**
 	 * 构造通道上下文对象
 	 *
@@ -128,13 +120,11 @@ final class TCPChannelContext extends ChannelContext {
 					  final AioConfig config,
 					  ReadCompletionHandler readCompletionHandler,
 					  WriteCompletionHandler writeCompletionHandler,
-					  MemoryBlock memoryBlock,
-					  ExecutorService aioThreadPoolExecutor) {
+					  MemoryBlock memoryBlock) {
 		this.channel = channel;
 		this.readCompletionHandler = readCompletionHandler;
 		this.writeCompletionHandler = writeCompletionHandler;
 		this.aioConfig = config;
-		setAioExecutor(aioThreadPoolExecutor);
 
 		// Java8 函数式编程的无返回函数
 		Consumer<WriteBuffer> flushConsumer = var -> {
@@ -304,18 +294,6 @@ final class TCPChannelContext extends ChannelContext {
 	}
 
 	/**
-	 * 设置aio-socket线程池
-	 *
-	 * @param aioThreadPoolExecutor 线程池
-	 */
-	private void setAioExecutor(ExecutorService aioThreadPoolExecutor) {
-		if (getAioConfig().isServer() && aioThreadPoolExecutor != null) {
-//			this.aioWorker = new AioWorker(this, aioThreadPoolExecutor);
-			this.aioWorker = new AsyAioWorker(this, aioThreadPoolExecutor);
-		}
-	}
-
-	/**
 	 * 调用处理器
 	 *
 	 * @param packet 消息包
@@ -324,21 +302,6 @@ final class TCPChannelContext extends ChannelContext {
 		Packet handle = getAioConfig().getHandler().handle(this, packet);
 		if (handle != null) {
 			aioEncoder(handle, false, false);
-		}
-	}
-
-	/**
-	 * 调用解码处理器
-	 *
-	 * @param integer 读结果
-	 * @return 如果不存在解码处理器则返回false
-	 */
-	protected boolean aioDecoder(Integer integer) {
-		if (this.aioWorker != null) {
-			this.aioWorker.setResult(integer).execute();
-			return true;
-		} else {
-			return false;
 		}
 	}
 
