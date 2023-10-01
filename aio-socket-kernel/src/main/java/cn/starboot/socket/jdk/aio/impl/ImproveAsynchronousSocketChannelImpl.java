@@ -209,7 +209,6 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			throw new ReadPendingException();
 		}
 		this.readBuffer = readBuffer;
-//		this.readBuffer.flip();
 		this.readAttachment = attachment;
 		this.readCompletionHandler = (CompletionHandler<Number, Object>) handler;
 		doRead();

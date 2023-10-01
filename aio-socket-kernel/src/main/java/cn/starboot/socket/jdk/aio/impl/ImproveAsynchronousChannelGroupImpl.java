@@ -196,7 +196,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 					}
 					System.out.println("select 一次： " + workerThread.getName());
 					int select = selector.select();
-					System.out.println("select 所选中的： " + select + "次");
+					System.out.println("select 所选中的： " + select + "次" + " ,name: " + workerThread.getName());
 
 					// 执行本次已触发待处理的事件
 					for (SelectionKey key : keySet) {
