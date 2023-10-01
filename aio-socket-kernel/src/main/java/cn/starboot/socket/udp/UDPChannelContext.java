@@ -94,7 +94,7 @@ final class UDPChannelContext extends ChannelContext {
 	}
 
 	@Override
-	protected boolean aioEncoder(Packet packet, boolean isBlock) {
+	protected boolean aioEncoder(Packet packet, boolean isBlock, boolean isFlush) {
 		try {
 			synchronized (this) {
 				getAioConfig().getHandler().encode(packet, this);

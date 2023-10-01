@@ -207,6 +207,7 @@ final class TCPChannelContext extends ChannelContext {
 				return;
 			}
 		}
+		flush();
 		if (eof || status == ChannelStatusEnum.CHANNEL_STATUS_CLOSING) {
 			close(false);
 			handler.stateEvent(this, StateMachineEnum.INPUT_SHUTDOWN, null);
@@ -254,10 +255,10 @@ final class TCPChannelContext extends ChannelContext {
 	 */
 	void writeCompleted() {
 		if (writeBuffer == null) {
-			writeBuffer = byteBuf.pollItem();
+			writeBuffer = byteBuf.poll();
 		} else if (!writeBuffer.buffer().hasRemaining()) {
 			writeBuffer.clean();
-			writeBuffer = byteBuf.pollItem();
+			writeBuffer = byteBuf.poll();
 		}
 		if (writeBuffer != null) {
 			continueWrite(writeBuffer);
@@ -322,7 +323,7 @@ final class TCPChannelContext extends ChannelContext {
 	private void aioHandler(Packet packet) {
 		Packet handle = getAioConfig().getHandler().handle(this, packet);
 		if (handle != null) {
-			aioEncoder(handle, false);
+			aioEncoder(handle, false, false);
 		}
 	}
 
@@ -393,7 +394,7 @@ final class TCPChannelContext extends ChannelContext {
 	}
 
 	@Override
-	protected boolean aioEncoder(Packet packet, boolean isBlock) {
+	protected boolean aioEncoder(Packet packet, boolean isBlock, boolean isFlush) {
 		if (isInvalid()) {
 			return false;
 		}
@@ -409,7 +410,9 @@ final class TCPChannelContext extends ChannelContext {
 		} finally {
 			lock.unlock();
 		}
-//		flush();
+		if (isFlush) {
+			flush();
+		}
 		return true;
 	}
 

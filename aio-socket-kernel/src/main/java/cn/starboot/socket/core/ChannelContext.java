@@ -294,7 +294,7 @@ public abstract class ChannelContext {
     /**
      * 发送器
      */
-    protected abstract boolean aioEncoder(Packet packet, boolean isBlock);
+    protected abstract boolean aioEncoder(Packet packet, boolean isBlock, boolean isFlush);
 
 	/**
 	 * 同步等待读

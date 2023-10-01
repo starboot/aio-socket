@@ -1540,7 +1540,7 @@ public class Aio {
 		if (Objects.isNull(channelContext)) {
 			return false;
 		}
-		return channelContext.aioEncoder(packet, isBlock);
+		return channelContext.aioEncoder(packet, isBlock, true);
 	}
 
 	/**
