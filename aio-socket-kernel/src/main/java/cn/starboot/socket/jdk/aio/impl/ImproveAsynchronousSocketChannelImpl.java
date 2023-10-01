@@ -33,7 +33,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	/**
 	 * 用于接收 read 通道数据的缓冲区，经解码后腾出缓冲区以供下一批数据的读取
 	 */
-	private ByteBuffer readBuffer;
+	private MemoryUnit readMemoryUnit;
 	/**
 	 * 存放待输出数据的缓冲区
 	 */
@@ -208,9 +208,9 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		if (this.readCompletionHandler != null) {
 			throw new ReadPendingException();
 		}
-		if (this.readBuffer == null) {
+		if (this.readMemoryUnit == null) {
 			System.out.println("设置buffer");
-			this.readBuffer = supplier.get().buffer();
+			this.readMemoryUnit = supplier.get();
 		}
 		this.readAttachment = attachment;
 		this.readCompletionHandler = (CompletionHandler<Number, Object>) handler;
@@ -318,8 +318,8 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			int readSize = 0;
 			boolean hasRemain = true;
 			if (directRead) {
-				readSize = socketChannel.read(readBuffer);
-				hasRemain = readBuffer.hasRemaining();
+				readSize = socketChannel.read(readMemoryUnit.buffer());
+				hasRemain = readMemoryUnit.buffer().hasRemaining();
 			}
 			if (readSize != 0 || !hasRemain) {
 				CompletionHandler<Number, Object> completionHandler = readCompletionHandler;
@@ -362,7 +362,10 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	private void resetRead() {
 		readCompletionHandler = null;
 		readAttachment = null;
-//		readBuffer = null;
+		if (!readMemoryUnit.buffer().hasRemaining()) {
+			readMemoryUnit.clean();
+			readMemoryUnit = null;
+		}
 	}
 
 	public final boolean doWrite() {
