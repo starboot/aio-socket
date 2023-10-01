@@ -57,7 +57,6 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		this.readWorkers = new Worker[threadNum];
 		for (int i = 0; i < threadNum; i++) {
 			readWorkers[i] = new Worker(Selector.open(), selectionKey -> {
-				System.out.println("准备读.");
 				ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
 				asynchronousSocketChannel.doRead();
 			});
@@ -70,7 +69,6 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		this.commonWorkers = new Worker[commonThreadNum];
 
 		for (int i = 0; i < commonThreadNum; i++) {
-			System.out.println("创建...boss");
 			commonWorkers[i] = new Worker(Selector.open(), selectionKey -> {
 				if (selectionKey.isWritable()) {
 					ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
@@ -112,7 +110,6 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 	}
 
 	public Worker getReadWorker() {
-		System.out.println("获取ReadWorker次数：" + readWorkers.length);
 		return readWorkers[(readIndex.getAndIncrement() & Integer.MAX_VALUE) % readWorkers.length];
 	}
 
@@ -185,7 +182,6 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		@Override
 		public final void run() {
 			workerThread = Thread.currentThread();
-			System.out.println(workerThread.getName());
 			// 优先获取SelectionKey,若无关注事件触发则阻塞在selector.select(),减少select被调用次数
 			Set<SelectionKey> keySet = selector.selectedKeys();
 			try {
@@ -194,10 +190,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 					while ((selectorConsumer = consumers.poll()) != null) {
 						selectorConsumer.accept(selector);
 					}
-					System.out.println("select 一次： " + workerThread.getName());
-					int select = selector.select();
-					System.out.println("select 所选中的： " + select + "次" + " ,name: " + workerThread.getName());
-
+					selector.select();
 					// 执行本次已触发待处理的事件
 					for (SelectionKey key : keySet) {
 						consumer.accept(key);
@@ -205,7 +198,6 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 					keySet.clear();
 				}
 			} catch (Exception e) {
-				System.out.println("这...");
 				e.printStackTrace();
 			} finally {
 				try {
