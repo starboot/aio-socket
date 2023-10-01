@@ -29,7 +29,8 @@ public interface StateMachineEvent {
      * @see StateMachineEnum    状态机枚举
      */
     default void stateEvent(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
-        if (stateMachineEnum == StateMachineEnum.DECODE_EXCEPTION || stateMachineEnum == StateMachineEnum.PROCESS_EXCEPTION) {
+        if (stateMachineEnum == StateMachineEnum.DECODE_EXCEPTION || stateMachineEnum == StateMachineEnum.PROCESS_EXCEPTION
+		|| stateMachineEnum == StateMachineEnum.INPUT_EXCEPTION) {
             throwable.printStackTrace();
         }
     }

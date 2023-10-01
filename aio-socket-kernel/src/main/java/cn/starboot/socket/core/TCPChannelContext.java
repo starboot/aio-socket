@@ -160,9 +160,9 @@ final class TCPChannelContext extends ChannelContext {
 	 */
 	void initTCPChannelContext(Supplier<MemoryUnit> supplier) {
 
-		readSupplier = ((ApplyAndRegister<MemoryUnit>) supplier::get).andRegister(memoryUnit -> readBuffer = memoryUnit);
+//		readSupplier = ((ApplyAndRegister<MemoryUnit>) supplier::get).andRegister(memoryUnit -> readBuffer = memoryUnit);
 
-//		readSupplier = () -> { readBuffer = supplier.get(); return readBuffer; };
+		readSupplier = () -> { readBuffer = supplier.get(); return readBuffer; };
 
 //		this.readBuffer = supplier.get();
 //		this.readBuffer.buffer().flip();
@@ -197,6 +197,9 @@ final class TCPChannelContext extends ChannelContext {
 				e.printStackTrace();
 			}
 			if (packet == null) {
+//				if (!readBuffer.hasRemaining()) {
+//					this.readBuffer = null;
+//				}
 				break;
 			}
 			aioHandler(packet);
@@ -226,8 +229,10 @@ final class TCPChannelContext extends ChannelContext {
 			this.readBuffer = getVirtualBuffer(getAioConfig().getReadBufferSize());
 			this.readBuffer.buffer().clear();
 		} else {
+//			System.out.println("回味...");
 			readBuffer.compact();
 		}
+//		System.out.println("继续读..." + readBuffer.position() + "--" + readBuffer.limit() + " **** " + readBuffer.capacity());
 		continueRead();
 	}
 

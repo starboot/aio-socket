@@ -201,14 +201,17 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		if (timeout > 0) {
 			throw new UnsupportedOperationException();
 		}
-		read0(supplier.get().buffer(), attachment, handler);
+		read0(supplier, attachment, handler);
 	}
 
-	private <V extends Number, A> void read0(ByteBuffer readBuffer, A attachment, CompletionHandler<V, ? super A> handler) {
+	private <V extends Number, A> void read0(Supplier<MemoryUnit> supplier, A attachment, CompletionHandler<V, ? super A> handler) {
 		if (this.readCompletionHandler != null) {
 			throw new ReadPendingException();
 		}
-		this.readBuffer = readBuffer;
+		if (this.readBuffer == null) {
+			System.out.println("设置buffer");
+			this.readBuffer = supplier.get().buffer();
+		}
 		this.readAttachment = attachment;
 		this.readCompletionHandler = (CompletionHandler<Number, Object>) handler;
 		doRead();
@@ -359,7 +362,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	private void resetRead() {
 		readCompletionHandler = null;
 		readAttachment = null;
-		readBuffer = null;
+//		readBuffer = null;
 	}
 
 	public final boolean doWrite() {
