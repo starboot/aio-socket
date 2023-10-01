@@ -245,7 +245,7 @@ final class TCPChannelContext extends ChannelContext {
 		if (monitor != null) {
 			monitor.beforeRead(this);
 		}
-		channel.read(readSupplier, 0L, TimeUnit.MILLISECONDS, this, readCompletionHandler);
+		channel.read(readSupplier, this, readCompletionHandler);
 	}
 
 	/**
@@ -283,7 +283,7 @@ final class TCPChannelContext extends ChannelContext {
 		if (monitor != null) {
 			monitor.beforeWrite(this);
 		}
-		channel.write(writeBuffer, 0L, TimeUnit.MILLISECONDS, this, writeCompletionHandler);
+		channel.write(writeBuffer, this, writeCompletionHandler);
 	}
 
 	private void flipRead(boolean eof) {
@@ -409,7 +409,7 @@ final class TCPChannelContext extends ChannelContext {
 		} finally {
 			lock.unlock();
 		}
-		flush();
+//		flush();
 		return true;
 	}
 

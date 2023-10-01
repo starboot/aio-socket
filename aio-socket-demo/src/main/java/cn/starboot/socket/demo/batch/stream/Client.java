@@ -53,7 +53,7 @@ public class Client {
     public static void main(String[] args) throws IOException {
 
         Packet demoPacket = new StringPacket("hello aio-socket");
-		ImproveAsynchronousChannelGroup asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(2), 2);
+		ImproveAsynchronousChannelGroup asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors()), Runtime.getRuntime().availableProcessors());
         MemoryPoolFactory poolFactory = () -> new MemoryPool(32 * 1024 * 1024, 10, true);
         ClientHandler clientHandler = new ClientHandler();
         // 5000

@@ -120,7 +120,7 @@ public class ServerBootstrap {
         startExecutorService();
         getConfig().initMemoryPoolFactory();
         start0(channel -> new TCPChannelContext(channel, getConfig(), this.aioReadCompletionHandler,
-                this.aioWriteCompletionHandler, this.memoryPool.allocateBufferPage(), this.workerExecutorService));
+                this.aioWriteCompletionHandler, this.memoryPool.allocateBufferPage(), null));
     }
 
     /**
@@ -235,11 +235,11 @@ public class ServerBootstrap {
         }else {
             this.bossExecutorService = ThreadUtils.getGroupExecutor();
         }
-        if (getConfig().getWorkerThreadNumber() > 0) {
-            this.workerExecutorService = ThreadUtils.getAioExecutor(getConfig().getWorkerThreadNumber());
-        }else {
-            this.workerExecutorService = ThreadUtils.getAioExecutor();
-        }
+//        if (getConfig().getWorkerThreadNumber() > 0) {
+//            this.workerExecutorService = ThreadUtils.getAioExecutor(getConfig().getWorkerThreadNumber());
+//        }else {
+//            this.workerExecutorService = ThreadUtils.getAioExecutor();
+//        }
     }
 
     /**

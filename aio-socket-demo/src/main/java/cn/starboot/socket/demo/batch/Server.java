@@ -54,8 +54,10 @@ public class Server {
                 .setReadBufferSize(1024 * 1024)
                 .setWriteBufferSize(1024 * 4, 512)
                 .addPlugin(new MonitorPlugin(5))
-				.setThreadNum(8, 8)
+				.setThreadNum(Runtime.getRuntime().availableProcessors() + 1, 8)
                 .start();
+
+		System.out.println(Runtime.getRuntime().availableProcessors() + 1);
 
     }
 }

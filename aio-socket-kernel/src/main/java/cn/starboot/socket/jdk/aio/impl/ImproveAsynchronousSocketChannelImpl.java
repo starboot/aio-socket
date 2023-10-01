@@ -385,6 +385,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				}
 				writeInterrupted = false;
 			} else {
+//				System.out.println("注册");
 				SelectionKey commonSelectionKey = socketChannel.keyFor(commonWorker.selector);
 				if (commonSelectionKey == null) {
 					commonWorker.addRegister(selector -> {
