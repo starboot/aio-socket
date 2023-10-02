@@ -174,25 +174,37 @@ final class TCPChannelContext extends ChannelContext {
 		final ByteBuffer readBuffer = this.readBuffer.buffer();
 		final Handler handler = getAioConfig().getHandler();
 		while (readBuffer.hasRemaining() && status == ChannelStatusEnum.CHANNEL_STATUS_ENABLED) {
-			Packet packet = null;
-			try {
-				if (getOldByteBuffer().isEmpty()) {
-					packet = handler.decode(this.readBuffer, this);
-				} else {
-					getOldByteBuffer().offer(this.readBuffer);
-					packet = handler.decode(getOldByteBuffer().peek(), this);
-				}
-			} catch (AioDecoderException e) {
-				handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, e);
-				e.printStackTrace();
-			}
-			if (packet == null) {
+//			Packet packet = null;
+//			try {
+//				if (getOldByteBuffer().isEmpty()) {
+//					packet = handler.decode(this.readBuffer, this);
+//				} else {
+//					getOldByteBuffer().offer(this.readBuffer);
+//					packet = handler.decode(getOldByteBuffer().peek(), this);
+//				}
+//			} catch (AioDecoderException e) {
+//				handler.stateEvent(this, StateMachineEnum.DECODE_EXCEPTION, e);
+//				e.printStackTrace();
+//			}
+//			if (packet == null) {
+//				break;
+//			}
+//			aioHandler(packet);
+//			if (modCount != this.modCount) {
+//				return;
+//			}
+
+			byte[] aByte = getByte(this.readBuffer);
+			if (aByte == null) {
 				break;
 			}
-			aioHandler(packet);
-			if (modCount != this.modCount) {
-				return;
+			try {
+				byteBuf.writeInt(aByte.length);
+				byteBuf.write(aByte);
+			} catch (AioEncoderException e) {
+				e.printStackTrace();
 			}
+
 		}
 		flush();
 		if (eof || status == ChannelStatusEnum.CHANNEL_STATUS_CLOSING) {
@@ -224,6 +236,21 @@ final class TCPChannelContext extends ChannelContext {
 		continueRead();
 	}
 
+	private byte[] getByte(MemoryUnit memoryUnit) {
+		ByteBuffer buffer = memoryUnit.buffer();
+		int remaining = buffer.remaining();
+		if (remaining < Integer.BYTES) {
+			return null;
+		}
+		buffer.mark();
+		int length = buffer.getInt();
+		byte[] b = AIOUtil.getBytesFromByteBuffer(memoryUnit, length, Integer.BYTES, this);
+		if (b == null) {
+			buffer.reset();
+			return null;
+		}
+		return b;
+	}
 	/**
 	 * 触发通道读方法
 	 *
