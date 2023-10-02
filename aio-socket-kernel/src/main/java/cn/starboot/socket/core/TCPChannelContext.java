@@ -187,9 +187,6 @@ final class TCPChannelContext extends ChannelContext {
 				e.printStackTrace();
 			}
 			if (packet == null) {
-//				if (!readBuffer.hasRemaining()) {
-//					this.readBuffer = null;
-//				}
 				break;
 			}
 			aioHandler(packet);
