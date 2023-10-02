@@ -19,6 +19,7 @@ import cn.starboot.socket.enums.ChannelStatusEnum;
 import cn.starboot.socket.exception.AioEncoderException;
 import cn.starboot.socket.jdk.aio.ApplyAndRegister;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
+import cn.starboot.socket.plugins.AbstractPlugin;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
