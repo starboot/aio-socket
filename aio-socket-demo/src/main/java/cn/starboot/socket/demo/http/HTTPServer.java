@@ -21,6 +21,7 @@ public class HTTPServer {
         routeHandle.route("/", new HttpServerHandler() {
             @Override
             public void handle(HttpRequest request, HttpResponse response) throws IOException {
+				System.out.println("1111");
                 response.write("aio-socket HTTP Server".getBytes());
             }
         }).route("/test1", new HttpServerHandler() {

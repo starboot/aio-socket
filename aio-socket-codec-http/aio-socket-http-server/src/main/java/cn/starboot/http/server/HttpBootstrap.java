@@ -99,8 +99,8 @@ public class HttpBootstrap {
         if (configuration.isBannerEnabled() && LOGGER.isInfoEnabled()) {
 			LOGGER.info("\r\n" + HttpBanner.BANNER + "\r\n :: aio-socket http server :: (" + AioConfig.VERSION + ")");
         }
-//        server.setThreadNum(8);
         server.setReadBufferSize(configuration.getReadPageSize())
+				.setMemoryPoolFactory(16 * 1024 * 1024, 10, true)
 				.start();
     }
 

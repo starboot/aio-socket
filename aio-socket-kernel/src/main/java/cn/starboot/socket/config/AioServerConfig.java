@@ -7,7 +7,7 @@ public class AioServerConfig extends AioConfig {
 	/**
 	 * 内核IO线程池线程数量
 	 */
-	private int bossThreadNum;
+	private int bossThreadNum = Runtime.getRuntime().availableProcessors();
 
 
 	@Override
