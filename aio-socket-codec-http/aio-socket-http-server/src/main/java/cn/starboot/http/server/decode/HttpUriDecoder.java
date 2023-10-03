@@ -51,7 +51,6 @@ class HttpUriDecoder extends AbstractDecoder {
             } else {
                 HTTPRequestPacket.setServerHandler(uriTreeNode.getAttach());
             }
-
             switch (byteBuffer.get(byteBuffer.position() - 1)) {
                 case Constant.SP:
                     return protocolDecoder.decode(byteBuffer, channelContext, HTTPRequestPacket);

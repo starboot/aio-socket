@@ -203,12 +203,13 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		read0(supplier, attachment, handler);
 	}
 
+	private Supplier<MemoryUnit> supplier;
 	private <V extends Number, A> void read0(Supplier<MemoryUnit> supplier, A attachment, CompletionHandler<V, ? super A> handler) {
 		if (this.readCompletionHandler != null) {
 			throw new ReadPendingException();
 		}
-		if (this.readMemoryUnit == null) {
-			this.readMemoryUnit = supplier.get();
+		if (this.supplier == null) {
+			this.supplier = supplier;
 		}
 		this.readAttachment = attachment;
 		this.readCompletionHandler = (CompletionHandler<Number, Object>) handler;
@@ -317,6 +318,9 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			boolean hasRemain = true;
 			if (directRead) {
 				// 在这里申请内存
+				if (this.readMemoryUnit == null) {
+					this.readMemoryUnit = supplier.get();
+				}
 				readSize = socketChannel.read(readMemoryUnit.buffer());
 				hasRemain = readMemoryUnit.buffer().hasRemaining();
 			}

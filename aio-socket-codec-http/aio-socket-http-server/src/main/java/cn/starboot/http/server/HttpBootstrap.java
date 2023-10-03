@@ -100,7 +100,8 @@ public class HttpBootstrap {
 			LOGGER.info("\r\n" + HttpBanner.BANNER + "\r\n :: aio-socket http server :: (" + AioConfig.VERSION + ")");
         }
         server.setReadBufferSize(configuration.getReadPageSize())
-				.setMemoryPoolFactory(16 * 1024 * 1024, 10, true)
+				// 不知道为什么  HTTP 不支持直接内存 也就是零拷贝
+				.setMemoryPoolFactory(16 * 1024 * 1024, 10, false)
 				.start();
     }
 

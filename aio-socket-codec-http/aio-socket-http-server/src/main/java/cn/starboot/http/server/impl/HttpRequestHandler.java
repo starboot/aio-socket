@@ -91,7 +91,6 @@ public class HttpRequestHandler implements AioHandler {
         } else if (decodeChain == BODY_READY_DECODER) {
             return HTTPRequestPacket;
         }
-
         decodeChain = decodeChain.decode(readBuffer.buffer(), channelContext, HTTPRequestPacket);
         attachment.setDecoder(decodeChain);
         if (decodeChain == BODY_READY_DECODER) {

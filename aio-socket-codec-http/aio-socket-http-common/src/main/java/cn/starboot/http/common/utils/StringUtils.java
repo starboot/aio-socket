@@ -455,7 +455,7 @@ public class StringUtils {
     }
 
     public static <T> ByteTree<T> scanByteTree(ByteBuffer buffer, ByteTree.EndMatcher endMatcher, ByteTree<T> cache) {
-        int position = buffer.position() + buffer.arrayOffset();
+    	int position = buffer.position() + buffer.arrayOffset();
         int limit = buffer.limit() + buffer.arrayOffset();
         byte[] data = buffer.array();
         while (position < limit && data[position] == Constant.SP) {
