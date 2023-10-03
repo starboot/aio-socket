@@ -316,6 +316,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			int readSize = 0;
 			boolean hasRemain = true;
 			if (directRead) {
+				// 在这里申请内存
 				readSize = socketChannel.read(readMemoryUnit.buffer());
 				hasRemain = readMemoryUnit.buffer().hasRemaining();
 			}

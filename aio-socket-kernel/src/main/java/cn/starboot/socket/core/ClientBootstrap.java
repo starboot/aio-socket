@@ -17,6 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.config.AioClientConfig;
+import cn.starboot.socket.factory.ReadWriteBuffWithMemoryUnitFactory;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.utils.ThreadUtils;
@@ -41,6 +42,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -89,6 +91,16 @@ public class ClientBootstrap {
 	private final static int connectTimeout = 5000;
 
 	/**
+	 * 读完成处理类
+	 */
+	private ReadCompletionHandler aioReadCompletionHandler;
+
+	/**
+	 * 写完成处理类
+	 */
+	private WriteCompletionHandler aioWriteCompletionHandler;
+
+	/**
 	 * IO事件处理线程组。
 	 * 作为客户端，该AsynchronousChannelGroup只需保证2个长度的线程池大小即可满足通信读写所需。
 	 */
@@ -103,6 +115,20 @@ public class ClientBootstrap {
 	 * 构造虚拟缓冲区工厂
 	 */
 	private final MemoryUnitFactory readMemoryUnitFactory = memoryBlock -> memoryBlock.allocate(this.config.getReadBufferSize());
+
+	/**
+	 * socketChannel 和 ChannelContext联系
+	 */
+	private final ReadWriteBuffWithMemoryUnitFactory<ImproveAsynchronousSocketChannel, TCPChannelContext>
+			readWriteBuffWithMemoryUnitFactory = (improveAsynchronousSocketChannel) ->
+			new TCPChannelContext(improveAsynchronousSocketChannel,
+					getConfig(),
+					aioReadCompletionHandler,
+					aioWriteCompletionHandler,
+					memoryPool.allocateBufferPage());
+
+
+	private Function<ReadWriteBuff, Supplier<MemoryUnit>> applyAndRegisterFunction;
 
 	/**
 	 * 当前构造方法设置了启动Aio客户端的必要参数，基本实现开箱即用。
@@ -182,6 +208,7 @@ public class ClientBootstrap {
 		}
 	}
 
+
 	/**
 	 * 采用异步的方式启动客户端
 	 *
@@ -194,10 +221,13 @@ public class ClientBootstrap {
 					   CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
 
 		ImproveAsynchronousSocketChannel socketChannel = ImproveAsynchronousSocketChannel.open(asynchronousChannelGroup);
+		this.aioReadCompletionHandler = new ReadCompletionHandler();
+		this.aioWriteCompletionHandler = new WriteCompletionHandler();
 		if (this.memoryPool == null) {
 			this.memoryPool = getConfig().getMemoryPoolFactory().create();
 		}
-		Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
+		this.applyAndRegisterFunction = this.readWriteBuffWithMemoryUnitFactory.createFunction(readMemoryUnitFactory, memoryPool);
+//		Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
 		if (this.config.getSocketOptions() != null) {
 			for (Map.Entry<SocketOption<Object>, Object> entry : this.config.getSocketOptions().entrySet()) {
 				socketChannel.setOption(entry.getKey(), entry.getValue());
@@ -218,8 +248,8 @@ public class ClientBootstrap {
 						throw new RuntimeException("NetMonitor refuse channel");
 					}
 					//连接成功则构造AIOChannelContext对象
-					channelContext = new TCPChannelContext(connectedChannel, config, new ReadCompletionHandler(), new WriteCompletionHandler(), memoryPool.allocateBufferPage());
-					channelContext.initTCPChannelContext(supplier);
+					channelContext = readWriteBuffWithMemoryUnitFactory.convert(connectedChannel);
+					channelContext.initTCPChannelContext(applyAndRegisterFunction);
 					handler.completed(channelContext, future);
 				} catch (Exception e) {
 					failed(e, socketChannel);

@@ -35,6 +35,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -89,14 +90,9 @@ final class TCPChannelContext extends ChannelContext {
 	private InputStream inputStream;
 
 	/**
-	 * 存放刚读到的数据
+	 * 当前TCP私有输入输出buff
 	 */
-	private MemoryUnit readBuffer;
-
-	/**
-	 * 存放待发送的完整比特流
-	 */
-	private MemoryUnit writeBuffer;
+	private final ReadWriteBuff readWriteBuff;
 
 	/**
 	 * 消息解码逻辑执行器
@@ -121,17 +117,16 @@ final class TCPChannelContext extends ChannelContext {
 		this.readCompletionHandler = readCompletionHandler;
 		this.writeCompletionHandler = writeCompletionHandler;
 		this.aioConfig = config;
-
-		// Java8 函数式编程的无返回函数
+		this.readWriteBuff = new ReadWriteBuff();
 		Consumer<WriteBuffer> flushConsumer = var -> {
 			if (!semaphore.tryAcquire()) {
 				return;
 			}
-			this.writeBuffer = var.poll();
-			if (writeBuffer == null) {
+			readWriteBuff.setWriteBuffer(var.poll());
+			if (readWriteBuff.getWriteBuffer() == null) {
 				semaphore.release();
 			} else {
-				continueWrite(writeBuffer);
+				continueWrite(readWriteBuff.getWriteBuffer());
 			}
 		};
 		// 为当前ChannelContext添加对外输出流
@@ -141,14 +136,17 @@ final class TCPChannelContext extends ChannelContext {
 	}
 
 	private Supplier<MemoryUnit> readSupplier;
+
 	/**
 	 * 初始化TCPChannelContext
 	 */
-	void initTCPChannelContext(Supplier<MemoryUnit> supplier) {
+	void initTCPChannelContext(Function<ReadWriteBuff, Supplier<MemoryUnit>> applyAndRegisterFunction) {
 
 //		readSupplier = ((ApplyAndRegister<MemoryUnit>) supplier::get).andRegister(memoryUnit -> readBuffer = memoryUnit);
 
-		readSupplier = () -> { readBuffer = supplier.get(); return readBuffer; };
+//		readSupplier = () -> { readBuffer = supplier.get(); return readBuffer; };
+
+		readSupplier = applyAndRegisterFunction.apply(readWriteBuff);
 		continueRead();
 	}
 
@@ -163,15 +161,15 @@ final class TCPChannelContext extends ChannelContext {
 		if (status == ChannelStatusEnum.CHANNEL_STATUS_CLOSED) {
 			return;
 		}
-		final ByteBuffer readBuffer = this.readBuffer.buffer();
+		final ByteBuffer readBuffer = readWriteBuff.getReadBuffer().buffer();
 		final Handler handler = getAioConfig().getHandler();
 		while (readBuffer.hasRemaining() && status == ChannelStatusEnum.CHANNEL_STATUS_ENABLED) {
 			Packet packet = null;
 			try {
 				if (getOldByteBuffer().isEmpty()) {
-					packet = handler.decode(this.readBuffer, this);
+					packet = handler.decode(this.readWriteBuff.getReadBuffer(), this);
 				} else {
-					getOldByteBuffer().offer(this.readBuffer);
+					getOldByteBuffer().offer(this.readWriteBuff.getReadBuffer());
 					packet = handler.decode(getOldByteBuffer().peek(), this);
 				}
 			} catch (AioDecoderException e) {
@@ -204,10 +202,10 @@ final class TCPChannelContext extends ChannelContext {
 			}
 			if (getOldByteBuffer().isEmpty()) {
 				// 空间太小，申请一份空间继续读
-				getOldByteBuffer().offer(this.readBuffer);
+				getOldByteBuffer().offer(this.readWriteBuff.getReadBuffer());
 			}
-			this.readBuffer = getVirtualBuffer(getAioConfig().getReadBufferSize());
-			this.readBuffer.buffer().clear();
+			readWriteBuff.setReadBuffer(getVirtualBuffer(getAioConfig().getReadBufferSize()));
+			readBuffer.clear();
 		} else {
 			readBuffer.compact();
 		}
@@ -231,14 +229,14 @@ final class TCPChannelContext extends ChannelContext {
 	 * 需要调用控制同步
 	 */
 	void writeCompleted() {
-		if (writeBuffer == null) {
-			writeBuffer = byteBuf.poll();
-		} else if (!writeBuffer.buffer().hasRemaining()) {
-			writeBuffer.clean();
-			writeBuffer = byteBuf.poll();
+		if (readWriteBuff.getWriteBuffer() == null) {
+			readWriteBuff.setWriteBuffer(byteBuf.poll());
+		} else if (!readWriteBuff.getWriteBuffer().buffer().hasRemaining()) {
+			readWriteBuff.getWriteBuffer().clean();
+			readWriteBuff.setWriteBuffer(byteBuf.poll());
 		}
-		if (writeBuffer != null) {
-			continueWrite(writeBuffer);
+		if (readWriteBuff.getWriteBuffer() != null) {
+			continueWrite(readWriteBuff.getWriteBuffer());
 			return;
 		}
 		semaphore.release();
@@ -266,7 +264,7 @@ final class TCPChannelContext extends ChannelContext {
 
 	private void flipRead(boolean eof) {
 		this.eof = eof;
-		this.readBuffer.buffer().flip();
+		this.readWriteBuff.getReadBuffer().buffer().flip();
 	}
 
 	/**
@@ -301,19 +299,19 @@ final class TCPChannelContext extends ChannelContext {
 		if (immediate) {
 			try {
 				this.byteBuf.close();
-				if (readBuffer != null) {
-					readBuffer.clean();
-					readBuffer = null;
+				if (readWriteBuff.getReadBuffer() != null) {
+					readWriteBuff.getReadBuffer().clean();
+					readWriteBuff.setReadBuffer(null);
 				}
-				if (writeBuffer != null) {
-					writeBuffer.clean();
-					writeBuffer = null;
+				if (readWriteBuff.getWriteBuffer() != null) {
+					readWriteBuff.getWriteBuffer().clean();
+					readWriteBuff.setWriteBuffer(null);
 				}
 			} finally {
 				AIOUtil.close(channel);
 				getAioConfig().getHandler().stateEvent(this, StateMachineEnum.CHANNEL_CLOSED, null);
 			}
-		} else if ((writeBuffer == null || !writeBuffer.buffer().hasRemaining()) && byteBuf.isEmpty()) {
+		} else if ((readWriteBuff.getWriteBuffer() == null || !readWriteBuff.getWriteBuffer().buffer().hasRemaining()) && byteBuf.isEmpty()) {
 			close(true);
 		} else {
 			getAioConfig().getHandler().stateEvent(this, StateMachineEnum.CHANNEL_CLOSING, null);
@@ -368,7 +366,7 @@ final class TCPChannelContext extends ChannelContext {
 
 	@Override
 	public MemoryUnit getReadBuffer() {
-		return this.readBuffer;
+		return this.readWriteBuff.getReadBuffer();
 	}
 
 	@Override
@@ -380,7 +378,7 @@ final class TCPChannelContext extends ChannelContext {
 	 * 同步读取数据
 	 */
 	private int synRead() throws IOException {
-		ByteBuffer buffer = readBuffer.buffer();
+		ByteBuffer buffer = this.readWriteBuff.getReadBuffer().buffer();
 		if (buffer.remaining() > 0) {
 			return 0;
 		}
@@ -449,7 +447,7 @@ final class TCPChannelContext extends ChannelContext {
 			if (remainLength == 0) {
 				return -1;
 			}
-			ByteBuffer readBuffer = TCPChannelContext.this.readBuffer.buffer();
+			ByteBuffer readBuffer = TCPChannelContext.this.readWriteBuff.getReadBuffer().buffer();
 			if (readBuffer.hasRemaining()) {
 				remainLength--;
 				return readBuffer.get();
@@ -475,7 +473,7 @@ final class TCPChannelContext extends ChannelContext {
 			if (remainLength > 0 && remainLength < len) {
 				len = remainLength;
 			}
-			ByteBuffer readBuffer = TCPChannelContext.this.readBuffer.buffer();
+			ByteBuffer readBuffer = TCPChannelContext.this.readWriteBuff.getReadBuffer().buffer();
 			int size = 0;
 			while (len > 0 && synRead() != -1) {
 				int readSize = Math.min(readBuffer.remaining(), len);
@@ -496,7 +494,7 @@ final class TCPChannelContext extends ChannelContext {
 				remainLength = 0;
 				return remainLength;
 			}
-			ByteBuffer readBuffer = TCPChannelContext.this.readBuffer.buffer();
+			ByteBuffer readBuffer = TCPChannelContext.this.readWriteBuff.getReadBuffer().buffer();
 			if (remainLength < -1) {
 				return readBuffer.remaining();
 			} else {
