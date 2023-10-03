@@ -340,7 +340,6 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				ImproveAsynchronousChannelGroupImpl.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
 			}
 		} catch (Throwable e) {
-			System.out.println("出错......................");
 			e.printStackTrace();
 			if (readCompletionHandler == null) {
 				e.printStackTrace();

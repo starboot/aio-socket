@@ -17,9 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ChannelStatusEnum;
 import cn.starboot.socket.exception.AioEncoderException;
-import cn.starboot.socket.jdk.aio.ApplyAndRegister;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
-import cn.starboot.socket.plugins.AbstractPlugin;
 import cn.starboot.socket.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.Packet;
@@ -33,12 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -156,10 +149,6 @@ final class TCPChannelContext extends ChannelContext {
 //		readSupplier = ((ApplyAndRegister<MemoryUnit>) supplier::get).andRegister(memoryUnit -> readBuffer = memoryUnit);
 
 		readSupplier = () -> { readBuffer = supplier.get(); return readBuffer; };
-
-//		this.readBuffer = supplier.get();
-//		this.readBuffer.buffer().flip();
-//		signalRead(false);
 		continueRead();
 	}
 
