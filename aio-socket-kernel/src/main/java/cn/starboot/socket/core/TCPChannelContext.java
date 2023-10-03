@@ -360,11 +360,11 @@ final class TCPChannelContext extends ChannelContext {
 			return false;
 		}
 		try {
+			// 这里的锁防止 多线程同时往writeBuffer里面写
 			lock.lock();
 //			synchronized (this) {
 				getAioConfig().getHandler().encode(packet, this);
 //			}
-//			flush();
 		} catch (AioEncoderException e) {
 			Aio.close(this);
 			return false;
@@ -372,7 +372,7 @@ final class TCPChannelContext extends ChannelContext {
 			lock.unlock();
 		}
 		if (isFlush) {
-//			flush();
+			flush();
 		}
 		return true;
 	}
