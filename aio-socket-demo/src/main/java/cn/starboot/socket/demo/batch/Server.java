@@ -21,24 +21,22 @@ import cn.starboot.socket.utils.pool.memory.MemoryPool;
 
 /**
  * 性能：
- * 消息处理量：300万/秒
- * 流量流动量：284MB/sec (input, output)  max=300MB/s
  * ------------------------------------------------
  * 			aio-socket performance
  * -------------------in 5 sec --------------------
- * inflow:				1104.983139038086(MB)
- * outflow:			    1104.6816596984863(MB)
+ * inflow:				2352.982048034668(MB)
+ * outflow:			    2352.755474090576(MB)
  * process fail:		0
- * process count:		57917126
- * process total:		732974447
- * read count:			1105
- * write count:		    283043
+ * process count:		26813951
+ * process total:		282750775
+ * read count:			18822
+ * write count:		    611264
  * connect count:		0
  * disconnect count:	0
- * online count:		10
+ * online count:		9
  * connected total:	    10
- * Requests/sec:		1.15834252E7
- * Transfer/sec:		220.9966278076172(MB)
+ * Requests/sec:		5362790.2
+ * Transfer/sec:		470.5964096069336(MB)
  * ------------------------------------------------
  */
 public class Server {
