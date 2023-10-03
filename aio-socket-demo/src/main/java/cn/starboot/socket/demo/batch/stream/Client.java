@@ -70,12 +70,10 @@ public class Client {
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
                 bootstrap.setBufferFactory(1024 * 1024 * 4, 10, true)
                         .setReadBufferSize(1024 * 1024)
-						.setThreadNum(8)
                         .setWriteBufferSize(1024 * 1024, 512)
                 ;
                 try {
                     ChannelContext start = bootstrap.start(asynchronousChannelGroup);
-					System.out.println(start.getAioConfig().getBossThreadNumber());
                     while (true) {
                         Aio.send(start, demoPacket);
                     }
