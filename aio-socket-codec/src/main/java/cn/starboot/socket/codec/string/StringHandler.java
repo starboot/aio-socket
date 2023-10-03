@@ -73,19 +73,25 @@ public abstract class StringHandler implements AioHandler {
             return null;
         }
         // 不使用UTF_8性能会提升8%
-        return charsets != null ? new StringPacket(new String(b, charsets)) : new StringPacket(new String(b));
+		Packet packet = new Packet();
+		packet.setTestData(b);
+		return packet;
+//		return charsets != null ? new StringPacket(new String(b, charsets)) : new StringPacket(new String(b));
     }
 
     @Override
     public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
         WriteBuffer writeBuffer = channelContext.getWriteBuffer();
-        if (packet instanceof StringPacket) {
-			StringPacket packet1 = (StringPacket) packet;
-			writeBuffer.writeInt(packet1.getData().getBytes().length);
-			writeBuffer.write(packet1.getData().getBytes());
-		}else {
-			throw new AioEncoderException("String Protocol encode failed because of the Packet is not StringPacket.");
-		}
+		byte[] testData = packet.getTestData();
+		writeBuffer.writeInt(testData.length);
+		writeBuffer.write(testData);
+//        if (packet instanceof StringPacket) {
+//			StringPacket packet1 = (StringPacket) packet;
+//			writeBuffer.writeInt(packet1.getData().getBytes().length);
+//			writeBuffer.write(packet1.getData().getBytes());
+//		}else {
+//			throw new AioEncoderException("String Protocol encode failed because of the Packet is not StringPacket.");
+//		}
 
     }
 

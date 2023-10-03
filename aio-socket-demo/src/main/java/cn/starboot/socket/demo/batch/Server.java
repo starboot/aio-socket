@@ -21,8 +21,8 @@ import cn.starboot.socket.utils.pool.memory.MemoryPool;
 
 /**
  * 性能：
- * 消息处理量：1158万/秒
- * 流量流动量：284MB/sec (input, output)
+ * 消息处理量：300万/秒
+ * 流量流动量：284MB/sec (input, output)  max=300MB/s
  * ------------------------------------------------
  * 			aio-socket performance
  * -------------------in 5 sec --------------------

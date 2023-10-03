@@ -69,6 +69,16 @@ public class Packet implements Serializable {
 	 */
 	protected JSONObject extras;
 
+	private byte[] testData;
+
+	public byte[] getTestData() {
+		return testData;
+	}
+
+	public void setTestData(byte[] testData) {
+		this.testData = testData;
+	}
+
 	public Packet() {
 	}
 

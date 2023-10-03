@@ -27,6 +27,15 @@ public class ServerHandler extends StringHandler {
 //		if (packet.getReq() != null)  {
 //			packet.setResp(packet.getReq());
 //		}
+		System.out.println("进来");
         return packet;
     }
+
+	@Override
+	public Packet handle(ChannelContext channelContext, Packet packet) {
+//		if (packet instanceof StringPacket) {
+//			return handle(channelContext, (StringPacket) packet);
+//		}
+		return packet;
+	}
 }
