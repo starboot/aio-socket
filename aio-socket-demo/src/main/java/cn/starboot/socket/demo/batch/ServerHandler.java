@@ -16,26 +16,14 @@
 package cn.starboot.socket.demo.batch;
 
 import cn.starboot.socket.Packet;
-import cn.starboot.socket.codec.string.StringHandler;
-import cn.starboot.socket.codec.string.StringPacket;
+import cn.starboot.socket.codec.bytes.BytesHandler;
+import cn.starboot.socket.codec.bytes.BytesPacket;
 import cn.starboot.socket.core.ChannelContext;
 
-public class ServerHandler extends StringHandler {
+public class ServerHandler extends BytesHandler {
 
 	@Override
-    public Packet handle(ChannelContext channelContext, StringPacket packet) {
-//		if (packet.getReq() != null)  {
-//			packet.setResp(packet.getReq());
-//		}
-		System.out.println("进来");
-        return packet;
-    }
-
-	@Override
-	public Packet handle(ChannelContext channelContext, Packet packet) {
-//		if (packet instanceof StringPacket) {
-//			return handle(channelContext, (StringPacket) packet);
-//		}
+	public Packet handle(ChannelContext channelContext, BytesPacket packet) {
 		return packet;
 	}
 }
