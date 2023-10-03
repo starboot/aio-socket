@@ -67,6 +67,8 @@ public class HTTPServer {
 		bootstrap.setPort(8080)
 				.addHandler(routeHandle)
 				.addHandler(wsRouteHandle);
+
+
         bootstrap.start();
     }
 }
