@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -245,6 +247,10 @@ final class TCPChannelContext extends ChannelContext {
 		}
 		buffer.mark();
 		int length = buffer.getInt();
+		if (buffer.remaining() < length) {
+			buffer.reset();
+			return null;
+		}
 		byte[] b = AIOUtil.getBytesFromByteBuffer(memoryUnit, length, Integer.BYTES, this);
 		if (b == null) {
 			buffer.reset();
@@ -252,6 +258,7 @@ final class TCPChannelContext extends ChannelContext {
 		}
 		return b;
 	}
+
 	/**
 	 * 触发通道读方法
 	 *
