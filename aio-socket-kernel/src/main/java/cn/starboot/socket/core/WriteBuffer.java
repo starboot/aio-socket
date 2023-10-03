@@ -273,6 +273,7 @@ public final class WriteBuffer {
             consumer.accept(this);
             return;
         }
+        // writeInBuf.buffer()可能为空
         if (writeInBuf != null && writeInBuf.buffer().position() > 0) {
             consumer.accept(this);
         }

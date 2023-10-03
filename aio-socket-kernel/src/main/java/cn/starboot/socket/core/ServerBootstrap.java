@@ -290,11 +290,10 @@ public class ServerBootstrap {
 	 * 设置线程池线程数量
 	 *
 	 * @param bossThreadNum   内核IO线程数量
-	 * @param workerThreadNum 普通作业线程数量
 	 * @return ServerBootstrap 对象
 	 */
-	public ServerBootstrap setThreadNum(int bossThreadNum, int workerThreadNum) {
-		getConfig().setBossThreadNumber(bossThreadNum).setWorkerThreadNumber(workerThreadNum);
+	public ServerBootstrap setThreadNum(int bossThreadNum) {
+		getConfig().setBossThreadNumber(bossThreadNum);
 		return this;
 	}
 

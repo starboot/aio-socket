@@ -278,13 +278,9 @@ public abstract class AioConfig {
 
 	public abstract boolean isServer();
 
-	public abstract AioConfig setBossThreadNumber(int bossThreadNumber);
-
-	public abstract void setWorkerThreadNumber(int workerThreadNumber);
+	public abstract void setBossThreadNumber(int bossThreadNumber);
 
 	public abstract int getBossThreadNumber();
-
-	public abstract int getWorkerThreadNumber();
 
 	@Override
 	public String toString() {
@@ -303,7 +299,6 @@ public abstract class AioConfig {
 				", memoryBlockNum=" + memoryBlockNum +
 				", memoryBlockSize=" + memoryBlockSize +
 				", bossThreadNum=" + getBossThreadNumber() +
-				", workerThreadNum=" + getWorkerThreadNumber() +
 				'}';
 	}
 }

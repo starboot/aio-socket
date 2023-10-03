@@ -20,13 +20,8 @@ public class AioClientConfig extends AioConfig {
 	}
 
 	@Override
-	public AioConfig setBossThreadNumber(int bossThreadNumber) {
+	public void setBossThreadNumber(int bossThreadNumber) {
 		this.bossThreadNumber = bossThreadNumber;
-		return this;
-	}
-
-	@Override
-	public void setWorkerThreadNumber(int workerThreadNumber) {
 	}
 
 	@Override
@@ -34,8 +29,4 @@ public class AioClientConfig extends AioConfig {
 		return this.bossThreadNumber;
 	}
 
-	@Override
-	public int getWorkerThreadNumber() {
-		return 0;
-	}
 }

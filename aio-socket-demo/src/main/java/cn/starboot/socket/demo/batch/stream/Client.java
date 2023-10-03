@@ -47,6 +47,15 @@ import java.util.concurrent.ExecutorService;
  * Requests/sec:		3241583.4
  * Transfer/sec:		284.5852798461914(MB)
  * ------------------------------------------------
+ *
+ * Exception in thread "Thread-4" java.lang.NullPointerException
+ * 	at cn.starboot.socket.core.WriteBuffer.flush(WriteBuffer.java:276)
+ * 	at cn.starboot.socket.core.ChannelContext.flush(ChannelContext.java:135)
+ * 	at cn.starboot.socket.core.TCPChannelContext.aioEncoder(TCPChannelContext.java:362)
+ * 	at cn.starboot.socket.core.Aio.send0(Aio.java:1543)
+ * 	at cn.starboot.socket.core.Aio.send(Aio.java:1526)
+ * 	at cn.starboot.socket.demo.batch.stream.Client.lambda$main$0(Client.java:71)
+ * 	at java.lang.Thread.run(Thread.java:748)
  */
 public class Client {
 
@@ -66,6 +75,7 @@ public class Client {
                 ;
                 try {
                     ChannelContext start = bootstrap.start(asynchronousChannelGroup);
+					System.out.println(start.getAioConfig().getBossThreadNumber());
                     while (true) {
                         Aio.send(start, demoPacket);
                     }

@@ -9,10 +9,6 @@ public class AioServerConfig extends AioConfig {
 	 */
 	private int bossThreadNum;
 
-	/**
-	 * 作业任务线程池线程数量
-	 */
-	private int workerThreadNum;
 
 	@Override
 	public String getName() {
@@ -25,14 +21,8 @@ public class AioServerConfig extends AioConfig {
 	}
 
 	@Override
-	public AioConfig setBossThreadNumber(int bossThreadNumber) {
+	public void setBossThreadNumber(int bossThreadNumber) {
 		this.bossThreadNum = bossThreadNumber;
-		return this;
-	}
-
-	@Override
-	public void setWorkerThreadNumber(int workerThreadNumber) {
-		this.workerThreadNum = workerThreadNumber;
 	}
 
 	@Override
@@ -40,8 +30,4 @@ public class AioServerConfig extends AioConfig {
 		return this.bossThreadNum;
 	}
 
-	@Override
-	public int getWorkerThreadNumber() {
-		return this.workerThreadNum;
-	}
 }
