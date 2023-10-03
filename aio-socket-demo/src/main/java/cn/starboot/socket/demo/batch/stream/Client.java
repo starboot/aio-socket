@@ -54,14 +54,12 @@ public class Client {
 
         Packet demoPacket = new StringPacket("hello aio-socket");
 		ImproveAsynchronousChannelGroup asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors()), Runtime.getRuntime().availableProcessors());
-        MemoryPoolFactory poolFactory = () -> new MemoryPool(32 * 1024 * 1024, 10, true);
         ClientHandler clientHandler = new ClientHandler();
-        // 5000
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 // 127.0.0.1
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
-                bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)
+                bootstrap.setBufferFactory(1024 * 1024 * 4, 10, true)
                         .setReadBufferSize(1024 * 1024)
 						.setThreadNum(8)
                         .setWriteBufferSize(1024 * 1024, 512)
