@@ -8,7 +8,7 @@ import cn.starboot.socket.utils.pool.memory.MemoryUnitFactory;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public interface ReadWriteBuffWithMemoryUnitFactory<T, R> {
+public interface BootstrapFunction<T, R> {
 
 	R convert(T t);
 

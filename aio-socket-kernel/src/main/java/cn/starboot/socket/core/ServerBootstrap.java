@@ -16,7 +16,7 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.config.AioServerConfig;
-import cn.starboot.socket.factory.ReadWriteBuffWithMemoryUnitFactory;
+import cn.starboot.socket.factory.BootstrapFunction;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousServerSocketChannel;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
@@ -95,8 +95,8 @@ public class ServerBootstrap {
 	/**
 	 * socketChannel 和 ChannelContext联系
 	 */
-	private final ReadWriteBuffWithMemoryUnitFactory<ImproveAsynchronousSocketChannel, TCPChannelContext>
-			readWriteBuffWithMemoryUnitFactory = (improveAsynchronousSocketChannel) ->
+	private final BootstrapFunction<ImproveAsynchronousSocketChannel, TCPChannelContext>
+			bootstrapFunction = (improveAsynchronousSocketChannel) ->
 			new TCPChannelContext(improveAsynchronousSocketChannel,
 					getConfig(),
 					aioReadCompletionHandler,
@@ -139,7 +139,7 @@ public class ServerBootstrap {
 			if (this.memoryPool == null) {
 				this.memoryPool = getConfig().getMemoryPoolFactory().create();
 			}
-			this.applyAndRegisterFunction = this.readWriteBuffWithMemoryUnitFactory.createFunction(readMemoryUnitFactory, memoryPool);
+			this.applyAndRegisterFunction = this.bootstrapFunction.createFunction(readMemoryUnitFactory, memoryPool);
 			this.asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(this.bossExecutorService, getConfig().getBossThreadNumber());
 			this.serverSocketChannel = ImproveAsynchronousServerSocketChannel.open(this.asynchronousChannelGroup);
 			if (getConfig().getSocketOptions() != null) {
@@ -204,7 +204,7 @@ public class ServerBootstrap {
 			}
 			if (acceptChannel != null) {
 				acceptChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-				context = this.readWriteBuffWithMemoryUnitFactory.convert(acceptChannel);
+				context = this.bootstrapFunction.convert(acceptChannel);
 				context.initTCPChannelContext(applyAndRegisterFunction);
 			} else {
 				AIOUtil.close(channel);

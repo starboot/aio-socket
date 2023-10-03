@@ -17,7 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.config.AioClientConfig;
-import cn.starboot.socket.factory.ReadWriteBuffWithMemoryUnitFactory;
+import cn.starboot.socket.factory.BootstrapFunction;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.utils.ThreadUtils;
@@ -119,8 +119,8 @@ public class ClientBootstrap {
 	/**
 	 * socketChannel 和 ChannelContext联系
 	 */
-	private final ReadWriteBuffWithMemoryUnitFactory<ImproveAsynchronousSocketChannel, TCPChannelContext>
-			readWriteBuffWithMemoryUnitFactory = (improveAsynchronousSocketChannel) ->
+	private final BootstrapFunction<ImproveAsynchronousSocketChannel, TCPChannelContext>
+			bootstrapFunction = (improveAsynchronousSocketChannel) ->
 			new TCPChannelContext(improveAsynchronousSocketChannel,
 					getConfig(),
 					aioReadCompletionHandler,
@@ -226,7 +226,7 @@ public class ClientBootstrap {
 		if (this.memoryPool == null) {
 			this.memoryPool = getConfig().getMemoryPoolFactory().create();
 		}
-		this.applyAndRegisterFunction = this.readWriteBuffWithMemoryUnitFactory.createFunction(readMemoryUnitFactory, memoryPool);
+		this.applyAndRegisterFunction = this.bootstrapFunction.createFunction(readMemoryUnitFactory, memoryPool);
 //		Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
 		if (this.config.getSocketOptions() != null) {
 			for (Map.Entry<SocketOption<Object>, Object> entry : this.config.getSocketOptions().entrySet()) {
@@ -248,7 +248,7 @@ public class ClientBootstrap {
 						throw new RuntimeException("NetMonitor refuse channel");
 					}
 					//连接成功则构造AIOChannelContext对象
-					channelContext = readWriteBuffWithMemoryUnitFactory.convert(connectedChannel);
+					channelContext = bootstrapFunction.convert(connectedChannel);
 					channelContext.initTCPChannelContext(applyAndRegisterFunction);
 					handler.completed(channelContext, future);
 				} catch (Exception e) {
