@@ -101,7 +101,7 @@ public class HttpBootstrap {
         }
         server.setReadBufferSize(configuration.getReadPageSize())
 				// 不知道为什么  HTTP 不支持直接内存 也就是零拷贝
-				.setMemoryPoolFactory(16 * 1024 * 1024, 10, false)
+//				.setMemoryPoolFactory(16 * 1024 * 1024, 10, false)
 				.start();
     }
 

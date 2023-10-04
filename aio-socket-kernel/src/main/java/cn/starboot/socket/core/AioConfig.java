@@ -214,7 +214,9 @@ public abstract class AioConfig {
     }
 
     protected void initMemoryPoolFactory() {
-    	this.memoryPoolFactory = () -> new MemoryPool(getMemoryBlockSize(), getMemoryBlockNum(), isDirect());
+    	if (this.memoryBlockSize == 0 || this.memoryBlockNum == 0)
+    		return;
+    	this.memoryPoolFactory = () -> new MemoryPool(this.memoryBlockSize, this.memoryBlockNum, isDirect());
 	}
 
     public Plugins getPlugins() {
@@ -257,16 +259,8 @@ public abstract class AioConfig {
 		return this;
 	}
 
-	public int getMemoryBlockNum() {
-		return memoryBlockNum;
-	}
-
 	public void setMemoryBlockNum(int memoryBlockNum) {
 		this.memoryBlockNum = memoryBlockNum;
-	}
-
-	public int getMemoryBlockSize() {
-		return memoryBlockSize;
 	}
 
 	public AioConfig setMemoryBlockSize(int memoryBlockSize) {
