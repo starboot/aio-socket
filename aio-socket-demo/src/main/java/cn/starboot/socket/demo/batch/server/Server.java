@@ -23,19 +23,19 @@ import cn.starboot.socket.plugins.MonitorPlugin;
  * ------------------------------------------------
  * 			aio-socket performance
  * -------------------in 5 sec --------------------
- * inflow:				2352.982048034668(MB)
- * outflow:			    2352.755474090576(MB)
+ * inflow:				2657.0466499328613(MB)
+ * outflow:			    2656.9602966308594(MB)
  * process fail:		0
- * process count:		26813951
- * process total:		282750775
- * read count:			18822
- * write count:		    611264
+ * process count:		30280287
+ * process total:		102196866
+ * read count:			21403
+ * write count:		    690394
  * connect count:		0
  * disconnect count:	0
- * online count:		9
+ * online count:		10
  * connected total:	    10
- * Requests/sec:		5362790.2
- * Transfer/sec:		470.5964096069336(MB)
+ * Requests/sec:		6056057.4
+ * Transfer/sec:		531.4093299865723(MB)
  * ------------------------------------------------
  */
 public class Server {
