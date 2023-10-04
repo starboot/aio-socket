@@ -7,7 +7,7 @@ public class AioClientConfig extends AioConfig {
 	/**
 	 * 客户端线程数默认为2;就够用了
 	 */
-	private int bossThreadNumber = 2;
+	private int bossThreadNumber = 1;
 
 	@Override
 	public String getName() {
