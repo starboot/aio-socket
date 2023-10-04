@@ -16,22 +16,19 @@
 package cn.starboot.socket.demo.batch.stream;
 
 import cn.starboot.socket.Packet;
+import cn.starboot.socket.codec.bytes.BytesHandler;
+import cn.starboot.socket.codec.bytes.BytesPacket;
 import cn.starboot.socket.codec.string.StringHandler;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.exception.AioEncoderException;
 
-public class ClientHandler extends StringHandler {
+public class ClientHandler extends BytesHandler {
 
 	private static final byte[] data = "hello-aio-socket".getBytes();
 
 	private static final int len = data.length;
-
-    @Override
-    public Packet handle(ChannelContext channelContext, StringPacket packet) {
-        return null;
-    }
 
 	@Override
 	public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
@@ -41,5 +38,10 @@ public class ClientHandler extends StringHandler {
 		while (num-- > 0) {
 			writeBuffer.write(data);
 		}
+	}
+
+	@Override
+	public Packet handle(ChannelContext channelContext, BytesPacket packet) {
+		return null;
 	}
 }

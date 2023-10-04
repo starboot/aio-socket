@@ -16,6 +16,7 @@
 package cn.starboot.socket.demo.batch.stream;
 
 import cn.starboot.socket.Packet;
+import cn.starboot.socket.codec.bytes.BytesPacket;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
@@ -61,7 +62,8 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
-        Packet demoPacket = new StringPacket("hello aio-socket");
+        String data = "hello aio-socket";
+		Packet bytesPacket = new BytesPacket(data.getBytes());
 		ImproveAsynchronousChannelGroup asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors()), Runtime.getRuntime().availableProcessors());
         ClientHandler clientHandler = new ClientHandler();
         for (int i = 0; i < 10; i++) {
@@ -75,7 +77,7 @@ public class Client {
                 try {
                     ChannelContext start = bootstrap.start(asynchronousChannelGroup);
                     while (true) {
-                        Aio.send(start, demoPacket);
+                        Aio.send(start, bytesPacket);
                     }
 //                    bootstrap.shutdown();
                 } catch (IOException e) {
