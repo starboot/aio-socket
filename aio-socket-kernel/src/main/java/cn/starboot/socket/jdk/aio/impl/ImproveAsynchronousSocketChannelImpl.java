@@ -345,7 +345,6 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				ImproveAsynchronousChannelGroupImpl.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
 			}
 		} catch (Throwable e) {
-			e.printStackTrace();
 			if (readCompletionHandler == null) {
 				e.printStackTrace();
 				try {
@@ -389,7 +388,6 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				}
 				writeInterrupted = false;
 			} else {
-//				System.out.println("注册");
 				SelectionKey commonSelectionKey = socketChannel.keyFor(commonWorker.selector);
 				if (commonSelectionKey == null) {
 					commonWorker.addRegister(selector -> {

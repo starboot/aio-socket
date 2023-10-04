@@ -37,7 +37,7 @@ public class Client {
             new Thread(() -> {
                 // 127.0.0.1
                 ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
-                bootstrap.setBufferFactory(1024 * 1024 * 4, 10, true)
+                bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)
                         .setReadBufferSize(1024 * 1024)
                         .setWriteBufferSize(1024 * 1024, 512)
                 ;
