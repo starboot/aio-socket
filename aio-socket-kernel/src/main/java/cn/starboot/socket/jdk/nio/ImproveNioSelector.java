@@ -81,20 +81,30 @@ final class ImproveNioSelector extends Selector {
 	}
 
 	int selectCnt = 0;
+	boolean isLoop = true;
 	@Override
 	public int select() throws IOException {
-		selectCnt++;
-		boolean ranTasks = true;
-		if (ranTasks) {  // ranTasks || strategy > 0
-			if (selectCnt > MIN_PREMATURE_SELECTOR_RETURNS && LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Selector.select() returned prematurely {} times in a row for Selector {}.",
-						selectCnt - 1, selector);
+		int select = 0;
+		resetState();
+		while (isLoop) {
+			selectCnt++;
+			select = selector.select();
+			if (select > 0) {
+				if (selectCnt > MIN_PREMATURE_SELECTOR_RETURNS && LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Selector.select() returned prematurely {} times in a row for Selector {}.",
+							selectCnt - 1, selector);
+				}
+				resetState();
+			} else if (unexpectedSelectorWakeup(selectCnt)) { // Unexpected wakeup (unusual case)
+				resetState();
 			}
-			selectCnt = 0;
-		} else if (unexpectedSelectorWakeup(selectCnt)) { // Unexpected wakeup (unusual case)
-			selectCnt = 0;
 		}
-		return selector.select();
+		return select;
+	}
+
+	private void resetState() {
+		isLoop = !isLoop;
+		selectCnt = 0;
 	}
 
 	@Override
