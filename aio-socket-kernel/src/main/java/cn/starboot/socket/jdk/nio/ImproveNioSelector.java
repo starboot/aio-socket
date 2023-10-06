@@ -10,9 +10,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.spi.AbstractSelectableChannel;
 import java.nio.channels.spi.AbstractSelector;
-import java.nio.channels.spi.SelectorProvider;
 import java.util.Set;
-import java.util.concurrent.Semaphore;
 
 /**
  * 解决一下NIO空轮训的bug(虽然官方已经表明修复成功，但部分网友仍坚持还有出现的可能)
@@ -25,12 +23,7 @@ public final class ImproveNioSelector extends AbstractSelector {
 
 	private Selector selector;
 
-	/**
-	 * 防止多线程调用selector
-	 */
-	private final Semaphore selectSemaphore = new Semaphore(1);
-
-	private static final int MIN_PREMATURE_SELECTOR_RETURNS = 3;
+	private static final int MIN_PREMATURE_SELECTOR_RETURNS = 10;
 
 	private static final int SELECTOR_AUTO_REBUILD_THRESHOLD;
 
@@ -43,7 +36,7 @@ public final class ImproveNioSelector extends AbstractSelector {
 		SELECTOR_AUTO_REBUILD_THRESHOLD = selectorAutoRebuildThreshold;
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("-Dio.nio.selectorAutoRebuildThreshold: {}", SELECTOR_AUTO_REBUILD_THRESHOLD);
+			LOGGER.debug("-Dio.jdk.nio.selectorAutoRebuildThreshold: {}", SELECTOR_AUTO_REBUILD_THRESHOLD);
 		}
 	}
 
@@ -89,7 +82,7 @@ public final class ImproveNioSelector extends AbstractSelector {
 
 	@Override
 	public int select() throws IOException {
-		return selector.select();
+		return select0(SelectModel.SELECT);
 	}
 
 	private int select0(SelectModel selectModel) throws IOException {
@@ -101,10 +94,10 @@ public final class ImproveNioSelector extends AbstractSelector {
 	private int select0(SelectModel selectModel, long timeout) throws IOException {
 		if (selectModel == SelectModel.SELECT_NOW)
 			return selector.selectNow();
+
 		initState();
 		int select = 0;
 		long star = System.currentTimeMillis();
-		System.out.println("select");
 		while (isLoop) {
 			selectCnt++;
 			select = selector.select(timeout);
@@ -137,6 +130,7 @@ public final class ImproveNioSelector extends AbstractSelector {
 
 	@Override
 	public Selector wakeup() {
+		isLoop = false;
 		return selector.wakeup();
 	}
 
