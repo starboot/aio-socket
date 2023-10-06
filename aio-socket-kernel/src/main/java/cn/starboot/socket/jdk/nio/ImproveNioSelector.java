@@ -9,6 +9,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.Set;
+import java.util.concurrent.Semaphore;
 
 /**
  * 解决一下NIO空轮训的bug(虽然官方已经表明修复成功，但部分网友仍坚持还有出现的可能)
@@ -20,6 +21,11 @@ final class ImproveNioSelector extends Selector {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveNioSelector.class);
 
 	private Selector selector;
+
+	/**
+	 * 防止多线程调用selector
+	 */
+	private final Semaphore selectSemaphore = new Semaphore(1);
 
 	private static final int MIN_PREMATURE_SELECTOR_RETURNS = 3;
 
@@ -89,13 +95,19 @@ final class ImproveNioSelector extends Selector {
 		return select0(selectModel, 0);
 	}
 
-	int selectCnt = 0;
-	boolean isLoop = true;
+	private int selectCnt;
+	private boolean isLoop;
 	private int select0(SelectModel selectModel, long timeout) throws IOException {
+		try {
+			selectSemaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		if (selectModel == SelectModel.SELECT_NOW)
 			return selector.selectNow();
+		initState();
 		int select = 0;
-		resetState();
+		long star = System.currentTimeMillis();
 		while (isLoop) {
 			selectCnt++;
 			select = selector.select(timeout);
@@ -104,17 +116,27 @@ final class ImproveNioSelector extends Selector {
 					LOGGER.debug("Selector.select() returned prematurely {} times in a row for Selector {}.",
 							selectCnt - 1, selector);
 				}
-				resetState();
+				isLoop = false;
 			} else if (unexpectedSelectorWakeup(selectCnt)) { // Unexpected wakeup (unusual case)
-				resetState();
+				isLoop = false;
+			}
+			if (timeout > 0) {
+				final long end = System.currentTimeMillis();
+				final long spend = end - star;
+				if (spend >= timeout) {
+					isLoop = false;
+				}
+				timeout -= spend;
+				star = end;
 			}
 		}
+		selectSemaphore.release();
 		return select;
 	}
 
-	private void resetState() {
-		isLoop = !isLoop;
+	private void initState() {
 		selectCnt = 0;
+		isLoop = true;
 	}
 
 	@Override
