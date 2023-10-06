@@ -3,6 +3,7 @@ package cn.starboot.socket.jdk.aio.impl;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousServerSocketChannel;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
+import cn.starboot.socket.jdk.nio.NioEventLoopWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 
 	private final ServerSocketChannel serverSocketChannel;
 	private final ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup;
-	private final ImproveAsynchronousChannelGroupImpl.Worker acceptWorker;
+	private final NioEventLoopWorker acceptWorker;
 	private CompletionHandler<ImproveAsynchronousSocketChannel, Object> acceptCompletionHandler;
 	private Object attachment;
 	private SelectionKey selectionKey;

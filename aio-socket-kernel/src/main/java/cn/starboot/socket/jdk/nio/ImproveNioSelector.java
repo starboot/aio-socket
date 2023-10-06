@@ -16,7 +16,7 @@ import java.util.concurrent.Semaphore;
  *
  * @author MDong
  */
-final class ImproveNioSelector extends Selector {
+public final class ImproveNioSelector extends Selector {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveNioSelector.class);
 

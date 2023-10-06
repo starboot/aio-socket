@@ -2,6 +2,7 @@ package cn.starboot.socket.jdk.aio.impl;
 
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
+import cn.starboot.socket.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
@@ -24,11 +25,11 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	/**
 	 * 处理 read 事件的线程资源
 	 */
-	private final ImproveAsynchronousChannelGroupImpl.Worker readWorker;
+	private final NioEventLoopWorker readWorker;
 	/**
 	 * 处理 write 事件的线程资源
 	 */
-	protected final ImproveAsynchronousChannelGroupImpl.Worker commonWorker;
+	protected final NioEventLoopWorker commonWorker;
 
 	/**
 	 * 用于接收 read 通道数据的缓冲区，经解码后腾出缓冲区以供下一批数据的读取
@@ -297,7 +298,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			this.readSelectionKey.cancel();
 			this.readSelectionKey = null;
 		}
-		SelectionKey key = this.socketChannel.keyFor(commonWorker.selector);
+		SelectionKey key = this.socketChannel.keyFor(commonWorker.getSelector());
 		if (key != null) {
 			key.cancel();
 		}
@@ -388,7 +389,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				}
 				writeInterrupted = false;
 			} else {
-				SelectionKey commonSelectionKey = socketChannel.keyFor(commonWorker.selector);
+				SelectionKey commonSelectionKey = socketChannel.keyFor(commonWorker.getSelector());
 				if (commonSelectionKey == null) {
 					commonWorker.addRegister(selector -> {
 						try {
