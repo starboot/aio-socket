@@ -46,7 +46,7 @@ final class ImproveNioSelector extends Selector {
 		}
 	}
 
-	public static ImproveNioSelector open() throws IOException {
+	public static ImproveNioSelector open() {
 		return new ImproveNioSelector();
 	}
 
