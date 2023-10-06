@@ -72,23 +72,33 @@ final class ImproveNioSelector extends Selector {
 
 	@Override
 	public int selectNow() throws IOException {
-		return selector.selectNow();
+		return select0(SelectModel.SELECT_NOW);
 	}
 
 	@Override
 	public int select(long timeout) throws IOException {
-		return selector.select(timeout);
+		return select0(SelectModel.SELECT, timeout);
+	}
+
+	@Override
+	public int select() throws IOException {
+		return select0(SelectModel.SELECT);
+	}
+
+	private int select0(SelectModel selectModel) throws IOException {
+		return select0(selectModel, 0);
 	}
 
 	int selectCnt = 0;
 	boolean isLoop = true;
-	@Override
-	public int select() throws IOException {
+	private int select0(SelectModel selectModel, long timeout) throws IOException {
+		if (selectModel == SelectModel.SELECT_NOW)
+			return selector.selectNow();
 		int select = 0;
 		resetState();
 		while (isLoop) {
 			selectCnt++;
-			select = selector.select();
+			select = selector.select(timeout);
 			if (select > 0) {
 				if (selectCnt > MIN_PREMATURE_SELECTOR_RETURNS && LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Selector.select() returned prematurely {} times in a row for Selector {}.",
@@ -196,6 +206,11 @@ final class ImproveNioSelector extends Selector {
 
 	private Selector openSelector() throws IOException {
 		return Selector.open();
+	}
+
+	enum SelectModel {
+		SELECT,
+		SELECT_NOW
 	}
 
 
