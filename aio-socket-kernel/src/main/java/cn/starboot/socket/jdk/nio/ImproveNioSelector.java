@@ -5,8 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.channels.spi.AbstractSelectableChannel;
+import java.nio.channels.spi.AbstractSelector;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
@@ -16,7 +19,7 @@ import java.util.concurrent.Semaphore;
  *
  * @author MDong
  */
-public final class ImproveNioSelector extends Selector {
+public final class ImproveNioSelector extends AbstractSelector {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveNioSelector.class);
 
@@ -44,26 +47,24 @@ public final class ImproveNioSelector extends Selector {
 		}
 	}
 
-	private ImproveNioSelector() {
-		try {
-			this.selector = openSelector();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private ImproveNioSelector(Selector selector) {
+		super(selector.provider());
+		this.selector = selector;
 	}
 
 	public static ImproveNioSelector open() {
-		return new ImproveNioSelector();
+		return new ImproveNioSelector(openSelector());
 	}
 
 	@Override
-	public boolean isOpen() {
-		return selector.isOpen();
-	}
-
-	@Override
-	public SelectorProvider provider() {
-		return selector.provider();
+	protected SelectionKey register(AbstractSelectableChannel ch, int ops, Object att) {
+		SelectionKey register = null;
+		try {
+			register = ch.register(selector, ops, att);
+		} catch (ClosedChannelException e) {
+			e.printStackTrace();
+		}
+		return register;
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public final class ImproveNioSelector extends Selector {
 
 	@Override
 	public int select() throws IOException {
-		return select0(SelectModel.SELECT);
+		return selector.select();
 	}
 
 	private int select0(SelectModel selectModel) throws IOException {
@@ -98,16 +99,12 @@ public final class ImproveNioSelector extends Selector {
 	private int selectCnt;
 	private boolean isLoop;
 	private int select0(SelectModel selectModel, long timeout) throws IOException {
-		try {
-			selectSemaphore.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		if (selectModel == SelectModel.SELECT_NOW)
 			return selector.selectNow();
 		initState();
 		int select = 0;
 		long star = System.currentTimeMillis();
+		System.out.println("select");
 		while (isLoop) {
 			selectCnt++;
 			select = selector.select(timeout);
@@ -130,7 +127,6 @@ public final class ImproveNioSelector extends Selector {
 				star = end;
 			}
 		}
-		selectSemaphore.release();
 		return select;
 	}
 
@@ -145,7 +141,7 @@ public final class ImproveNioSelector extends Selector {
 	}
 
 	@Override
-	public void close() throws IOException {
+	protected void implCloseSelector() throws IOException {
 		selector.close();
 	}
 
@@ -185,12 +181,7 @@ public final class ImproveNioSelector extends Selector {
 			return;
 		}
 
-		try {
-			newSelector = openSelector();
-		} catch (Exception e) {
-			LOGGER.warn("Failed to create a new Selector.", e);
-			return;
-		}
+		newSelector = openSelector();
 
 		// Register all channels to the new Selector.
 		int nChannels = 0;
@@ -226,8 +217,14 @@ public final class ImproveNioSelector extends Selector {
 		}
 	}
 
-	private Selector openSelector() throws IOException {
-		return Selector.open();
+	private static Selector openSelector() {
+		Selector selector = null;
+		try {
+			selector =  Selector.open();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return selector;
 	}
 
 	enum SelectModel {
