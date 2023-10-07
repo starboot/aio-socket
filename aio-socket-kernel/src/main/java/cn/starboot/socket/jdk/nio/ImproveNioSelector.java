@@ -149,7 +149,7 @@ public final class ImproveNioSelector extends AbstractSelector {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Selector.select() returned prematurely because " +
 						"Thread.currentThread().interrupt() was called. Use " +
-						"NioEventLoop.shutdownGracefully() to shutdown the NioEventLoop.");
+						"ImproveNioSelector.shutdownGracefully() to shutdown the ImproveNioSelector.");
 			}
 			return true;
 		}
