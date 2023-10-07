@@ -19,23 +19,23 @@ import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.plugins.MonitorPlugin;
 
 /**
- * 性能：
+ * 性能：稳定在500+MB/s
  * ------------------------------------------------
  * 			aio-socket performance
  * -------------------in 5 sec --------------------
- * inflow:				2657.0466499328613(MB)
- * outflow:			    2656.9602966308594(MB)
+ * inflow:				2727.9791870117188(MB)
+ * outflow:			    2728.252544403076(MB)
  * process fail:		0
- * process count:		30280287
- * process total:		102196866
- * read count:			21403
- * write count:		    690394
+ * process count:		31098500
+ * process total:		1143286443
+ * read count:			21827
+ * write count:		    708829
  * connect count:		0
  * disconnect count:	0
  * online count:		10
  * connected total:	    10
- * Requests/sec:		6056057.4
- * Transfer/sec:		531.4093299865723(MB)
+ * Requests/sec:		6219700.0
+ * Transfer/sec:		545.5958374023437(MB)
  * ------------------------------------------------
  */
 public class Server {
