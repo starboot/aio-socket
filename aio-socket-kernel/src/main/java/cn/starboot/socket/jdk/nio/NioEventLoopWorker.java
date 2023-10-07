@@ -7,7 +7,21 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
+/**
+ * nio轮训工作者
+ * @author MDong
+ */
 public class NioEventLoopWorker implements Runnable {
+
+	/**
+	 * 当前NioEventLoopWorker绑定的Selector
+	 */
+	private final Selector selector;
+
+	/**
+	 * 当前worker所属线程
+	 */
+	private Thread workerThread;
 
 	/**
 	 * group运行状态
@@ -15,12 +29,14 @@ public class NioEventLoopWorker implements Runnable {
 	private boolean running = true;
 
 	/**
-	 * 当前Worker绑定的Selector
+	 * 用于处理轮训结果的声明式函数
 	 */
-	final Selector selector;
 	private final Consumer<SelectionKey> consumer;
+
+	/**
+	 * 待注册的事件
+	 */
 	private final ConcurrentLinkedQueue<Consumer<Selector>> consumers = new ConcurrentLinkedQueue<>();
-	private Thread workerThread;
 
 	public NioEventLoopWorker(Selector selector, Consumer<SelectionKey> consumer) {
 		this.selector = selector;
