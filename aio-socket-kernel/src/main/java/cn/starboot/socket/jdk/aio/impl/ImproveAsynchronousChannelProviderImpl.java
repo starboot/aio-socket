@@ -25,9 +25,10 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 		if (defaultImproveAsynchronousChannelGroup == null) {
 			synchronized (ImproveAsynchronousChannelProviderImpl.class) {
 				if (defaultImproveAsynchronousChannelGroup == null) {
-					defaultImproveAsynchronousChannelGroup = new ImproveAsynchronousChannelGroupImpl(this,
-							ThreadUtils.getGroupExecutor(),
-							ThreadUtils.MAX_POOL_SIZE_FOR_BOSS);
+					defaultImproveAsynchronousChannelGroup =
+							new ImproveAsynchronousChannelGroupImpl(this,
+									ThreadUtils.getGroupExecutor(),
+									ThreadUtils.MAX_POOL_SIZE_FOR_BOSS);
 				}
 			}
 		}
@@ -39,8 +40,13 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 																			   ThreadFactory threadFactory)
 			throws IOException {
 		ThreadPoolExecutor groupExecutor =
-				new ThreadPoolExecutor(nThreads, nThreads, 0L,
-						TimeUnit.SECONDS, new LinkedBlockingQueue<>(), threadFactory, new AioCallerRunsPolicy());
+				new ThreadPoolExecutor(nThreads,
+						nThreads,
+						0L,
+						TimeUnit.SECONDS,
+						new LinkedBlockingQueue<>(),
+						threadFactory,
+						new AioCallerRunsPolicy());
 		groupExecutor.prestartCoreThread();
 		return new ImproveAsynchronousChannelGroupImpl(this, groupExecutor, nThreads);
 	}
@@ -64,14 +70,16 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 	}
 
 	@Override
-	public ImproveAsynchronousServerSocketChannel
-	openImproveAsynchronousServerSocketChannel(ImproveAsynchronousChannelGroup group) throws IOException {
+	public ImproveAsynchronousServerSocketChannel openImproveAsynchronousServerSocketChannel
+			(ImproveAsynchronousChannelGroup group)
+			throws IOException {
 		return new ImproveAsynchronousServerSocketChannelImpl(toPort(group));
 	}
 
 	@Override
-	public ImproveAsynchronousSocketChannel
-	openImproveAsynchronousSocketChannel(ImproveAsynchronousChannelGroup group) throws IOException {
+	public ImproveAsynchronousSocketChannel openImproveAsynchronousSocketChannel
+			(ImproveAsynchronousChannelGroup group)
+			throws IOException {
 		return new ImproveAsynchronousSocketChannelImpl(toPort(group));
 	}
 }
