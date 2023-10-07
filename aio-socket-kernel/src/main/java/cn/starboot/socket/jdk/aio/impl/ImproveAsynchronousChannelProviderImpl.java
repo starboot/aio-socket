@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.nio.channels.IllegalChannelGroupException;
 import java.util.concurrent.*;
 
+/**
+ * @author MDong
+ */
 final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousChannelProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousChannelProviderImpl.class);
