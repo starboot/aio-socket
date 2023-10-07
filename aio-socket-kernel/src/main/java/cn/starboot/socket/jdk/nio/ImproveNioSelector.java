@@ -145,7 +145,7 @@ public final class ImproveNioSelector extends AbstractSelector {
 			// As this is most likely a bug in the handler of the user or it's client library we will
 			// also log it.
 			//
-			// See /issues/2426
+			// See netty/issues/2426
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Selector.select() returned prematurely because " +
 						"Thread.currentThread().interrupt() was called. Use " +
