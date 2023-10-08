@@ -341,6 +341,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 					}
 				});
 			} else {
+				// 在这里应该释放内存
 				ImproveAsynchronousChannelGroupImpl.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
 			}
 		} catch (Throwable e) {
