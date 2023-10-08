@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class ImproveAsynchronousSocketChannel
@@ -231,7 +232,7 @@ public abstract class ImproveAsynchronousSocketChannel
 	 * method.
 	 *
 	 * @param <A>        The type of the attachment
-	 * @param supplier        The buffer into which bytes are to be transferred
+	 * @param function        The buffer into which bytes are to be transferred
 	 * @param timeout    The maximum time for the I/O operation to complete
 	 * @param unit       The time unit of the {@code timeout} argument
 	 * @param attachment The object to attach to the I/O operation; can be {@code null}
@@ -241,7 +242,7 @@ public abstract class ImproveAsynchronousSocketChannel
 	 * @throws NotYetConnectedException      If this channel is not yet connected
 	 * @throws ShutdownChannelGroupException If the channel group has terminated
 	 */
-	public abstract <A> void read(Supplier<MemoryUnit> supplier,
+	public abstract <A> void read(Function<Boolean,MemoryUnit> function,
 								  long timeout,
 								  TimeUnit unit,
 								  A attachment,
@@ -254,10 +255,10 @@ public abstract class ImproveAsynchronousSocketChannel
 	 * @throws ShutdownChannelGroupException If the channel group has terminated
 	 */
 	@Override
-	public final <A> void read(Supplier<MemoryUnit> supplier,
-									 A attachment,
-									 CompletionHandler<Integer, ? super A> handler) {
-		read(supplier, 0L, TimeUnit.MILLISECONDS, attachment, handler);
+	public final <A> void read(Function<Boolean,MemoryUnit> function,
+							   A attachment,
+							   CompletionHandler<Integer, ? super A> handler) {
+		read(function, 0L, TimeUnit.MILLISECONDS, attachment, handler);
 	}
 
 	/**

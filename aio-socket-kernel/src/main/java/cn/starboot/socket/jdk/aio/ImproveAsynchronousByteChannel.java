@@ -5,6 +5,7 @@ import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface ImproveAsynchronousByteChannel
@@ -46,7 +47,7 @@ public interface ImproveAsynchronousByteChannel
 	 *
 	 * @param   <A>
 	 *          The type of the attachment
-	 * @param   supplier
+	 * @param   function
 	 *          The buffer into which bytes are to be transferred
 	 * @param   attachment
 	 *          The object to attach to the I/O operation; can be {@code null}
@@ -62,9 +63,9 @@ public interface ImproveAsynchronousByteChannel
 	 *          If the channel is associated with a {@link AsynchronousChannelGroup
 	 *          group} that has terminated
 	 */
-	<A> void read(Supplier<MemoryUnit> supplier,
-						A attachment,
-						CompletionHandler<Integer,? super A> handler);
+	<A> void read(Function<Boolean,MemoryUnit> function,
+				  A attachment,
+				  CompletionHandler<Integer,? super A> handler);
 
 	/**
 	 * Reads a sequence of bytes from this channel into the given buffer.

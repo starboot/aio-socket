@@ -36,7 +36,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * 通道上下文信息类
@@ -104,7 +104,7 @@ final class TCPChannelContext extends ChannelContext {
 	 */
 	private MemoryUnit writeBuffer;
 
-	private final Supplier<MemoryUnit> memoryUnitSupplier;
+	private final Function<Boolean,MemoryUnit> memoryUnitFunction;
 
 	/**
 	 * 构造通道上下文对象
@@ -125,10 +125,21 @@ final class TCPChannelContext extends ChannelContext {
 		this.readCompletionHandler = readCompletionHandler;
 		this.writeCompletionHandler = writeCompletionHandler;
 		this.aioConfig = config;
-		this.memoryUnitSupplier = () -> {
-			if (readBuffer == null)
-				readBuffer = readMemoryUnitFactory.createBuffer(memoryBlock);
-			return readBuffer;
+		this.memoryUnitFunction = isGet -> {
+			if (isGet) {
+				if (readBuffer == null) {
+					readBuffer = readMemoryUnitFactory.createBuffer(memoryBlock);
+				}
+				return readBuffer;
+			} else {
+				if (aioConfig.isServer()
+						&& readBuffer != null
+						&& readBuffer.buffer().remaining() == readBuffer.buffer().capacity())
+				{
+					freeReadMemoryUnit(true);
+				}
+				return null;
+			}
 		};
 		Consumer<WriteBuffer> flushConsumer = var -> {
 			if (!semaphore.tryAcquire()) {
@@ -156,7 +167,7 @@ final class TCPChannelContext extends ChannelContext {
 	}
 
 	private void freeReadMemoryUnit(boolean isClean) {
-		if (isClean) {
+		if (isClean && readBuffer != null) {
 			this.readBuffer.clean();
 		}
 		this.readBuffer = null;
@@ -221,7 +232,8 @@ final class TCPChannelContext extends ChannelContext {
 		} else if (readBuffer.hasRemaining()){
 			readBuffer.compact();
 		} else {
-			freeReadMemoryUnit(true);
+			readBuffer.clear();
+//			freeReadMemoryUnit(true);
 		}
 		read0();
 	}
@@ -235,7 +247,7 @@ final class TCPChannelContext extends ChannelContext {
 		if (monitor != null) {
 			monitor.beforeRead(this);
 		}
-		asynchronousSocketChannel.read(memoryUnitSupplier, this, readCompletionHandler);
+		asynchronousSocketChannel.read(memoryUnitFunction, this, readCompletionHandler);
 	}
 
 	/**

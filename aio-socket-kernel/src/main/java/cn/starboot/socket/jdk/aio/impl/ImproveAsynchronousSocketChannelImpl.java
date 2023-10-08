@@ -14,6 +14,7 @@ import java.nio.channels.*;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSocketChannel {
@@ -192,25 +193,25 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> void read(Supplier<MemoryUnit> supplier,
-							   long timeout,
-							   TimeUnit unit,
-							   A attachment,
-							   CompletionHandler<Integer, ? super A> handler)
+	public <A> void read(Function<Boolean,MemoryUnit> function,
+						 long timeout,
+						 TimeUnit unit,
+						 A attachment,
+						 CompletionHandler<Integer, ? super A> handler)
 	{
 		if (timeout > 0) {
 			throw new UnsupportedOperationException();
 		}
-		read0(supplier, attachment, handler);
+		read0(function, attachment, handler);
 	}
 
-	private Supplier<MemoryUnit> supplier;
-	private <V extends Number, A> void read0(Supplier<MemoryUnit> supplier, A attachment, CompletionHandler<V, ? super A> handler) {
+	private Function<Boolean,MemoryUnit> memoryUnitFunction;
+	private <V extends Number, A> void read0(Function<Boolean,MemoryUnit> function, A attachment, CompletionHandler<V, ? super A> handler) {
 		if (this.readCompletionHandler != null) {
 			throw new ReadPendingException();
 		}
-		if (this.supplier == null) {
-			this.supplier = supplier;
+		if (this.memoryUnitFunction == null) {
+			this.memoryUnitFunction = function;
 		}
 		this.readAttachment = attachment;
 		this.readCompletionHandler = (CompletionHandler<Number, Object>) handler;
@@ -319,7 +320,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			boolean hasRemain = true;
 			if (directRead) {
 				// 在这里申请内存
-				this.readMemoryUnit = supplier.get();
+				this.readMemoryUnit = memoryUnitFunction.apply(true);
 				readSize = socketChannel.read(readMemoryUnit.buffer());
 				hasRemain = readMemoryUnit.buffer().hasRemaining();
 			}
@@ -342,6 +343,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				});
 			} else {
 				// 在这里应该释放内存
+				memoryUnitFunction.apply(false);
 				ImproveAsynchronousChannelGroupImpl.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
 			}
 		} catch (Throwable e) {
