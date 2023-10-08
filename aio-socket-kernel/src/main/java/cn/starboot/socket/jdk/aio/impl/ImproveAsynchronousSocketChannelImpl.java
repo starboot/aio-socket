@@ -319,9 +319,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			boolean hasRemain = true;
 			if (directRead) {
 				// 在这里申请内存
-				if (this.readMemoryUnit == null) {
-					this.readMemoryUnit = supplier.get();
-				}
+				this.readMemoryUnit = supplier.get();
 				readSize = socketChannel.read(readMemoryUnit.buffer());
 				hasRemain = readMemoryUnit.buffer().hasRemaining();
 			}
@@ -364,10 +362,12 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	private void resetRead() {
 		readCompletionHandler = null;
 		readAttachment = null;
-		if (!readMemoryUnit.buffer().hasRemaining()) {
-			readMemoryUnit.clean();
-			readMemoryUnit = null;
-		}
+		readMemoryUnit = null;
+//		if (!readMemoryUnit.buffer().hasRemaining()) {
+//			System.out.println("这里有bug");
+//			readMemoryUnit.clean();
+//			readMemoryUnit = null;
+//		}
 	}
 
 	public final boolean doWrite() {

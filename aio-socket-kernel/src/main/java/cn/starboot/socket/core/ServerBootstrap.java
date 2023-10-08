@@ -16,14 +16,12 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.config.AioServerConfig;
-import cn.starboot.socket.factory.BootstrapFunction;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousServerSocketChannel;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
-import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.utils.pool.memory.MemoryUnitFactory;
 import cn.starboot.socket.plugins.Plugins;
 import cn.starboot.socket.utils.AIOUtil;
@@ -40,7 +38,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * AIO Server 启动类
@@ -90,21 +87,21 @@ public class ServerBootstrap {
 	/**
 	 * 虚拟内存工厂，这里为读操作获取虚拟内存
 	 */
-	private final MemoryUnitFactory readMemoryUnitFactory = memoryBlock -> memoryBlock.allocate(getConfig().getReadBufferSize());
+	private final MemoryUnitFactory readMemoryUnitFactory
+			= memoryBlock -> memoryBlock.allocate(getConfig().getReadBufferSize());
 
 	/**
 	 * socketChannel 和 ChannelContext联系
 	 */
-	private final BootstrapFunction<ImproveAsynchronousSocketChannel, TCPChannelContext>
-			bootstrapFunction = (improveAsynchronousSocketChannel) ->
+	private final Function<ImproveAsynchronousSocketChannel, TCPChannelContext> bootstrapFunction
+			= (improveAsynchronousSocketChannel) ->
 			new TCPChannelContext(improveAsynchronousSocketChannel,
 					getConfig(),
 					aioReadCompletionHandler,
 					aioWriteCompletionHandler,
-					memoryPool.allocateBufferPage());
+					memoryPool.allocateBufferPage(),
+					readMemoryUnitFactory);
 
-
-	private Function<ReadWriteBuff, Supplier<MemoryUnit>> applyAndRegisterFunction;
 
 	/**
 	 * ServerBootstrap
@@ -139,7 +136,6 @@ public class ServerBootstrap {
 			if (this.memoryPool == null) {
 				this.memoryPool = getConfig().getMemoryPoolFactory().create();
 			}
-			this.applyAndRegisterFunction = this.bootstrapFunction.createFunction(readMemoryUnitFactory, memoryPool);
 			this.asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(this.bossExecutorService, getConfig().getBossThreadNumber());
 			this.serverSocketChannel = ImproveAsynchronousServerSocketChannel.open(this.asynchronousChannelGroup);
 			if (getConfig().getSocketOptions() != null) {
@@ -195,7 +191,6 @@ public class ServerBootstrap {
 	private void initChannelContext(ImproveAsynchronousSocketChannel channel) {
 
 		//连接成功则构造ChannelContext对象
-//        Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
 		TCPChannelContext context = null;
 		ImproveAsynchronousSocketChannel acceptChannel = channel;
 		try {
@@ -204,8 +199,8 @@ public class ServerBootstrap {
 			}
 			if (acceptChannel != null) {
 				acceptChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-				context = this.bootstrapFunction.convert(acceptChannel);
-				context.initTCPChannelContext(applyAndRegisterFunction);
+				context = this.bootstrapFunction.apply(acceptChannel);
+				context.initTCPChannelContext();
 			} else {
 				AIOUtil.close(channel);
 			}
@@ -289,7 +284,7 @@ public class ServerBootstrap {
 	/**
 	 * 设置线程池线程数量
 	 *
-	 * @param bossThreadNum   内核IO线程数量
+	 * @param bossThreadNum 内核IO线程数量
 	 * @return ServerBootstrap 对象
 	 */
 	public ServerBootstrap setThreadNum(int bossThreadNum) {

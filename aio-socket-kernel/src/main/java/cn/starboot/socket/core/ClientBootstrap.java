@@ -17,7 +17,6 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.config.AioClientConfig;
-import cn.starboot.socket.factory.BootstrapFunction;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.utils.ThreadUtils;
@@ -25,7 +24,6 @@ import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
-import cn.starboot.socket.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.utils.pool.memory.MemoryUnitFactory;
 import cn.starboot.socket.plugins.Plugins;
 import cn.starboot.socket.utils.AIOUtil;
@@ -119,16 +117,15 @@ public class ClientBootstrap {
 	/**
 	 * socketChannel 和 ChannelContext联系
 	 */
-	private final BootstrapFunction<ImproveAsynchronousSocketChannel, TCPChannelContext>
+	private final Function<ImproveAsynchronousSocketChannel, TCPChannelContext>
 			bootstrapFunction = (improveAsynchronousSocketChannel) ->
 			new TCPChannelContext(improveAsynchronousSocketChannel,
 					getConfig(),
 					aioReadCompletionHandler,
 					aioWriteCompletionHandler,
-					memoryPool.allocateBufferPage());
+					memoryPool.allocateBufferPage(),
+					readMemoryUnitFactory);
 
-
-	private Function<ReadWriteBuff, Supplier<MemoryUnit>> applyAndRegisterFunction;
 
 	/**
 	 * 当前构造方法设置了启动Aio客户端的必要参数，基本实现开箱即用。
@@ -226,7 +223,6 @@ public class ClientBootstrap {
 		if (this.memoryPool == null) {
 			this.memoryPool = getConfig().getMemoryPoolFactory().create();
 		}
-		this.applyAndRegisterFunction = this.bootstrapFunction.createFunction(readMemoryUnitFactory, memoryPool);
 //		Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
 		if (this.config.getSocketOptions() != null) {
 			for (Map.Entry<SocketOption<Object>, Object> entry : this.config.getSocketOptions().entrySet()) {
@@ -248,8 +244,8 @@ public class ClientBootstrap {
 						throw new RuntimeException("NetMonitor refuse channel");
 					}
 					//连接成功则构造AIOChannelContext对象
-					channelContext = bootstrapFunction.convert(connectedChannel);
-					channelContext.initTCPChannelContext(applyAndRegisterFunction);
+					channelContext = bootstrapFunction.apply(connectedChannel);
+					channelContext.initTCPChannelContext();
 					handler.completed(channelContext, future);
 				} catch (Exception e) {
 					failed(e, socketChannel);
