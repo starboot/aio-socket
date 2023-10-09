@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.CompletionHandler;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -60,14 +61,14 @@ final class TCPChannelContext extends ChannelContext {
 	private final Semaphore semaphore = new Semaphore(1);
 
 	/**
-	 * 读回调
+	 * 读完成处理类
 	 */
-	private final ReadCompletionHandler readCompletionHandler;
+	private final CompletionHandler<Integer, TCPChannelContext> readCompletionHandler;
 
 	/**
-	 * 写回调
+	 * 写完成处理类
 	 */
-	private final WriteCompletionHandler writeCompletionHandler;
+	private final CompletionHandler<Integer, TCPChannelContext> writeCompletionHandler;
 
 	/**
 	 * 服务配置
@@ -117,8 +118,8 @@ final class TCPChannelContext extends ChannelContext {
 	 */
 	TCPChannelContext(ImproveAsynchronousSocketChannel asynchronousSocketChannel,
 					  final AioConfig config,
-					  ReadCompletionHandler readCompletionHandler,
-					  WriteCompletionHandler writeCompletionHandler,
+					  CompletionHandler<Integer, TCPChannelContext> readCompletionHandler,
+					  CompletionHandler<Integer, TCPChannelContext> writeCompletionHandler,
 					  MemoryBlock memoryBlock,
 					  MemoryUnitFactory readMemoryUnitFactory) {
 		this.asynchronousSocketChannel = asynchronousSocketChannel;

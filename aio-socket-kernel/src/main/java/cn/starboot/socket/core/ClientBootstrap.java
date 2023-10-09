@@ -19,12 +19,9 @@ import cn.starboot.socket.enums.ProtocolEnum;
 import cn.starboot.socket.config.AioClientConfig;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
-import cn.starboot.socket.utils.ThreadUtils;
-import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
-import cn.starboot.socket.utils.pool.memory.MemoryUnitFactory;
 import cn.starboot.socket.plugins.Plugins;
 import cn.starboot.socket.utils.AIOUtil;
 import cn.starboot.socket.utils.TimerService;
@@ -40,8 +37,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * AIO Client 启动类
@@ -49,7 +44,7 @@ import java.util.function.Supplier;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class ClientBootstrap {
+public class ClientBootstrap extends AbstractBootstrap{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientBootstrap.class);
 
@@ -79,52 +74,9 @@ public class ClientBootstrap {
 	private TCPChannelContext channelContext;
 
 	/**
-	 * 内存池
-	 */
-	private MemoryPool memoryPool = null;
-
-	/**
 	 * 连接超时时间
 	 */
 	private final static int connectTimeout = 5000;
-
-	/**
-	 * 读完成处理类
-	 */
-	private ReadCompletionHandler aioReadCompletionHandler;
-
-	/**
-	 * 写完成处理类
-	 */
-	private WriteCompletionHandler aioWriteCompletionHandler;
-
-	/**
-	 * IO事件处理线程组。
-	 * 作为客户端，该AsynchronousChannelGroup只需保证2个长度的线程池大小即可满足通信读写所需。
-	 */
-	private ImproveAsynchronousChannelGroup asynchronousChannelGroup;
-
-	/**
-	 * 客户端服务配置。
-	 */
-	private final AioConfig config = new AioClientConfig();
-
-	/**
-	 * 构造虚拟缓冲区工厂
-	 */
-	private final MemoryUnitFactory readMemoryUnitFactory = memoryBlock -> memoryBlock.allocate(this.config.getReadBufferSize());
-
-	/**
-	 * socketChannel 和 ChannelContext联系
-	 */
-	private final Function<ImproveAsynchronousSocketChannel, TCPChannelContext>
-			bootstrapFunction = (improveAsynchronousSocketChannel) ->
-			new TCPChannelContext(improveAsynchronousSocketChannel,
-					getConfig(),
-					aioReadCompletionHandler,
-					aioWriteCompletionHandler,
-					memoryPool.allocateBufferPage(),
-					readMemoryUnitFactory);
 
 
 	/**
@@ -135,9 +87,10 @@ public class ClientBootstrap {
 	 * @param handler 协议编解码  消息处理器
 	 */
 	public ClientBootstrap(String host, int port, AioHandler handler) {
-		this.config.setHost(host);
-		this.config.setPort(port);
-		this.config.getPlugins().addAioHandler(handler);
+		super(new AioClientConfig());
+		getConfig().setHost(host);
+		getConfig().setPort(port);
+		getConfig().getPlugins().addAioHandler(handler);
 		this.clientProtocol = handler.name();
 	}
 
@@ -151,8 +104,9 @@ public class ClientBootstrap {
 	 * @see cn.starboot.socket.core.ClientBootstrap#start(ImproveAsynchronousChannelGroup)
 	 */
 	public final ChannelContext start() throws IOException {
-		this.asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
-		return start(this.asynchronousChannelGroup);
+
+//		this.asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
+		return start(getAsynchronousChannelGroup());
 	}
 
 	/**
@@ -166,6 +120,7 @@ public class ClientBootstrap {
 	 * @see java.nio.channels.AsynchronousSocketChannel#connect(SocketAddress)
 	 */
 	public ChannelContext start(ImproveAsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
+		setAsynchronousChannelGroup(asynchronousChannelGroup);
 		if (isInit) {
 			checkAndResetConfig();
 		}
@@ -217,34 +172,30 @@ public class ClientBootstrap {
 	private void start(ImproveAsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
 					   CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
 
+		beforeStart();
 		ImproveAsynchronousSocketChannel socketChannel = ImproveAsynchronousSocketChannel.open(asynchronousChannelGroup);
-		this.aioReadCompletionHandler = new ReadCompletionHandler();
-		this.aioWriteCompletionHandler = new WriteCompletionHandler();
-		if (this.memoryPool == null) {
-			this.memoryPool = getConfig().getMemoryPoolFactory().create();
-		}
 //		Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
-		if (this.config.getSocketOptions() != null) {
-			for (Map.Entry<SocketOption<Object>, Object> entry : this.config.getSocketOptions().entrySet()) {
+		if (getConfig().getSocketOptions() != null) {
+			for (Map.Entry<SocketOption<Object>, Object> entry : getConfig().getSocketOptions().entrySet()) {
 				socketChannel.setOption(entry.getKey(), entry.getValue());
 			}
 		}
 		if (this.localAddress != null) {
 			socketChannel.bind(this.localAddress);
 		}
-		socketChannel.connect(new InetSocketAddress(config.getHost(), config.getPort()), socketChannel, new CompletionHandler<Void, ImproveAsynchronousSocketChannel>() {
+		socketChannel.connect(new InetSocketAddress(getConfig().getHost(), getConfig().getPort()), socketChannel, new CompletionHandler<Void, ImproveAsynchronousSocketChannel>() {
 			@Override
 			public void completed(Void result, ImproveAsynchronousSocketChannel socketChannel) {
 				try {
 					ImproveAsynchronousSocketChannel connectedChannel = socketChannel;
-					if (config.getMonitor() != null) {
-						connectedChannel = config.getMonitor().shouldAccept(socketChannel);
+					if (getConfig().getMonitor() != null) {
+						connectedChannel = getConfig().getMonitor().shouldAccept(socketChannel);
 					}
 					if (connectedChannel == null) {
 						throw new RuntimeException("NetMonitor refuse channel");
 					}
 					//连接成功则构造AIOChannelContext对象
-					channelContext = bootstrapFunction.apply(connectedChannel);
+					channelContext = getBootstrapFunction().apply(connectedChannel);
 					channelContext.initTCPChannelContext();
 					handler.completed(channelContext, future);
 				} catch (Exception e) {
@@ -318,10 +269,7 @@ public class ClientBootstrap {
 			this.channelContext.close(flag);
 			this.channelContext = null;
 		}
-		if (this.asynchronousChannelGroup != null) {
-			this.asynchronousChannelGroup.shutdown();
-			this.asynchronousChannelGroup = null;
-		}
+		super.shutdown();
 	}
 
 	/**
@@ -335,15 +283,6 @@ public class ClientBootstrap {
 	public ClientBootstrap setThreadNum(int threadNum) {
 		getConfig().setBossThreadNumber(threadNum);
 		return this;
-	}
-
-	/**
-	 * 获取配置信息
-	 *
-	 * @return AioConfig
-	 */
-	public AioConfig getConfig() {
-		return this.config;
 	}
 
 	/**

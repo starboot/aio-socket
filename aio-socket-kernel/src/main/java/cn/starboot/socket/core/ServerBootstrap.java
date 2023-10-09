@@ -16,16 +16,12 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.config.AioServerConfig;
-import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousServerSocketChannel;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
-import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.intf.AioHandler;
 import cn.starboot.socket.plugins.Plugin;
-import cn.starboot.socket.utils.pool.memory.MemoryUnitFactory;
 import cn.starboot.socket.plugins.Plugins;
 import cn.starboot.socket.utils.AIOUtil;
-import cn.starboot.socket.utils.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +31,6 @@ import java.net.SocketOption;
 import java.net.StandardSocketOptions;
 import java.nio.channels.CompletionHandler;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * AIO Server 启动类
@@ -45,63 +38,14 @@ import java.util.function.Function;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class ServerBootstrap {
+public class ServerBootstrap extends AbstractBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerBootstrap.class);
-
-	/**
-	 * 内存池
-	 */
-	private MemoryPool memoryPool;
-
-	/**
-	 * 内核IO线程池
-	 */
-	private ExecutorService bossExecutorService;
-
-	/**
-	 * 读完成处理类
-	 */
-	private ReadCompletionHandler aioReadCompletionHandler;
-
-	/**
-	 * 写完成处理类
-	 */
-	private WriteCompletionHandler aioWriteCompletionHandler;
-
-	/**
-	 * AIO 通道组
-	 */
-	private ImproveAsynchronousChannelGroup asynchronousChannelGroup;
 
 	/**
 	 * AIO Server 通道
 	 */
 	private ImproveAsynchronousServerSocketChannel serverSocketChannel;
-
-	/**
-	 * 服务器配置类
-	 */
-	private final AioConfig config = new AioServerConfig();
-
-	/**
-	 * 虚拟内存工厂，这里为读操作获取虚拟内存
-	 */
-	private final MemoryUnitFactory readMemoryUnitFactory
-			= memoryBlock -> memoryBlock.allocate(getConfig().getReadBufferSize());
-
-	/**
-	 * socketChannel 和 ChannelContext联系
-	 */
-	private final Function<ImproveAsynchronousSocketChannel, TCPChannelContext> bootstrapFunction
-			= (improveAsynchronousSocketChannel) ->
-			new TCPChannelContext(improveAsynchronousSocketChannel,
-					getConfig(),
-					aioReadCompletionHandler,
-					aioWriteCompletionHandler,
-					memoryPool.allocateBufferPage(),
-					readMemoryUnitFactory);
-
 
 	/**
 	 * ServerBootstrap
@@ -111,17 +55,22 @@ public class ServerBootstrap {
 	 * @param handler 任务处理器
 	 */
 	public ServerBootstrap(String host, int port, AioHandler handler) {
-		this.config.setHost(host);
-		this.config.setPort(port);
-		this.config.getPlugins().addAioHandler(handler);
+		super(new AioServerConfig());
+		getConfig().setHost(host);
+		getConfig().setPort(port);
+		getConfig().getPlugins().addAioHandler(handler);
 	}
 
 	/**
 	 * 启动AIO Socket Server
 	 */
 	public void start() {
-		startExecutorService();
-		getConfig().initMemoryPoolFactory();
+		try {
+			beforeStart();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		start0();
 	}
 
@@ -131,13 +80,7 @@ public class ServerBootstrap {
 	private void start0() {
 		try {
 			checkAndResetConfig();
-			this.aioReadCompletionHandler = new ReadCompletionHandler();
-			this.aioWriteCompletionHandler = new WriteCompletionHandler();
-			if (this.memoryPool == null) {
-				this.memoryPool = getConfig().getMemoryPoolFactory().create();
-			}
-			this.asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(this.bossExecutorService, getConfig().getBossThreadNumber());
-			this.serverSocketChannel = ImproveAsynchronousServerSocketChannel.open(this.asynchronousChannelGroup);
+			this.serverSocketChannel = ImproveAsynchronousServerSocketChannel.open(getAsynchronousChannelGroup());
 			if (getConfig().getSocketOptions() != null) {
 				for (Map.Entry<SocketOption<Object>, Object> entry : getConfig().getSocketOptions().entrySet()) {
 					this.serverSocketChannel.setOption(entry.getKey(), entry.getValue());
@@ -194,12 +137,12 @@ public class ServerBootstrap {
 		TCPChannelContext context = null;
 		ImproveAsynchronousSocketChannel acceptChannel = channel;
 		try {
-			if (this.config.getMonitor() != null) {
+			if (getConfig().getMonitor() != null) {
 				acceptChannel = getConfig().getMonitor().shouldAccept(channel);
 			}
 			if (acceptChannel != null) {
 				acceptChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-				context = this.bootstrapFunction.apply(acceptChannel);
+				context = getBootstrapFunction().apply(acceptChannel);
 				context.initTCPChannelContext();
 			} else {
 				AIOUtil.close(channel);
@@ -228,22 +171,6 @@ public class ServerBootstrap {
 	}
 
 	/**
-	 * 启动内核线程池
-	 */
-	private void startExecutorService() {
-		if (getConfig().getBossThreadNumber() > 0) {
-			this.bossExecutorService = ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber());
-		} else {
-			this.bossExecutorService = ThreadUtils.getGroupExecutor();
-		}
-//        if (getConfig().getWorkerThreadNumber() > 0) {
-//            this.workerExecutorService = ThreadUtils.getAioExecutor(getConfig().getWorkerThreadNumber());
-//        }else {
-//            this.workerExecutorService = ThreadUtils.getAioExecutor();
-//        }
-	}
-
-	/**
 	 * 停止服务端
 	 */
 	public void shutdown() {
@@ -255,30 +182,7 @@ public class ServerBootstrap {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (!this.asynchronousChannelGroup.isTerminated()) {
-			try {
-				this.asynchronousChannelGroup.shutdownNow();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			this.asynchronousChannelGroup.awaitTermination(3, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		if (this.memoryPool != null) {
-			this.memoryPool.release();
-		}
-	}
-
-	/**
-	 * 获取配置信息
-	 *
-	 * @return AioConfig
-	 */
-	public AioConfig getConfig() {
-		return this.config;
+		super.shutdown();
 	}
 
 	/**
