@@ -115,7 +115,10 @@ abstract class AbstractBootstrap {
 			@Override
 			public void failed(Throwable exc, TCPChannelContext channelContext) {
 				try {
-					channelContext.getAioConfig().getHandler().stateEvent(channelContext, StateMachineEnum.INPUT_EXCEPTION, exc);
+					channelContext
+							.getAioConfig()
+							.getHandler()
+							.stateEvent(channelContext, StateMachineEnum.INPUT_EXCEPTION, exc);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -143,7 +146,10 @@ abstract class AbstractBootstrap {
 			@Override
 			public void failed(Throwable exc, TCPChannelContext channelContext) {
 				try {
-					channelContext.getAioConfig().getHandler().stateEvent(channelContext, StateMachineEnum.ENCODE_EXCEPTION, exc);
+					channelContext
+							.getAioConfig()
+							.getHandler()
+							.stateEvent(channelContext, StateMachineEnum.ENCODE_EXCEPTION, exc);
 					channelContext.close(true);
 				} catch (Exception e) {
 					e.printStackTrace();
