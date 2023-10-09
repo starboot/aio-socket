@@ -236,7 +236,6 @@ final class TCPChannelContext extends ChannelContext {
 			readBuffer.compact();
 		} else {
 			readBuffer.clear();
-//			freeReadMemoryUnit(true);
 		}
 		read0();
 	}
