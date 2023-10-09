@@ -132,10 +132,13 @@ final class TCPChannelContext extends ChannelContext {
 				}
 				return readBuffer;
 			} else {
-				if (aioConfig.isServer()
-						&& readBuffer != null
-						&& readBuffer.buffer().remaining() == readBuffer.buffer().capacity())
-				{
+				if (!aioConfig.isServer()) {
+					return null;
+				}
+				if (readBuffer == null) {
+					return null;
+				}
+				if (readBuffer.buffer().remaining() == readBuffer.buffer().capacity()) {
 					freeReadMemoryUnit(true);
 				}
 				return null;
