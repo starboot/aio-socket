@@ -1,7 +1,7 @@
 <p align="center">
 	<img alt="logo" src="https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-logo.png">
 </p>
-<h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket v2.x</h2>
+<h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket v3.x</h2>
 <h4 align="center">一款强大且轻量的面向网络层通讯框架</h4>
 <p align="center">
     <a href="https://www.oscs1024.com/project/oscs/mxd888/aio-socket?ref=badge_small"><img 
@@ -52,11 +52,15 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 > 2. maven 3.6.1
 > 3. IDEA 2020.1 社区版
 #### 引入Maven坐标  
+v3.0版本暂未推送至Maven中央仓库，大家可以fork到自己仓库并且poll到本地电脑运行一下。<br/>
+首先启动服务器: aio-socket-demo/src/main/java/cn.starboot.socket.demo.batch.server.Server.java<br/>
+启动客户端：aio-socket-demo/src/main/java/cn.starboot.socket.demo.batch.client.Client.java<br/>
+<br/>
 ~~~
 <dependency>
   <groupId>cn.starboot.socket</groupId>
   <artifactId>aio-socket-all</artifactId>
-  <version>2.0.1</version>
+  <version>3.0.0</version>
 </dependency>
 ~~~
 #### 起步
