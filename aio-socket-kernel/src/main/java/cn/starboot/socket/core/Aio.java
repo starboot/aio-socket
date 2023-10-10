@@ -2098,6 +2098,8 @@ public class Aio {
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
 	}
 
+	// -------------------------------多包发送篇--------------------------------
+
 	public static class OutputChannelContext {
 
 		private final ChannelContext channelContext;
