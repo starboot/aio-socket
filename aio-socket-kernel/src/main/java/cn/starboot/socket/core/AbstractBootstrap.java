@@ -151,7 +151,8 @@ abstract class AbstractBootstrap implements Bootstrap {
 		}
 		if (this.asynchronousChannelGroup == null) {
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("启用内置线程池: " + getConfig().getBossThreadNumber());
+				LOGGER.debug("Start the default thread pool for the aio-socket kernel with thread pool number :{} ",
+						getConfig().getBossThreadNumber());
 			}
 			startExecutorService();
 			this.asynchronousChannelGroup =
