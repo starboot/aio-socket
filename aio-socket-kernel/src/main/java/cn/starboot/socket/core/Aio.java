@@ -1514,25 +1514,6 @@ public class Aio {
 
 	// ------------------------------异步发送篇-------------------------------
 
-	public static class OutputChannelContext {
-
-		private final ChannelContext channelContext;
-
-		public OutputChannelContext(ChannelContext channelContext) {
-			this.channelContext = channelContext;
-		}
-
-		public void write(Packet packet) {
-			channelContext.aioEncoder(packet, false, false);
-		}
-	}
-
-	public static void multiSend(ChannelContext channelContext,
-							 Consumer<OutputChannelContext> outPutChannelContextConsumer) {
-		outPutChannelContextConsumer.accept(new OutputChannelContext(channelContext));
-		channelContext.flush();
-	}
-
 	/**
 	 * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
 	 *
@@ -2115,6 +2096,25 @@ public class Aio {
 			return false;
 		}
 		return sendToSet(aioConfig, set, packet, channelContextFilter, isBlock);
+	}
+
+	public static class OutputChannelContext {
+
+		private final ChannelContext channelContext;
+
+		public OutputChannelContext(ChannelContext channelContext) {
+			this.channelContext = channelContext;
+		}
+
+		public void write(Packet packet) {
+			channelContext.aioEncoder(packet, false, false);
+		}
+	}
+
+	public static void multiSend(ChannelContext channelContext,
+								 Consumer<OutputChannelContext> outPutChannelContextConsumer) {
+		outPutChannelContextConsumer.accept(new OutputChannelContext(channelContext));
+		channelContext.flush();
 	}
 
 	// -------------------------------unBing篇--------------------------------
