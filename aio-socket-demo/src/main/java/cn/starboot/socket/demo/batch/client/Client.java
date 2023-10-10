@@ -27,32 +27,38 @@ import java.io.IOException;
 
 public class Client {
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
-        String data = "hello aio-socket";
+		String data = "hello aio-socket";
 		Packet bytesPacket = new BytesPacket(data.getBytes());
-		ImproveAsynchronousChannelGroup asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors()), Runtime.getRuntime().availableProcessors());
-        ClientHandler clientHandler = new ClientHandler();
-        for (int i = 0; i < 10; i++) {
-            new Thread(() -> {
-                // 127.0.0.1
-                ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
-                bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)
-                        .setReadBufferSize(1024 * 1024)
-                        .setWriteBufferSize(1024 * 1024, 512)
-                ;
-                try {
-                    ChannelContext start = bootstrap.start(asynchronousChannelGroup);
-                    while (true) {
-                        Aio.send(start, bytesPacket);
-                    }
+		ImproveAsynchronousChannelGroup asynchronousChannelGroup =
+				ImproveAsynchronousChannelGroup
+						.withCachedThreadPool(ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors()),
+								Runtime.getRuntime().availableProcessors());
+		ClientHandler clientHandler = new ClientHandler();
+		for (int i = 0; i < 10; i++) {
+			new Thread(() -> {
+				ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
+				try {
+					ChannelContext channelContext =
+							bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)
+									.setReadBufferSize(1024 * 1024)
+									.setWriteBufferSize(1024 * 1024, 512)
+									.setMemoryKeep(true)
+									.start(asynchronousChannelGroup);
+					Aio.multiSend(channelContext,
+							outputChannelContext -> {
+								while (true) {
+									outputChannelContext.write(bytesPacket);
+								}
+							});
 //                    bootstrap.shutdown();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
-            }).start();
-        }
-    }
+			}).start();
+		}
+	}
 
 }

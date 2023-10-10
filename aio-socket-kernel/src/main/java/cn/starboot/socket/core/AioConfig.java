@@ -98,6 +98,8 @@ public abstract class AioConfig {
 
 	private int memoryBlockSize;
 
+	private boolean memoryKeep;
+
 	private SetWithLock<ChannelContext> connections;
 
 	/**
@@ -266,6 +268,14 @@ public abstract class AioConfig {
 	public AioConfig setMemoryBlockSize(int memoryBlockSize) {
 		this.memoryBlockSize = memoryBlockSize;
 		return this;
+	}
+
+	public boolean isMemoryKeep() {
+		return memoryKeep;
+	}
+
+	public void setMemoryKeep(boolean memoryKeep) {
+		this.memoryKeep = memoryKeep;
 	}
 
 	public abstract String getName();

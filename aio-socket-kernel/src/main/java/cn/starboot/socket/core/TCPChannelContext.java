@@ -131,19 +131,15 @@ final class TCPChannelContext extends ChannelContext {
 				if (readBuffer == null) {
 					readBuffer = readMemoryUnitFactory.createBuffer(memoryBlock);
 				}
-				return readBuffer;
 			} else {
-				if (!aioConfig.isServer()) {
-					return null;
-				}
-				if (readBuffer == null) {
+				if (aioConfig.isMemoryKeep() || readBuffer == null) {
 					return null;
 				}
 				if (readBuffer.buffer().remaining() == readBuffer.buffer().capacity()) {
 					freeReadMemoryUnit(true);
 				}
-				return null;
 			}
+			return readBuffer;
 		};
 		Consumer<WriteBuffer> flushConsumer = var -> {
 			if (!semaphore.tryAcquire()) {

@@ -233,6 +233,11 @@ public class ServerBootstrap extends AbstractBootstrap {
 		return this;
 	}
 
+	public ServerBootstrap setMemoryKeep(boolean isMemoryKeep) {
+		getConfig().setMemoryKeep(isMemoryKeep);
+		return this;
+	}
+
 	/**
 	 * 注册插件
 	 *

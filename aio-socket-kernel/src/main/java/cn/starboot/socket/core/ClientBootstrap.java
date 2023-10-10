@@ -333,6 +333,11 @@ public class ClientBootstrap extends AbstractBootstrap{
 		return this;
 	}
 
+	public ClientBootstrap setMemoryKeep(boolean isMemoryKeep) {
+		getConfig().setMemoryKeep(isMemoryKeep);
+		return this;
+	}
+
 	public ClientBootstrap addHeartPacket(Packet heartPacket) {
 		this.heartBeat = heartPacket;
 		return this;
