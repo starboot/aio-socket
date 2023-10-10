@@ -2113,6 +2113,14 @@ public class Aio {
 		}
 	}
 
+	/**
+	 * 多包发送过程中
+	 * 		1.单个包不支持阻塞发送
+	 * 		2.多个包组成的整体支持阻塞发送
+	 *
+	 * @param channelContext 通道上下文
+	 * @param outPutChannelContextConsumer 多包发送消费器
+	 */
 	public static void multiSend(ChannelContext channelContext,
 								 Consumer<OutputChannelContext> outPutChannelContextConsumer) {
 		outPutChannelContextConsumer.accept(new OutputChannelContext(channelContext));
