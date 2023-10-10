@@ -233,8 +233,7 @@ public final class WriteBuffer {
             return;
         }
         consumer.accept(this);
-        // 检查是否已经发送出去了
-        if (writeInBuf == null || writeInBuf.buffer().position() == 0) {
+        if (isFinishFlush()) {
             return;
         }
         // 有人在发送，这个消息进入等待队列  writeInBuf修改为读模式
@@ -261,6 +260,11 @@ public final class WriteBuffer {
             throw new RuntimeException(e1);
         }
     }
+
+	// 检查是否已经发送出去了
+    boolean isFinishFlush() {
+    	return writeInBuf == null || writeInBuf.buffer().position() == 0;
+	}
 
     /**
      * 刷新缓冲区，将数据发送出去
@@ -302,7 +306,7 @@ public final class WriteBuffer {
      * @return true:有,false:无
      */
     boolean isEmpty() {
-        return count == 0 && (writeInBuf == null || writeInBuf.buffer().position() == 0);
+        return count == 0 && isFinishFlush();
     }
 
     /**

@@ -385,6 +385,10 @@ final class TCPChannelContext extends ChannelContext {
 		if (isFlush) {
 			flush();
 		}
+		if (isBlock) {
+			// todo 阻塞发送待设计
+		}
+
 		return true;
 	}
 
