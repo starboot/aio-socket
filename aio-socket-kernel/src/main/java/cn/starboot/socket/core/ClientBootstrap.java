@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class ClientBootstrap extends AbstractBootstrap{
+public class ClientBootstrap extends AbstractBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientBootstrap.class);
 

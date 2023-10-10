@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-abstract class AbstractBootstrap {
+abstract class AbstractBootstrap implements Bootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBootstrap.class);
 
@@ -55,27 +55,6 @@ abstract class AbstractBootstrap {
 	 */
 	private final MemoryUnitFactory readMemoryUnitFactory
 			= memoryBlock -> memoryBlock.allocate(getConfig().getReadBufferSize());
-
-	/**
-	 * 启动
-	 */
-	protected void beforeStart() throws IOException {
-		getConfig().initMemoryPoolFactory();
-		if (this.memoryPool == null) {
-			this.memoryPool = getConfig().getMemoryPoolFactory().create();
-		}
-		if (this.asynchronousChannelGroup == null) {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("启用内置线程池: " + getConfig().getBossThreadNumber());
-			}
-			startExecutorService();
-			this.asynchronousChannelGroup =
-					ImproveAsynchronousChannelGroup
-							.withCachedThreadPool(this.bossExecutorService,
-									getConfig().getBossThreadNumber());
-		}
-
-	}
 
 	/**
 	 * socketChannel 和 ChannelContext联系
@@ -161,6 +140,29 @@ abstract class AbstractBootstrap {
 		};
 	}
 
+
+	/**
+	 * 启动
+	 */
+	protected void beforeStart() throws IOException {
+		getConfig().initMemoryPoolFactory();
+		if (this.memoryPool == null) {
+			this.memoryPool = getConfig().getMemoryPoolFactory().create();
+		}
+		if (this.asynchronousChannelGroup == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("启用内置线程池: " + getConfig().getBossThreadNumber());
+			}
+			startExecutorService();
+			this.asynchronousChannelGroup =
+					ImproveAsynchronousChannelGroup
+							.withCachedThreadPool(this.bossExecutorService,
+									getConfig().getBossThreadNumber());
+		}
+
+	}
+
+	@Override
 	public AioConfig getConfig() {
 		return this.config;
 	}
@@ -201,6 +203,7 @@ abstract class AbstractBootstrap {
 //        }
 	}
 
+	@Override
 	public void shutdown() {
 		if (!this.asynchronousChannelGroup.isTerminated()) {
 			try {
