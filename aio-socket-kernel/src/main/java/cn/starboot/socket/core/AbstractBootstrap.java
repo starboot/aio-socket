@@ -26,14 +26,19 @@ abstract class AbstractBootstrap {
 	private MemoryPool memoryPool;
 
 	/**
+	 * 服务器配置类
+	 */
+	private final AioConfig config;
+
+	/**
 	 * 内核IO线程池
 	 */
 	private ExecutorService bossExecutorService;
 
 	/**
-	 * 服务器配置类
+	 * AIO 通道组
 	 */
-	private final AioConfig config;
+	private ImproveAsynchronousChannelGroup asynchronousChannelGroup;
 
 	/**
 	 * 读完成处理类
@@ -46,11 +51,6 @@ abstract class AbstractBootstrap {
 	private final CompletionHandler<Integer, TCPChannelContext> aioWriteCompletionHandler;
 
 	/**
-	 * AIO 通道组
-	 */
-	private ImproveAsynchronousChannelGroup asynchronousChannelGroup;
-
-	/**
 	 * 虚拟内存工厂，这里为读操作获取虚拟内存
 	 */
 	private final MemoryUnitFactory readMemoryUnitFactory
@@ -60,12 +60,15 @@ abstract class AbstractBootstrap {
 	 * 启动
 	 */
 	protected void beforeStart() throws IOException {
-		startExecutorService();
 		getConfig().initMemoryPoolFactory();
 		if (this.memoryPool == null) {
 			this.memoryPool = getConfig().getMemoryPoolFactory().create();
 		}
 		if (this.asynchronousChannelGroup == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("启用内置线程池: " + getConfig().getBossThreadNumber());
+			}
+			startExecutorService();
 			this.asynchronousChannelGroup =
 					ImproveAsynchronousChannelGroup
 							.withCachedThreadPool(this.bossExecutorService,

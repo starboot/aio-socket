@@ -106,7 +106,7 @@ public class ClientBootstrap extends AbstractBootstrap{
 	public final ChannelContext start() throws IOException {
 
 //		this.asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
-		return start(getAsynchronousChannelGroup());
+		return start(null);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class ClientBootstrap extends AbstractBootstrap{
 			checkAndResetConfig();
 		}
 		CompletableFuture<ChannelContext> future = new CompletableFuture<>();
-		start(asynchronousChannelGroup, future, new CompletionHandler<ChannelContext, CompletableFuture<ChannelContext>>() {
+		start(future, new CompletionHandler<ChannelContext, CompletableFuture<ChannelContext>>() {
 			@Override
 			public void completed(ChannelContext channelContext, CompletableFuture<ChannelContext> future) {
 				if (future.isDone() || future.isCancelled()) {
@@ -164,16 +164,16 @@ public class ClientBootstrap extends AbstractBootstrap{
 	/**
 	 * 采用异步的方式启动客户端
 	 *
-	 * @param asynchronousChannelGroup 通信线程资源组
 	 * @param future                   可传入回调方法中的附件对象
 	 * @param handler                  异步回调
 	 * @throws IOException 网络IO异常
 	 */
-	private void start(ImproveAsynchronousChannelGroup asynchronousChannelGroup, CompletableFuture<ChannelContext> future,
-					   CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler) throws IOException {
+	private void start(CompletableFuture<ChannelContext> future,
+					   CompletionHandler<ChannelContext, ? super CompletableFuture<ChannelContext>> handler)
+			throws IOException {
 
 		beforeStart();
-		ImproveAsynchronousSocketChannel socketChannel = ImproveAsynchronousSocketChannel.open(asynchronousChannelGroup);
+		ImproveAsynchronousSocketChannel socketChannel = ImproveAsynchronousSocketChannel.open(getAsynchronousChannelGroup());
 //		Supplier<MemoryUnit> supplier = () -> readMemoryUnitFactory.createBuffer(memoryPool.allocateBufferPage());
 		if (getConfig().getSocketOptions() != null) {
 			for (Map.Entry<SocketOption<Object>, Object> entry : getConfig().getSocketOptions().entrySet()) {
