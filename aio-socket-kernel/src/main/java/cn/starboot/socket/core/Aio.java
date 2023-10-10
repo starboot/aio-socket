@@ -2100,6 +2100,15 @@ public class Aio {
 
 	// -------------------------------多包发送篇--------------------------------
 
+	/**
+	 * 多包发送适配器对象
+	 * ~~
+	 * 为了对外暴露统一API
+	 * 因此将ChannelContext对象的发送方法设置为了protected
+	 * 通过适配器设计模式实现多包发送，提升连续发送效率
+	 * ~~
+	 * @author MDong
+	 */
 	public static class OutputChannelContext {
 
 		private final ChannelContext channelContext;
@@ -2126,6 +2135,10 @@ public class Aio {
 		outPutChannelContextConsumer.accept(new OutputChannelContext(channelContext));
 		channelContext.flush();
 	}
+
+	/*
+	 * todo 还有众多(多包发送功能)暂未实现。等作者有时间了吧
+	 */
 
 	// -------------------------------unBing篇--------------------------------
 
