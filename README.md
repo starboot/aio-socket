@@ -52,7 +52,7 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 > 2. maven 3.6.1
 > 3. IDEA 2020.1 社区版
 #### 引入Maven坐标  
-v3.0版本暂未推送至Maven中央仓库，大家可以fork到自己仓库并且poll到本地电脑运行一下。<br/>
+v3.0版本暂未推送至Maven中央仓库，大家可以fork到自己仓库并且pull到本地电脑运行体验。<br/>
 首先启动服务器: aio-socket-demo/src/main/java/cn.starboot.socket.demo.batch.server.Server.java<br/>
 启动客户端：aio-socket-demo/src/main/java/cn.starboot.socket.demo.batch.client.Client.java<br/>
 <br/>
