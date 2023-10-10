@@ -2,7 +2,7 @@
 	<img alt="logo" src="https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-logo.png">
 </p>
 <h2 align="center" style="margin: 30px 0 30px; font-weight: bold;">aio-socket v3.x</h2>
-<h4 align="center">一款强大且轻量的面向网络层通讯框架</h4>
+<h4 align="center">一款强大且轻量的传输层通讯框架内核</h4>
 <p align="center">
     <a href="https://www.oscs1024.com/project/oscs/mxd888/aio-socket?ref=badge_small"><img 
             src="https://www.oscs1024.com/platform/badge/mxd888/aio-socket.svg?size=small" 
