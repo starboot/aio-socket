@@ -28,6 +28,9 @@ import java.util.function.Consumer;
  * 在执行发送，若没有人往这个通道写入数据则立刻发送
  * 否则存进待发送队列items
  *
+ * 同步发送wait和notifyAll的操作对象为：consumer
+ * 同步方法学习请参考：https://blog.csdn.net/x541211190/article/details/109258676
+ *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
