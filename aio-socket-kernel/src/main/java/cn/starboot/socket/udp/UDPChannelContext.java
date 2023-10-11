@@ -103,7 +103,7 @@ final class UDPChannelContext extends ChannelContext {
 			Aio.close(this);
 			return false;
 		}
-		flush();
+		flush(false);
 		return true;
 	}
 
@@ -113,6 +113,6 @@ final class UDPChannelContext extends ChannelContext {
 	}
 
 	protected void UDPFlush() {
-		flush();
+		flush(false);
 	}
 }

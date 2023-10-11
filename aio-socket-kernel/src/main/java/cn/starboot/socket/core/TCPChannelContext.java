@@ -207,7 +207,7 @@ final class TCPChannelContext extends ChannelContext {
 				return;
 			}
 		}
-		flush();
+		flush(false);
 		if (eof || status == ChannelStatusEnum.CHANNEL_STATUS_CLOSING) {
 			close(false);
 			handler.stateEvent(this, StateMachineEnum.INPUT_SHUTDOWN, null);
@@ -270,7 +270,7 @@ final class TCPChannelContext extends ChannelContext {
 			close();
 		} else {
 			//也许此时有新的消息通过write方法添加到writeCacheQueue中
-			flush();
+			flush(false);
 		}
 	}
 
@@ -339,7 +339,7 @@ final class TCPChannelContext extends ChannelContext {
 			close(true);
 		} else {
 			getAioConfig().getHandler().stateEvent(this, StateMachineEnum.CHANNEL_CLOSING, null);
-			flush();
+			flush(false);
 		}
 	}
 
@@ -383,10 +383,8 @@ final class TCPChannelContext extends ChannelContext {
 			lock.unlock();
 		}
 		if (isFlush) {
-			flush();
-		}
-		if (isBlock) {
-			// todo 阻塞发送待设计
+			// 是否同步发送
+			flush(isBlock);
 		}
 
 		return true;

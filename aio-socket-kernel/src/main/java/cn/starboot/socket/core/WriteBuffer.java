@@ -193,8 +193,7 @@ public final class WriteBuffer {
         }
         ByteBuffer writeBuffer = writeInBuf.buffer();
         if (closed) {
-            writeInBuf.clean();
-            writeInBuf = null;
+            freeWriteInBuf();
             throw new AioEncoderException("writeBuffer has closed");
         }
         int remaining = writeBuffer.remaining();
@@ -236,10 +235,11 @@ public final class WriteBuffer {
         if (isFinishFlush()) {
             return;
         }
-        // 有人在发送，这个消息进入等待队列  writeInBuf修改为读模式
-        writeInBuf.buffer().flip();
+        // 有人在发送，这个消息进入等待队列
+//        writeInBuf.buffer().flip();
         MemoryUnit memoryUnit = writeInBuf;
-        writeInBuf = null;
+        flushWriteInBuf();
+//        writeInBuf = null;
         try {
             while (count == items.length) {
                 this.wait();
@@ -261,43 +261,71 @@ public final class WriteBuffer {
         }
     }
 
-	// 检查是否已经发送出去了
-    boolean isFinishFlush() {
-    	return writeInBuf == null || writeInBuf.buffer().position() == 0;
-	}
-
     /**
      * 刷新缓冲区，将数据发送出去
      */
-    protected void flush() {
+    protected void flush(boolean isSyn) {
         if (closed) {
             throw new RuntimeException("OutputStream has closed");
         }
         if (this.count > 0) {
             consumer.accept(this);
-            return;
-        }
-        MemoryUnit currentWriteInBuf = writeInBuf;
-        if (currentWriteInBuf != null && currentWriteInBuf.buffer().position() > 0) {
-			consumer.accept(this);
-        }
+        } else {
+			MemoryUnit currentWriteInBuf = writeInBuf;
+			if (currentWriteInBuf != null && currentWriteInBuf.buffer().position() > 0) {
+				consumer.accept(this);
+			}
+		}
+        if (isSyn) {
+			// 当前输出需要同步到items或者交给channelContext的writeBuffer
+			if (isFinishFlush())
+				return;
+			synchronized (consumer) {
+				try {
+					consumer.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
     }
+
+	// 检查是否已经发送出去了
+	boolean isFinishFlush() {
+		return writeInBuf == null || writeInBuf.buffer().position() == 0;
+	}
+
+	/**
+	 * 刷新当前暂存的输出流，将它存进items或者交给channelContext的writeBuffer
+	 */
+	private void flushWriteInBuf() {
+		// writeInBuf修改为读模式
+    	writeInBuf.buffer().flip();
+    	writeInBuf = null;
+		synchronized (consumer) {
+			consumer.notifyAll();
+		}
+	}
 
     public synchronized void close() {
         if (closed) {
             return;
         }
-        flush();
+        flush(false);
         closed = true;
-        if (writeInBuf != null) {
-            writeInBuf.clean();
-            writeInBuf = null;
-        }
+		freeWriteInBuf();
         MemoryUnit byteBuf;
         while ((byteBuf = poll()) != null) {
             byteBuf.clean();
         }
     }
+
+    private void freeWriteInBuf() {
+		if (writeInBuf != null) {
+			writeInBuf.clean();
+			writeInBuf = null;
+		}
+	}
 
 
     /**
@@ -343,9 +371,10 @@ public final class WriteBuffer {
         }
         if (writeInBuf != null && writeInBuf.buffer().position() > 0) {
             // 将暂存器里面的数据更改为读模式，一会将其读出来并发送
-            writeInBuf.buffer().flip();
+//            writeInBuf.buffer().flip();
             MemoryUnit buffer = writeInBuf;
-            writeInBuf = null;
+            flushWriteInBuf();
+//            writeInBuf = null;
             return buffer;
         } else {
             return null;

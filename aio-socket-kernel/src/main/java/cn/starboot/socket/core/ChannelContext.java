@@ -131,8 +131,8 @@ public abstract class ChannelContext {
     /**
      * 通道数据输出出
      */
-    protected void flush(){
-        byteBuf.flush();
+    protected void flush(boolean isSyn){
+        byteBuf.flush(isSyn);
     }
 
     /**

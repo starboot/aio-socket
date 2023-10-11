@@ -46,12 +46,23 @@ public class Client {
 									.setWriteBufferSize(1024 * 1024, 512)
 									.setMemoryKeep(true)
 									.start(asynchronousChannelGroup);
+
+					//(测试1和测试2的注释，不要同时打开，因为每个都是while(true).都打开没有测试的意义)
+					// 测试1. 多包发送，适合用作流媒体服务器开发
 					Aio.multiSend(channelContext,
 							outputChannelContext -> {
 								while (true) {
 									outputChannelContext.write(bytesPacket);
 								}
 							});
+
+					// 测试2. 单包发送，适合用作HTTP、websocket、IM、IOT和RPC等单包场景
+//					while (true) {
+//						Aio.send(channelContext, bytesPacket);
+//					}
+
+
+					// 关闭服务器
 //                    bootstrap.shutdown();
 				} catch (IOException e) {
 					e.printStackTrace();

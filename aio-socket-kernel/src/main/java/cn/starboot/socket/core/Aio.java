@@ -2133,7 +2133,7 @@ public class Aio {
 	public static void multiSend(ChannelContext channelContext,
 								 Consumer<OutputChannelContext> outPutChannelContextConsumer) {
 		outPutChannelContextConsumer.accept(new OutputChannelContext(channelContext));
-		channelContext.flush();
+		channelContext.flush(false);
 	}
 
 	/*
