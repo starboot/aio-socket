@@ -94,7 +94,6 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 v3.0版本暂未推送至Maven中央仓库<br/>
 等待多次测试表现没问题，可以上生产环境后将会推送至Maven中央仓库<br/>
 大家可以fork到自己仓库并且pull到本地电脑运行体验。<br/>
-
 ~~~
 <dependency>
   <groupId>cn.starboot.socket</groupId>
@@ -103,13 +102,61 @@ v3.0版本暂未推送至Maven中央仓库<br/>
 </dependency>
 ~~~
 
-### 简单例子: **Hello World**
-这里使用**basic**<br/>
-请看清楚是**basic**不是**batch**<br/>
-**basic:** hello world 级别的测试<br/>
-**batch:** 压力测试，用于展示aio-socket性能表现<br/>
-首先启动服务器: **aio-socket-demo**/src/main/java/cn.starboot.socket.demo.**basic**.server.**Server.java**<br/>
-启动客户端：**aio-socket-demo**/src/main/java/cn.starboot.socket.demo.**basic**.client.**Client.java**<br/>
+### **Demo**
+```java
+// 创建消息包处理类
+public class ServerHandler extends StringHandler {
+	@Override
+	public Packet handle(ChannelContext channelContext, StringPacket packet) {
+
+		try {
+			System.out.println("收到来自客户端" + channelContext.getRemoteAddress() + "的消息:" + packet.getData());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// 将消息回发给客户端
+		return packet;
+	}
+}
+```
+```java
+public class Server {
+
+    public static void main(String[] args) {
+        ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
+        bootstrap.setMemoryPoolFactory(1024 * 64, 2, true)
+                .setReadBufferSize(1024 * 4)
+                .setWriteBufferSize(1024 * 2, 128)
+                .start();
+    }
+}
+```
+
+```java
+public class ClientHandler extends StringHandler {
+	@Override
+	public Packet handle(ChannelContext channelContext, StringPacket packet) {
+		System.out.println("收到来自服务器的消息：" + packet.getData());
+		return null;
+	}
+}
+```
+```java
+public class Client {
+
+    public static void main(String[] args) throws IOException {
+        Packet demoPacket = new StringPacket("hello aio-socket");
+		ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
+		bootstrap.setBufferFactory(1024 * 16, 2, true)
+				.setReadBufferSize(1024 * 4)
+				.setWriteBufferSize(1024 * 2, 4);
+
+		ChannelContext start = bootstrap.start();
+		Aio.send(start, demoPacket);
+    }
+}
+```
+<br/>
 观看控制台打印信息(Server和Client的都有哦!)  
 
 ### **流量转发速率**压力测试(尽情享受aio-socket内核性能)(**540+MB/s**)
@@ -167,3 +214,22 @@ v3.0版本暂未推送至Maven中央仓库<br/>
    t-im：基于aio-socket开发的高性能IM通讯框架，官网：  https://gitee.com/starboot/t-im  <br>  
    WeChat：为t-im 提供基本的UI功能，官网：  https://gitee.com/starboot/we-chat  <br>  
    本项目如有侵犯到任何个人或组织的权益请联系邮箱：1191998028@qq.com （如有侵权请联系删除）
+   
+   
+## LICENSE
+
+~~~
+   Copyright 2019-2022 The aio-socket Project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+~~~
