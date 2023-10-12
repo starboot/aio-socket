@@ -194,8 +194,7 @@ public class Client {
 启动客户端：**aio-socket-demo**/src/main/java/cn.starboot.socket.demo.**batch**.**client**.**StreamClient.java**<br/>
 <br/>
 <br/>
-打开服务器的控制台，可以查看当前流量传输速率。比较每秒处理多少消息比如1000w/s、500w/s，这些没有意义。
-作为通讯内核，应该关注流量转发速率，消息处理速度在ISO第七层的应用层有众多因素掺杂。并且这不应该成为量化一个通讯内核好坏的指标。<br/>
+打开服务器的控制台，可以查看当前流量传输速率。<br/>
 
 ### **消息处理速率**压力测试 (**2696w/s**)
 这里使用**batch**<br/>，并且测试客户端是：**ProcessorClient.java**。测试服务器没有变化<br/>
