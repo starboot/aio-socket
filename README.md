@@ -91,7 +91,10 @@ Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等
 
 ### 引入Maven坐标  
 
-v3.0版本暂未推送至Maven中央仓库，大家可以fork到自己仓库并且pull到本地电脑运行体验。<br/>
+v3.0版本暂未推送至Maven中央仓库<br/>
+等待多次测试表现没问题，可以上生产环境后将会推送至Maven中央仓库<br/>
+大家可以fork到自己仓库并且pull到本地电脑运行体验。<br/>
+
 ~~~
 <dependency>
   <groupId>cn.starboot.socket</groupId>
