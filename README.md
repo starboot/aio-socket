@@ -103,7 +103,7 @@ v3.0版本暂未推送至Maven中央仓库<br/>
 </dependency>
 ~~~
 
-### **Demo: Hello World**
+### 简单例子: **Hello World**
 这里使用**basic**<br/>
 请看清楚是**basic**不是**batch**<br/>
 **basic:** hello world 级别的测试<br/>
