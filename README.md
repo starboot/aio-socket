@@ -23,7 +23,7 @@
 ## aio-socket 简介
 
 aio-socket是Java AIO通讯内核，采用了内存池、线程池、插件化增添模块等思想进行设计。
-采用静态类方法API进行统一封装，提供了基本的HTTP、WebSocket和MQTT等基本的解编码能力。
+采用静态类方法API进行统一封装，提供了基本的HTTP、WebSocket和MQTT等解编码能力。
 意在制作一个易于理解、性能强悍的通讯内核。
 为即时通讯(IM)、物联网(IOT)以及实时流媒体服务器(Real time streaming server)等领域提供价值吧！
 
