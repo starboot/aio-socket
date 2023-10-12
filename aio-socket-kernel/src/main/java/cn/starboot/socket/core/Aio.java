@@ -40,9 +40,9 @@ import java.util.function.Consumer;
  * 群发
  * 移除连接、关闭连接
  * GET：获取指定群组或Id的ChannelContext or ChannelContexts
- *
+ * <p>
  * 使用方式：Aio.bindBsId(bsId, channelContext);
- * 		   如果需要返回结果：Boolean b = Aio.bindBsId(bsId, channelContext);
+ * 如果需要返回结果：Boolean b = Aio.bindBsId(bsId, channelContext);
  *
  * @author MDong
  * @author t-io
@@ -57,10 +57,10 @@ public class Aio {
 	/**
 	 * 绑定业务ID
 	 *
-	 * @param bsId 业务ID
+	 * @param bsId           业务ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return {@code true} 绑定成功 或者
-	 * 		   {@code false} 绑定失败
+	 * {@code false} 绑定失败
 	 */
 	public static Boolean bindBsId(String bsId,
 								   ChannelContext channelContext) {
@@ -78,7 +78,7 @@ public class Aio {
 	/**
 	 * 绑定客户端节点
 	 *
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param node           客户端 {@link cn.starboot.socket.Node}
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
@@ -96,7 +96,7 @@ public class Aio {
 	/**
 	 * 绑定集群ID
 	 *
-	 * @param cluId 集群ID
+	 * @param cluId          集群ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
@@ -116,7 +116,7 @@ public class Aio {
 	/**
 	 * 绑定群组：提供群组ID和用户上下文信息
 	 *
-	 * @param groupId 群组ID
+	 * @param groupId        群组ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
@@ -137,8 +137,8 @@ public class Aio {
 	 * 绑定群组：不提供群组ID和用户上下文信息
 	 *
 	 * @param aioConfig 配置信息
-	 * @param userId 用户ID
-	 * @param groupId 群组ID
+	 * @param userId    用户ID
+	 * @param groupId   群组ID
 	 * @return 绑定状态
 	 */
 	public static Boolean bindGroup(AioConfig aioConfig,
@@ -150,7 +150,7 @@ public class Aio {
 	/**
 	 * 绑定ID
 	 *
-	 * @param id ID
+	 * @param id             ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
@@ -171,7 +171,7 @@ public class Aio {
 	/**
 	 * 绑定IP
 	 *
-	 * @param ip IP
+	 * @param ip             IP
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
@@ -191,7 +191,7 @@ public class Aio {
 	/**
 	 * 绑定token
 	 *
-	 * @param token TOKEN
+	 * @param token          TOKEN
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
@@ -211,7 +211,7 @@ public class Aio {
 	/**
 	 * 绑定用户
 	 *
-	 * @param user USER
+	 * @param user           USER
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 绑定状态
 	 */
@@ -234,7 +234,7 @@ public class Aio {
 	 * 同步发送到指定用户
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param packet         数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSend(ChannelContext channelContext,
@@ -249,7 +249,7 @@ public class Aio {
 	 * 同步发送到平台所有用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToAll(AioConfig aioConfig,
@@ -260,8 +260,8 @@ public class Aio {
 	/**
 	 * 同步发送到平台所有用户，并且带有过滤规则
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -277,8 +277,8 @@ public class Aio {
 	 * 同步发送到指定业务ID
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param bsId      业务ID
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToBsId(AioConfig aioConfig,
@@ -291,8 +291,8 @@ public class Aio {
 	 * 同步发送到指定用户节点
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToClientNode(AioConfig aioConfig,
@@ -305,8 +305,8 @@ public class Aio {
 	 * 同步发送到指定集群中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param cluId     集群ID
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToCluId(AioConfig aioConfig,
@@ -318,9 +318,9 @@ public class Aio {
 	/**
 	 * 同步发送到指定集群中，并且带有过滤规则
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId                集群ID
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -336,8 +336,8 @@ public class Aio {
 	/**
 	 * 同步发送到指定群组中
 	 *
-	 * @param groupId 群组ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param groupId   群组ID
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @return 发送状态
 	 */
@@ -350,9 +350,9 @@ public class Aio {
 	/**
 	 * 同步发送到指定群组中，并且带有过滤规则
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId              群组ID
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -369,8 +369,8 @@ public class Aio {
 	 * 同步发送到指定ID
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param id        ID
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToId(AioConfig aioConfig,
@@ -383,8 +383,8 @@ public class Aio {
 	 * 同步发送到指定IP中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param ip        IP
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToIp(AioConfig aioConfig,
@@ -396,9 +396,9 @@ public class Aio {
 	/**
 	 * 同步发送到指定IP中，并且带有过滤规则
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip                   IP
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -415,8 +415,8 @@ public class Aio {
 	 * 同步发送到指定TOKEN中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param token     TOKEN
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToToken(AioConfig aioConfig,
@@ -428,9 +428,9 @@ public class Aio {
 	/**
 	 * 同步发送到指定TOKEN中，并且带有过滤规则
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token                TOKEN
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -447,8 +447,8 @@ public class Aio {
 	 * 同步发送到指定用户中
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param user      USER
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean bSendToUser(AioConfig aioConfig,
@@ -460,9 +460,9 @@ public class Aio {
 	/**
 	 * 同步发送到指定用户中，并且带有过滤规则
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user                 USER
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -490,7 +490,7 @@ public class Aio {
 	 * 关闭指定通道的连接，并提供关闭码
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
-	 * @param closeCode 关闭状态码 {@link CloseCode}
+	 * @param closeCode      关闭状态码 {@link CloseCode}
 	 */
 	public static void close(ChannelContext channelContext,
 							 CloseCode closeCode) {
@@ -520,7 +520,7 @@ public class Aio {
 	 * 关闭指定业务ID的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
+	 * @param bsId      业务ID
 	 */
 	public static void closeBsId(AioConfig aioConfig,
 								 String bsId) {
@@ -531,7 +531,7 @@ public class Aio {
 	 * 关闭指定业务ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
+	 * @param bsId      业务ID
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeBsId(AioConfig aioConfig,
@@ -544,7 +544,7 @@ public class Aio {
 	 * 关闭指定客户节点的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
 	 */
 	public static void closeClientNode(AioConfig aioConfig,
 									   Node node) {
@@ -555,7 +555,7 @@ public class Aio {
 	 * 关闭指定客户节点的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeClientNode(AioConfig aioConfig,
@@ -568,7 +568,7 @@ public class Aio {
 	 * 关闭指定集群ID的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
+	 * @param cluId     集群ID
 	 */
 	public static void closeClu(AioConfig aioConfig,
 								String cluId) {
@@ -579,7 +579,7 @@ public class Aio {
 	 * 关闭指定集群ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
+	 * @param cluId     集群ID
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeClu(AioConfig aioConfig,
@@ -592,7 +592,7 @@ public class Aio {
 	 * 关闭指定群组的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组
+	 * @param groupId   群组
 	 */
 	public static void closeGroup(AioConfig aioConfig,
 								  String groupId) {
@@ -603,7 +603,7 @@ public class Aio {
 	 * 关闭指定群组的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组
+	 * @param groupId   群组
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeGroup(AioConfig aioConfig,
@@ -616,7 +616,7 @@ public class Aio {
 	 * 关闭指定ID的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param id        ID
 	 */
 	public static void closeId(AioConfig aioConfig,
 							   String id) {
@@ -627,7 +627,7 @@ public class Aio {
 	 * 关闭指定ID的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param id        ID
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeId(AioConfig aioConfig,
@@ -640,7 +640,7 @@ public class Aio {
 	 * 关闭指定IP的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param ip        IP
 	 */
 	public static void closeIp(AioConfig aioConfig,
 							   String ip) {
@@ -651,7 +651,7 @@ public class Aio {
 	 * 关闭指定IP的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param ip        IP
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeIp(AioConfig aioConfig,
@@ -664,7 +664,7 @@ public class Aio {
 	 * 关闭指定TOKEN的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param token     TOKEN
 	 */
 	public static void closeToken(AioConfig aioConfig,
 								  String token) {
@@ -675,7 +675,7 @@ public class Aio {
 	 * 关闭指定TOKEN的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param token     TOKEN
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeToken(AioConfig aioConfig,
@@ -688,7 +688,7 @@ public class Aio {
 	 * 关闭指定USER的连接
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param user      USER
 	 */
 	public static void closeUser(AioConfig aioConfig,
 								 String user) {
@@ -699,7 +699,7 @@ public class Aio {
 	 * 关闭指定USER的连接，并提供关闭码
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param user      USER
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void closeUser(AioConfig aioConfig,
@@ -711,9 +711,9 @@ public class Aio {
 	/**
 	 * 关闭指定集合的连接，并提供关闭码
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param aioConfig   配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param setWithLock 带有锁结构的SET集合
-	 * @param closeCode 关闭状态码 {@link CloseCode}
+	 * @param closeCode   关闭状态码 {@link CloseCode}
 	 */
 	public static void closeSet(AioConfig aioConfig,
 								SetWithLock<ChannelContext> setWithLock,
@@ -756,7 +756,7 @@ public class Aio {
 	 * 根据业务ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
+	 * @param bsId      业务ID
 	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getByBsId(AioConfig aioConfig,
@@ -771,7 +771,7 @@ public class Aio {
 	 * 根据业务ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
+	 * @param bsId      业务ID
 	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getChannelContextByBsId(AioConfig aioConfig,
@@ -783,7 +783,7 @@ public class Aio {
 	 * 根据客户节点获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
 	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getByClientNode(AioConfig aioConfig,
@@ -798,7 +798,7 @@ public class Aio {
 	 * 根据客户节点获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
 	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getChannelContextByClientNode(AioConfig aioConfig,
@@ -810,7 +810,7 @@ public class Aio {
 	 * 根据集群ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
+	 * @param cluId     集群ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByCluId(AioConfig aioConfig,
@@ -825,7 +825,7 @@ public class Aio {
 	 * 根据集群ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
+	 * @param cluId     集群ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByCluId(AioConfig aioConfig,
@@ -837,7 +837,7 @@ public class Aio {
 	 * 根据群组ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组ID
+	 * @param groupId   群组ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByGroupId(AioConfig aioConfig,
@@ -852,7 +852,7 @@ public class Aio {
 	 * 根据群组ID获取指定ID下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组ID
+	 * @param groupId   群组ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByGroupId(AioConfig aioConfig,
@@ -864,7 +864,7 @@ public class Aio {
 	 * 根据ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param id        ID
 	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getById(AioConfig aioConfig,
@@ -879,7 +879,7 @@ public class Aio {
 	 * 根据ID获取指定用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param id        ID
 	 * @return 用户上下文信息
 	 */
 	public static ChannelContext getChannelContextById(AioConfig aioConfig,
@@ -891,7 +891,7 @@ public class Aio {
 	 * 根据IP获取指定IP下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param ip        IP
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByIp(AioConfig aioConfig,
@@ -906,7 +906,7 @@ public class Aio {
 	 * 根据IP获取指定IP下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param ip        IP
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByIp(AioConfig aioConfig,
@@ -918,7 +918,7 @@ public class Aio {
 	 * 根据TOKEN获取指定TOKEN下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param token     TOKEN
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByToken(AioConfig aioConfig,
@@ -933,7 +933,7 @@ public class Aio {
 	 * 根据集群TOKEN获取指定TOKEN下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param token     TOKEN
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByToken(AioConfig aioConfig,
@@ -945,7 +945,7 @@ public class Aio {
 	 * 根据USER获取指定USER下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param user      USER
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getByUser(AioConfig aioConfig,
@@ -960,7 +960,7 @@ public class Aio {
 	 * 根据USER获取指定USER下所有在线用户上下文信息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param user      USER
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
 	public static SetWithLock<ChannelContext> getChannelContextByUser(AioConfig aioConfig,
@@ -973,7 +973,7 @@ public class Aio {
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param pageIndex 索引页
-	 * @param pageSize 页面大小
+	 * @param pageSize  页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig,
@@ -987,9 +987,9 @@ public class Aio {
 	 * 按照分页获取指定集群组ID下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
+	 * @param cluId     集群ID
 	 * @param pageIndex 索引页
-	 * @param pageSize 页面大小
+	 * @param pageSize  页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfClu(AioConfig aioConfig,
@@ -1007,7 +1007,7 @@ public class Aio {
 	 * 获取指定集群组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
+	 * @param cluId     集群ID
 	 * @return int
 	 */
 	public static Integer cluCount(AioConfig aioConfig,
@@ -1022,8 +1022,8 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定集群组中
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId          集群ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1041,9 +1041,9 @@ public class Aio {
 	 * 按照分页获取指定群组ID下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组ID
+	 * @param groupId   群组ID
 	 * @param pageIndex 索引页
-	 * @param pageSize 页面大小
+	 * @param pageSize  页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfGroup(AioConfig aioConfig,
@@ -1061,7 +1061,7 @@ public class Aio {
 	 * 获取指定群组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组ID
+	 * @param groupId   群组ID
 	 * @return int
 	 */
 	// 群组有多少个连接
@@ -1077,8 +1077,8 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定群组中
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组ID
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId        群组ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1094,13 +1094,12 @@ public class Aio {
 	}
 
 	/**
-	 *
 	 * 按照分页获取指定IP组下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param ip        IP
 	 * @param pageIndex 索引页
-	 * @param pageSize 页面大小
+	 * @param pageSize  页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfIp(AioConfig aioConfig,
@@ -1118,7 +1117,7 @@ public class Aio {
 	 * 获取指定IP组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param ip        IP
 	 * @return int
 	 */
 	public static Integer ipCount(AioConfig aioConfig,
@@ -1133,8 +1132,8 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定IP组中
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip             IP
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1152,9 +1151,9 @@ public class Aio {
 	 * 按照分页获取指定TOKEN组下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param token     TOKEN
 	 * @param pageIndex 索引页
-	 * @param pageSize 页面大小
+	 * @param pageSize  页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfToken(AioConfig aioConfig,
@@ -1172,7 +1171,7 @@ public class Aio {
 	 * 获取指定TOKEN组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param token     TOKEN
 	 * @return int
 	 */
 	public static Integer tokenCount(AioConfig aioConfig,
@@ -1187,8 +1186,8 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定TOKEN组中
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token          TOKEN
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1206,9 +1205,9 @@ public class Aio {
 	 * 按照分页获取指定USER组下所有在线用户
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param user      USER
 	 * @param pageIndex 索引页
-	 * @param pageSize 页面大小
+	 * @param pageSize  页面大小
 	 * @return 分页结果
 	 */
 	public static Page<ChannelContext> getPageOfUser(AioConfig aioConfig,
@@ -1226,7 +1225,7 @@ public class Aio {
 	 * 获取指定USER组下在线用户个数
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param user      USER
 	 * @return int
 	 */
 	public static Integer userCount(AioConfig aioConfig,
@@ -1241,8 +1240,8 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定USER组中
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user           USER
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1260,8 +1259,8 @@ public class Aio {
 	 * 按照分页获取指定集合下所有在线用户
 	 *
 	 * @param setWithLock 带有锁结构的SET集合
-	 * @param pageIndex 索引页
-	 * @param pageSize 页面大小
+	 * @param pageIndex   索引页
+	 * @param pageSize    页面大小
 	 * @return 分页结果
 	 */
 	private static Page<ChannelContext> getPageOfSet(SetWithLock<ChannelContext> setWithLock,
@@ -1273,7 +1272,7 @@ public class Aio {
 	/**
 	 * 判断指定用户是否在指定SET集合组中
 	 *
-	 * @param setWithLock 带有锁结构的SET集合
+	 * @param setWithLock    带有锁结构的SET集合
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
@@ -1300,7 +1299,7 @@ public class Aio {
 	 * 移除连接(与关闭一个道理)
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
-	 * @param closeCode 关闭状态码 {@link CloseCode}
+	 * @param closeCode      关闭状态码 {@link CloseCode}
 	 */
 	public static void remove(ChannelContext channelContext,
 							  CloseCode closeCode) {
@@ -1311,7 +1310,7 @@ public class Aio {
 	 * 根据业务ID移除连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
+	 * @param bsId      业务ID
 	 */
 	public static void removeBsId(AioConfig aioConfig,
 								  String bsId) {
@@ -1322,7 +1321,7 @@ public class Aio {
 	 * 根据业务ID移除连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
+	 * @param bsId      业务ID
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeBsId(AioConfig aioConfig,
@@ -1335,7 +1334,7 @@ public class Aio {
 	 * 根据客户节点移除连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
 	 */
 	public static void removeClientNode(AioConfig aioConfig,
 										Node node) {
@@ -1346,7 +1345,7 @@ public class Aio {
 	 * 根据客户节点移除连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeClientNode(AioConfig aioConfig,
@@ -1359,7 +1358,7 @@ public class Aio {
 	 * 根据集群组ID移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群组ID
+	 * @param cluId     集群组ID
 	 */
 	public static void removeClu(AioConfig aioConfig,
 								 String cluId) {
@@ -1370,7 +1369,7 @@ public class Aio {
 	 * 根据集群组ID移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群组ID
+	 * @param cluId     集群组ID
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeClu(AioConfig aioConfig,
@@ -1383,7 +1382,7 @@ public class Aio {
 	 * 根据群组ID移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组ID
+	 * @param groupId   群组ID
 	 */
 	public static void removeGroup(AioConfig aioConfig,
 								   String groupId) {
@@ -1394,7 +1393,7 @@ public class Aio {
 	 * 根据群组ID移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群组ID
+	 * @param groupId   群组ID
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeGroup(AioConfig aioConfig,
@@ -1407,7 +1406,7 @@ public class Aio {
 	 * 根据ID移除连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param id        ID
 	 */
 	public static void removeId(AioConfig aioConfig,
 								String id) {
@@ -1418,7 +1417,7 @@ public class Aio {
 	 * 根据ID移除连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param id        ID
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeId(AioConfig aioConfig,
@@ -1431,7 +1430,7 @@ public class Aio {
 	 * 根据IP移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param ip        IP
 	 */
 	public static void removeIp(AioConfig aioConfig,
 								String ip) {
@@ -1442,7 +1441,7 @@ public class Aio {
 	 * 根据IP移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
+	 * @param ip        IP
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeIp(AioConfig aioConfig,
@@ -1455,7 +1454,7 @@ public class Aio {
 	 * 根据TOKEN移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param token     TOKEN
 	 */
 	public static void removeToken(AioConfig aioConfig,
 								   String token) {
@@ -1466,7 +1465,7 @@ public class Aio {
 	 * 根据TOKEN移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
+	 * @param token     TOKEN
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeToken(AioConfig aioConfig,
@@ -1479,7 +1478,7 @@ public class Aio {
 	 * 根据USER移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param user      USER
 	 */
 	public static void removeUser(AioConfig aioConfig,
 								  String user) {
@@ -1490,7 +1489,7 @@ public class Aio {
 	 * 根据USER移除组内所有连接(与关闭一个道理)
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
+	 * @param user      USER
 	 * @param closeCode 关闭状态码 {@link CloseCode}
 	 */
 	public static void removeUser(AioConfig aioConfig,
@@ -1502,9 +1501,9 @@ public class Aio {
 	/**
 	 * 移除集合SET组内所有连接(与关闭一个道理)
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param aioConfig   配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param setWithLock 带有锁结构的SET集合
-	 * @param closeCode 关闭状态码 {@link CloseCode}
+	 * @param closeCode   关闭状态码 {@link CloseCode}
 	 */
 	public static void removeSet(AioConfig aioConfig,
 								 SetWithLock<ChannelContext> setWithLock,
@@ -1518,7 +1517,7 @@ public class Aio {
 	 * 异步发送/同步发送 (使用同步发送时，在确保开启ACKPlugin后，只需要将Packet中Req字段赋值即可)
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param packet         数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean send(ChannelContext channelContext,
@@ -1530,8 +1529,8 @@ public class Aio {
 	 * 发送内部逻辑，不对外暴露接口
 	 *
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param isBlock 是否采用同步等待发送
+	 * @param packet         数据报文 {@link cn.starboot.socket.Packet}
+	 * @param isBlock        是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	private static Boolean send0(ChannelContext channelContext,
@@ -1547,7 +1546,7 @@ public class Aio {
 	 * 向所有在线用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToAll(AioConfig aioConfig,
@@ -1558,8 +1557,8 @@ public class Aio {
 	/**
 	 * 向所有在线用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -1574,12 +1573,12 @@ public class Aio {
 	/**
 	 * 向所有在线用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
-	 * @param isBlock 是否采用同步等待发送
+	 * @param isBlock              是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	public static Boolean sendToAll(AioConfig aioConfig,
@@ -1607,8 +1606,8 @@ public class Aio {
 	 * 向指定业务ID用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param bsId      业务ID
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToBsId(AioConfig aioConfig,
@@ -1621,9 +1620,9 @@ public class Aio {
 	 * 向指定业务ID用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param isBlock 是否采用同步等待发送
+	 * @param bsId      业务ID
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
+	 * @param isBlock   是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	private static Boolean sendToBsId(AioConfig aioConfig,
@@ -1641,8 +1640,8 @@ public class Aio {
 	 * 向指定客户节点用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToClientNode(AioConfig aioConfig,
@@ -1655,9 +1654,9 @@ public class Aio {
 	 * 向指定客户节点用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
-	 * @param isBlock 是否采用同步等待发送
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
+	 * @param isBlock   是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	private static Boolean sendToClientNode(AioConfig aioConfig,
@@ -1675,8 +1674,8 @@ public class Aio {
 	 * 向指定集群ID所有用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param cluId     集群ID
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToCluId(AioConfig aioConfig,
@@ -1688,9 +1687,9 @@ public class Aio {
 	/**
 	 * 向指定集群ID所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId                集群ID
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -1706,13 +1705,13 @@ public class Aio {
 	/**
 	 * 向指定集群ID所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param cluId 集群ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId                集群ID
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
-	 * @param isBlock 是否采用同步等待发送
+	 * @param isBlock              是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	private static Boolean sendToCluId(AioConfig aioConfig,
@@ -1737,8 +1736,8 @@ public class Aio {
 	 * 向指定群ID内所有用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param groupId   群ID
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToGroup(AioConfig aioConfig,
@@ -1750,9 +1749,9 @@ public class Aio {
 	/**
 	 * 向指定群ID内所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId              群ID
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -1768,13 +1767,13 @@ public class Aio {
 	/**
 	 * 向指定群ID内所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param groupId 群ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId              群ID
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
-	 * @param isBlock 是否采用同步等待发送
+	 * @param isBlock              是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	public static Boolean sendToGroup(AioConfig aioConfig,
@@ -1800,7 +1799,7 @@ public class Aio {
 	 * 向指定ID用户发送消息
 	 *
 	 * @param config 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param id     ID
 	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
@@ -1813,9 +1812,9 @@ public class Aio {
 	/**
 	 * 向指定ID用户发送消息
 	 *
-	 * @param config 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param config  配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id      ID
+	 * @param packet  数据报文 {@link cn.starboot.socket.Packet}
 	 * @param isBlock 是否采用同步等待发送
 	 * @return 发送状态
 	 */
@@ -1830,8 +1829,8 @@ public class Aio {
 	 * 向指定IP内所有用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param ip        IP
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToIp(AioConfig aioConfig,
@@ -1843,9 +1842,9 @@ public class Aio {
 	/**
 	 * 向指定IP内所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip                   IP
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -1861,20 +1860,20 @@ public class Aio {
 	/**
 	 * 向指定IP内所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param ip IP
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip                   IP
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
-	 * @param isBlock 是否采用同步等待发送
+	 * @param isBlock              是否采用同步等待发送
 	 * @return 发送状态
 	 */
-	public static Boolean sendToIp(AioConfig aioConfig,
-								   String ip,
-								   Packet packet,
-								   ChannelContextFilter channelContextFilter,
-								   boolean isBlock) {
+	private static Boolean sendToIp(AioConfig aioConfig,
+									String ip,
+									Packet packet,
+									ChannelContextFilter channelContextFilter,
+									boolean isBlock) {
 		SetWithLock<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
@@ -1891,9 +1890,9 @@ public class Aio {
 	/**
 	 * 向指定SET集合中所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param aioConfig   配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @param setWithLock 带有锁结构的SET集合
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param packet      数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToSet(AioConfig aioConfig,
@@ -1905,9 +1904,9 @@ public class Aio {
 	/**
 	 * 向指定SET集合中所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock 带有锁结构的SET集合
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param setWithLock          带有锁结构的SET集合
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -1923,13 +1922,13 @@ public class Aio {
 	/**
 	 * 向指定SET集合中所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock 带有锁结构的SET集合
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param setWithLock          带有锁结构的SET集合
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
-	 * @param isBlock 是否采用同步等待发送
+	 * @param isBlock              是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	private static Boolean sendToSet(AioConfig aioConfig,
@@ -1945,32 +1944,46 @@ public class Aio {
 		}
 		LongAdder sendNum = new LongAdder();
 		LongAdder sendSuc = new LongAdder();
-		if (Objects.isNull(channelContextFilter)) {
-			setWithLock
-					.handle((ReadLockHandler<Set<ChannelContext>>)
-							channelContextSet -> channelContextSet.forEach(
-									channelContext -> {
-										if (Objects.nonNull(channelContext)) {
-											sendNum.increment();
-											if (send0(channelContext, packet, isBlock)) {
-												sendSuc.increment();
-											}
+		setWithLock
+				.handle((ReadLockHandler<Set<ChannelContext>>)
+						channelContextSet -> channelContextSet.forEach(
+								channelContext -> {
+									if (Objects.nonNull(channelContext)
+											&& (Objects.isNull(channelContextFilter)
+											|| channelContextFilter.filter(channelContext))) {
+										sendNum.increment();
+										if (send0(channelContext, packet, isBlock)) {
+											sendSuc.increment();
 										}
-									}));
-		} else {
-			setWithLock
-					.handle((ReadLockHandler<Set<ChannelContext>>)
-							channelContextSet -> channelContextSet.forEach(
-									channelContext -> {
-										if (Objects.nonNull(channelContext)
-												&& channelContextFilter.filter(channelContext)) {
-											sendNum.increment();
-											if (send0(channelContext, packet, isBlock)) {
-												sendSuc.increment();
-											}
-										}
-									}));
-		}
+									}
+								}));
+
+//		if (Objects.isNull(channelContextFilter)) {
+//			setWithLock
+//					.handle((ReadLockHandler<Set<ChannelContext>>)
+//							channelContextSet -> channelContextSet.forEach(
+//									channelContext -> {
+//										if (Objects.nonNull(channelContext)) {
+//											sendNum.increment();
+//											if (send0(channelContext, packet, isBlock)) {
+//												sendSuc.increment();
+//											}
+//										}
+//									}));
+//		} else {
+//			setWithLock
+//					.handle((ReadLockHandler<Set<ChannelContext>>)
+//							channelContextSet -> channelContextSet.forEach(
+//									channelContext -> {
+//										if (Objects.nonNull(channelContext)
+//												&& channelContextFilter.filter(channelContext)) {
+//											sendNum.increment();
+//											if (send0(channelContext, packet, isBlock)) {
+//												sendSuc.increment();
+//											}
+//										}
+//									}));
+//		}
 		return sendNum.longValue() == sendSuc.longValue();
 	}
 
@@ -1978,8 +1991,8 @@ public class Aio {
 	 * 向指定TOKEN内所有用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param token     TOKEN
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToToken(AioConfig aioConfig,
@@ -1991,9 +2004,9 @@ public class Aio {
 	/**
 	 * 向指定TOKEN内所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token                TOKEN
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -2009,13 +2022,13 @@ public class Aio {
 	/**
 	 * 向指定TOKEN内所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param token TOKEN
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token                TOKEN
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
-	 * @param isBlock 是否采用同步等待发送
+	 * @param isBlock              是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	private static Boolean sendToToken(AioConfig aioConfig,
@@ -2040,8 +2053,8 @@ public class Aio {
 	 * 向指定USER内所有用户发送消息
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param user      USER
+	 * @param packet    数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToUser(AioConfig aioConfig,
@@ -2053,9 +2066,9 @@ public class Aio {
 	/**
 	 * 向指定USER内所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user                 USER
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
@@ -2071,13 +2084,13 @@ public class Aio {
 	/**
 	 * 向指定USER内所有用户发送消息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param user USER
-	 * @param packet 数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user                 USER
+	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
 	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
-	 * @param isBlock 是否采用同步等待发送
+	 * @param isBlock              是否采用同步等待发送
 	 * @return 发送状态
 	 */
 	private static Boolean sendToUser(AioConfig aioConfig,
@@ -2107,6 +2120,7 @@ public class Aio {
 	 * 因此将ChannelContext对象的发送方法设置为了protected
 	 * 通过适配器设计模式实现多包发送，提升连续发送效率
 	 * ~~
+	 *
 	 * @author MDong
 	 */
 	public static class OutputChannelContext {
@@ -2123,22 +2137,380 @@ public class Aio {
 	}
 
 	/**
-	 * 多包发送过程中
-	 * 		1.单个包不支持阻塞发送
-	 * 		2.多个包组成的整体支持阻塞发送
+	 * 多包发送过程
+	 * 1.多包发送不支持阻塞发送
+	 * 2.多个包组成的整体支持阻塞发送
 	 *
-	 * @param channelContext 通道上下文
+	 * @param channelContext               通道上下文
 	 * @param outPutChannelContextConsumer 多包发送消费器
 	 */
-	public static void multiSend(ChannelContext channelContext,
-								 Consumer<OutputChannelContext> outPutChannelContextConsumer) {
+	public static boolean multiSend(ChannelContext channelContext,
+									Consumer<OutputChannelContext> outPutChannelContextConsumer) {
+		if (Objects.isNull(channelContext)) {
+			return false;
+		}
 		outPutChannelContextConsumer.accept(new OutputChannelContext(channelContext));
 		channelContext.flush(false);
+		return true;
 	}
 
-	/*
-	 * todo 还有众多(多包发送功能)暂未实现。等作者有时间了吧
+	/**
+	 * 向所有在线用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
 	 */
+	public static Boolean multiSendToAll(AioConfig aioConfig,
+										 Consumer<OutputChannelContext> outPutConsumer) {
+		return multiSendToAll(aioConfig, outPutConsumer, null);
+	}
+
+	/**
+	 * 向所有在线用户发送多包消息
+	 *
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param outPutConsumer       数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToAll(AioConfig aioConfig,
+										 Consumer<OutputChannelContext> outPutConsumer,
+										 ChannelContextFilter channelContextFilter) {
+		if (aioConfig.isUseConnections()) {
+			if (aioConfig.getConnections().size() > 0) {
+				multiSendToSet(aioConfig, aioConfig.getConnections(), outPutConsumer, channelContextFilter);
+			} else {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("当前aio-socket服务器没有连接在线");
+				}
+			}
+			return true;
+		} else {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("未开启保持连接状态");
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * 向指定业务ID用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId           业务ID
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToBsId(AioConfig aioConfig,
+										  String bsId,
+										  Consumer<OutputChannelContext> outPutConsumer) {
+		ChannelContext channelContext = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.Bs_ID)
+				.getChannelContext(bsId);
+		return multiSend(channelContext, outPutConsumer);
+	}
+
+	/**
+	 * 向指定客户节点用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param node           客户端 {@link cn.starboot.socket.Node}
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToClientNode(AioConfig aioConfig,
+												Node node,
+												Consumer<OutputChannelContext> outPutConsumer) {
+		ChannelContext channelContext = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLIENT_NODE_ID)
+				.getChannelContext(node.getAddr());
+		return multiSend(channelContext, outPutConsumer);
+	}
+
+	/**
+	 * 向指定集群ID所有用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId          集群ID
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToCluId(AioConfig aioConfig,
+										   String cluId,
+										   Consumer<OutputChannelContext> outPutConsumer) {
+		return multiSendToCluId(aioConfig, cluId, outPutConsumer, null);
+	}
+
+	/**
+	 * 向指定集群ID所有用户发送多包消息
+	 *
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param cluId                集群ID
+	 * @param outPutConsumer       数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToCluId(AioConfig aioConfig,
+										   String cluId,
+										   Consumer<OutputChannelContext> outPutConsumer,
+										   ChannelContextFilter channelContextFilter) {
+		SetWithLock<ChannelContext> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.CLU_ID)
+				.getSet(cluId);
+		if (Objects.isNull(set)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("集群Id:{},没有绑定任何通道", cluId);
+			}
+			return false;
+		}
+		return multiSendToSet(aioConfig, set, outPutConsumer, channelContextFilter);
+	}
+
+	/**
+	 * 向指定群ID内所有用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId        群ID
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToGroup(AioConfig aioConfig,
+										   String groupId,
+										   Consumer<OutputChannelContext> outPutConsumer) {
+		return multiSendToGroup(aioConfig, groupId, outPutConsumer, null);
+	}
+
+	/**
+	 * 向指定群ID内所有用户发送多包消息
+	 *
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param groupId              群ID
+	 * @param outPutConsumer       数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToGroup(AioConfig aioConfig,
+										   String groupId,
+										   Consumer<OutputChannelContext> outPutConsumer,
+										   ChannelContextFilter channelContextFilter) {
+		// 群组成员集合
+		SetWithLock<ChannelContext> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.GROUP_ID)
+				.getSet(groupId);
+		if (Objects.isNull(set)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("群组Id:{},没有绑定任何通道", groupId);
+			}
+			return false;
+		}
+		return multiSendToSet(aioConfig, set, outPutConsumer, channelContextFilter);
+	}
+
+	/**
+	 * 向指定ID用户发送多包消息
+	 *
+	 * @param config         配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id             ID
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToId(AioConfig config,
+										String id,
+										Consumer<OutputChannelContext> outPutConsumer) {
+		return multiSend(getChannelContextById(config, id), outPutConsumer);
+	}
+
+	/**
+	 * 向指定IP内所有用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip             IP
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToIp(AioConfig aioConfig,
+										String ip,
+										Consumer<OutputChannelContext> outPutConsumer) {
+		return multiSendToIp(aioConfig, ip, outPutConsumer, null);
+	}
+
+	/**
+	 * 向指定IP内所有用户发送多包消息
+	 *
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param ip                   IP
+	 * @param outPutConsumer       数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToIp(AioConfig aioConfig,
+										String ip,
+										Consumer<OutputChannelContext> outPutConsumer,
+										ChannelContextFilter channelContextFilter) {
+		SetWithLock<ChannelContext> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.IP)
+				.getSet(ip);
+		if (Objects.isNull(set)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("ip:{},没有绑定任何通道", ip);
+			}
+			return false;
+		}
+		return multiSendToSet(aioConfig, set, outPutConsumer, channelContextFilter);
+	}
+
+	/**
+	 * 向指定SET集合中所有用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param setWithLock    带有锁结构的SET集合
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToSet(AioConfig aioConfig,
+										 SetWithLock<ChannelContext> setWithLock,
+										 Consumer<OutputChannelContext> outPutConsumer) {
+		return multiSendToSet(aioConfig, setWithLock, outPutConsumer, null);
+	}
+
+	/**
+	 * 向指定SET集合中所有用户发送多包消息
+	 *
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param setWithLock          带有锁结构的SET集合
+	 * @param outPutConsumer       数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToSet(AioConfig aioConfig,
+										 SetWithLock<ChannelContext> setWithLock,
+										 Consumer<OutputChannelContext> outPutConsumer,
+										 ChannelContextFilter channelContextFilter) {
+		if (Objects.isNull(setWithLock) || setWithLock.getObj().size() == 0) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("集合内没人在线");
+			}
+			return false;
+		}
+		LongAdder sendNum = new LongAdder();
+		LongAdder sendSuc = new LongAdder();
+		setWithLock
+				.handle((ReadLockHandler<Set<ChannelContext>>)
+						channelContextSet -> channelContextSet.forEach(
+								channelContext -> {
+									if (Objects.nonNull(channelContext)
+											&& (Objects.isNull(channelContextFilter)
+											|| channelContextFilter.filter(channelContext))) {
+										sendNum.increment();
+										if (multiSend(channelContext, outPutConsumer)) {
+											sendSuc.increment();
+										}
+									}
+								}));
+		return sendNum.longValue() == sendSuc.longValue();
+	}
+
+
+	/**
+	 * 向指定TOKEN内所有用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token          TOKEN
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToToken(AioConfig aioConfig,
+										   String token,
+										   Consumer<OutputChannelContext> outPutConsumer) {
+		return multiSendToToken(aioConfig, token, outPutConsumer, null);
+	}
+
+	/**
+	 * 向指定TOKEN内所有用户发送多包消息
+	 *
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param token                TOKEN
+	 * @param outPutConsumer       数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToToken(AioConfig aioConfig,
+										   String token,
+										   Consumer<OutputChannelContext> outPutConsumer,
+										   ChannelContextFilter channelContextFilter) {
+		SetWithLock<ChannelContext> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.TOKEN)
+				.getSet(token);
+		if (Objects.isNull(set)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("token:{},没有绑定任何通道", token);
+			}
+			return false;
+		}
+		return multiSendToSet(aioConfig, set, outPutConsumer, channelContextFilter);
+	}
+
+	/**
+	 * 向指定USER内所有用户发送多包消息
+	 *
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user           USER
+	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToUser(AioConfig aioConfig,
+										  String user,
+										  Consumer<OutputChannelContext> outPutConsumer) {
+		return multiSendToUser(aioConfig, user, outPutConsumer, null);
+	}
+
+	/**
+	 * 向指定USER内所有用户发送多包消息
+	 *
+	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param user                 USER
+	 * @param outPutConsumer       数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
+	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
+	 *                             如果为满足规则过滤器的则被抛弃，不予以处理（发送）
+	 * @return 发送状态
+	 */
+	public static Boolean multiSendToUser(AioConfig aioConfig,
+										  String user,
+										  Consumer<OutputChannelContext> outPutConsumer,
+										  ChannelContextFilter channelContextFilter) {
+		SetWithLock<ChannelContext> set = aioConfig
+				.getMaintainManager()
+				.getCommand(MaintainEnum.USER)
+				.getSet(user);
+		if (Objects.isNull(set)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("user:{},没有绑定任何通道", user);
+			}
+			return false;
+		}
+		return multiSendToSet(aioConfig, set, outPutConsumer, channelContextFilter);
+	}
+
 
 	// -------------------------------unBing篇--------------------------------
 
@@ -2174,7 +2546,7 @@ public class Aio {
 	 * 解绑指定用户的业务ID，提供业务ID
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
+	 * @param bsId      业务ID
 	 * @return 解绑状态
 	 */
 	public static Boolean unbindBsId(AioConfig aioConfig,
@@ -2185,8 +2557,8 @@ public class Aio {
 	/**
 	 * 解绑指定用户的业务ID，提供业务ID和用户上下文信息
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param bsId 业务ID
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param bsId           业务ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
@@ -2213,7 +2585,7 @@ public class Aio {
 	 * 解绑客户端节点
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param node      客户端 {@link cn.starboot.socket.Node}
 	 * @return 解绑状态
 	 */
 	public static Boolean unbindClientNode(AioConfig aioConfig,
@@ -2224,8 +2596,8 @@ public class Aio {
 	/**
 	 * 解绑客户端节点
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param node 客户端 {@link cn.starboot.socket.Node}
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param node           客户端 {@link cn.starboot.socket.Node}
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
@@ -2245,7 +2617,7 @@ public class Aio {
 	/**
 	 * 从指定集群组内解绑
 	 *
-	 * @param cluId 集群ID
+	 * @param cluId          集群ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
@@ -2277,7 +2649,7 @@ public class Aio {
 	/**
 	 * 从指定群组内解绑
 	 *
-	 * @param groupId 群组ID
+	 * @param groupId        群组ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
@@ -2320,7 +2692,7 @@ public class Aio {
 	 * 解绑ID
 	 *
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param id        ID
 	 * @return 解绑状态
 	 */
 	public static Boolean unbindId(AioConfig aioConfig,
@@ -2331,8 +2703,8 @@ public class Aio {
 	/**
 	 * 解绑ID
 	 *
-	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param id ID
+	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param id             ID
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
@@ -2348,7 +2720,7 @@ public class Aio {
 	/**
 	 * 根据指定IP解绑用户
 	 *
-	 * @param ip IP
+	 * @param ip             IP
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
@@ -2380,7 +2752,7 @@ public class Aio {
 	/**
 	 * 根据TOKEN解绑用户
 	 *
-	 * @param token TOKEN
+	 * @param token          TOKEN
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
@@ -2412,7 +2784,7 @@ public class Aio {
 	/**
 	 * 根据USER解绑用户
 	 *
-	 * @param user USER
+	 * @param user           USER
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return 解绑状态
 	 */
