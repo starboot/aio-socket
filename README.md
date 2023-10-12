@@ -94,6 +94,103 @@ getty、SuperSocket、zinx、evpp、libtnet以及HP-Socket等等优秀的开源�
 |  消息处理量  | 6219700(**count/s**) |  
 |  流量读取速率  | 545.5958(**MB/s**) | 
 
+## 项目目录结构
+```
+aio-socket
+├─doc 项目开发文档
+├─aio-socket-codec-http  HTTP解编码
+│    ├─aio-socket-http-client  HTTP客户端
+│    ├─aio-socket-http-common  HTTP公共解编码
+│    ├─aio-socket-http-parent  HTTP依赖管理
+│    └─aio-socket-http-server  HTTP服务器
+├─aio-socket-codec-mqtt  MQTT解编码
+├─aio-socket-codec  基础解编码
+│    └─main  核心源码总目录
+│        └─java  
+│           └─cn
+│               └─starboot
+│                   └─socket
+│                       └─codec
+│                           ├─base64    base64解编码
+│                           ├─bytes     字节流解编码
+│                           ├─protobuf  protobuf解编码
+│                           ├─string    字符串解编码
+│                           └─util      解编码工具包
+├─aio-socket-demo  Demo代码目录
+│    └─main  核心源码总目录
+│        ├─java  
+│        │  └─cn
+│        │      └─starboot
+│        │          └─socket
+│        │              └─demo
+│        │                  ├─ack        ACK Demo
+│        │                  ├─basic      hello world Demo
+│        │                  ├─batch      性能压测 Demo
+│        │                  ├─cache      缓存 Demo
+│        │                  ├─heartbeat  心跳 Demo
+│        │                  ├─http       HTTP Server Demo
+│        │                  ├─mqtt       MQTT Server Demo
+│        │                  ├─mutiproto  多协议 Demo
+│        │                  ├─plugins    自定义插件 Demo
+│        │                  └─reconnect  重连 Demo
+│        └─resources
+│            └─page
+│                └─websocket.html        用于测试websocket协议的客户端
+├─aio-socket-kernel   aio-socket内核程序
+│    └─main  核心源码总目录
+│        └─java  
+│           └─cn
+│              └─starboot
+│                  └─socket
+│                      ├─config     配置信息
+│                      ├─core       核心代码
+│                      ├─enums      内核枚举
+│                      ├─exception  解编码异常
+│                      ├─intf       对外接口
+│                      ├─jdk        改进JDK默认方法
+│                      ├─maintain   关系维护
+│                      ├─plugins    抽象插件接口
+│                      ├─udp        UDP
+│                      └─utils      内核工具包
+├─aio-socket-parent  aio-socket依赖管理
+├─aio-socket-plugin  aio-socket插件实现类
+│    └─main  核心源码总目录
+│        └─java  
+│           └─cn
+│               └─starboot
+│                   └─socket
+│                       └─plugins
+│                           ├─ACKPlugin             ACK插件
+│                           ├─BlackListPlugin       黑名单插件
+│                           ├─ClusterPlugin         集群插件(开发中)
+│                           ├─HeartPlugin           心跳插件
+│                           ├─MonitorPlugin         监控插件
+│                           ├─ReconnectPlugin       重连插件
+│                           ├─SSLPlugin             SSL插件
+│                           ├─SocketOptionPlugin    SocketOption插件
+│                           └─StreamMonitorPlugin   流控监测插件
+└─aio-socket-utils  aio-socket工具包
+     └─main  核心源码总目录
+         ├─java  
+         │  └─cn
+         │      └─starboot
+         │          └─socket
+         │              └─utils
+         │                  ├─cache     缓存工具包
+         │                  ├─config    配置
+         │                  ├─hutool    封装hutool
+         │                  ├─json      封装JSON
+         │                  ├─lock      并发锁结构
+         │                  ├─page      分页查询
+         │                  ├─pool      内存池、线程池
+         │                  ├─queue     自定义并发队列结构
+         │                  └─scanner   包扫描器
+         └─resources
+             ├─caffeine.properties      Caffeine配置信息
+             └─j2cache.properties       j2cache配置信息
+```
+
+
 ## 软件架构
 给大家画个架构图🎉 
 ![Image text](https://gitee.com/mxd_2022/static/raw/master/aio-socket/aio-socket-frame.jpg)
@@ -109,11 +206,19 @@ getty、SuperSocket、zinx、evpp、libtnet以及HP-Socket等等优秀的开源�
 > 3. IDEA 2020.1 社区版
 
 
-### 引入Maven坐标  
+### 下载项目
+
+``` shell
+git clone git@gitee.com:starboot/aio-socket.git
+```
+
+### 依赖引入
 
 v3.0版本暂未推送至Maven中央仓库<br/>
 等待多次测试表现没问题，可以上生产环境后将会推送至Maven中央仓库<br/>
 大家可以fork到自己仓库并且pull到本地电脑运行体验。<br/>
+
++ Apache Maven
 ~~~
 <dependency>
   <groupId>cn.starboot.socket</groupId>
@@ -121,6 +226,25 @@ v3.0版本暂未推送至Maven中央仓库<br/>
   <version>3.0.0</version>
 </dependency>
 ~~~
+
++ Gradle(groovy)
+
+```groovy
+implementation group: 'cn.starboot.socket', name: 'aio-socket-all', version: '3.0.0'
+```
+
+or
+
+```groovy
+implementation 'cn.starboot.socket:aio-socket-all:3.0.0'
+```
+
++ Gradle(Kotlin)
+
+```kotlin
+implementation("cn.starboot.socket:aio-socket-all:3.0.0")
+```
+
 
 ### **Demo**
 ```java
@@ -213,6 +337,14 @@ public class Client {
 <br/>
 打开服务器的控制台，可以查看当前流量传输速率。比较每秒处理多少消息比如4000w/s、2000w/s、1000w/s、500w/s，这些没有意义。
 作为通讯内核，应该关注流量转发速率，消息处理速度在ISO第七层的应用层有众多因素掺杂。并且这不应该成为量化一个通讯内核好坏的指标。<br/>
+
+## 参与贡献
+
+aio-socket热烈欢迎对Java多线程开发、网络IO通讯有兴趣的开发者或学生参与到项目建设中来，
+aio-socket鼓励大家对项目提出建设性建议，项目长期维护。
+<br/>
+本作者欢迎大家提交PR。在一起，就可以。让我们用平凡的生命创建非凡的贡献。开源不易，还望多多包涵！！！
+
 
 ## 联系方式
 
