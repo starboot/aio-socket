@@ -24,6 +24,11 @@ import cn.starboot.socket.utils.pool.memory.MemoryPool;
 
 import java.io.IOException;
 
+/**
+ * hello world 客户端
+ *
+ * @author MDong
+ */
 public class Client {
 
     public static void main(String[] args) throws IOException {

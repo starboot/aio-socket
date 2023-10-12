@@ -25,7 +25,14 @@ import cn.starboot.socket.utils.ThreadUtils;
 
 import java.io.IOException;
 
-public class Client {
+/**
+ * 用于测试 流量传输速率的 压测客户端
+ *
+ * ---------  不要ProcessorClient和StreamClient同时打开，那样压力测试结果不准确----------
+ *
+ * @author MDong
+ */
+public class StreamClient {
 
 	public static void main(String[] args) throws IOException {
 
@@ -35,10 +42,10 @@ public class Client {
 				ImproveAsynchronousChannelGroup
 						.withCachedThreadPool(ThreadUtils.getGroupExecutor(Runtime.getRuntime().availableProcessors()),
 								Runtime.getRuntime().availableProcessors());
-		ClientHandler clientHandler = new ClientHandler();
+		StreamClientHandler streamClientHandler = new StreamClientHandler();
 		for (int i = 0; i < 10; i++) {
 			new Thread(() -> {
-				ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, clientHandler);
+				ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, streamClientHandler);
 				try {
 					ChannelContext channelContext =
 							bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)

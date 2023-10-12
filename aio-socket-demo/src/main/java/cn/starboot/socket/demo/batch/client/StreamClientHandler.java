@@ -22,7 +22,7 @@ import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.exception.AioEncoderException;
 
-public class ClientHandler extends BytesHandler {
+public class StreamClientHandler extends BytesHandler {
 
 	private static final byte[] data = "hello-aio-socket".getBytes();
 
