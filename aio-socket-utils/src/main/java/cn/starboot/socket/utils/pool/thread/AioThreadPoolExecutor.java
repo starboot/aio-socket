@@ -1,5 +1,5 @@
 /*
- *    Copyright 2019 The aio-socket Project
+ *    Copyright 2020 The t-io Project
  *
  *    The aio-socket Project Licenses this file to you under the Apache License,
  *    Version 2.0 (the "License"); you may not use this file except in compliance
@@ -19,6 +19,9 @@ import java.util.concurrent.*;
 
 /**
  * 并发同步线程池
+ *
+ * @author t-io: https://gitee.com/tywo45/t-io.git
+ * @author MDong
  */
 public class AioThreadPoolExecutor extends ThreadPoolExecutor {
 
