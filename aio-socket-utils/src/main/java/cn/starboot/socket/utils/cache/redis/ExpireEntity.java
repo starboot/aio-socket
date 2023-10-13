@@ -1,5 +1,5 @@
 /*
- *    Copyright 2019 The aio-socket Project
+ *    Copyright 2020 The t-io Project
  *
  *    The aio-socket Project Licenses this file to you under the Apache License,
  *    Version 2.0 (the "License"); you may not use this file except in compliance
@@ -14,7 +14,13 @@
  *    limitations under the License.
  */
 package cn.starboot.socket.utils.cache.redis;
-
+/**
+ * 对缓存的封装，包括Redis、Caffeine和j2cache，
+ * 此部分源代码出自talent-tan的开源项目t-io。
+ *
+ * @author t-io: https://gitee.com/tywo45/t-io.git
+ * @author MDong
+ */
 public class ExpireEntity {
 
 	private final String cacheName;

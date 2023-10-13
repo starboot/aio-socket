@@ -1,5 +1,5 @@
 /*
- *    Copyright 2019 The aio-socket Project
+ *    Copyright 2020 The t-io Project
  *
  *    The aio-socket Project Licenses this file to you under the Apache License,
  *    Version 2.0 (the "License"); you may not use this file except in compliance
@@ -30,7 +30,7 @@ import java.util.Objects;
 /**
  * J2Cache
  *
- * @author t-io
+ * @author t-io: https://gitee.com/tywo45/t-io.git
  * @author MDong
  */
 public class J2Cache extends AbstractCache {
