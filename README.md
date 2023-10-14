@@ -10,7 +10,7 @@
 	<a href="https://gitee.com/mxd_2022/aio-socket/stargazers"><img
             src="https://gitee.com/mxd_2022/aio-socket/badge/star.svg?theme=dark"  alt="gitee star"/></a>
 	<a href="https://gitee.com/mxd_2022/aio-socket"><img 
-	        src="https://img.shields.io/badge/aio--socket-3.x-yellowgreen"  alt=""/></a>
+	        src="https://img.shields.io/badge/aio--socket-3.x.x-yellowgreen"  alt=""/></a>
     <a href="https://www.apache.org/licenses/LICENSE-2.0"><img 
             src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg" alt=""/></a>
     <a target="_blank" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html"><img 
