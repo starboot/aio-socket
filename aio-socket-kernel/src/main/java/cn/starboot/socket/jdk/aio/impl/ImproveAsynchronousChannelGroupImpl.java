@@ -81,25 +81,28 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 
 	private void initMainReactor(int threadNum) {
 		for (int i = 0; i < threadNum; i++) {
-			mainReactor[i] = new NioEventLoopWorker(ImproveNioSelector.open(), selectionKey -> {
-				if (selectionKey.isWritable()) {
-					ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
-					//直接调用interestOps的效果比 removeOps(selectionKey, SelectionKey.OP_WRITE) 更好
-					selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
-					while (asynchronousSocketChannel.doWrite()) ;
-				} else if (selectionKey.isAcceptable()) {
-					ImproveAsynchronousServerSocketChannelImpl serverSocketChannel = (ImproveAsynchronousServerSocketChannelImpl) selectionKey.attachment();
-					serverSocketChannel.doAccept();
-				} else if (selectionKey.isConnectable()) {
-					Runnable runnable = (Runnable) selectionKey.attachment();
-					runnable.run();
-				} else if (selectionKey.isReadable()) {
-					//同步read
-					ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel = (ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
-					removeOps(selectionKey, SelectionKey.OP_READ);
-					asynchronousSocketChannel.doRead();
-				}
-			});
+			mainReactor[i] = new NioEventLoopWorker(ImproveNioSelector.open(),
+					selectionKey -> {
+						if (selectionKey.isWritable()) {
+							ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel =
+									(ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
+							selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
+							while (asynchronousSocketChannel.doWrite()) ;
+						} else if (selectionKey.isAcceptable()) {
+							ImproveAsynchronousServerSocketChannelImpl serverSocketChannel =
+									(ImproveAsynchronousServerSocketChannelImpl) selectionKey.attachment();
+							serverSocketChannel.doAccept();
+						} else if (selectionKey.isConnectable()) {
+							Runnable runnable = (Runnable) selectionKey.attachment();
+							runnable.run();
+						} else if (selectionKey.isReadable()) {
+							//同步read
+							ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel =
+									(ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
+							removeOps(selectionKey, SelectionKey.OP_READ);
+							asynchronousSocketChannel.doRead();
+						}
+					});
 			mainReactorExecutorService.execute(mainReactor[i]);
 		}
 	}
