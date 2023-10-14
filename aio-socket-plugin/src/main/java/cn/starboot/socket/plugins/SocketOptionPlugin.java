@@ -9,6 +9,7 @@
 package cn.starboot.socket.plugins;
 
 import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,19 +50,19 @@ public class SocketOptionPlugin extends AbstractPlugin {
      * 默认将通过{@link #setOption(SocketOption, Object)}指定的配置值绑定到每一个Socket中。
      * 如果有个性化的需求,可以重新实现本方法。
      *
-     * @param channel .
+     * @param asynchronousSocketChannel .
      */
-    public void setOption(AsynchronousSocketChannel channel) {
-        try {
-            if (!optionMap.containsKey(StandardSocketOptions.TCP_NODELAY)) {
-                channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-            }
-            for (Map.Entry<SocketOption<Object>, Object> entry : optionMap.entrySet()) {
-                channel.setOption(entry.getKey(), entry.getValue());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setOption(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
+//        try {
+//            if (!optionMap.containsKey(StandardSocketOptions.TCP_NODELAY)) {
+//				asynchronousSocketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+//            }
+//            for (Map.Entry<SocketOption<Object>, Object> entry : optionMap.entrySet()) {
+//				asynchronousSocketChannel.setOption(entry.getKey(), entry.getValue());
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**

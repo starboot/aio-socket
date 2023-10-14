@@ -38,7 +38,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 		this.improveAsynchronousChannelGroup = group;
 		this.serverSocketChannel = ServerSocketChannel.open();
 		this.serverSocketChannel.configureBlocking(false);
-		acceptWorker = ((ImproveAsynchronousChannelGroupImpl) improveAsynchronousChannelGroup).getCommonWorker();
+		acceptWorker = ((ImproveAsynchronousChannelGroupImpl) improveAsynchronousChannelGroup).getMainReactor();
 	}
 
 

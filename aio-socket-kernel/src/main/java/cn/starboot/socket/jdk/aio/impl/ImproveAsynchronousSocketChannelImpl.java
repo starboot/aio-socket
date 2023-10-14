@@ -84,8 +84,8 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		this.isServerCreate = isServerCreate;
 		this.socketChannel = socketChannel;
 		this.group = group;
-		readWorker = ((ImproveAsynchronousChannelGroupImpl) group).getReadWorker();
-		commonWorker = ((ImproveAsynchronousChannelGroupImpl) group).getCommonWorker();
+		readWorker = ((ImproveAsynchronousChannelGroupImpl) group).getSubReactor();
+		commonWorker = ((ImproveAsynchronousChannelGroupImpl) group).getMainReactor();
 	}
 
 	@Override
