@@ -16,6 +16,7 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.config.AioServerConfig;
+import cn.starboot.socket.enums.StateMachineEnum;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousServerSocketChannel;
 import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.intf.AioHandler;
@@ -105,21 +106,20 @@ public class ServerBootstrap extends AbstractBootstrap {
 	 * 启动接受连接请求的监听
 	 */
 	private void startAcceptThread() {
-		this.serverSocketChannel.accept(null, new CompletionHandler<ImproveAsynchronousSocketChannel, Void>() {
+		this.serverSocketChannel.accept(getConfig(), new CompletionHandler<ImproveAsynchronousSocketChannel, AioConfig>() {
 			@Override
-			public void completed(ImproveAsynchronousSocketChannel channel, Void attachment) {
+			public void completed(ImproveAsynchronousSocketChannel channel, AioConfig aioConfig) {
 				try {
-					serverSocketChannel.accept(attachment, this);
-				} catch (Throwable throwable) {
-					failed(throwable, attachment);
-					serverSocketChannel.accept(attachment, this);
-				} finally {
 					initChannelContext(channel);
+					serverSocketChannel.accept(aioConfig, this);
+				} catch (Throwable throwable) {
+					failed(throwable, aioConfig);
+					serverSocketChannel.accept(aioConfig, this);
 				}
 			}
 
 			@Override
-			public void failed(Throwable exc, Void attachment) {
+			public void failed(Throwable exc, AioConfig aioConfig) {
 				exc.printStackTrace();
 			}
 		});
