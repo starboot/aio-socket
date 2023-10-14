@@ -365,7 +365,6 @@ aio-socket鼓励大家对项目提出建设性建议，项目长期维护。
    
    t-im：基于aio-socket开发的高性能IM通讯框架，官网：  https://gitee.com/starboot/t-im  <br>  
    WeChat：为t-im 提供基本的UI功能，官网：  https://gitee.com/starboot/we-chat  <br>  
-   本项目如有侵犯到任何个人或组织的权益请联系邮箱：1191998028@qq.com （如有侵权请联系删除）
    
    
 ## LICENSE
@@ -385,3 +384,8 @@ aio-socket鼓励大家对项目提出建设性建议，项目长期维护。
    See the License for the specific language governing permissions and
    limitations under the License.
 ~~~
+
+
+## 版权保障
+
+   本项目如有侵犯到任何个人或组织的权益请联系邮箱：1191998028@qq.com （如有侵权请联系删除）
