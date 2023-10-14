@@ -78,8 +78,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 
 	protected ImproveAsynchronousSocketChannelImpl(ImproveAsynchronousChannelGroup group,
 												   SocketChannel socketChannel,
-												   boolean isServerCreate)
-			throws IOException {
+												   boolean isServerCreate) {
 		super(group.provider());
 		this.isServerCreate = isServerCreate;
 		this.socketChannel = socketChannel;

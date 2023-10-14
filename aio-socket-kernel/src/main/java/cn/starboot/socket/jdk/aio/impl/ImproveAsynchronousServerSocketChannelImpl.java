@@ -13,27 +13,44 @@ import java.net.SocketOption;
 import java.nio.channels.*;
 import java.util.Set;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 
 final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchronousServerSocketChannel {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousServerSocketChannelImpl.class);
 
 	private final ServerSocketChannel serverSocketChannel;
+
 	private final ImproveAsynchronousChannelGroup improveAsynchronousChannelGroup;
+
 	private final NioEventLoopWorker acceptWorker;
+
 	private CompletionHandler<ImproveAsynchronousSocketChannel, Object> acceptCompletionHandler;
+
 	private Object attachment;
+
 	private SelectionKey selectionKey;
+
 	private boolean acceptPending;
 
 	private int acceptInvoker;
+
+	private final Function<SocketChannel, ImproveAsynchronousSocketChannel> initAsynchronousSocketChannel =
+			new Function<SocketChannel, ImproveAsynchronousSocketChannel>() {
+				@Override
+				public ImproveAsynchronousSocketChannel apply(SocketChannel socketChannel) {
+					return new ImproveAsynchronousSocketChannelImpl(improveAsynchronousChannelGroup,
+							initSocketChannel(socketChannel),
+							true);
+				}
+			};
 
 	/**
 	 * Initializes a new instance of this class.
 	 *
 	 * @param group The provider that created this channel
 	 */
-	protected ImproveAsynchronousServerSocketChannelImpl(ImproveAsynchronousChannelGroup group) throws IOException {
+	ImproveAsynchronousServerSocketChannelImpl(ImproveAsynchronousChannelGroup group) throws IOException {
 		super(group.provider());
 		this.improveAsynchronousChannelGroup = group;
 		this.serverSocketChannel = ServerSocketChannel.open();
@@ -64,6 +81,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 		return this.serverSocketChannel.supportedOptions();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <A> void accept(A attachment, CompletionHandler<ImproveAsynchronousSocketChannel, ? super A> handler) {
 		if (acceptPending) {
@@ -75,29 +93,50 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 		doAccept();
 	}
 
-	public void doAccept() {
+	private boolean isDirectAccept() {
+		return acceptInvoker++ < ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
+	}
+
+	private SocketChannel initSocketChannel(SocketChannel socketChannel) {
 		try {
-			SocketChannel socketChannel = null;
-			if (acceptInvoker++ < ImproveAsynchronousChannelGroupImpl.MAX_INVOKER) {
-				socketChannel = serverSocketChannel.accept();
-			}
-			if (socketChannel != null) {
-				ImproveAsynchronousSocketChannel asynchronousSocketChannel = new ImproveAsynchronousSocketChannelImpl(improveAsynchronousChannelGroup, socketChannel, true);
-				socketChannel.configureBlocking(false);
-				socketChannel.finishConnect();
-				acceptPending = false;
-				acceptCompletionHandler.completed(asynchronousSocketChannel, attachment);
-				if (selectionKey != null) {
-					ImproveAsynchronousChannelGroupImpl.removeOps(selectionKey, SelectionKey.OP_ACCEPT);
-				}
-			} else if (selectionKey == null) {
-				acceptWorker.addRegister(selector -> {
+			socketChannel.configureBlocking(false);
+			socketChannel.finishConnect();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return socketChannel;
+	}
+
+	private void finishAccept(SocketChannel socketChannel) {
+		ImproveAsynchronousSocketChannel asynchronousSocketChannel =
+				initAsynchronousSocketChannel.apply(socketChannel);
+		acceptPending = false;
+		acceptCompletionHandler.completed(asynchronousSocketChannel, attachment);
+	}
+
+	private void initRegister() {
+		acceptWorker.addRegister(
+				selector -> {
 					try {
-						selectionKey = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT, ImproveAsynchronousServerSocketChannelImpl.this);
+						selectionKey = serverSocketChannel.register(selector,
+								SelectionKey.OP_ACCEPT,
+								ImproveAsynchronousServerSocketChannelImpl.this);
 					} catch (ClosedChannelException closedChannelException) {
 						acceptCompletionHandler.failed(closedChannelException, attachment);
 					}
 				});
+	}
+
+	public void doAccept() {
+		try {
+			SocketChannel socketChannel = isDirectAccept() ? serverSocketChannel.accept() : null;
+			if (socketChannel != null) {
+				finishAccept(socketChannel);
+				if (selectionKey != null) {
+					ImproveAsynchronousChannelGroupImpl.removeOps(selectionKey, SelectionKey.OP_ACCEPT);
+				}
+			} else if (selectionKey == null) {
+				initRegister();
 			} else {
 				ImproveAsynchronousChannelGroupImpl.interestOps(acceptWorker, selectionKey, SelectionKey.OP_ACCEPT);
 			}
@@ -110,7 +149,8 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 
 	@Override
 	public Future<ImproveAsynchronousSocketChannel> accept() {
-		return null;
+		throw new UnsupportedOperationException("Unsupported Operation Exception: " +
+				"Future<ImproveAsynchronousSocketChannel> accept()");
 	}
 
 	@Override
