@@ -205,11 +205,7 @@ public class ClientBootstrap extends AbstractBootstrap {
 
 			@Override
 			public void failed(Throwable throwable, ImproveAsynchronousSocketChannel socketChannel) {
-				try {
-					handler.failed(throwable, future);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				handler.failed(throwable, future);
 				AIOUtil.closeImproveAsynchronousSocketChannel(socketChannel);
 				shutdownNow();
 			}
