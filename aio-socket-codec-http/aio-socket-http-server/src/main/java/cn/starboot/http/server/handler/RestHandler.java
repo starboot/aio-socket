@@ -33,7 +33,7 @@ import java.util.function.BiConsumer;
 
 public class RestHandler extends HttpServerHandler {
 	private final HttpRouteHandler httpRouteHandler;
-	private AttachKey<ByteBuffer> bodyBufferKey = AttachKey.valueOf("bodyBuffer");
+	private final AttachKey<ByteBuffer> bodyBufferKey = AttachKey.valueOf("bodyBuffer", ByteBuffer.class);
 	private BiConsumer<HttpRequest, HttpResponse> inspect = (httpRequest, response) -> {
 	};
 	private final MethodInterceptor interceptor = MethodInvocation::proceed;

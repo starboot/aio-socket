@@ -49,16 +49,9 @@ public final class AttachKey<T> {
 		}
 	}
 
-	public static <T> AttachKey<T> valueOf(String name) {
-		AttachKey<T> option = NAMES.get(name);
-		if (option == null) {
-			option = new AttachKey<T>(name);
-			AttachKey<T> old = NAMES.putIfAbsent(name, option);
-			if (old != null) {
-				option = old;
-			}
-		}
-		return option;
+	public static <T> AttachKey<T> valueOf(String name, Class<T> t) {
+		AttachKey<T> attachKey = NAMES.get(name);
+		return attachKey == null ? NAMES.putIfAbsent(name, new AttachKey<T>(name)) : attachKey;
 	}
 
 	public String getKey() {
