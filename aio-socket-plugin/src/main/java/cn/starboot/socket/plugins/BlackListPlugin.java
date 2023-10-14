@@ -27,7 +27,7 @@ public final class BlackListPlugin extends AbstractPlugin {
     }
 
     @Override
-    public ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
+    public ImproveAsynchronousSocketChannel agreeAccept(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
         InetSocketAddress inetSocketAddress = null;
         try {
             inetSocketAddress = (InetSocketAddress) asynchronousSocketChannel.getRemoteAddress();

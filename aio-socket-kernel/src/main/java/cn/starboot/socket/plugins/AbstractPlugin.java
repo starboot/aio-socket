@@ -50,7 +50,7 @@ public abstract class AbstractPlugin implements Plugin {
     }
 
     @Override
-    public ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel channel) {
+    public ImproveAsynchronousSocketChannel agreeAccept(ImproveAsynchronousSocketChannel channel) {
         return channel;
     }
 
