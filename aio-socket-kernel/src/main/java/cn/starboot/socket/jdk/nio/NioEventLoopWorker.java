@@ -3,6 +3,7 @@ package cn.starboot.socket.jdk.nio;
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -10,6 +11,7 @@ import java.util.function.Consumer;
 
 /**
  * nio轮训工作者
+ *
  * @author MDong
  */
 public class NioEventLoopWorker implements Runnable {
@@ -18,6 +20,8 @@ public class NioEventLoopWorker implements Runnable {
 	 * 当前NioEventLoopWorker绑定的Selector
 	 */
 	private final Selector nioEventLoopSelector;
+
+	private final Set<SelectionKey> selectionKeys;
 
 	/**
 	 * 当前worker所属线程
@@ -42,6 +46,7 @@ public class NioEventLoopWorker implements Runnable {
 	public NioEventLoopWorker(Selector selector, Consumer<SelectionKey> consumer) {
 		this.nioEventLoopSelector = selector;
 		this.nioEventLoopSelectionKey = consumer;
+		this.selectionKeys = nioEventLoopSelector.selectedKeys();
 	}
 
 	public void shutdown() {
@@ -67,24 +72,27 @@ public class NioEventLoopWorker implements Runnable {
 	@Override
 	public final void run() {
 		nioEventLoopThread = Thread.currentThread();
-		Set<SelectionKey> selectionKeys = nioEventLoopSelector.selectedKeys();
 		try {
 			while (isRunning) {
 				while (!registerWaitQueue.isEmpty()) {
 					registerWaitQueue.poll().accept(nioEventLoopSelector);
 				}
 				nioEventLoopSelector.select();
-				selectionKeys.iterator().forEachRemaining(nioEventLoopSelectionKey);
-				selectionKeys.clear();
+				Iterator<SelectionKey> iterator = selectionKeys.iterator();
+				while (iterator.hasNext()) {
+					nioEventLoopSelectionKey.accept(iterator.next());
+					iterator.remove();
+				}
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				nioEventLoopSelector.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		}
+
+		// 关闭selector
+		try {
+			nioEventLoopSelector.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
