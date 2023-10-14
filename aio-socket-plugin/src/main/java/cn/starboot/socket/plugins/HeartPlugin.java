@@ -85,16 +85,11 @@ public abstract class HeartPlugin extends AbstractPlugin {
 	}
 
 	@Override
-	public final void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext context, Throwable throwable) {
+	public final void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable) {
 		switch (stateMachineEnum) {
-			case NEW_CHANNEL:
-				registerHeart(context);
-				break;
-			case CHANNEL_CLOSED:
-				removeHeart(context);
-				break;
-			default:
-				break;
+			case NEW_CHANNEL: addChannelContext(channelContext); break;
+			case CHANNEL_CLOSED: removeChannelContext(channelContext); break;
+			default: break;
 		}
 	}
 
@@ -107,7 +102,7 @@ public abstract class HeartPlugin extends AbstractPlugin {
 	 */
 	public abstract boolean isHeartMessage(Packet packet);
 
-	private void registerHeart(final ChannelContext channelContext) {
+	private void addChannelContext(final ChannelContext channelContext) {
 		channelContextMap.put(channelContext, System.currentTimeMillis());
 		TimerService.getInstance().schedule(new TimerTask() {
 			@Override
@@ -126,12 +121,12 @@ public abstract class HeartPlugin extends AbstractPlugin {
 				if (timeout > 0 && (current - lastTime) > timeout) {
 					timeoutCallback.callback(channelContext, lastTime);
 				}
-				registerHeart(channelContext);
+				addChannelContext(channelContext);
 			}
 		}, this.period, TimeUnit.MILLISECONDS);
 	}
 
-	private void removeHeart(final ChannelContext channelContext) {
+	private void removeChannelContext(final ChannelContext channelContext) {
 		channelContextMap.remove(channelContext);
 	}
 
