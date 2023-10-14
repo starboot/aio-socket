@@ -83,6 +83,9 @@ public class AIOUtil {
      */
     public static void closeImproveAsynchronousSocketChannel(ImproveAsynchronousSocketChannel asynchronousSocketChannel)
 	{
+		if (asynchronousSocketChannel == null) {
+			return;
+		}
         try {
 			asynchronousSocketChannel.shutdownInput();
 			asynchronousSocketChannel.shutdownOutput();
