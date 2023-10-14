@@ -32,7 +32,7 @@ public interface Monitor {
      * @param channel                    当前已经建立连接的通道对象
      * @return AsynchronousSocketChannel 非null:接受该连接,null:拒绝该连接
      */
-	ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel channel);
+	ImproveAsynchronousSocketChannel agreeAccept(ImproveAsynchronousSocketChannel channel);
 
     /**
      * 监控触发本次读回调ChannelContext的已读数据字节数

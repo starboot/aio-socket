@@ -54,9 +54,9 @@ public class Plugins implements Handler, Monitor {
     private final Map<ProtocolEnum, AioHandler> handlers = new HashMap<>();
 
     @Override
-    public ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
+    public ImproveAsynchronousSocketChannel agreeAccept(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
         for (Plugin p : aioPluginList) {
-            if (p.shouldAccept(asynchronousSocketChannel) == null) {
+            if (p.agreeAccept(asynchronousSocketChannel) == null) {
                 return null;
             }
         }

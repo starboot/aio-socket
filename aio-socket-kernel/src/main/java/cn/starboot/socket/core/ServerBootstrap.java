@@ -134,7 +134,7 @@ public class ServerBootstrap extends AbstractBootstrap {
 		ImproveAsynchronousSocketChannel acceptChannel = channel;
 		try {
 			if (getConfig().getMonitor() != null) {
-				acceptChannel = getConfig().getMonitor().shouldAccept(channel);
+				acceptChannel = getConfig().getMonitor().agreeAccept(channel);
 			}
 			if (acceptChannel != null) {
 				acceptChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);

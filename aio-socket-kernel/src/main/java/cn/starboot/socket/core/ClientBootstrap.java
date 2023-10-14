@@ -189,7 +189,7 @@ public class ClientBootstrap extends AbstractBootstrap {
 				try {
 					ImproveAsynchronousSocketChannel connectedChannel = socketChannel;
 					if (getConfig().getMonitor() != null) {
-						connectedChannel = getConfig().getMonitor().shouldAccept(socketChannel);
+						connectedChannel = getConfig().getMonitor().agreeAccept(socketChannel);
 					}
 					if (connectedChannel == null) {
 						throw new RuntimeException("NetMonitor refuse channel");
