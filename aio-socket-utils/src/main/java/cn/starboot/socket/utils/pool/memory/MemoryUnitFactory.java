@@ -23,6 +23,6 @@ public interface MemoryUnitFactory {
      * @param memoryBlock  指定内存页
      * @return            虚拟内存
      */
-    MemoryUnit createBuffer(MemoryBlock memoryBlock);
+    MemoryUnit createMemoryUnit(MemoryBlock memoryBlock);
 
 }

@@ -20,12 +20,12 @@ public interface MemoryPoolFactory {
     /**
      * 禁用状态的内存池
      */
-    MemoryPoolFactory DISABLED_BUFFER_FACTORY = () -> new MemoryPool(0, 1, false);
+    MemoryPoolFactory DISABLED_MEMORY_POOL_FACTORY = () -> new MemoryPool(0, 1, false);
 
     /**
      * 创建内存池
      *
      * @return 生成的内存池对象
      */
-    MemoryPool create();
+    MemoryPool createMemoryPool();
 }

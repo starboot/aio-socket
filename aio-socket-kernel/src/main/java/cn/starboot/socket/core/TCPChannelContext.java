@@ -129,7 +129,7 @@ final class TCPChannelContext extends ChannelContext {
 		this.memoryUnitFunction = isGet -> {
 			if (isGet) {
 				if (readBuffer == null) {
-					readBuffer = readMemoryUnitFactory.createBuffer(memoryBlock);
+					readBuffer = readMemoryUnitFactory.createMemoryUnit(memoryBlock);
 				}
 			} else {
 				if (aioConfig.isMemoryKeep() || readBuffer == null) {

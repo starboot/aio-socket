@@ -65,7 +65,7 @@ abstract class AbstractBootstrap implements Bootstrap {
 					getConfig(),
 					getAioReadCompletionHandler(),
 					getAioWriteCompletionHandler(),
-					memoryPool.allocateBufferPage(),
+					memoryPool.allocateMemoryBlock(),
 					readMemoryUnitFactory);
 
 	protected AbstractBootstrap(AioConfig config) {
@@ -143,7 +143,7 @@ abstract class AbstractBootstrap implements Bootstrap {
 	protected void beforeStart() throws IOException {
 		getConfig().initMemoryPoolFactory();
 		if (this.memoryPool == null) {
-			this.memoryPool = getConfig().getMemoryPoolFactory().create();
+			this.memoryPool = getConfig().getMemoryPoolFactory().createMemoryPool();
 		}
 		if (this.asynchronousChannelGroup == null) {
 			if (LOGGER.isDebugEnabled()) {

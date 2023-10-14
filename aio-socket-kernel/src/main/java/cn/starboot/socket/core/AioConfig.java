@@ -115,7 +115,7 @@ public abstract class AioConfig {
     /**
      * 内存池工厂
      */
-    private MemoryPoolFactory memoryPoolFactory = MemoryPoolFactory.DISABLED_BUFFER_FACTORY;
+    private MemoryPoolFactory memoryPoolFactory = MemoryPoolFactory.DISABLED_MEMORY_POOL_FACTORY;
 
 	/**
 	 * 关系维持管理器

@@ -174,7 +174,7 @@ public final class Worker implements Runnable {
 			buffer.flip();
 			Runnable runnable = () -> {
 				//解码
-				ChannelContext session = new UDPChannelContext(channel, remote, bufferPool.allocateBufferPage());
+				ChannelContext session = new UDPChannelContext(channel, remote, bufferPool.allocateMemoryBlock());
 				try {
 					Monitor netMonitor = config.getMonitor();
 					if (netMonitor != null) {
