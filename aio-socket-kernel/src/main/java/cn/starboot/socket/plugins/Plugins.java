@@ -46,7 +46,7 @@ public class Plugins implements Handler, Monitor {
     /**
      * 插件项
      */
-    private final List<Plugin> plugins = new ArrayList<>();
+    private final List<Plugin> aioPluginList = new ArrayList<>();
 
     /**
      * 处理器集合
@@ -54,50 +54,48 @@ public class Plugins implements Handler, Monitor {
     private final Map<ProtocolEnum, AioHandler> handlers = new HashMap<>();
 
     @Override
-    public ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel channel) {
-		ImproveAsynchronousSocketChannel acceptChannel = channel;
-        for (Plugin plugin : plugins) {
-            acceptChannel = plugin.shouldAccept(acceptChannel);
-            if (acceptChannel == null) {
+    public ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
+        for (Plugin p : aioPluginList) {
+            if (p.shouldAccept(asynchronousSocketChannel) == null) {
                 return null;
             }
         }
-        return acceptChannel;
+        return asynchronousSocketChannel;
     }
 
     @Override
     public void afterRead(ChannelContext context, int readSize) {
-        for (Plugin plugin : plugins) {
-            plugin.afterRead(context, readSize);
+        for (Plugin p : aioPluginList) {
+            p.afterRead(context, readSize);
         }
     }
 
     @Override
     public void beforeRead(ChannelContext context) {
-        for (Plugin plugin : plugins) {
-            plugin.beforeRead(context);
+        for (Plugin p : aioPluginList) {
+            p.beforeRead(context);
         }
     }
 
     @Override
     public void afterWrite(ChannelContext context, int writeSize) {
-        for (Plugin plugin : plugins) {
-            plugin.afterWrite(context, writeSize);
+        for (Plugin p : aioPluginList) {
+            p.afterWrite(context, writeSize);
         }
     }
 
     @Override
     public void beforeWrite(ChannelContext context) {
-        for (Plugin plugin : plugins) {
-            plugin.beforeWrite(context);
+        for (Plugin p : aioPluginList) {
+            p.beforeWrite(context);
         }
     }
 
     @Override
     public Packet handle(ChannelContext channelContext, Packet packet) {
         boolean flag = true;
-        for (Plugin plugin : plugins) {
-            if (!plugin.beforeProcess(channelContext, packet)) {
+        for (Plugin p : aioPluginList) {
+            if (!p.beforeProcess(channelContext, packet)) {
                 flag = false;
             }
         }
@@ -121,8 +119,8 @@ public class Plugins implements Handler, Monitor {
 			}
         }
         if (packet != null) {
-            for (Plugin plugin : plugins) {
-                plugin.afterDecode(packet, channelContext);
+            for (Plugin p : aioPluginList) {
+                p.afterDecode(packet, channelContext);
             }
         }
         return packet;
@@ -130,16 +128,16 @@ public class Plugins implements Handler, Monitor {
 
     @Override
     public void encode(Packet packet, ChannelContext channelContext) throws AioEncoderException {
-        for (Plugin plugin : plugins) {
-            plugin.beforeEncode(packet, channelContext);
+        for (Plugin p : aioPluginList) {
+            p.beforeEncode(packet, channelContext);
         }
         handlers.get(channelContext.getProtocol()).encode(packet, channelContext);
     }
 
     @Override
     public void stateEvent(ChannelContext channelContext, StateMachineEnum stateMachineEnum, Throwable throwable) {
-        for (Plugin plugin : plugins) {
-            plugin.stateEvent(stateMachineEnum, channelContext, throwable);
+        for (Plugin p : aioPluginList) {
+            p.stateEvent(stateMachineEnum, channelContext, throwable);
         }
         if (channelContext.getProtocol() != null) {
             handlers.get(channelContext.getProtocol()).stateEvent(channelContext, stateMachineEnum, throwable);
@@ -157,7 +155,7 @@ public class Plugins implements Handler, Monitor {
     }
 
     public final Plugins addPlugin(Plugin plugin) {
-        this.plugins.add(plugin);
+        this.aioPluginList.add(plugin);
         return this;
     }
 }
