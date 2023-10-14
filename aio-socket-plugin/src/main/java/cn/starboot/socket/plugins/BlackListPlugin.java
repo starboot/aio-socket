@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
 
@@ -20,29 +21,27 @@ public final class BlackListPlugin extends AbstractPlugin {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BlackListPlugin.class);
 
-    private final ConcurrentLinkedQueue<Predicate<InetSocketAddress>> ipBlackList = new ConcurrentLinkedQueue<>();
+    private final Queue<Predicate<InetSocketAddress>> ipBlackList = new ConcurrentLinkedQueue<>();
 
     public BlackListPlugin() {
         System.out.println("aio-socket version: " + AioConfig.VERSION + "; server kernel's black list plugin added successfully");
     }
 
     @Override
-    public ImproveAsynchronousSocketChannel agreeAccept(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
-        InetSocketAddress inetSocketAddress = null;
+    public final ImproveAsynchronousSocketChannel agreeAccept(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
         try {
-            inetSocketAddress = (InetSocketAddress) asynchronousSocketChannel.getRemoteAddress();
+			InetSocketAddress inetSocketAddress = (InetSocketAddress) asynchronousSocketChannel.getRemoteAddress();
+            if (inetSocketAddress != null && !ipBlackList.isEmpty()) {
+				for (Predicate<InetSocketAddress> predicate : ipBlackList) {
+					if (!predicate.test(inetSocketAddress)) {
+						return null;
+					}
+				}
+			}
         } catch (IOException e) {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error(e.getMessage());
 			}
-        }
-        if (inetSocketAddress == null) {
-            return asynchronousSocketChannel;
-        }
-        for (Predicate<InetSocketAddress> predicate : ipBlackList) {
-            if (!predicate.test(inetSocketAddress)) {
-                return null;
-            }
         }
 		return asynchronousSocketChannel;
     }
