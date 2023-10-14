@@ -91,20 +91,16 @@ abstract class AbstractBootstrap implements Bootstrap {
 			 * 读失败，他会在什么时候触发呢？（忽略completed方法中异常后的调用）
 			 * 1. 会在客户端机器主动杀死aio-socket客户端进程或者客户端机器突然宕机或坏掉时，则服务器端对应的ChannelContext会调用此方法
 			 * 2. 相比之下，当客户端的ChannelContext正在读通道时，服务器关闭了对应的连接，则客户端的ChannelContext会调用此方法
-			 * @param exc            异常信息
+			 * @param throwable      异常信息
 			 * @param channelContext 读完成出错的通道
 			 */
 			@Override
-			public void failed(Throwable exc, TCPChannelContext channelContext) {
+			public void failed(Throwable throwable, TCPChannelContext channelContext) {
 				try {
 					channelContext
 							.getAioConfig()
 							.getHandler()
-							.stateEvent(channelContext, StateMachineEnum.INPUT_EXCEPTION, exc);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
+							.stateEvent(channelContext, StateMachineEnum.INPUT_EXCEPTION, throwable);
 					channelContext.close(false);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -126,12 +122,12 @@ abstract class AbstractBootstrap implements Bootstrap {
 			}
 
 			@Override
-			public void failed(Throwable exc, TCPChannelContext channelContext) {
+			public void failed(Throwable throwable, TCPChannelContext channelContext) {
 				try {
 					channelContext
 							.getAioConfig()
 							.getHandler()
-							.stateEvent(channelContext, StateMachineEnum.ENCODE_EXCEPTION, exc);
+							.stateEvent(channelContext, StateMachineEnum.ENCODE_EXCEPTION, throwable);
 					channelContext.close(true);
 				} catch (Exception e) {
 					e.printStackTrace();
