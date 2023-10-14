@@ -86,11 +86,10 @@ public abstract class HeartPlugin extends AbstractPlugin {
 
 	@Override
 	public final void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext channelContext, Throwable throwable) {
-		switch (stateMachineEnum) {
-			case NEW_CHANNEL: addChannelContext(channelContext); break;
-			case CHANNEL_CLOSED: removeChannelContext(channelContext); break;
-			default: break;
-		}
+		if (stateMachineEnum == StateMachineEnum.NEW_CHANNEL)
+			addChannelContext(channelContext);
+		else if (stateMachineEnum == StateMachineEnum.CHANNEL_CLOSED)
+			removeChannelContext(channelContext);
 	}
 
 	/**
