@@ -17,6 +17,7 @@ package cn.starboot.http.common.enums;
 
 /**
  *
+ * @author smart-socket: https://gitee.com/smartboot/smart-socket.git
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */

@@ -17,6 +17,8 @@ package cn.starboot.http.common;
 
 /**
  * 抽象编码
+ *
+ * @author smart-socket: https://gitee.com/smartboot/smart-socket.git
  */
 public class AbstractResponseEncoder {
 
