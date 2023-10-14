@@ -62,6 +62,7 @@ public class StringUtils {
                     buffer.append(' ');
             }
         }
+
         if (column != 15) {
             for (int i = 0; i < 15 - column; i++) {
                 buffer.append("   ");

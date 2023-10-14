@@ -1,5 +1,7 @@
 package cn.starboot.socket.codec.util;
 
+import cn.starboot.socket.utils.StringUtils;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -63,43 +65,7 @@ public class ByteBufferUtil {
 	}
 
 	public static String toHexString(byte[] bytes) {
-		StringBuilder buffer = new StringBuilder(bytes.length);
-		buffer.append("\r\n\t\t   0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f\r\n");
-		int startIndex = 0;
-		int column = 0;
-
-		int i;
-		for(i = 0; i < bytes.length; ++i) {
-			column = i % 16;
-			switch(column) {
-				case 0:
-					startIndex = i;
-					buffer.append(fixHexString(Integer.toHexString(i))).append(": ");
-					buffer.append(HexUtils.encode(bytes[i]));
-					buffer.append(' ');
-					break;
-				case 15:
-					buffer.append(HexUtils.encode(bytes[i]));
-					buffer.append(" ; ");
-					buffer.append(filterString(bytes, startIndex, column + 1));
-					buffer.append("\r\n");
-					break;
-				default:
-					buffer.append(HexUtils.encode(bytes[i]));
-					buffer.append(' ');
-			}
-		}
-
-		if (column != 15) {
-			for(i = 0; i < 15 - column; ++i) {
-				buffer.append("   ");
-			}
-
-			buffer.append("; ").append(filterString(bytes, startIndex, column + 1));
-			buffer.append("\r\n");
-		}
-
-		return buffer.toString();
+		return StringUtils.toHexString(bytes);
 	}
 
 	private static String filterString(byte[] bytes, int offset, int count) {
