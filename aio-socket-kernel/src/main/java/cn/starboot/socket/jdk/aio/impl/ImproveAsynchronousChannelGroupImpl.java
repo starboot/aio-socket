@@ -164,7 +164,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		}
 		selectionKey.interestOps(selectionKey.interestOps() | opt);
 		//Worker线程无需wakeup
-		if (worker.getWorkerThread() != Thread.currentThread()) {
+		if (worker.getNioEventLoopThread() != Thread.currentThread()) {
 			selectionKey.selector().wakeup();
 		}
 	}

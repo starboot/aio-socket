@@ -3,6 +3,7 @@ package cn.starboot.socket.jdk.nio;
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
@@ -16,75 +17,71 @@ public class NioEventLoopWorker implements Runnable {
 	/**
 	 * 当前NioEventLoopWorker绑定的Selector
 	 */
-	private final Selector selector;
+	private final Selector nioEventLoopSelector;
 
 	/**
 	 * 当前worker所属线程
 	 */
-	private Thread workerThread;
+	private Thread nioEventLoopThread;
 
 	/**
-	 * group运行状态
+	 * NioEventLoopWorker运行状态
 	 */
-	private boolean running = true;
+	private boolean isRunning = true;
 
 	/**
 	 * 用于处理轮训结果的声明式函数
 	 */
-	private final Consumer<SelectionKey> consumer;
+	private final Consumer<SelectionKey> nioEventLoopSelectionKey;
 
 	/**
 	 * 待注册的事件
 	 */
-	private final ConcurrentLinkedQueue<Consumer<Selector>> consumers = new ConcurrentLinkedQueue<>();
+	private final Queue<Consumer<Selector>> registerWaitQueue = new ConcurrentLinkedQueue<>();
 
 	public NioEventLoopWorker(Selector selector, Consumer<SelectionKey> consumer) {
-		this.selector = selector;
-		this.consumer = consumer;
+		this.nioEventLoopSelector = selector;
+		this.nioEventLoopSelectionKey = consumer;
 	}
 
 	public void shutdown() {
-		this.running = false;
+		this.isRunning = false;
 	}
 
-	public Thread getWorkerThread() {
-		return workerThread;
+	public Thread getNioEventLoopThread() {
+		return nioEventLoopThread;
 	}
 
 	public Selector getSelector() {
-		return selector;
+		return nioEventLoopSelector;
 	}
 
 	/**
 	 * 注册事件
 	 */
 	public void addRegister(Consumer<Selector> register) {
-		consumers.offer(register);
-		selector.wakeup();
+		registerWaitQueue.offer(register);
+		nioEventLoopSelector.wakeup();
 	}
 
 	@Override
 	public final void run() {
-		workerThread = Thread.currentThread();
-		// 若无关注事件触发则阻塞在select(),减少select被调用次数
-		Set<SelectionKey> keySet = selector.selectedKeys();
+		nioEventLoopThread = Thread.currentThread();
+		Set<SelectionKey> selectionKeys = nioEventLoopSelector.selectedKeys();
 		try {
-			while (running) {
-				Consumer<Selector> selectorConsumer;
-				while ((selectorConsumer = consumers.poll()) != null) {
-					selectorConsumer.accept(selector);
+			while (isRunning) {
+				while (!registerWaitQueue.isEmpty()) {
+					registerWaitQueue.poll().accept(nioEventLoopSelector);
 				}
-				selector.select();
-				for (SelectionKey key : keySet) {
-					consumer.accept(key);
-				}
-				keySet.clear();
+				nioEventLoopSelector.select();
+				selectionKeys.iterator().forEachRemaining(nioEventLoopSelectionKey);
+				selectionKeys.clear();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				selector.close();
+				nioEventLoopSelector.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
