@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
 
 /**
- * 黑名单插件,smart-socket会拒绝与黑名单中的IP建立连接
+ * 黑名单插件
  *
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
