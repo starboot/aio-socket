@@ -17,24 +17,8 @@ public class ConcurrentWithSet<E> extends AbstractConcurrentWithCollection<Set<E
 	}
 
 	@Override
-	public int size() {
-		final int[] size = {0};
-		final Consumer<Integer> callBackFunction = integer -> size[0] = integer;
-		size(callBackFunction);
-		return size[0];
-	}
-
-	@Override
 	public void size(Consumer<Integer> callBackFunction) {
 		handle((ConcurrentWithReadHandler<Set<E>>) es -> callBackFunction.accept(es.size()));
-	}
-
-	@Override
-	public boolean isEmpty() {
-		final boolean[] result = new boolean[1];
-		final Consumer<Boolean> booleanConsumer = aBoolean -> result[0] = aBoolean;
-		isEmpty(booleanConsumer);
-		return result[0];
 	}
 
 	@Override

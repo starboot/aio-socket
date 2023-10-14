@@ -14,16 +14,6 @@ public class ConcurrentWithList<E> extends AbstractConcurrentWithCollection<List
 		super(object);
 	}
 
-	@Override
-	public int size() {
-		return 0;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return false;
-	}
-
 	public void get(Integer id, Consumer<E> callBackFunction) {
 		handle((ConcurrentWithReadHandler<List<E>>) es -> callBackFunction.accept(es.get(id)));
 	}
