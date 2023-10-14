@@ -177,15 +177,15 @@ aio-socket
          │      └─starboot
          │          └─socket
          │              └─utils
-         │                  ├─cache     缓存工具包
-         │                  ├─config    配置
-         │                  ├─hutool    封装hutool
-         │                  ├─json      封装JSON
-         │                  ├─lock      并发锁结构
-         │                  ├─page      分页查询
-         │                  ├─pool      内存池、线程池
-         │                  ├─queue     自定义并发队列结构
-         │                  └─scanner   包扫描器
+         │                  ├─cache      缓存工具包
+         │                  ├─config     配置
+         │                  ├─hutool     封装hutool
+         │                  ├─json       封装JSON
+         │                  ├─concurrent 并发锁结构
+         │                  ├─page       分页查询
+         │                  ├─pool       内存池、线程池
+         │                  ├─queue      自定义并发队列结构
+         │                  └─scanner    包扫描器
          └─resources
              ├─caffeine.properties      Caffeine配置信息
              └─j2cache.properties       j2cache配置信息
