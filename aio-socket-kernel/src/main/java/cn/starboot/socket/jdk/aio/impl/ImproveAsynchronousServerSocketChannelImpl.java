@@ -83,7 +83,6 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 			}
 			if (socketChannel != null) {
 				ImproveAsynchronousSocketChannel asynchronousSocketChannel = new ImproveAsynchronousSocketChannelImpl(improveAsynchronousChannelGroup, socketChannel, true);
-				//这行代码不要乱动
 				socketChannel.configureBlocking(false);
 				socketChannel.finishConnect();
 				CompletionHandler<ImproveAsynchronousSocketChannel, Object> completionHandler = acceptCompletionHandler;
@@ -99,7 +98,6 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 				acceptWorker.addRegister(selector -> {
 					try {
 						selectionKey = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT, ImproveAsynchronousServerSocketChannelImpl.this);
-//                        selectionKey.attach(EnhanceAsynchronousServerSocketChannel.this);
 					} catch (ClosedChannelException e) {
 						acceptCompletionHandler.failed(e, attachment);
 					}
