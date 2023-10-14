@@ -37,41 +37,39 @@ public class StringUtils {
         return new String(buf);
     }
 
-    public static String toHexString(final byte[] bytes) {
-        final StringBuilder buffer = new StringBuilder(bytes.length);
-        buffer.append("\r\n\t\t   0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f\r\n");
-        int startIndex = 0;
+    public static String toHexString(byte[] data) {
+        final StringBuilder builder = new StringBuilder(data.length);
+		builder.append("\r\n\t\t   0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f\r\n");
+        int index = 0;
         int column = 0;
-        for (int i = 0; i < bytes.length; i++) {
+        for (int i = 0; i < data.length; i++) {
             column = i % 16;
             switch (column) {
                 case 0:
-                    startIndex = i;
-                    buffer.append(fixHexString(Integer.toHexString(i), 8)).append(": ");
-                    buffer.append(toHex(bytes[i]));
-                    buffer.append(' ');
+					index = i;
+					builder.append(fixHexString(Integer.toHexString(i), 8)).append(": ");
+					builder.append(toHex(data[i]));
+					builder.append(' ');
                     break;
                 case 15:
-                    buffer.append(toHex(bytes[i]));
-                    buffer.append(" ; ");
-                    buffer.append(filterString(bytes, startIndex, column + 1));
-                    buffer.append("\r\n");
+					builder.append(toHex(data[i]));
+					builder.append(" ; ");
+					builder.append(filterString(data, index, column + 1));
+					builder.append("\r\n");
                     break;
                 default:
-                    buffer.append(toHex(bytes[i]));
-                    buffer.append(' ');
+					builder.append(toHex(data[i]));
+					builder.append(' ');
             }
         }
-
         if (column != 15) {
             for (int i = 0; i < 15 - column; i++) {
-                buffer.append("   ");
+				builder.append("   ");
             }
-            buffer.append("; ").append(filterString(bytes, startIndex, column + 1));
-            buffer.append("\r\n");
+			builder.append("; ").append(filterString(data, index, column + 1));
+			builder.append("\r\n");
         }
-
-        return buffer.toString();
+        return builder.toString();
     }
 
     private static String filterString(final byte[] bytes, final int offset, final int count) {
