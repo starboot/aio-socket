@@ -46,7 +46,7 @@ public class ServerBootstrap extends AbstractBootstrap {
 	/**
 	 * AIO Server 通道
 	 */
-	private ImproveAsynchronousServerSocketChannel serverSocketChannel;
+	private ImproveAsynchronousServerSocketChannel asynchronousServerSocketChannel;
 
 	/**
 	 * ServerBootstrap
@@ -81,16 +81,16 @@ public class ServerBootstrap extends AbstractBootstrap {
 	private void start0() {
 		try {
 			checkAndResetConfig();
-			this.serverSocketChannel = ImproveAsynchronousServerSocketChannel.open(getAsynchronousChannelGroup());
+			this.asynchronousServerSocketChannel = ImproveAsynchronousServerSocketChannel.open(getAsynchronousChannelGroup());
 			if (getConfig().getSocketOptions() != null) {
 				for (Map.Entry<SocketOption<Object>, Object> entry : getConfig().getSocketOptions().entrySet()) {
-					this.serverSocketChannel.setOption(entry.getKey(), entry.getValue());
+					this.asynchronousServerSocketChannel.setOption(entry.getKey(), entry.getValue());
 				}
 			}
 			if (getConfig().getHost() != null) {
-				this.serverSocketChannel.bind(new InetSocketAddress(getConfig().getHost(), getConfig().getPort()), getConfig().getBacklog());
+				this.asynchronousServerSocketChannel.bind(new InetSocketAddress(getConfig().getHost(), getConfig().getPort()), getConfig().getBacklog());
 			} else {
-				this.serverSocketChannel.bind(new InetSocketAddress(getConfig().getPort()), getConfig().getBacklog());
+				this.asynchronousServerSocketChannel.bind(new InetSocketAddress(getConfig().getPort()), getConfig().getBacklog());
 			}
 			startAcceptThread();
 			if (LOGGER.isInfoEnabled()) {
@@ -106,15 +106,15 @@ public class ServerBootstrap extends AbstractBootstrap {
 	 * 启动接受连接请求的监听
 	 */
 	private void startAcceptThread() {
-		this.serverSocketChannel.accept(getConfig(), new CompletionHandler<ImproveAsynchronousSocketChannel, AioConfig>() {
+		this.asynchronousServerSocketChannel.accept(getConfig(), new CompletionHandler<ImproveAsynchronousSocketChannel, AioConfig>() {
 			@Override
 			public void completed(ImproveAsynchronousSocketChannel channel, AioConfig aioConfig) {
 				try {
 					initChannelContext(channel);
-					serverSocketChannel.accept(aioConfig, this);
+					asynchronousServerSocketChannel.accept(aioConfig, this);
 				} catch (Throwable throwable) {
 					failed(throwable, aioConfig);
-					serverSocketChannel.accept(aioConfig, this);
+					asynchronousServerSocketChannel.accept(aioConfig, this);
 				}
 			}
 
@@ -175,9 +175,9 @@ public class ServerBootstrap extends AbstractBootstrap {
 	 */
 	public void shutdown() {
 		try {
-			if (this.serverSocketChannel != null) {
-				this.serverSocketChannel.close();
-				this.serverSocketChannel = null;
+			if (this.asynchronousServerSocketChannel != null) {
+				this.asynchronousServerSocketChannel.close();
+				this.asynchronousServerSocketChannel = null;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
