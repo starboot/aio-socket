@@ -209,10 +209,9 @@ public class ClientBootstrap extends AbstractBootstrap {
 					handler.failed(throwable, future);
 				} catch (Exception e) {
 					e.printStackTrace();
-				} finally {
-					AIOUtil.closeImproveAsynchronousSocketChannel(socketChannel);
-					shutdownNow();
 				}
+				AIOUtil.closeImproveAsynchronousSocketChannel(socketChannel);
+				shutdownNow();
 			}
 		});
 	}
