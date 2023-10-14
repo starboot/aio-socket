@@ -22,6 +22,7 @@ import java.util.Map;
 /**
  * 用于设置Socket Option的插件
  *
+ * @author smart-socket: https://gitee.com/smartboot/smart-socket.git
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */

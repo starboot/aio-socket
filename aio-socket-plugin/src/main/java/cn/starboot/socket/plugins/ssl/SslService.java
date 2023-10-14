@@ -21,6 +21,7 @@ import java.util.function.Consumer;
  * TLS/SSL服务
  * keytool -genkey -validity 36000 -alias www.mxd.xyz -keyalg RSA -keystore server.keystore
  *
+ * @author smart-socket: https://gitee.com/smartboot/smart-socket.git
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */

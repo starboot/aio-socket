@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.LongAdder;
 /**
  * 服务器运行状态监控插件
  *
+ * @author smart-socket: https://gitee.com/smartboot/smart-socket.git
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */

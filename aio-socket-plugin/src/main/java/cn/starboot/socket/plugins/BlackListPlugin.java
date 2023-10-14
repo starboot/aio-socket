@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * 黑名单插件,smart-socket会拒绝与黑名单中的IP建立连接
  *
+ * @author smart-socket: https://gitee.com/smartboot/smart-socket.git
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */

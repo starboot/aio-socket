@@ -11,6 +11,7 @@ package cn.starboot.socket.plugins.ssl;
 /**
  * 配置引擎请求客户端验证。此选项只对服务器模式的引擎有用
  *
+ * @author smart-socket: https://gitee.com/smartboot/smart-socket.git
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
