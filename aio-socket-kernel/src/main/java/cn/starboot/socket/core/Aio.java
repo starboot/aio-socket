@@ -1284,14 +1284,7 @@ public class Aio {
 	 */
 	private static Boolean isInSet(ConcurrentWithSet<ChannelContext> setWithLock,
 								   ChannelContext channelContext) {
-		AtomicBoolean contains = new AtomicBoolean(false);
-		setWithLock.contains(channelContext, new Consumer<Boolean>() {
-			@Override
-			public void accept(Boolean aBoolean) {
-				contains.set(aBoolean);
-			}
-		});
-		return contains.get();
+		return setWithLock.contains(channelContext);
 	}
 
 	// -------------------------------Remove篇--------------------------------
