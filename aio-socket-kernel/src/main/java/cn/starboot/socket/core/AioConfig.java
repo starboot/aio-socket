@@ -17,7 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.Monitor;
 import cn.starboot.socket.maintain.*;
-import cn.starboot.socket.utils.lock.SetWithLock;
+import cn.starboot.socket.utils.concurrent.collection.ConcurrentWithSet;
 import cn.starboot.socket.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.intf.Handler;
@@ -100,7 +100,7 @@ public abstract class AioConfig {
 
 	private boolean memoryKeep;
 
-	private SetWithLock<ChannelContext> connections;
+	private ConcurrentWithSet<ChannelContext> connections;
 
 	/**
 	 * 插件
@@ -244,11 +244,11 @@ public abstract class AioConfig {
 	public synchronized void setUseConnections(boolean useConnections) {
 		this.useConnections = useConnections;
 		if (this.useConnections && Objects.isNull(this.connections)) {
-			this.connections = new SetWithLock<>(new HashSet<>());
+			this.connections = new ConcurrentWithSet<>(new HashSet<>());
 		}
 	}
 
-	public SetWithLock<ChannelContext> getConnections() {
+	public ConcurrentWithSet<ChannelContext> getConnections() {
 		return connections;
 	}
 

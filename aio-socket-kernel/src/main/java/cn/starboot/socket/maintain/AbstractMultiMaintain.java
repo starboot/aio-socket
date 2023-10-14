@@ -1,21 +1,22 @@
 package cn.starboot.socket.maintain;
 
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.utils.lock.SetWithLock;
+import cn.starboot.socket.utils.concurrent.collection.ConcurrentWithSet;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 public abstract class AbstractMultiMaintain extends AbstractMaintain {
 
 	/**
 	 * 采用并发安全数据结构处理一对多中群组问题
 	 */
-	private final Map<String, SetWithLock<ChannelContext>> multiMaintainMap = new ConcurrentHashMap<>();
+	private final Map<String, ConcurrentWithSet<ChannelContext>> multiMaintainMap = new ConcurrentHashMap<>();
 
-	protected Map<String, SetWithLock<ChannelContext>> getMultiMaintainMap() {
+	protected Map<String, ConcurrentWithSet<ChannelContext>> getMultiMaintainMap() {
 		return this.multiMaintainMap;
 	}
 
@@ -28,11 +29,19 @@ public abstract class AbstractMultiMaintain extends AbstractMaintain {
 	 */
 	@Override
 	public boolean join(String id, ChannelContext context) {
-		SetWithLock<ChannelContext> channelContexts = getMultiMaintainMap().get(id);
+		ConcurrentWithSet<ChannelContext> channelContexts = getMultiMaintainMap().get(id);
 		if (Objects.isNull(channelContexts)) {
-			channelContexts = new SetWithLock<>(new HashSet<>());
+			channelContexts = new ConcurrentWithSet<>(new HashSet<>());
 		}
-		return channelContexts.add(context);
+		final boolean[] result = new boolean[1];
+		channelContexts.add(context, new Consumer<Boolean>() {
+			@Override
+			public void accept(Boolean aBoolean) {
+				result[0] = aBoolean;
+			}
+		});
+
+		return result[0];
 	}
 
 	/**
@@ -50,17 +59,24 @@ public abstract class AbstractMultiMaintain extends AbstractMaintain {
 				|| Objects.isNull(context)) {
 			return false;
 		}
-		boolean result;
+		final boolean[] result = new boolean[1];
 		if (Objects.isNull(getMultiMaintainMap().get(id))
-				&& !(getMultiMaintainMap().get(id).getObj().contains(context))) {
+//				&& !(getMultiMaintainMap().get(id).getObj().contains(context))
+		) {
 			return true;
 		}else {
-			result = getMultiMaintainMap().get(id).remove(context);
-			if (getMultiMaintainMap().get(id).size() == 0) {
-				getMultiMaintainMap().remove(id);
-			}
+
+			getMultiMaintainMap().get(id).remove(context, new Consumer<Boolean>() {
+				@Override
+				public void accept(Boolean aBoolean) {
+					result[0] = aBoolean;
+				}
+			});
+//			if (getMultiMaintainMap().get(id).size() == 0) {
+//				getMultiMaintainMap().remove(id);
+//			}
 		}
-		return result;
+		return result[0];
 	}
 
 	/**
@@ -79,7 +95,7 @@ public abstract class AbstractMultiMaintain extends AbstractMaintain {
 	}
 
 	@Override
-	public SetWithLock<ChannelContext> getSet(String id) {
+	public ConcurrentWithSet<ChannelContext> getSet(String id) {
 		return Objects.isNull(getMultiMaintainMap().get(id)) ? null : getMultiMaintainMap().get(id);
 	}
 }

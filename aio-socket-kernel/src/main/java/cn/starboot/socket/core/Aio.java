@@ -20,8 +20,8 @@ import cn.starboot.socket.Node;
 import cn.starboot.socket.Packet;
 import cn.starboot.socket.enums.CloseCode;
 import cn.starboot.socket.enums.MaintainEnum;
-import cn.starboot.socket.utils.lock.ReadLockHandler;
-import cn.starboot.socket.utils.lock.SetWithLock;
+import cn.starboot.socket.utils.concurrent.collection.ConcurrentWithSet;
+import cn.starboot.socket.utils.concurrent.handle.ConcurrentWithReadHandler;
 import cn.starboot.socket.utils.page.Page;
 import cn.starboot.socket.utils.page.PageUtils;
 import org.slf4j.Logger;
@@ -716,18 +716,24 @@ public class Aio {
 	 * @param closeCode   关闭状态码 {@link CloseCode}
 	 */
 	public static void closeSet(AioConfig aioConfig,
-								SetWithLock<ChannelContext> setWithLock,
+								ConcurrentWithSet<ChannelContext> setWithLock,
 								CloseCode closeCode) {
-		if (Objects.isNull(setWithLock) || setWithLock.getObj().size() == 0) {
+		if (Objects.isNull(setWithLock) || setWithLock.isEmpty()) {
 			return;
 		}
-		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>)
-				channelContextSet -> channelContextSet.forEach((Consumer<ChannelContext>)
-						channelContext -> {
-							if (Objects.nonNull(channelContext)) {
-								close(channelContext, closeCode);
-							}
-						}));
+		setWithLock.handle(new ConcurrentWithReadHandler<Set<ChannelContext>>() {
+			@Override
+			public void handler(Set<ChannelContext> channelContextSet) throws Exception {
+				channelContextSet.forEach(new Consumer<ChannelContext>() {
+					@Override
+					public void accept(ChannelContext channelContext) {
+						if (Objects.nonNull(channelContext)) {
+							close(channelContext, closeCode);
+						}
+					}
+				});
+			}
+		});
 	}
 
 	// ---------------------------------Get篇---------------------------------
@@ -738,7 +744,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getAll(AioConfig aioConfig) {
+	public static ConcurrentWithSet<ChannelContext> getAll(AioConfig aioConfig) {
 		return aioConfig.getConnections();
 	}
 
@@ -748,7 +754,7 @@ public class Aio {
 	 * @param aioConfig 配置信息 {@link cn.starboot.socket.core.AioConfig}
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getAllChannelContexts(AioConfig aioConfig) {
+	public static ConcurrentWithSet<ChannelContext> getAllChannelContexts(AioConfig aioConfig) {
 		return getAll(aioConfig);
 	}
 
@@ -813,8 +819,8 @@ public class Aio {
 	 * @param cluId     集群ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getByCluId(AioConfig aioConfig,
-														 String cluId) {
+	public static ConcurrentWithSet<ChannelContext> getByCluId(AioConfig aioConfig,
+															   String cluId) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
@@ -828,8 +834,8 @@ public class Aio {
 	 * @param cluId     集群ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getChannelContextByCluId(AioConfig aioConfig,
-																	   String cluId) {
+	public static ConcurrentWithSet<ChannelContext> getChannelContextByCluId(AioConfig aioConfig,
+																			 String cluId) {
 		return getByCluId(aioConfig, cluId);
 	}
 
@@ -840,8 +846,8 @@ public class Aio {
 	 * @param groupId   群组ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getByGroupId(AioConfig aioConfig,
-														   String groupId) {
+	public static ConcurrentWithSet<ChannelContext> getByGroupId(AioConfig aioConfig,
+																 String groupId) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
@@ -855,8 +861,8 @@ public class Aio {
 	 * @param groupId   群组ID
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getChannelContextByGroupId(AioConfig aioConfig,
-																		 String groupId) {
+	public static ConcurrentWithSet<ChannelContext> getChannelContextByGroupId(AioConfig aioConfig,
+																			   String groupId) {
 		return getByGroupId(aioConfig, groupId);
 	}
 
@@ -894,8 +900,8 @@ public class Aio {
 	 * @param ip        IP
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getByIp(AioConfig aioConfig,
-													  String ip) {
+	public static ConcurrentWithSet<ChannelContext> getByIp(AioConfig aioConfig,
+															String ip) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
@@ -909,8 +915,8 @@ public class Aio {
 	 * @param ip        IP
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getChannelContextByIp(AioConfig aioConfig,
-																	String ip) {
+	public static ConcurrentWithSet<ChannelContext> getChannelContextByIp(AioConfig aioConfig,
+																		  String ip) {
 		return getByIp(aioConfig, ip);
 	}
 
@@ -921,8 +927,8 @@ public class Aio {
 	 * @param token     TOKEN
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getByToken(AioConfig aioConfig,
-														 String token) {
+	public static ConcurrentWithSet<ChannelContext> getByToken(AioConfig aioConfig,
+															   String token) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
@@ -936,8 +942,8 @@ public class Aio {
 	 * @param token     TOKEN
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getChannelContextByToken(AioConfig aioConfig,
-																	   String token) {
+	public static ConcurrentWithSet<ChannelContext> getChannelContextByToken(AioConfig aioConfig,
+																			 String token) {
 		return getByToken(aioConfig, token);
 	}
 
@@ -948,8 +954,8 @@ public class Aio {
 	 * @param user      USER
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getByUser(AioConfig aioConfig,
-														String user) {
+	public static ConcurrentWithSet<ChannelContext> getByUser(AioConfig aioConfig,
+															  String user) {
 		return aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
@@ -963,8 +969,8 @@ public class Aio {
 	 * @param user      USER
 	 * @return 用户上下文信息带锁数据结构的SET集合
 	 */
-	public static SetWithLock<ChannelContext> getChannelContextByUser(AioConfig aioConfig,
-																	  String user) {
+	public static ConcurrentWithSet<ChannelContext> getChannelContextByUser(AioConfig aioConfig,
+																			String user) {
 		return getByUser(aioConfig, user);
 	}
 
@@ -979,7 +985,7 @@ public class Aio {
 	public static Page<ChannelContext> getPageOfAll(AioConfig aioConfig,
 													Integer pageIndex,
 													Integer pageSize) {
-		SetWithLock<ChannelContext> connections = aioConfig.getConnections();
+		ConcurrentWithSet<ChannelContext> connections = aioConfig.getConnections();
 		return getPageOfSet(connections, pageIndex, pageSize);
 	}
 
@@ -996,7 +1002,7 @@ public class Aio {
 													String cluId,
 													Integer pageIndex,
 													Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
 				.getSet(cluId);
@@ -1030,7 +1036,7 @@ public class Aio {
 	public static Boolean isInClu(AioConfig aioConfig,
 								  String cluId,
 								  ChannelContext channelContext) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
 				.getSet(cluId);
@@ -1050,7 +1056,7 @@ public class Aio {
 													  String groupId,
 													  Integer pageIndex,
 													  Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
 				.getSet(groupId);
@@ -1086,7 +1092,7 @@ public class Aio {
 	public static Boolean isInGroup(AioConfig aioConfig,
 									String groupId,
 									ChannelContext channelContext) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
 				.getSet(groupId);
@@ -1106,7 +1112,7 @@ public class Aio {
 												   String ip,
 												   Integer pageIndex,
 												   Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
 				.getSet(ip);
@@ -1140,7 +1146,7 @@ public class Aio {
 	public static Boolean isInIp(AioConfig aioConfig,
 								 String ip,
 								 ChannelContext channelContext) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
 				.getSet(ip);
@@ -1160,7 +1166,7 @@ public class Aio {
 													  String token,
 													  Integer pageIndex,
 													  Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
 				.getSet(token);
@@ -1194,7 +1200,7 @@ public class Aio {
 	public static Boolean isInToken(AioConfig aioConfig,
 									String token,
 									ChannelContext channelContext) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
 				.getSet(token);
@@ -1214,7 +1220,7 @@ public class Aio {
 													 String user,
 													 Integer pageIndex,
 													 Integer pageSize) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
 				.getSet(user);
@@ -1248,7 +1254,7 @@ public class Aio {
 	public static Boolean isInUser(AioConfig aioConfig,
 								   String user,
 								   ChannelContext channelContext) {
-		SetWithLock<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
 				.getSet(user);
@@ -1263,7 +1269,7 @@ public class Aio {
 	 * @param pageSize    页面大小
 	 * @return 分页结果
 	 */
-	private static Page<ChannelContext> getPageOfSet(SetWithLock<ChannelContext> setWithLock,
+	private static Page<ChannelContext> getPageOfSet(ConcurrentWithSet<ChannelContext> setWithLock,
 													 Integer pageIndex,
 													 Integer pageSize) {
 		return PageUtils.fromSetWithLock(setWithLock, pageIndex, pageSize);
@@ -1276,11 +1282,15 @@ public class Aio {
 	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
-	private static Boolean isInSet(SetWithLock<ChannelContext> setWithLock,
+	private static Boolean isInSet(ConcurrentWithSet<ChannelContext> setWithLock,
 								   ChannelContext channelContext) {
 		AtomicBoolean contains = new AtomicBoolean(false);
-		setWithLock.handle((ReadLockHandler<Set<ChannelContext>>)
-				channelContextSet -> contains.set(channelContextSet.contains(channelContext)));
+		setWithLock.contains(channelContext, new Consumer<Boolean>() {
+			@Override
+			public void accept(Boolean aBoolean) {
+				contains.set(aBoolean);
+			}
+		});
 		return contains.get();
 	}
 
@@ -1506,7 +1516,7 @@ public class Aio {
 	 * @param closeCode   关闭状态码 {@link CloseCode}
 	 */
 	public static void removeSet(AioConfig aioConfig,
-								 SetWithLock<ChannelContext> setWithLock,
+								 ConcurrentWithSet<ChannelContext> setWithLock,
 								 CloseCode closeCode) {
 		closeSet(aioConfig, setWithLock, closeCode);
 	}
@@ -1719,7 +1729,7 @@ public class Aio {
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter,
 									   boolean isBlock) {
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
 				.getSet(cluId);
@@ -1782,7 +1792,7 @@ public class Aio {
 									  ChannelContextFilter channelContextFilter,
 									  boolean isBlock) {
 		// 群组成员集合
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
 				.getSet(groupId);
@@ -1874,7 +1884,7 @@ public class Aio {
 									Packet packet,
 									ChannelContextFilter channelContextFilter,
 									boolean isBlock) {
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
 				.getSet(ip);
@@ -1896,7 +1906,7 @@ public class Aio {
 	 * @return 发送状态
 	 */
 	public static Boolean sendToSet(AioConfig aioConfig,
-									SetWithLock<ChannelContext> setWithLock,
+									ConcurrentWithSet<ChannelContext> setWithLock,
 									Packet packet) {
 		return sendToSet(aioConfig, setWithLock, packet, null);
 	}
@@ -1913,7 +1923,7 @@ public class Aio {
 	 * @return 发送状态
 	 */
 	public static Boolean sendToSet(AioConfig aioConfig,
-									SetWithLock<ChannelContext> setWithLock,
+									ConcurrentWithSet<ChannelContext> setWithLock,
 									Packet packet,
 									ChannelContextFilter channelContextFilter) {
 		return sendToSet(aioConfig, setWithLock, packet, channelContextFilter, false);
@@ -1932,11 +1942,11 @@ public class Aio {
 	 * @return 发送状态
 	 */
 	private static Boolean sendToSet(AioConfig aioConfig,
-									 SetWithLock<ChannelContext> setWithLock,
+									 ConcurrentWithSet<ChannelContext> setWithLock,
 									 Packet packet,
 									 ChannelContextFilter channelContextFilter,
 									 boolean isBlock) {
-		if (Objects.isNull(setWithLock) || setWithLock.getObj().size() == 0) {
+		if (Objects.isNull(setWithLock) || setWithLock.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("集合内没人在线");
 			}
@@ -1945,9 +1955,9 @@ public class Aio {
 		LongAdder sendNum = new LongAdder();
 		LongAdder sendSuc = new LongAdder();
 		setWithLock
-				.handle((ReadLockHandler<Set<ChannelContext>>)
-						channelContextSet -> channelContextSet.forEach(
-								channelContext -> {
+				.handle((ConcurrentWithReadHandler<Set<ChannelContext>>)
+						channelContextSet ->
+								channelContextSet.forEach(channelContext -> {
 									if (Objects.nonNull(channelContext)
 											&& (Objects.isNull(channelContextFilter)
 											|| channelContextFilter.filter(channelContext))) {
@@ -2036,7 +2046,7 @@ public class Aio {
 									   Packet packet,
 									   ChannelContextFilter channelContextFilter,
 									   boolean isBlock) {
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
 				.getSet(token);
@@ -2098,7 +2108,7 @@ public class Aio {
 									  Packet packet,
 									  ChannelContextFilter channelContextFilter,
 									  boolean isBlock) {
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
 				.getSet(user);
@@ -2261,7 +2271,7 @@ public class Aio {
 										   String cluId,
 										   Consumer<OutputChannelContext> outPutConsumer,
 										   ChannelContextFilter channelContextFilter) {
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
 				.getSet(cluId);
@@ -2304,7 +2314,7 @@ public class Aio {
 										   Consumer<OutputChannelContext> outPutConsumer,
 										   ChannelContextFilter channelContextFilter) {
 		// 群组成员集合
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
 				.getSet(groupId);
@@ -2360,7 +2370,7 @@ public class Aio {
 										String ip,
 										Consumer<OutputChannelContext> outPutConsumer,
 										ChannelContextFilter channelContextFilter) {
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
 				.getSet(ip);
@@ -2382,7 +2392,7 @@ public class Aio {
 	 * @return 发送状态
 	 */
 	public static Boolean multiSendToSet(AioConfig aioConfig,
-										 SetWithLock<ChannelContext> setWithLock,
+										 ConcurrentWithSet<ChannelContext> setWithLock,
 										 Consumer<OutputChannelContext> outPutConsumer) {
 		return multiSendToSet(aioConfig, setWithLock, outPutConsumer, null);
 	}
@@ -2399,10 +2409,10 @@ public class Aio {
 	 * @return 发送状态
 	 */
 	public static Boolean multiSendToSet(AioConfig aioConfig,
-										 SetWithLock<ChannelContext> setWithLock,
+										 ConcurrentWithSet<ChannelContext> setWithLock,
 										 Consumer<OutputChannelContext> outPutConsumer,
 										 ChannelContextFilter channelContextFilter) {
-		if (Objects.isNull(setWithLock) || setWithLock.getObj().size() == 0) {
+		if (Objects.isNull(setWithLock) || setWithLock.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("集合内没人在线");
 			}
@@ -2411,9 +2421,9 @@ public class Aio {
 		LongAdder sendNum = new LongAdder();
 		LongAdder sendSuc = new LongAdder();
 		setWithLock
-				.handle((ReadLockHandler<Set<ChannelContext>>)
-						channelContextSet -> channelContextSet.forEach(
-								channelContext -> {
+				.handle((ConcurrentWithReadHandler<Set<ChannelContext>>)
+						channelContextSet ->
+								channelContextSet.forEach(channelContext -> {
 									if (Objects.nonNull(channelContext)
 											&& (Objects.isNull(channelContextFilter)
 											|| channelContextFilter.filter(channelContext))) {
@@ -2456,7 +2466,7 @@ public class Aio {
 										   String token,
 										   Consumer<OutputChannelContext> outPutConsumer,
 										   ChannelContextFilter channelContextFilter) {
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
 				.getSet(token);
@@ -2498,7 +2508,7 @@ public class Aio {
 										  String user,
 										  Consumer<OutputChannelContext> outPutConsumer,
 										  ChannelContextFilter channelContextFilter) {
-		SetWithLock<ChannelContext> set = aioConfig
+		ConcurrentWithSet<ChannelContext> set = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
 				.getSet(user);

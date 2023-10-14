@@ -94,6 +94,8 @@ public abstract class AbstractConcurrent<T> implements Serializable {
 		readWriteSemaphore.release();
 	}
 
+	public abstract int size();
+
 	public abstract void size(Consumer<Integer> callBackFunction);
 
 	public abstract void clear();

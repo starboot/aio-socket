@@ -16,8 +16,8 @@
 package cn.starboot.socket.utils.cache.redis;
 
 import cn.starboot.socket.utils.TimerService;
-import cn.starboot.socket.utils.lock.SetWithLock;
-import cn.starboot.socket.utils.lock.WriteLockHandler;
+import cn.starboot.socket.utils.concurrent.collection.ConcurrentWithSet;
+import cn.starboot.socket.utils.concurrent.handle.ConcurrentWithWriteHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * 定时更新redis的过期时间
@@ -43,7 +44,7 @@ public class RedisExpireUpdateService extends TimerService {
 
 	private static RedisExpireUpdateService redisExpireUpdateTask;
 
-	private static final SetWithLock<ExpireEntity> setWithLock = new SetWithLock<>(new HashSet<>());
+	private static final ConcurrentWithSet<ExpireEntity> setWithLock = new ConcurrentWithSet<>(new HashSet<>());
 
 	public synchronized static RedisExpireUpdateService getInstance(Integer seconds) {
 		long mills = TimeUnit.SECONDS.toMillis(seconds);
@@ -63,24 +64,32 @@ public class RedisExpireUpdateService extends TimerService {
 	}
 
 	public void add(String cacheName, String key, String value) {
-		setWithLock.add(new ExpireEntity(cacheName, key, value));
+		setWithLock.add(new ExpireEntity(cacheName, key, value), new Consumer<Boolean>() {
+			@Override
+			public void accept(Boolean aBoolean) {
+
+			}
+		});
 	}
 
 	@Override
 	public void run() {
-		setWithLock.handle((WriteLockHandler<Set<ExpireEntity>>) expireVos -> {
-			for (ExpireEntity expireEntity : expireVos) {
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("update cache live time, cacheName:{}, key:{}",
-							expireEntity.getCacheName(),
-							expireEntity.getKey());
+		setWithLock.handle(new ConcurrentWithWriteHandler<Set<ExpireEntity>>() {
+			@Override
+			public void handler(Set<ExpireEntity> expireEntities) throws Exception {
+				for (ExpireEntity expireEntity : expireEntities) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("update cache live time, cacheName:{}, key:{}",
+								expireEntity.getCacheName(),
+								expireEntity.getKey());
+					}
+					RedisCache cache = RedisCache.getCache(expireEntity.getCacheName());
+					if (cache.ttl(expireEntity.getKey()) > 0) {
+						cache.put(expireEntity.getKey(), expireEntity.getValue());
+					}
 				}
-				RedisCache cache = RedisCache.getCache(expireEntity.getCacheName());
-				if (cache.ttl(expireEntity.getKey()) > 0) {
-					cache.put(expireEntity.getKey(), expireEntity.getValue());
-				}
+				expireEntities.clear();
 			}
-			expireVos.clear();
 		});
 	}
 }

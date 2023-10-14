@@ -1,28 +1,19 @@
 package cn.starboot.socket.utils.page;
 
+import cn.starboot.socket.utils.concurrent.collection.AbstractConcurrentWithCollection;
+import cn.starboot.socket.utils.concurrent.collection.ConcurrentWithList;
+import cn.starboot.socket.utils.concurrent.collection.ConcurrentWithSet;
 import cn.starboot.socket.utils.convert.Converter;
-import cn.starboot.socket.utils.lock.SetWithLock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.locks.Lock;
+import java.util.function.Consumer;
 
 public class PageUtils {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PageUtils.class);
-
-	public static <T> Page<T> fromList(List<T> list,
-									   Integer pageIndex,
-									   Integer pageSize) {
-		return fromList(list, pageIndex, pageSize, null);
-	}
-
 	@SuppressWarnings("unchecked")
-	public static <T> Page<T> fromList(List<?> list,
+	public static <T> Page<T> fromList(ConcurrentWithList<T> list,
 									   Integer pageIndex,
 									   Integer pageSize,
 									   Converter<T> converter) {
@@ -36,15 +27,27 @@ public class PageUtils {
 		if (pageData == null) {
 			return (Page<T>) page;
 		}
-
-		int startIndex = Math.min((page.getPageNumber() - 1) * page.getPageSize(), list.size());
-		int endIndex = Math.min(page.getPageNumber() * page.getPageSize(), list.size());
+		final int[] recordCount = {0};
+		list.size(integer -> recordCount[0] = integer);
+		int startIndex = Math.min((page.getPageNumber() - 1) * page.getPageSize(), recordCount[0]);
+		int endIndex = Math.min(page.getPageNumber() * page.getPageSize(), recordCount[0]);
 
 		for (int i = startIndex; i < endIndex; i++) {
 			if (converter != null) {
-				pageData.add(converter.convert(list.get(i)));
+				list.get(i, new Consumer<T>() {
+					@Override
+					public void accept(T t) {
+						pageData.add(converter.convert(t));
+					}
+				});
+
 			} else {
-				pageData.add(list.get(i));
+				list.get(i, new Consumer<T>() {
+					@Override
+					public void accept(T t) {
+						pageData.add(t);
+					}
+				});
 			}
 
 		}
@@ -52,79 +55,70 @@ public class PageUtils {
 		return (Page<T>) page;
 	}
 
-	public static <T> Page<T> fromSet(Set<T> set,
-									  Integer pageIndex,
-									  Integer pageSize) {
-		return fromSet(set, pageIndex, pageSize, null);
-	}
 
-	public static <T> Page<T> fromSet(Set<?> set,
-									  Integer pageIndex,
-									  Integer pageSize,
-									  Converter<T> converter) {
-		if (set == null) {
-			return null;
-		}
-
-		Page<Object> page = pre(set, pageIndex, pageSize);
-
-		List<Object> pageData = page.getList();
-		if (pageData == null) {
-			return (Page<T>) page;
-		}
-
-		int startIndex = Math.min((page.getPageNumber() - 1) * page.getPageSize(), set.size());
-		int endIndex = Math.min(page.getPageNumber() * page.getPageSize(), set.size());
-
-		int i = 0;
-		for (Object t : set) {
-			if (i >= endIndex) {
-				break;
-			}
-			if (i < startIndex) {
-				i++;
-				continue;
-			}
-
-			if (converter != null) {
-				pageData.add(converter.convert(t));
-			} else {
-				pageData.add(t);
-			}
-
-			i++;
-			continue;
-		}
-		page.setList(pageData);
-		return (Page<T>) page;
-	}
-
-	public static <T> Page<T> fromSetWithLock(SetWithLock<T> setWithLock,
+	public static <T> Page<T> fromSetWithLock(ConcurrentWithSet<T> setWithLock,
 											  Integer pageIndex,
 											  Integer pageSize) {
 		return fromSetWithLock(setWithLock, pageIndex, pageSize, null);
 
 	}
 
-	public static <T> Page<T> fromSetWithLock(SetWithLock<?> setWithLock,
+	public static <T> Page<T> fromSetWithLock(ConcurrentWithSet<T> concurrentWithSet,
 											  Integer pageIndex,
 											  Integer pageSize,
 											  Converter<T> converter) {
-		if (setWithLock == null) {
-			return null;
-		}
-		Lock lock = setWithLock.readLock();
-		lock.lock();
-		try {
-			@SuppressWarnings("unchecked")
-			Set<Object> set = (Set<Object>) setWithLock.getObj();
-			return fromSet(set, pageIndex, pageSize, converter);
-		} finally {
-			lock.unlock();
-		}
+		return fromSet(concurrentWithSet, pageIndex, pageSize, converter);
 	}
 
-	private static Page<Object> pre(Collection<?> allList,
+	@SuppressWarnings("unchecked")
+	public static <T> Page<T> fromSet(ConcurrentWithSet<T> concurrentWithSet,
+									  Integer pageIndex,
+									  Integer pageSize,
+									  Converter<T> converter) {
+		if (concurrentWithSet == null) {
+			return null;
+		}
+
+		Page<Object> page = pre(concurrentWithSet, pageIndex, pageSize);
+
+		List<Object> pageData = page.getList();
+		if (pageData == null) {
+			return (Page<T>) page;
+		}
+		final int[] recordCount = {0};
+		concurrentWithSet.size(integer -> recordCount[0] = integer);
+		int startIndex = Math.min((page.getPageNumber() - 1) * page.getPageSize(), recordCount[0]);
+		int endIndex = Math.min(page.getPageNumber() * page.getPageSize(), recordCount[0]);
+
+
+		concurrentWithSet.toArray(new Consumer<Object[]>() {
+			@Override
+			public void accept(Object[] objects) {
+				int i = 0;
+				for (Object t : objects) {
+					if (i >= endIndex) {
+						break;
+					}
+					if (i < startIndex) {
+						i++;
+						continue;
+					}
+
+					if (converter != null) {
+						pageData.add(converter.convert(t));
+					} else {
+						pageData.add(t);
+					}
+					i++;
+				}
+			}
+		});
+
+		page.setList(pageData);
+		return (Page<T>) page;
+	}
+
+	private static <T> Page<Object> pre(AbstractConcurrentWithCollection<? extends Collection<T>, T> allList,
 									Integer pageIndex,
 									Integer pageSize) {
 		if (allList == null) {
@@ -132,12 +126,14 @@ public class PageUtils {
 		}
 		pageSize = processPageSize(pageSize);
 		pageIndex = processpageNumber(pageIndex);
-		int recordCount = allList.size();
-		if (pageSize > recordCount) {
-			pageSize = recordCount;
+		final int[] recordCount = {0};
+		allList.size(integer -> recordCount[0] = integer);
+
+		if (pageSize > recordCount[0]) {
+			pageSize = recordCount[0];
 		}
 		List<Object> pageData = new ArrayList<>(pageSize);
-		return new Page<>(pageData, pageIndex, pageSize, recordCount);
+		return new Page<>(pageData, pageIndex, pageSize, recordCount[0]);
 	}
 
 	private static int processpageNumber(Integer pageIndex) {

@@ -14,6 +14,8 @@ public abstract class AbstractConcurrentWithCollection<T, E> extends AbstractCon
 		super(object);
 	}
 
+	public abstract boolean isEmpty();
+
 	public abstract void isEmpty(Consumer<Boolean> callBackFunction);
 
 	public abstract void contains(E object, Consumer<Boolean> callBackFunction);
