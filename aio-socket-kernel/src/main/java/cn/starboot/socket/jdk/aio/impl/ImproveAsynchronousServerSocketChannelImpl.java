@@ -85,21 +85,17 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 				ImproveAsynchronousSocketChannel asynchronousSocketChannel = new ImproveAsynchronousSocketChannelImpl(improveAsynchronousChannelGroup, socketChannel, true);
 				socketChannel.configureBlocking(false);
 				socketChannel.finishConnect();
-				CompletionHandler<ImproveAsynchronousSocketChannel, Object> completionHandler = acceptCompletionHandler;
-				Object attach = attachment;
-				resetAccept();
-				completionHandler.completed(asynchronousSocketChannel, attach);
-				if (!acceptPending && selectionKey != null) {
+				acceptPending = false;
+				acceptCompletionHandler.completed(asynchronousSocketChannel, attachment);
+				if (selectionKey != null) {
 					ImproveAsynchronousChannelGroupImpl.removeOps(selectionKey, SelectionKey.OP_ACCEPT);
 				}
-			}
-			//首次注册selector
-			else if (selectionKey == null) {
+			} else if (selectionKey == null) {
 				acceptWorker.addRegister(selector -> {
 					try {
 						selectionKey = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT, ImproveAsynchronousServerSocketChannelImpl.this);
-					} catch (ClosedChannelException e) {
-						acceptCompletionHandler.failed(e, attachment);
+					} catch (ClosedChannelException closedChannelException) {
+						acceptCompletionHandler.failed(closedChannelException, attachment);
 					}
 				});
 			} else {
@@ -110,12 +106,6 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 		} finally {
 			acceptInvoker = 0;
 		}
-	}
-
-	private void resetAccept() {
-		acceptPending = false;
-		acceptCompletionHandler = null;
-		attachment = null;
 	}
 
 	@Override
