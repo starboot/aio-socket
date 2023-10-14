@@ -15,16 +15,6 @@ public class ConcurrentWithQueue<E> extends AbstractConcurrentWithQueue<E>  {
 	}
 
 	@Override
-	public int size() {
-		return 0;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return false;
-	}
-
-	@Override
 	public void offer(E e, Consumer<Boolean> callBackFunction) {
 		handle((ConcurrentWithWriteHandler<Queue<E>>) es -> callBackFunction.accept(es.offer(e)));
 	}
