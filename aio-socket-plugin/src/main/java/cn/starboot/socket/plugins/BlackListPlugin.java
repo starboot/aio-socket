@@ -1,82 +1,67 @@
-/*******************************************************************************
- * Copyright (c) 2017-2019, org.smartboot. All rights reserved.
- * project name: smart-socket
- * file name: Protocol.java
- * Date: 2019-12-31
- * Author: sandao (zhengjunweimail@163.com)
- *
- ******************************************************************************/
 package cn.starboot.socket.plugins;
 
 import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.AsynchronousSocketChannel;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Predicate;
 
 /**
  * 黑名单插件,smart-socket会拒绝与黑名单中的IP建立连接
  *
- * @author smart-socket: https://gitee.com/smartboot/smart-socket.git
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
 public final class BlackListPlugin extends AbstractPlugin {
 
-    private final ConcurrentLinkedQueue<BlackListRule> ipBlackList = new ConcurrentLinkedQueue<>();
+	private static final Logger LOGGER = LoggerFactory.getLogger(BlackListPlugin.class);
+
+    private final ConcurrentLinkedQueue<Predicate<InetSocketAddress>> ipBlackList = new ConcurrentLinkedQueue<>();
 
     public BlackListPlugin() {
         System.out.println("aio-socket version: " + AioConfig.VERSION + "; server kernel's black list plugin added successfully");
     }
 
-//    @Override
-    public AsynchronousSocketChannel shouldAccept(AsynchronousSocketChannel channel) {
+    @Override
+    public ImproveAsynchronousSocketChannel shouldAccept(ImproveAsynchronousSocketChannel asynchronousSocketChannel) {
         InetSocketAddress inetSocketAddress = null;
         try {
-            inetSocketAddress = (InetSocketAddress) channel.getRemoteAddress();
+            inetSocketAddress = (InetSocketAddress) asynchronousSocketChannel.getRemoteAddress();
         } catch (IOException e) {
-            System.out.println("get remote address error " + e);
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(e.getMessage());
+			}
         }
         if (inetSocketAddress == null) {
-            return channel;
+            return asynchronousSocketChannel;
         }
-        for (BlackListRule rule : ipBlackList) {
-            if (!rule.access(inetSocketAddress)) {
+        for (Predicate<InetSocketAddress> predicate : ipBlackList) {
+            if (!predicate.test(inetSocketAddress)) {
                 return null;
             }
         }
-        return channel;
+		return asynchronousSocketChannel;
     }
 
     /**
      * 添加黑名单失败规则
      *
-     * @param rule .
+     * @param predicate .
      */
-    public void addRule(BlackListRule rule) {
-        ipBlackList.add(rule);
+    public void addRule(Predicate<InetSocketAddress> predicate) {
+        ipBlackList.add(predicate);
     }
 
     /**
      * 移除黑名单规则
      *
-     * @param rule .
+     * @param predicate .
      */
-    public void removeRule(BlackListRule rule) {
-        ipBlackList.remove(rule);
-    }
-
-    /**
-     * 黑名单规则定义
-     */
-    public interface BlackListRule {
-        /**
-         * 是否允许建立连接
-         *
-         * @param address .
-         * @return .
-         */
-        boolean access(InetSocketAddress address);
+    public void removeRule(Predicate<InetSocketAddress> predicate) {
+        ipBlackList.remove(predicate);
     }
 }
