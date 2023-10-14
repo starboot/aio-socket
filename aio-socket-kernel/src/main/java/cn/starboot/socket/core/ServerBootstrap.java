@@ -109,18 +109,14 @@ public class ServerBootstrap extends AbstractBootstrap {
 		this.asynchronousServerSocketChannel.accept(getConfig(), new CompletionHandler<ImproveAsynchronousSocketChannel, AioConfig>() {
 			@Override
 			public void completed(ImproveAsynchronousSocketChannel channel, AioConfig aioConfig) {
-				try {
-					initChannelContext(channel);
-					asynchronousServerSocketChannel.accept(aioConfig, this);
-				} catch (Throwable throwable) {
-					failed(throwable, aioConfig);
-					asynchronousServerSocketChannel.accept(aioConfig, this);
-				}
+				initChannelContext(channel);
+				asynchronousServerSocketChannel.accept(aioConfig, this);
 			}
 
 			@Override
 			public void failed(Throwable exc, AioConfig aioConfig) {
 				exc.printStackTrace();
+				asynchronousServerSocketChannel.accept(aioConfig, this);
 			}
 		});
 	}
