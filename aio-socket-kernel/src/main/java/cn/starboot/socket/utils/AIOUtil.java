@@ -79,25 +79,15 @@ public class AIOUtil {
     /**
      * 关闭用户通道
      *
-     * @param channel 用户通道
+     * @param asynchronousSocketChannel 用户通道
      */
-    public static void close(ImproveAsynchronousSocketChannel channel) {
-        boolean connected = true;
+    public static void closeImproveAsynchronousSocketChannel(ImproveAsynchronousSocketChannel asynchronousSocketChannel)
+	{
         try {
-            channel.shutdownInput();
-        } catch (IOException ignored) {
-        } catch (NotYetConnectedException e) {
-            connected = false;
-        }
-        try {
-            if (connected) {
-                channel.shutdownOutput();
-            }
-        } catch (IOException | NotYetConnectedException ignored) {
-        }
-        try {
-            channel.close();
-        } catch (IOException ignored) {
+			asynchronousSocketChannel.shutdownInput();
+			asynchronousSocketChannel.shutdownOutput();
+			asynchronousSocketChannel.close();
+        } catch (NotYetConnectedException |IOException ignored) {
         }
     }
 }

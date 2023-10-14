@@ -145,12 +145,13 @@ public class ServerBootstrap extends AbstractBootstrap {
 				context = getBootstrapFunction().apply(acceptChannel);
 				context.initTCPChannelContext();
 			} else {
-				AIOUtil.close(channel);
+				assert channel != null;
+				AIOUtil.closeImproveAsynchronousSocketChannel(channel);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (context == null) {
-				AIOUtil.close(channel);
+				AIOUtil.closeImproveAsynchronousSocketChannel(channel);
 			} else {
 				context.close(true);
 			}

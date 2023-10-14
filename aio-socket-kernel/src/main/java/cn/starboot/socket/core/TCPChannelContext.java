@@ -332,7 +332,7 @@ final class TCPChannelContext extends ChannelContext {
 					writeBuffer = null;
 				}
 			} finally {
-				AIOUtil.close(asynchronousSocketChannel);
+				AIOUtil.closeImproveAsynchronousSocketChannel(asynchronousSocketChannel);
 				getAioConfig().getHandler().stateEvent(this, StateMachineEnum.CHANNEL_CLOSED, null);
 			}
 		} else if ((writeBuffer == null || !writeBuffer.buffer().hasRemaining()) && byteBuf.isEmpty()) {

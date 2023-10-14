@@ -211,7 +211,7 @@ public class ClientBootstrap extends AbstractBootstrap {
 					e.printStackTrace();
 				} finally {
 					if (socketChannel != null) {
-						AIOUtil.close(socketChannel);
+						AIOUtil.closeImproveAsynchronousSocketChannel(socketChannel);
 					}
 					shutdownNow();
 				}
