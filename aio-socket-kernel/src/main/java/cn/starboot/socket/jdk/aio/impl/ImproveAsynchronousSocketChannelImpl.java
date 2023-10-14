@@ -83,8 +83,8 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		this.isServerCreate = isServerCreate;
 		this.socketChannel = socketChannel;
 		this.group = group;
-		readWorker = ((ImproveAsynchronousChannelGroupImpl) group).getSubReactor();
-		commonWorker = ((ImproveAsynchronousChannelGroupImpl) group).getMainReactor();
+		this.readWorker = ((ImproveAsynchronousChannelGroupImpl) group).getSubReactor();
+		this.commonWorker = ((ImproveAsynchronousChannelGroupImpl) group).getMainReactor();
 	}
 
 	@Override
@@ -130,7 +130,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 
 	<A> void implConnect(SocketAddress remote,
 						 A attachment,
-						 CompletionHandler<Void,? super A> handler) {
+						 CompletionHandler<Void, ? super A> handler) {
 		if (isServerCreate) {
 			try {
 				throw new UnsupportedEncodingException("unsupported");
@@ -151,36 +151,47 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		doConnect(remote, attachment, handler);
 	}
 
-	public <A> void doConnect(SocketAddress remote, A attachment, CompletionHandler<Void, ? super A> completionHandler) {
-		try {
-			boolean connected = socketChannel.isConnectionPending();
-			if (connected || socketChannel.connect(remote)) {
-				connected = socketChannel.finishConnect();
-			}
-			//这行代码不要乱动
-			socketChannel.configureBlocking(false);
-			if (connected) {
-				completionHandler.completed(null, attachment);
-			} else {
-				commonWorker.addRegister(selector -> {
+	private boolean doConnect0(SocketAddress remote) throws IOException {
+		boolean connected = socketChannel.isConnectionPending();
+		if (connected || socketChannel.connect(remote)) {
+			connected = socketChannel.finishConnect();
+		}
+		//这行代码不要乱动
+		socketChannel.configureBlocking(false);
+		return connected;
+	}
+
+	private <A> void initConnectRegister(Runnable runnable,
+										 A attachment,
+										 CompletionHandler<Void, ? super A> completionHandler) {
+		commonWorker.addRegister(
+				selector -> {
 					try {
-						socketChannel.register(selector, SelectionKey.OP_CONNECT, (Runnable) () -> doConnect(remote, attachment, completionHandler));
+						socketChannel.register(selector, SelectionKey.OP_CONNECT, runnable);
 					} catch (ClosedChannelException e) {
 						completionHandler.failed(e, attachment);
 					}
 				});
+	}
+
+	public <A> void doConnect(SocketAddress remote, A attachment, CompletionHandler<Void, ? super A> completionHandler) {
+		try {
+			if (doConnect0(remote)) {
+				completionHandler.completed(null, attachment);
+			} else {
+				initConnectRegister(() -> doConnect(remote, attachment, completionHandler),
+						attachment,
+						completionHandler);
 			}
 		} catch (IOException e) {
 			completionHandler.failed(e, attachment);
 		}
-
 	}
 
 	@Override
 	public <A> void connect(SocketAddress remote,
 							A attachment,
-							CompletionHandler<Void, ? super A> handler)
-	{
+							CompletionHandler<Void, ? super A> handler) {
 		if (handler == null)
 			throw new NullPointerException("'handler' is null");
 		implConnect(remote, attachment, handler);
@@ -192,20 +203,20 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	@Override
-	public <A> void read(Function<Boolean,MemoryUnit> function,
+	public <A> void read(Function<Boolean, MemoryUnit> function,
 						 long timeout,
 						 TimeUnit unit,
 						 A attachment,
-						 CompletionHandler<Integer, ? super A> handler)
-	{
+						 CompletionHandler<Integer, ? super A> handler) {
 		if (timeout > 0) {
 			throw new UnsupportedOperationException();
 		}
 		read0(function, attachment, handler);
 	}
 
-	private Function<Boolean,MemoryUnit> memoryUnitFunction;
-	private <V extends Number, A> void read0(Function<Boolean,MemoryUnit> function, A attachment, CompletionHandler<V, ? super A> handler) {
+	private Function<Boolean, MemoryUnit> memoryUnitFunction;
+
+	private <V extends Number, A> void read0(Function<Boolean, MemoryUnit> function, A attachment, CompletionHandler<V, ? super A> handler) {
 		if (this.readCompletionHandler != null) {
 			throw new ReadPendingException();
 		}
@@ -229,8 +240,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 						 long timeout,
 						 TimeUnit unit,
 						 A attachment,
-						 CompletionHandler<Long, ? super A> handler)
-	{
+						 CompletionHandler<Long, ? super A> handler) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -239,8 +249,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 						  long timeout,
 						  TimeUnit unit,
 						  A attachment,
-						  CompletionHandler<Integer, ? super A> handler)
-	{
+						  CompletionHandler<Integer, ? super A> handler) {
 		if (timeout > 0) {
 			throw new UnsupportedOperationException();
 		}
@@ -269,8 +278,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 						  long timeout,
 						  TimeUnit unit,
 						  A attachment,
-						  CompletionHandler<Long, ? super A> handler)
-	{
+						  CompletionHandler<Long, ? super A> handler) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -308,6 +316,8 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 	}
 
 	private byte readInvoker = ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
+
+
 	public final void doRead() {
 		try {
 			if (readCompletionHandler == null) {
@@ -421,6 +431,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		}
 		return false;
 	}
+
 	private void resetWrite() {
 		writeAttachment = null;
 		writeCompletionHandler = null;
