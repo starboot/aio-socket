@@ -12,7 +12,7 @@ import cn.starboot.http.common.utils.ByteTree;
 import cn.starboot.http.common.utils.Constant;
 import cn.starboot.http.common.utils.StringUtils;
 import cn.starboot.socket.plugins.Plugin;
-import cn.starboot.socket.plugins.StreamMonitorPlugin;
+//import cn.starboot.socket.plugins.StreamMonitorPlugin;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -177,10 +177,10 @@ public class HttpServerConfiguration {
      * 启用 debug 模式后会打印码流
      */
     public HttpServerConfiguration debug(boolean debug) {
-        plugins.removeIf(plugin -> plugin instanceof StreamMonitorPlugin);
-        if (debug) {
-            addPlugin(new StreamMonitorPlugin(StreamMonitorPlugin.BLUE_TEXT_INPUT_STREAM, StreamMonitorPlugin.RED_TEXT_OUTPUT_STREAM));
-        }
+//        plugins.removeIf(plugin -> plugin instanceof StreamMonitorPlugin);
+//        if (debug) {
+//            addPlugin(new StreamMonitorPlugin(StreamMonitorPlugin.BLUE_TEXT_INPUT_STREAM, StreamMonitorPlugin.RED_TEXT_OUTPUT_STREAM));
+//        }
         return this;
     }
 
