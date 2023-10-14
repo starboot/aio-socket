@@ -41,17 +41,20 @@ final class UDPChannelContext extends ChannelContext {
 
 	private final SocketAddress remote;
 
-	UDPChannelContext(final UDPChannel udpChannel, final SocketAddress remote, MemoryBlock memoryBlock) {
+	UDPChannelContext(UDPChannel udpChannel, SocketAddress remote, MemoryBlock memoryBlock) {
 		this.udpChannel = udpChannel;
 		this.remote = remote;
-		Consumer<WriteBuffer> consumer = var -> {
-			MemoryUnit writeBuffer = var.poll();
-			if (writeBuffer != null) {
-				this.udpChannel.write(writeBuffer, this);
-			}
-		};
-		setWriteBuffer(memoryBlock, consumer, this.udpChannel.config.getWriteBufferSize(), 20);
-		this.udpChannel.config.getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
+		// 为当前ChannelContext添加对外输出流
+		setWriteBuffer(memoryBlock,
+				buffer -> {
+					MemoryUnit writeBuffer = buffer.poll();
+					if (writeBuffer != null) {
+						this.udpChannel.write(writeBuffer, this);
+					}
+				},
+				getAioConfig().getWriteBufferSize(),
+				16);
+		getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
 	}
 
 	@Override
