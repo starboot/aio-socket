@@ -40,7 +40,7 @@ public abstract class HeartPlugin extends AbstractPlugin {
 
 	private static final TimeoutCallback DEFAULT_TIMEOUT_CALLBACK = (context, lastTime) -> context.close(true);
 
-	private final Map<ChannelContext, Long> sessionMap = new HashMap<>();
+	private final Map<ChannelContext, Long> channelContextMap = new HashMap<>();
 
 	private final long timeout;
 
@@ -79,7 +79,7 @@ public abstract class HeartPlugin extends AbstractPlugin {
 
 	@Override
 	public final boolean beforeProcess(ChannelContext channelContext, Packet packet) {
-		sessionMap.put(channelContext, System.currentTimeMillis());
+		channelContextMap.put(channelContext, System.currentTimeMillis());
 		//是否心跳响应消息 延长心跳监测时间
 		return !isHeartMessage(packet);
 	}
@@ -88,13 +88,10 @@ public abstract class HeartPlugin extends AbstractPlugin {
 	public final void stateEvent(StateMachineEnum stateMachineEnum, ChannelContext context, Throwable throwable) {
 		switch (stateMachineEnum) {
 			case NEW_CHANNEL:
-				sessionMap.put(context, System.currentTimeMillis());
 				registerHeart(context);
-				//注册心跳监测
 				break;
 			case CHANNEL_CLOSED:
-				//移除心跳监测
-				sessionMap.remove(context);
+				removeHeart(context);
 				break;
 			default:
 				break;
@@ -111,17 +108,18 @@ public abstract class HeartPlugin extends AbstractPlugin {
 	public abstract boolean isHeartMessage(Packet packet);
 
 	private void registerHeart(final ChannelContext channelContext) {
+		channelContextMap.put(channelContext, System.currentTimeMillis());
 		TimerService.getInstance().schedule(new TimerTask() {
 			@Override
 			public void run() {
 				if (channelContext.isInvalid()) {
-					sessionMap.remove(channelContext);
+					channelContextMap.remove(channelContext);
 					return;
 				}
-				Long lastTime = sessionMap.get(channelContext);
+				Long lastTime = channelContextMap.get(channelContext);
 				if (lastTime == null) {
 					lastTime = System.currentTimeMillis();
-					sessionMap.put(channelContext, lastTime);
+					channelContextMap.put(channelContext, lastTime);
 				}
 				long current = System.currentTimeMillis();
 				//超时未收到消息，关闭连接
@@ -131,6 +129,10 @@ public abstract class HeartPlugin extends AbstractPlugin {
 				registerHeart(channelContext);
 			}
 		}, this.period, TimeUnit.MILLISECONDS);
+	}
+
+	private void removeHeart(final ChannelContext channelContext) {
+		channelContextMap.remove(channelContext);
 	}
 
 	public interface TimeoutCallback {
