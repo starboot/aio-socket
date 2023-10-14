@@ -66,7 +66,7 @@ public class NioEventLoopWorker implements Runnable {
 	@Override
 	public final void run() {
 		workerThread = Thread.currentThread();
-		// 优先获取SelectionKey,若无关注事件触发则阻塞在selector.select(),减少select被调用次数
+		// 若无关注事件触发则阻塞在select(),减少select被调用次数
 		Set<SelectionKey> keySet = selector.selectedKeys();
 		try {
 			while (running) {
@@ -75,7 +75,6 @@ public class NioEventLoopWorker implements Runnable {
 					selectorConsumer.accept(selector);
 				}
 				selector.select();
-				// 执行本次已触发待处理的事件
 				for (SelectionKey key : keySet) {
 					consumer.accept(key);
 				}

@@ -19,11 +19,11 @@ import cn.starboot.socket.enums.StateMachineEnum;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.ClientBootstrap;
+import cn.starboot.socket.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.utils.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.channels.AsynchronousChannelGroup;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +37,7 @@ public class ReconnectPlugin extends AbstractPlugin {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReconnectPlugin.class);
 
-    private final AsynchronousChannelGroup asynchronousChannelGroup;
+    private final ImproveAsynchronousChannelGroup asynchronousChannelGroup;
 
     private final ClientBootstrap client;
 
@@ -51,7 +51,7 @@ public class ReconnectPlugin extends AbstractPlugin {
 		this(client, period, timeUnit, null);
 	}
 
-    public ReconnectPlugin(ClientBootstrap client, int period, TimeUnit timeUnit, AsynchronousChannelGroup asynchronousChannelGroup) {
+    public ReconnectPlugin(ClientBootstrap client, int period, TimeUnit timeUnit, ImproveAsynchronousChannelGroup asynchronousChannelGroup) {
         this.client = client;
 		this.period =  timeUnit.toMillis(period);
         this.asynchronousChannelGroup = asynchronousChannelGroup;
@@ -72,11 +72,7 @@ public class ReconnectPlugin extends AbstractPlugin {
             @Override
             public void run() {
                 try {
-                    if (asynchronousChannelGroup == null) {
-                        client.start();
-                    } else {
-//                        client.start(asynchronousChannelGroup);
-                    }
+					client.start(asynchronousChannelGroup);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
