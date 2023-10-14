@@ -711,17 +711,17 @@ public class Aio {
 	/**
 	 * 关闭指定集合的连接，并提供关闭码
 	 *
-	 * @param aioConfig   配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock 带有锁结构的SET集合
-	 * @param closeCode   关闭状态码 {@link CloseCode}
+	 * @param aioConfig         配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param concurrentWithSet 带有锁结构的SET集合
+	 * @param closeCode         关闭状态码 {@link CloseCode}
 	 */
 	public static void closeSet(AioConfig aioConfig,
-								ConcurrentWithSet<ChannelContext> setWithLock,
+								ConcurrentWithSet<ChannelContext> concurrentWithSet,
 								CloseCode closeCode) {
-		if (Objects.isNull(setWithLock) || setWithLock.isEmpty()) {
+		if (Objects.isNull(concurrentWithSet) || concurrentWithSet.isEmpty()) {
 			return;
 		}
-		setWithLock.handle(new ConcurrentWithReadHandler<Set<ChannelContext>>() {
+		concurrentWithSet.handle(new ConcurrentWithReadHandler<Set<ChannelContext>>() {
 			@Override
 			public void handler(Set<ChannelContext> channelContextSet) throws Exception {
 				channelContextSet.forEach(new Consumer<ChannelContext>() {
@@ -1002,11 +1002,11 @@ public class Aio {
 													String cluId,
 													Integer pageIndex,
 													Integer pageSize) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
 				.getSet(cluId);
-		return getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(concurrentWithSet, pageIndex, pageSize);
 	}
 
 	/**
@@ -1036,11 +1036,11 @@ public class Aio {
 	public static Boolean isInClu(AioConfig aioConfig,
 								  String cluId,
 								  ChannelContext channelContext) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.CLU_ID)
 				.getSet(cluId);
-		return isInSet(setWithLock, channelContext);
+		return isInSet(concurrentWithSet, channelContext);
 	}
 
 	/**
@@ -1056,11 +1056,11 @@ public class Aio {
 													  String groupId,
 													  Integer pageIndex,
 													  Integer pageSize) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
 				.getSet(groupId);
-		return getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(concurrentWithSet, pageIndex, pageSize);
 	}
 
 	/**
@@ -1092,11 +1092,11 @@ public class Aio {
 	public static Boolean isInGroup(AioConfig aioConfig,
 									String groupId,
 									ChannelContext channelContext) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.GROUP_ID)
 				.getSet(groupId);
-		return isInSet(setWithLock, channelContext);
+		return isInSet(concurrentWithSet, channelContext);
 	}
 
 	/**
@@ -1112,11 +1112,11 @@ public class Aio {
 												   String ip,
 												   Integer pageIndex,
 												   Integer pageSize) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
 				.getSet(ip);
-		return getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(concurrentWithSet, pageIndex, pageSize);
 	}
 
 	/**
@@ -1146,11 +1146,11 @@ public class Aio {
 	public static Boolean isInIp(AioConfig aioConfig,
 								 String ip,
 								 ChannelContext channelContext) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.IP)
 				.getSet(ip);
-		return isInSet(setWithLock, channelContext);
+		return isInSet(concurrentWithSet, channelContext);
 	}
 
 	/**
@@ -1166,11 +1166,11 @@ public class Aio {
 													  String token,
 													  Integer pageIndex,
 													  Integer pageSize) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
 				.getSet(token);
-		return getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(concurrentWithSet, pageIndex, pageSize);
 	}
 
 	/**
@@ -1200,11 +1200,11 @@ public class Aio {
 	public static Boolean isInToken(AioConfig aioConfig,
 									String token,
 									ChannelContext channelContext) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.TOKEN)
 				.getSet(token);
-		return isInSet(setWithLock, channelContext);
+		return isInSet(concurrentWithSet, channelContext);
 	}
 
 	/**
@@ -1220,11 +1220,11 @@ public class Aio {
 													 String user,
 													 Integer pageIndex,
 													 Integer pageSize) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
 				.getSet(user);
-		return getPageOfSet(setWithLock, pageIndex, pageSize);
+		return getPageOfSet(concurrentWithSet, pageIndex, pageSize);
 	}
 
 	/**
@@ -1254,37 +1254,37 @@ public class Aio {
 	public static Boolean isInUser(AioConfig aioConfig,
 								   String user,
 								   ChannelContext channelContext) {
-		ConcurrentWithSet<ChannelContext> setWithLock = aioConfig
+		ConcurrentWithSet<ChannelContext> concurrentWithSet = aioConfig
 				.getMaintainManager()
 				.getCommand(MaintainEnum.USER)
 				.getSet(user);
-		return isInSet(setWithLock, channelContext);
+		return isInSet(concurrentWithSet, channelContext);
 	}
 
 	/**
 	 * 按照分页获取指定集合下所有在线用户
 	 *
-	 * @param setWithLock 带有锁结构的SET集合
-	 * @param pageIndex   索引页
-	 * @param pageSize    页面大小
+	 * @param concurrentWithSet 带有锁结构的SET集合
+	 * @param pageIndex         索引页
+	 * @param pageSize          页面大小
 	 * @return 分页结果
 	 */
-	private static Page<ChannelContext> getPageOfSet(ConcurrentWithSet<ChannelContext> setWithLock,
+	private static Page<ChannelContext> getPageOfSet(ConcurrentWithSet<ChannelContext> concurrentWithSet,
 													 Integer pageIndex,
 													 Integer pageSize) {
-		return PageUtils.fromSetWithLock(setWithLock, pageIndex, pageSize);
+		return PageUtils.fromSetWithLock(concurrentWithSet, pageIndex, pageSize);
 	}
 
 	/**
 	 * 判断指定用户是否在指定SET集合组中
 	 *
-	 * @param setWithLock    带有锁结构的SET集合
-	 * @param channelContext 用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
+	 * @param concurrentWithSet 带有锁结构的SET集合
+	 * @param channelContext    用户上下文信息 {@link cn.starboot.socket.core.ChannelContext}
 	 * @return boolean
 	 */
-	private static Boolean isInSet(ConcurrentWithSet<ChannelContext> setWithLock,
+	private static Boolean isInSet(ConcurrentWithSet<ChannelContext> concurrentWithSet,
 								   ChannelContext channelContext) {
-		return setWithLock.contains(channelContext);
+		return concurrentWithSet.contains(channelContext);
 	}
 
 	// -------------------------------Remove篇--------------------------------
@@ -1504,14 +1504,14 @@ public class Aio {
 	/**
 	 * 移除集合SET组内所有连接(与关闭一个道理)
 	 *
-	 * @param aioConfig   配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock 带有锁结构的SET集合
-	 * @param closeCode   关闭状态码 {@link CloseCode}
+	 * @param aioConfig         配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param concurrentWithSet 带有锁结构的SET集合
+	 * @param closeCode         关闭状态码 {@link CloseCode}
 	 */
 	public static void removeSet(AioConfig aioConfig,
-								 ConcurrentWithSet<ChannelContext> setWithLock,
+								 ConcurrentWithSet<ChannelContext> concurrentWithSet,
 								 CloseCode closeCode) {
-		closeSet(aioConfig, setWithLock, closeCode);
+		closeSet(aioConfig, concurrentWithSet, closeCode);
 	}
 
 	// ------------------------------异步发送篇-------------------------------
@@ -1893,22 +1893,22 @@ public class Aio {
 	/**
 	 * 向指定SET集合中所有用户发送消息
 	 *
-	 * @param aioConfig   配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock 带有锁结构的SET集合
-	 * @param packet      数据报文 {@link cn.starboot.socket.Packet}
+	 * @param aioConfig         配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param concurrentWithSet 带有锁结构的SET集合
+	 * @param packet            数据报文 {@link cn.starboot.socket.Packet}
 	 * @return 发送状态
 	 */
 	public static Boolean sendToSet(AioConfig aioConfig,
-									ConcurrentWithSet<ChannelContext> setWithLock,
+									ConcurrentWithSet<ChannelContext> concurrentWithSet,
 									Packet packet) {
-		return sendToSet(aioConfig, setWithLock, packet, null);
+		return sendToSet(aioConfig, concurrentWithSet, packet, null);
 	}
 
 	/**
 	 * 向指定SET集合中所有用户发送消息
 	 *
 	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock          带有锁结构的SET集合
+	 * @param concurrentWithSet    带有锁结构的SET集合
 	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
@@ -1916,17 +1916,17 @@ public class Aio {
 	 * @return 发送状态
 	 */
 	public static Boolean sendToSet(AioConfig aioConfig,
-									ConcurrentWithSet<ChannelContext> setWithLock,
+									ConcurrentWithSet<ChannelContext> concurrentWithSet,
 									Packet packet,
 									ChannelContextFilter channelContextFilter) {
-		return sendToSet(aioConfig, setWithLock, packet, channelContextFilter, false);
+		return sendToSet(aioConfig, concurrentWithSet, packet, channelContextFilter, false);
 	}
 
 	/**
 	 * 向指定SET集合中所有用户发送消息
 	 *
 	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock          带有锁结构的SET集合
+	 * @param concurrentWithSet    带有锁结构的SET集合
 	 * @param packet               数据报文 {@link cn.starboot.socket.Packet}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
@@ -1935,11 +1935,11 @@ public class Aio {
 	 * @return 发送状态
 	 */
 	private static Boolean sendToSet(AioConfig aioConfig,
-									 ConcurrentWithSet<ChannelContext> setWithLock,
+									 ConcurrentWithSet<ChannelContext> concurrentWithSet,
 									 Packet packet,
 									 ChannelContextFilter channelContextFilter,
 									 boolean isBlock) {
-		if (Objects.isNull(setWithLock) || setWithLock.isEmpty()) {
+		if (Objects.isNull(concurrentWithSet) || concurrentWithSet.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("集合内没人在线");
 			}
@@ -1947,7 +1947,7 @@ public class Aio {
 		}
 		LongAdder sendNum = new LongAdder();
 		LongAdder sendSuc = new LongAdder();
-		setWithLock
+		concurrentWithSet
 				.handle((ConcurrentWithReadHandler<Set<ChannelContext>>)
 						channelContextSet ->
 								channelContextSet.forEach(channelContext -> {
@@ -1962,7 +1962,7 @@ public class Aio {
 								}));
 
 //		if (Objects.isNull(channelContextFilter)) {
-//			setWithLock
+//			concurrentWithSet
 //					.handle((ReadLockHandler<Set<ChannelContext>>)
 //							channelContextSet -> channelContextSet.forEach(
 //									channelContext -> {
@@ -1974,7 +1974,7 @@ public class Aio {
 //										}
 //									}));
 //		} else {
-//			setWithLock
+//			concurrentWithSet
 //					.handle((ReadLockHandler<Set<ChannelContext>>)
 //							channelContextSet -> channelContextSet.forEach(
 //									channelContext -> {
@@ -2379,22 +2379,22 @@ public class Aio {
 	/**
 	 * 向指定SET集合中所有用户发送多包消息
 	 *
-	 * @param aioConfig      配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock    带有锁结构的SET集合
-	 * @param outPutConsumer 数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
+	 * @param aioConfig         配置信息 {@link cn.starboot.socket.core.AioConfig}
+	 * @param concurrentWithSet 带有锁结构的SET集合
+	 * @param outPutConsumer    数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
 	 * @return 发送状态
 	 */
 	public static Boolean multiSendToSet(AioConfig aioConfig,
-										 ConcurrentWithSet<ChannelContext> setWithLock,
+										 ConcurrentWithSet<ChannelContext> concurrentWithSet,
 										 Consumer<OutputChannelContext> outPutConsumer) {
-		return multiSendToSet(aioConfig, setWithLock, outPutConsumer, null);
+		return multiSendToSet(aioConfig, concurrentWithSet, outPutConsumer, null);
 	}
 
 	/**
 	 * 向指定SET集合中所有用户发送多包消息
 	 *
 	 * @param aioConfig            配置信息 {@link cn.starboot.socket.core.AioConfig}
-	 * @param setWithLock          带有锁结构的SET集合
+	 * @param concurrentWithSet    带有锁结构的SET集合
 	 * @param outPutConsumer       数据报文 {@link cn.starboot.socket.core.Aio.OutputChannelContext}
 	 * @param channelContextFilter 规则过滤器 {@link ChannelContextFilter}
 	 *                             如果规则过滤器返回为true，则代表满足规则保留且发送
@@ -2402,10 +2402,10 @@ public class Aio {
 	 * @return 发送状态
 	 */
 	public static Boolean multiSendToSet(AioConfig aioConfig,
-										 ConcurrentWithSet<ChannelContext> setWithLock,
+										 ConcurrentWithSet<ChannelContext> concurrentWithSet,
 										 Consumer<OutputChannelContext> outPutConsumer,
 										 ChannelContextFilter channelContextFilter) {
-		if (Objects.isNull(setWithLock) || setWithLock.isEmpty()) {
+		if (Objects.isNull(concurrentWithSet) || concurrentWithSet.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("集合内没人在线");
 			}
@@ -2413,7 +2413,7 @@ public class Aio {
 		}
 		LongAdder sendNum = new LongAdder();
 		LongAdder sendSuc = new LongAdder();
-		setWithLock
+		concurrentWithSet
 				.handle((ConcurrentWithReadHandler<Set<ChannelContext>>)
 						channelContextSet ->
 								channelContextSet.forEach(channelContext -> {
