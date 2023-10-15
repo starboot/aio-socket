@@ -315,8 +315,37 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		}
 	}
 
-	private byte readInvoker = ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
+	private void readFinish(int readSize) {
+		CompletionHandler<Number, Object> completionHandler = readCompletionHandler;
+		Object attach = readAttachment;
+		resetRead();
+		completionHandler.completed(readSize, attach);
+	}
 
+	private void initReadRegister() {
+		readWorker.addRegister(selector -> {
+			try {
+				readSelectionKey = socketChannel.register(selector, SelectionKey.OP_READ, ImproveAsynchronousSocketChannelImpl.this);
+			} catch (ClosedChannelException e) {
+				readCompletionHandler.failed(e, readAttachment);
+			}
+		});
+	}
+
+	private void readThrowableHandler(Throwable throwable) {
+		if (readCompletionHandler == null) {
+			throwable.printStackTrace();
+			try {
+				close();
+			} catch (IOException ioException) {
+				ioException.printStackTrace();
+			}
+		} else {
+			readCompletionHandler.failed(throwable, readAttachment);
+		}
+	}
+
+	private byte readInvoker = ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
 
 	public final void doRead() {
 		try {
@@ -334,22 +363,12 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				hasRemain = readMemoryUnit.buffer().hasRemaining();
 			}
 			if (readSize != 0 || !hasRemain) {
-				CompletionHandler<Number, Object> completionHandler = readCompletionHandler;
-				Object attach = readAttachment;
-				resetRead();
-				completionHandler.completed(readSize, attach);
-
+				readFinish(readSize);
 				if (readCompletionHandler == null && readSelectionKey != null) {
 					ImproveAsynchronousChannelGroupImpl.removeOps(readSelectionKey, SelectionKey.OP_READ);
 				}
 			} else if (readSelectionKey == null) {
-				readWorker.addRegister(selector -> {
-					try {
-						readSelectionKey = socketChannel.register(selector, SelectionKey.OP_READ, ImproveAsynchronousSocketChannelImpl.this);
-					} catch (ClosedChannelException e) {
-						readCompletionHandler.failed(e, readAttachment);
-					}
-				});
+				initReadRegister();
 			} else {
 				// 判断是否申请了内存
 				if (directRead) {
@@ -359,16 +378,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				ImproveAsynchronousChannelGroupImpl.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
 			}
 		} catch (Throwable e) {
-			if (readCompletionHandler == null) {
-				e.printStackTrace();
-				try {
-					close();
-				} catch (IOException ioException) {
-					ioException.printStackTrace();
-				}
-			} else {
-				readCompletionHandler.failed(e, readAttachment);
-			}
+			readThrowableHandler(e);
 		} finally {
 			readInvoker = 0;
 		}
@@ -385,6 +395,37 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 //		}
 	}
 
+	private void writeFinish(int writeSize) {
+		CompletionHandler<Number, Object> completionHandler = writeCompletionHandler;
+		Object attach = writeAttachment;
+		resetWrite();
+		writeInterrupted = true;
+		completionHandler.completed(writeSize, attach);
+	}
+
+	private void initWriteRegister() {
+		commonWorker.addRegister(selector -> {
+			try {
+				socketChannel.register(selector, SelectionKey.OP_WRITE, ImproveAsynchronousSocketChannelImpl.this);
+			} catch (ClosedChannelException e) {
+				writeCompletionHandler.failed(e, writeAttachment);
+			}
+		});
+	}
+
+	private void writeThrowableHandler(Throwable throwable) {
+		if (writeCompletionHandler == null) {
+			throwable.printStackTrace();
+			try {
+				close();
+			} catch (IOException ioException) {
+				ioException.printStackTrace();
+			}
+		} else {
+			writeCompletionHandler.failed(throwable, writeAttachment);
+		}
+	}
+
 	public final boolean doWrite() {
 		if (writeInterrupted) {
 			writeInterrupted = false;
@@ -392,13 +433,8 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		}
 		try {
 			int writeSize = socketChannel.write(writeBuffer);
-
 			if (writeSize != 0 || !writeBuffer.hasRemaining()) {
-				CompletionHandler<Number, Object> completionHandler = writeCompletionHandler;
-				Object attach = writeAttachment;
-				resetWrite();
-				writeInterrupted = true;
-				completionHandler.completed(writeSize, attach);
+				writeFinish(writeSize);
 				if (!writeInterrupted) {
 					return true;
 				}
@@ -406,28 +442,13 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			} else {
 				SelectionKey commonSelectionKey = socketChannel.keyFor(commonWorker.getSelector());
 				if (commonSelectionKey == null) {
-					commonWorker.addRegister(selector -> {
-						try {
-							socketChannel.register(selector, SelectionKey.OP_WRITE, ImproveAsynchronousSocketChannelImpl.this);
-						} catch (ClosedChannelException e) {
-							writeCompletionHandler.failed(e, writeAttachment);
-						}
-					});
+					initWriteRegister();
 				} else {
 					ImproveAsynchronousChannelGroupImpl.interestOps(commonWorker, commonSelectionKey, SelectionKey.OP_WRITE);
 				}
 			}
 		} catch (Throwable e) {
-			if (writeCompletionHandler == null) {
-				e.printStackTrace();
-				try {
-					close();
-				} catch (IOException ioException) {
-					ioException.printStackTrace();
-				}
-			} else {
-				writeCompletionHandler.failed(e, writeAttachment);
-			}
+			writeThrowableHandler(e);
 		}
 		return false;
 	}
