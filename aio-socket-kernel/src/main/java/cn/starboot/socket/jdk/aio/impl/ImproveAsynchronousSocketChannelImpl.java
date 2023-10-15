@@ -365,6 +365,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 			if (readSize != 0 || !hasRemain) {
 				readFinish(readSize);
 				if (readCompletionHandler == null && readSelectionKey != null) {
+					// 当前用户已关闭，移除其select事件
 					ImproveAsynchronousChannelGroupImpl.removeOps(readSelectionKey, SelectionKey.OP_READ);
 				}
 			} else if (readSelectionKey == null) {
