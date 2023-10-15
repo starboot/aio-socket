@@ -18,7 +18,7 @@ import static cn.starboot.mqtt.codec.MqttConstant.DEFAULT_MAX_BYTES_IN_MESSAGE;
  *
  * @author MDong
  */
-public abstract class MqttHandler implements AioHandler {
+public abstract class MQTTHandler implements AioHandler {
 
 	private final int maxBytesInMessage;
 
@@ -28,21 +28,21 @@ public abstract class MqttHandler implements AioHandler {
 
 	private final MqttEncoder mqttEncoder;
 
-	public MqttHandler() {
+	public MQTTHandler() {
 		this.maxBytesInMessage = DEFAULT_MAX_BYTES_IN_MESSAGE;
 		this.maxClientIdLength = DEFAULT_MAX_BYTES_IN_MESSAGE;
 		this.mqttDecoder = new MqttDecoder();
 		this.mqttEncoder = MqttEncoder.getInstance();
 	}
 
-	public MqttHandler(int maxBytesInMessage) {
+	public MQTTHandler(int maxBytesInMessage) {
 		this.maxBytesInMessage = maxBytesInMessage;
 		this.maxClientIdLength = DEFAULT_MAX_BYTES_IN_MESSAGE;
 		this.mqttDecoder = new MqttDecoder(this.maxBytesInMessage);
 		this.mqttEncoder = MqttEncoder.getInstance();
 	}
 
-	public MqttHandler(int maxBytesInMessage, int maxClientIdLength) {
+	public MQTTHandler(int maxBytesInMessage, int maxClientIdLength) {
 		this.maxBytesInMessage = maxBytesInMessage;
 		this.maxClientIdLength = maxClientIdLength;
 		this.mqttDecoder = new MqttDecoder(this.maxBytesInMessage, this.maxClientIdLength);

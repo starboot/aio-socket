@@ -1,16 +1,15 @@
 package cn.starboot.socket.demo.mqtt;
 
-import cn.starboot.mqtt.MqttHandler;
+import cn.starboot.mqtt.MQTTHandler;
 import cn.starboot.mqtt.codec.MqttMessage;
 import cn.starboot.mqtt.codec.MqttMessageBuilders;
 import cn.starboot.mqtt.codec.MqttQoS;
-import cn.starboot.socket.Packet;
 import cn.starboot.socket.core.ChannelContext;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class myMqttHandler extends MqttHandler {
+public class myMQTTHandler extends MQTTHandler {
 
 	@Override
 	public MqttMessage handle(ChannelContext channelContext, MqttMessage mqttMessage) {

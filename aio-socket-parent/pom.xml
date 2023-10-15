@@ -170,6 +170,9 @@
 		<module>../aio-socket-codec-mqtt</module>
 		<module>../aio-socket-all</module>
 		<module>../aio-socket-plugin</module>
+        <module>../aio-socket-codec-rtmp</module>
+		<module>../aio-socket-codec-http-flv</module>
+		<module>../aio-socket-codec-webrtc</module>
 	</modules>
 
 	<build>
