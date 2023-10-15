@@ -37,19 +37,21 @@ final class UDPChannelContext extends ChannelContext {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPChannelContext.class);
 
-	private final UDPChannel udpChannel;
+//	private final UDPChannel udpChannel;
 
 	private final SocketAddress remote;
 
-	UDPChannelContext(UDPChannel udpChannel, SocketAddress remote, MemoryBlock memoryBlock) {
-		this.udpChannel = udpChannel;
+	UDPChannelContext(
+//			UDPChannel udpChannel,
+			SocketAddress remote, MemoryBlock memoryBlock) {
+//		this.udpChannel = udpChannel;
 		this.remote = remote;
 		setWriteBuffer(
 				memoryBlock,
 				buffer -> {
 					MemoryUnit writeBuffer = buffer.poll();
 					if (writeBuffer != null) {
-						this.udpChannel.write(writeBuffer, this);
+//						this.udpChannel.write(writeBuffer, this);
 					}
 				},
 				getAioConfig().getWriteBufferSize(),
@@ -72,13 +74,14 @@ final class UDPChannelContext extends ChannelContext {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("The UDP channel with ID " + this.getId() + " is closing");
 		}
-		this.udpChannel.close();
+//		this.udpChannel.close();
 		this.byteBuf.close();
 	}
 
 	@Override
 	public InetSocketAddress getLocalAddress() throws IOException {
-		return (InetSocketAddress) udpChannel.getChannel().getLocalAddress();
+//		return (InetSocketAddress) udpChannel.getChannel().getLocalAddress();
+		return null;
 	}
 
 	@Override
@@ -93,7 +96,8 @@ final class UDPChannelContext extends ChannelContext {
 
 	@Override
 	public AioConfig getAioConfig() {
-		return this.udpChannel.config;
+//		return this.udpChannel.config;
+		return null;
 	}
 
 	@Override

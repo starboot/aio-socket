@@ -4,7 +4,6 @@ import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.test.udp.UDPPacket;
 import cn.starboot.socket.udp.UDPBootstrap;
-import cn.starboot.socket.udp.UDPChannel;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -23,17 +22,17 @@ public class UDPClient {
                     bootstrap
 //                            .addPlugin(new MonitorPlugin(5))
                             .setReadBufferSize(1024);
-                    UDPChannel channel = bootstrap.open();
-                    ChannelContext session = channel.connect("localhost", 8888);
+//                    UDPChannel channel = bootstrap.open();
+//                    ChannelContext session = channel.connect("localhost", 8888);
 //                    session.setProtocol(udpHandler.name());
                     for (int i1 = 0; i1 < 2; i1++) {
-                        Aio.send(session, packet);
+//                        Aio.send(session, packet);
                         Thread.sleep(10);
                     }
                     count.countDown();
                     // 关闭会话
                     Thread.sleep(1000);
-                    session.close();
+//                    session.close();
 //                    System.out.println("发送完毕");
                     bootstrap.shutdown();
                 } catch (Exception e) {
