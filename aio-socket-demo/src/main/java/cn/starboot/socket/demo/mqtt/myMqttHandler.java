@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 public class myMqttHandler extends MqttHandler {
 
 	@Override
-	public Packet handle(ChannelContext channelContext, MqttMessage mqttMessage) {
+	public MqttMessage handle(ChannelContext channelContext, MqttMessage mqttMessage) {
 		System.out.println(mqttMessage.toString());
 		if (mqttMessage.payload() instanceof ByteBuffer) {
 			ByteBuffer payload = (ByteBuffer) mqttMessage.payload();

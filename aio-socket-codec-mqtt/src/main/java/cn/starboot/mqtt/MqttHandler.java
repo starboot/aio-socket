@@ -77,5 +77,5 @@ public abstract class MqttHandler implements AioHandler {
 		return ProtocolEnum.MQTT;
 	}
 
-	public abstract Packet handle(ChannelContext channelContext, MqttMessage mqttMessage);
+	public abstract MqttMessage handle(ChannelContext channelContext, MqttMessage mqttMessage);
 }
