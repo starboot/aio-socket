@@ -44,8 +44,8 @@ final class UDPChannelContext extends ChannelContext {
 	UDPChannelContext(UDPChannel udpChannel, SocketAddress remote, MemoryBlock memoryBlock) {
 		this.udpChannel = udpChannel;
 		this.remote = remote;
-		// 为当前ChannelContext添加对外输出流
-		setWriteBuffer(memoryBlock,
+		setWriteBuffer(
+				memoryBlock,
 				buffer -> {
 					MemoryUnit writeBuffer = buffer.poll();
 					if (writeBuffer != null) {
