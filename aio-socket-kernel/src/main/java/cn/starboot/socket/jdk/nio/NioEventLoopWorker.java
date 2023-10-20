@@ -77,12 +77,12 @@ public class NioEventLoopWorker implements Runnable {
 				while (!registerWaitQueue.isEmpty()) {
 					registerWaitQueue.poll().accept(nioEventLoopSelector);
 				}
-				nioEventLoopSelector.select();
 				Iterator<SelectionKey> iterator = selectionKeys.iterator();
 				while (iterator.hasNext()) {
 					nioEventLoopSelectionKey.accept(iterator.next());
 					iterator.remove();
 				}
+				nioEventLoopSelector.select();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
