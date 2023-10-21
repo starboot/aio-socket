@@ -1,6 +1,6 @@
 package cn.starboot.mqtt.codec;
 
-import cn.starboot.socket.utils.hutool.FastByteBuffer;
+import cn.starboot.socket.core.utils.hutool.FastByteBuffer;
 
 import java.nio.ByteBuffer;
 

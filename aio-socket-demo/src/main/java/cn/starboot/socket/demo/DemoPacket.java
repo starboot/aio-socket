@@ -1,6 +1,6 @@
 package cn.starboot.socket.demo;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 
 public class DemoPacket extends Packet {
 

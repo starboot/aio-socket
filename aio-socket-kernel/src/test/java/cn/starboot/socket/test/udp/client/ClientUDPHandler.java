@@ -1,6 +1,6 @@
 package cn.starboot.socket.test.udp.client;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.test.udp.UDPHandler;
 import cn.starboot.socket.test.udp.UDPPacket;

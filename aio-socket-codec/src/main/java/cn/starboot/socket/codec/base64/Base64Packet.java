@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.codec.base64;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 
 public class Base64Packet extends Packet {
 

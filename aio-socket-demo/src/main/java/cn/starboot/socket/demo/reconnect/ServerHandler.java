@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.demo.reconnect;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.string.StringHandler;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.ChannelContext;

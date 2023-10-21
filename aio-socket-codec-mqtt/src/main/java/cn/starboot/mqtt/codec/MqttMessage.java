@@ -1,6 +1,6 @@
 package cn.starboot.mqtt.codec;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.DecoderResult;
 
 /**

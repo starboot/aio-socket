@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.test.core;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
 

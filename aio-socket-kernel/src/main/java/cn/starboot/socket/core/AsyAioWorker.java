@@ -1,7 +1,6 @@
 package cn.starboot.socket.core;
 
-import cn.starboot.socket.Monitor;
-import cn.starboot.socket.enums.StateMachineEnum;
+import cn.starboot.socket.core.enums.StateMachineEnum;
 
 import java.util.concurrent.Executor;
 

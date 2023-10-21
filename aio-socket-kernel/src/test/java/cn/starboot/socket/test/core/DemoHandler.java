@@ -15,14 +15,14 @@
  */
 package cn.starboot.socket.test.core;
 
-import cn.starboot.socket.Packet;
-import cn.starboot.socket.enums.ProtocolEnum;
+import cn.starboot.socket.core.Packet;
+import cn.starboot.socket.core.enums.ProtocolEnum;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
-import cn.starboot.socket.exception.AioEncoderException;
-import cn.starboot.socket.intf.AioHandler;
-import cn.starboot.socket.utils.AIOUtil;
-import cn.starboot.socket.utils.pool.memory.MemoryUnit;
+import cn.starboot.socket.core.exception.AioEncoderException;
+import cn.starboot.socket.core.intf.AioHandler;
+import cn.starboot.socket.core.utils.AIOUtil;
+import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;

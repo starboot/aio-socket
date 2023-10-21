@@ -1,9 +1,7 @@
 package cn.starboot.socket.test.udp.client;
 
-import cn.starboot.socket.core.Aio;
-import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.test.udp.UDPPacket;
-import cn.starboot.socket.udp.UDPBootstrap;
+import cn.starboot.socket.core.udp.UDPBootstrap;
 
 import java.util.concurrent.CountDownLatch;
 

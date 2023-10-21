@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.codec.bytes;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 
 public class BytesPacket extends Packet {
 

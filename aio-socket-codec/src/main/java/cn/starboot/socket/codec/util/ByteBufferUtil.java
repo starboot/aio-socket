@@ -1,6 +1,6 @@
 package cn.starboot.socket.codec.util;
 
-import cn.starboot.socket.utils.StringUtils;
+import cn.starboot.socket.core.utils.StringUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;

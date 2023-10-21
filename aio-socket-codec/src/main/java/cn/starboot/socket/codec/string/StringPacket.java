@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.codec.string;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 
 public class StringPacket extends Packet {
 

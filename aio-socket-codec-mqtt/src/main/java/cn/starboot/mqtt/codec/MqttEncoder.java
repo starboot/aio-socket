@@ -4,7 +4,7 @@ import cn.starboot.socket.codec.EncoderException;
 import cn.starboot.socket.codec.util.ByteBufferUtil;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
-import cn.starboot.socket.exception.AioEncoderException;
+import cn.starboot.socket.core.exception.AioEncoderException;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;

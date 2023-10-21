@@ -15,9 +15,9 @@
  */
 package cn.starboot.socket.core;
 
-import cn.starboot.socket.exception.AioEncoderException;
-import cn.starboot.socket.utils.pool.memory.MemoryBlock;
-import cn.starboot.socket.utils.pool.memory.MemoryUnit;
+import cn.starboot.socket.core.exception.AioEncoderException;
+import cn.starboot.socket.core.utils.pool.memory.MemoryBlock;
+import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
@@ -336,7 +336,7 @@ public final class WriteBuffer {
      *
      * @return true:有,false:无
      */
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return count == 0 && isFinishFlush();
     }
 
@@ -345,7 +345,7 @@ public final class WriteBuffer {
      *
      * @return VirtualBuffer类型的消息
      */
-    MemoryUnit pollItem() {
+    private MemoryUnit pollItem() {
         if (count == 0) {
             return null;
         }
@@ -374,10 +374,8 @@ public final class WriteBuffer {
         }
         if (writeInBuf != null && writeInBuf.buffer().position() > 0) {
             // 将暂存器里面的数据更改为读模式，一会将其读出来并发送
-//            writeInBuf.buffer().flip();
             MemoryUnit buffer = writeInBuf;
             flushWriteInBuf();
-//            writeInBuf = null;
             return buffer;
         } else {
             return null;

@@ -17,9 +17,8 @@ package cn.starboot.socket.test.maintain;
 
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.ClientBootstrap;
+import cn.starboot.socket.core.tcp.ClientBootstrap;
 import cn.starboot.socket.test.core.DemoPacket;
-import cn.starboot.socket.utils.pool.memory.MemoryPool;
 
 import java.io.IOException;
 

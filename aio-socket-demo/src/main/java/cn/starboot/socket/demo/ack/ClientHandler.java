@@ -1,6 +1,6 @@
 package cn.starboot.socket.demo.ack;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.ChannelContext;
 

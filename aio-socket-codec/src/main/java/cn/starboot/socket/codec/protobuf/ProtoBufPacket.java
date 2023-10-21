@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.codec.protobuf;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 
 public class ProtoBufPacket extends Packet {
 

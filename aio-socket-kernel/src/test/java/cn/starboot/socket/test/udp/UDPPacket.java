@@ -1,6 +1,6 @@
 package cn.starboot.socket.test.udp;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 
 public class UDPPacket extends Packet {
 

@@ -15,12 +15,12 @@
  */
 package cn.starboot.socket.demo.reconnect;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.string.StringHandler;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
-import cn.starboot.socket.exception.AioEncoderException;
+import cn.starboot.socket.core.exception.AioEncoderException;
 
 public class ClientHandler extends StringHandler {
 

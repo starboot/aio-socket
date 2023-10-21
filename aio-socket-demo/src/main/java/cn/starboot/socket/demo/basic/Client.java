@@ -15,12 +15,11 @@
  */
 package cn.starboot.socket.demo.basic;
 
-import cn.starboot.socket.Packet;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.ClientBootstrap;
-import cn.starboot.socket.utils.pool.memory.MemoryPool;
+import cn.starboot.socket.core.tcp.ClientBootstrap;
 
 import java.io.IOException;
 
