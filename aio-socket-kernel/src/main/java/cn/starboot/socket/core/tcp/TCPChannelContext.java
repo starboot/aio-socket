@@ -19,6 +19,7 @@ import cn.starboot.socket.core.*;
 import cn.starboot.socket.core.enums.ChannelStatusEnum;
 import cn.starboot.socket.core.exception.AioEncoderException;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
+import cn.starboot.socket.core.jdk.aio.MemoryUnitFunction;
 import cn.starboot.socket.core.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.Monitor;
 import cn.starboot.socket.core.Packet;
@@ -38,7 +39,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * 通道上下文信息类
@@ -106,7 +106,7 @@ final class TCPChannelContext extends ChannelContext {
 	 */
 	private MemoryUnit writeBuffer;
 
-	private final Function<Boolean,MemoryUnit> memoryUnitFunction;
+	private final MemoryUnitFunction memoryUnitFunction;
 
 	/**
 	 * 构造通道上下文对象
