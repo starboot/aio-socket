@@ -132,7 +132,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 			SocketChannel socketChannel = isDirectAccept() ? serverSocketChannel.accept() : null;
 			if (socketChannel != null) {
 				finishAccept(socketChannel);
-				if (selectionKey != null) {
+				if (!acceptPending && selectionKey != null) {
 					ImproveAsynchronousChannelGroupImpl.removeOps(selectionKey, SelectionKey.OP_ACCEPT);
 				}
 			} else if (selectionKey == null) {
