@@ -92,20 +92,34 @@ public final class ImproveNioSelector extends AbstractSelector {
 		return select0(selectModel, 0);
 	}
 
-	private int selectCnt;
 	private boolean isLoop;
 	private int select0(SelectModel selectModel, long timeout) throws IOException {
-		if (selectModel == SelectModel.SELECT_NOW)
+		if (selectModel == SelectModel.SELECT_NOW) {
 			return selector.selectNow();
+		}
 
-		initState();
+		isLoop = true;
+		int selectCnt = 0;
 		int select = 0;
 		long star = System.currentTimeMillis();
 		while (isLoop) {
 			selectCnt++;
 			select = selector.select(timeout);
+
+			// ---------------
+//			isLoop = false;
+			if (select <= 0 && selectedKeys().iterator().hasNext()) {
+				String err = "出现了 select: " + select + " hasNext: " + selectedKeys().iterator().hasNext();
+				if (LOGGER.isErrorEnabled()) {
+					LOGGER.error(err);
+				} else {
+					System.out.println(err);
+				}
+			}
+			// ---------------
+
 			if (select > 0
-					|| !selectedKeys().isEmpty()
+					|| selectedKeys().iterator().hasNext()
 					|| unexpectedSelectorWakeup(selectCnt))
 			{
 				if (selectCnt > MIN_PREMATURE_SELECTOR_RETURNS
@@ -117,8 +131,8 @@ public final class ImproveNioSelector extends AbstractSelector {
 				isLoop = false;
 			}
 			if (timeout > 0) {
-				final long end = System.currentTimeMillis();
-				final long spend = end - star;
+				long end = System.currentTimeMillis();
+				long spend = end - star;
 				if (spend >= timeout) {
 					isLoop = false;
 				}
@@ -127,11 +141,6 @@ public final class ImproveNioSelector extends AbstractSelector {
 			}
 		}
 		return select;
-	}
-
-	private void initState() {
-		selectCnt = 0;
-		isLoop = true;
 	}
 
 	@Override
@@ -161,8 +170,8 @@ public final class ImproveNioSelector extends AbstractSelector {
 			}
 			return true;
 		}
-		if (SELECTOR_AUTO_REBUILD_THRESHOLD > 0 &&
-				selectCnt >= SELECTOR_AUTO_REBUILD_THRESHOLD) {
+		if (SELECTOR_AUTO_REBUILD_THRESHOLD > 0
+				&& selectCnt >= SELECTOR_AUTO_REBUILD_THRESHOLD) {
 			// The selector returned prematurely many times in a row.
 			// Rebuild the selector to work around the problem.
 			LOGGER.warn("Selector.select() returned prematurely {} times in a row; rebuilding Selector {}.",
