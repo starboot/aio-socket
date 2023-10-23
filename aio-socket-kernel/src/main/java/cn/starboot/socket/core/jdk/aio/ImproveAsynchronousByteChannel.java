@@ -6,7 +6,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.concurrent.Future;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface ImproveAsynchronousByteChannel
 		extends AsynchronousChannel
