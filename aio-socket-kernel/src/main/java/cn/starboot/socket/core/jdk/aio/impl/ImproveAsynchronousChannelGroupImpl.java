@@ -8,7 +8,6 @@ import cn.starboot.socket.core.utils.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,7 +53,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 	 *
 	 * @param provider The asynchronous channel provider for this group
 	 */
-	protected ImproveAsynchronousChannelGroupImpl(ImproveAsynchronousChannelProvider provider, ExecutorService executorService, int threadNum) throws IOException {
+	protected ImproveAsynchronousChannelGroupImpl(ImproveAsynchronousChannelProvider provider, ExecutorService executorService, int threadNum) {
 		super(provider);
 
 		final int commonThreadNum = 1;

@@ -24,7 +24,7 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 
 	private static volatile ImproveAsynchronousChannelGroup defaultImproveAsynchronousChannelGroup;
 
-	private ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup() throws IOException {
+	private ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup() {
 		if (defaultImproveAsynchronousChannelGroup == null) {
 			synchronized (ImproveAsynchronousChannelProviderImpl.class) {
 				if (defaultImproveAsynchronousChannelGroup == null) {
@@ -40,8 +40,7 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 
 	@Override
 	public ImproveAsynchronousChannelGroup openImproveAsynchronousChannelGroup(int nThreads,
-																			   ThreadFactory threadFactory)
-			throws IOException {
+																			   ThreadFactory threadFactory) {
 		ThreadPoolExecutor groupExecutor =
 				new ThreadPoolExecutor(nThreads,
 						nThreads,
@@ -56,13 +55,11 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 
 	@Override
 	public ImproveAsynchronousChannelGroup openImproveAsynchronousChannelGroup(ExecutorService executor,
-																			   int initialSize)
-			throws IOException {
+																			   int initialSize) {
 		return new ImproveAsynchronousChannelGroupImpl(this, executor, initialSize);
 	}
 
-	private ImproveAsynchronousChannelGroup toPort(ImproveAsynchronousChannelGroup group)
-			throws IOException {
+	private ImproveAsynchronousChannelGroup toPort(ImproveAsynchronousChannelGroup group) {
 		if (group == null) {
 			return defaultAsynchronousChannelGroup();
 		} else {
