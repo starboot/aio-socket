@@ -69,9 +69,10 @@ public class StreamClient {
 //					}
 
 
+					Thread.sleep(1000);
 					// 关闭服务器
-//                    bootstrap.shutdown();
-				} catch (IOException e) {
+                    bootstrap.shutdown();
+				} catch (IOException | InterruptedException e) {
 					e.printStackTrace();
 				}
 

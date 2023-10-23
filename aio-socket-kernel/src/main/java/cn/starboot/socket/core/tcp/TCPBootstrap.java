@@ -95,7 +95,7 @@ class TCPBootstrap extends AbstractBootstrap {
 							.getAioConfig()
 							.getHandler()
 							.stateEvent(channelContext, StateMachineEnum.INPUT_EXCEPTION, throwable);
-					channelContext.close(false);
+					channelContext.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

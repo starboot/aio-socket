@@ -210,7 +210,7 @@ final class TCPChannelContext extends ChannelContext {
 		}
 		flush(false);
 		if (eof || status == ChannelStatusEnum.CHANNEL_STATUS_CLOSING) {
-			close(false);
+			close(true);
 			handler.stateEvent(this, StateMachineEnum.INPUT_SHUTDOWN, null);
 			return;
 		}
