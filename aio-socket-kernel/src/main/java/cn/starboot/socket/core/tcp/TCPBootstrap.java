@@ -37,8 +37,8 @@ class TCPBootstrap extends AbstractBootstrap {
 	 * socketChannel 和 ChannelContext联系
 	 */
 	private final Function<ImproveAsynchronousSocketChannel, TCPChannelContext> bootstrapFunction
-			= (improveAsynchronousSocketChannel) ->
-			new TCPChannelContext(improveAsynchronousSocketChannel,
+			= (improveAsynchronousSocketChannel) -> new TCPChannelContext(
+					improveAsynchronousSocketChannel,
 					getConfig(),
 					getAioReadCompletionHandler(),
 					getAioWriteCompletionHandler(),
