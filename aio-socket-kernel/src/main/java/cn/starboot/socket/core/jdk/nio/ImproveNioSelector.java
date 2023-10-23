@@ -101,7 +101,9 @@ public final class ImproveNioSelector extends AbstractSelector {
 		while (isLoop) {
 			selectCnt++;
 			select = selector.select(timeout);
-			if (select > 0 || unexpectedSelectorWakeup(selectCnt)) {
+			if (select > 0
+					|| !selectedKeys().isEmpty()
+					|| unexpectedSelectorWakeup(selectCnt)) {
 				if (selectCnt > MIN_PREMATURE_SELECTOR_RETURNS && LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Selector.select() returned prematurely {} times in a row for Selector {}.",
 							selectCnt - 1, selector);

@@ -86,9 +86,7 @@ public class AIOUtil {
 			return;
 		}
         try {
-			asynchronousSocketChannel.shutdownInput();
-			asynchronousSocketChannel.shutdownOutput();
-			asynchronousSocketChannel.close();
+			asynchronousSocketChannel.shutdownInput().shutdownOutput().close();
         } catch (NotYetConnectedException |IOException ignored) {
         }
     }
