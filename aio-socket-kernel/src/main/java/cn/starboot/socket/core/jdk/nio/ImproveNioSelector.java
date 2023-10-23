@@ -28,7 +28,10 @@ public final class ImproveNioSelector extends AbstractSelector {
 	private static final int SELECTOR_AUTO_REBUILD_THRESHOLD;
 
 	static {
-		int selectorAutoRebuildThreshold = SystemPropertyUtil.getInt("cn.starboot.socket.selectorAutoRebuildThreshold", 512);
+		int selectorAutoRebuildThreshold
+				= SystemPropertyUtil
+				.getInt("cn.starboot.socket.selectorAutoRebuildThreshold",
+						512);
 		if (selectorAutoRebuildThreshold < MIN_PREMATURE_SELECTOR_RETURNS) {
 			selectorAutoRebuildThreshold = 0;
 		}
@@ -103,10 +106,13 @@ public final class ImproveNioSelector extends AbstractSelector {
 			select = selector.select(timeout);
 			if (select > 0
 					|| !selectedKeys().isEmpty()
-					|| unexpectedSelectorWakeup(selectCnt)) {
-				if (selectCnt > MIN_PREMATURE_SELECTOR_RETURNS && LOGGER.isDebugEnabled()) {
+					|| unexpectedSelectorWakeup(selectCnt))
+			{
+				if (selectCnt > MIN_PREMATURE_SELECTOR_RETURNS
+						&& LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Selector.select() returned prematurely {} times in a row for Selector {}.",
-							selectCnt - 1, selector);
+							selectCnt - 1,
+							selector);
 				}
 				isLoop = false;
 			}
