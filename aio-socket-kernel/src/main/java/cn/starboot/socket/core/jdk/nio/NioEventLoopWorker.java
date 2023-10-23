@@ -21,10 +21,13 @@ public class NioEventLoopWorker implements Runnable {
 	 */
 	private final Selector nioEventLoopSelector;
 
+	/**
+	 * 待处理SelectionKey
+	 */
 	private final Set<SelectionKey> selectionKeys;
 
 	/**
-	 * 当前worker所属线程
+	 * 当前NioEventLoopWorker所属线程
 	 */
 	private Thread nioEventLoopThread;
 
