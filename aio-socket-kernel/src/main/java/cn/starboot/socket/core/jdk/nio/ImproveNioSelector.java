@@ -30,7 +30,7 @@ public final class ImproveNioSelector extends AbstractSelector {
 	static {
 		int selectorAutoRebuildThreshold
 				= SystemPropertyUtil
-				.getInt("cn.starboot.socket.selectorAutoRebuildThreshold",
+				.getInt("cn.starboot.socket.core.selectorAutoRebuildThreshold",
 						512);
 		if (selectorAutoRebuildThreshold < MIN_PREMATURE_SELECTOR_RETURNS) {
 			selectorAutoRebuildThreshold = 0;
