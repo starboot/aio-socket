@@ -105,21 +105,18 @@ public final class ImproveNioSelector extends AbstractSelector {
 		while (isLoop) {
 			selectCnt++;
 			select = selector.select(timeout);
-
-			// ---------------
-//			isLoop = false;
-			if (select <= 0 && selectedKeys().iterator().hasNext()) {
-				String err = "出现了 select: " + select + " hasNext: " + selectedKeys().iterator().hasNext();
-				if (LOGGER.isErrorEnabled()) {
-					LOGGER.error(err);
-				} else {
-					System.out.println(err);
+			if (timeout > 0)
+			{
+				long end = System.currentTimeMillis();
+				long spend = end - star;
+				if (spend >= timeout) {
+					isLoop = false;
 				}
+				timeout -= spend;
+				star = end;
 			}
-			// ---------------
-
 			if (select > 0
-					|| selectedKeys().iterator().hasNext()
+					|| selectedKeys().size() > 0
 					|| unexpectedSelectorWakeup(selectCnt))
 			{
 				if (selectCnt > MIN_PREMATURE_SELECTOR_RETURNS
@@ -129,15 +126,6 @@ public final class ImproveNioSelector extends AbstractSelector {
 							selector);
 				}
 				isLoop = false;
-			}
-			if (timeout > 0) {
-				long end = System.currentTimeMillis();
-				long spend = end - star;
-				if (spend >= timeout) {
-					isLoop = false;
-				}
-				timeout -= spend;
-				star = end;
 			}
 		}
 		return select;

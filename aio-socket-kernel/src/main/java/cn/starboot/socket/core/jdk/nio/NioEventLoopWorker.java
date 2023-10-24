@@ -80,12 +80,14 @@ public class NioEventLoopWorker implements Runnable {
 				while (!registerWaitQueue.isEmpty()) {
 					registerWaitQueue.poll().accept(nioEventLoopSelector);
 				}
+				nioEventLoopSelector.select();
+				// 要放在select后边，否则部分TCP断开请求识别不到
 				Iterator<SelectionKey> iterator = selectionKeys.iterator();
 				while (iterator.hasNext()) {
 					nioEventLoopSelectionKey.accept(iterator.next());
 					iterator.remove();
 				}
-				nioEventLoopSelector.select();
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
