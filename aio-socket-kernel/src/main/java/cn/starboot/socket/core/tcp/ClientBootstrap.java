@@ -15,7 +15,6 @@
  */
 package cn.starboot.socket.core.tcp;
 
-import cn.starboot.socket.core.AbstractBootstrap;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
@@ -27,7 +26,6 @@ import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.plugins.Plugins;
-import cn.starboot.socket.core.utils.AIOUtil;
 import cn.starboot.socket.core.utils.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -210,7 +208,7 @@ public class ClientBootstrap extends TCPBootstrap {
 			@Override
 			public void failed(Throwable throwable, ImproveAsynchronousSocketChannel socketChannel) {
 				handler.failed(throwable, future);
-				AIOUtil.closeImproveAsynchronousSocketChannel(socketChannel);
+				Aio.UtilApi.closeImproveAsynchronousSocketChannel(socketChannel);
 				shutdownNow();
 			}
 		});

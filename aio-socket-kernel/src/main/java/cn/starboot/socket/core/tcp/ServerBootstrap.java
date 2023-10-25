@@ -15,15 +15,14 @@
  */
 package cn.starboot.socket.core.tcp;
 
+import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.config.AioServerConfig;
-import cn.starboot.socket.core.AbstractBootstrap;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousServerSocketChannel;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.plugins.Plugins;
-import cn.starboot.socket.core.utils.AIOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -142,12 +141,12 @@ public class ServerBootstrap extends TCPBootstrap {
 				context = getBootstrapFunction().apply(acceptChannel);
 				context.initTCPChannelContext();
 			} else {
-				AIOUtil.closeImproveAsynchronousSocketChannel(channel);
+				Aio.UtilApi.closeImproveAsynchronousSocketChannel(channel);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (context == null) {
-				AIOUtil.closeImproveAsynchronousSocketChannel(channel);
+				Aio.UtilApi.closeImproveAsynchronousSocketChannel(channel);
 			} else {
 				context.close(true);
 			}

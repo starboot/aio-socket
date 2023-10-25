@@ -27,7 +27,6 @@ import cn.starboot.socket.core.enums.StateMachineEnum;
 import cn.starboot.socket.core.exception.AioDecoderException;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.core.intf.Handler;
-import cn.starboot.socket.core.utils.AIOUtil;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnitFactory;
 
 import java.io.IOException;
@@ -333,7 +332,7 @@ final class TCPChannelContext extends ChannelContext {
 					writeBuffer = null;
 				}
 			} finally {
-				AIOUtil.closeImproveAsynchronousSocketChannel(asynchronousSocketChannel);
+				Aio.UtilApi.closeImproveAsynchronousSocketChannel(asynchronousSocketChannel);
 				getAioConfig().getHandler().stateEvent(this, StateMachineEnum.CHANNEL_CLOSED, null);
 			}
 		} else if ((writeBuffer == null || !writeBuffer.buffer().hasRemaining()) && byteBuf.isEmpty()) {
