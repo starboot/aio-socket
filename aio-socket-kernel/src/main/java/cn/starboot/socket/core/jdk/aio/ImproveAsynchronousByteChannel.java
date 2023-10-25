@@ -7,7 +7,7 @@ import java.nio.channels.*;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
-public interface ImproveAsynchronousByteChannel
+interface ImproveAsynchronousByteChannel
 		extends AsynchronousChannel
 {
 	/**
