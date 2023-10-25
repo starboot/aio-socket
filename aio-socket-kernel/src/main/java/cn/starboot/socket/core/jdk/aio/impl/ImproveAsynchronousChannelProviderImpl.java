@@ -25,6 +25,9 @@ final class ImproveAsynchronousChannelProviderImpl extends ImproveAsynchronousCh
 	private static volatile ImproveAsynchronousChannelGroup defaultImproveAsynchronousChannelGroup;
 
 	private ImproveAsynchronousChannelGroup defaultAsynchronousChannelGroup() {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("Load default improve asynchronous channel group.");
+		}
 		if (defaultImproveAsynchronousChannelGroup == null) {
 			synchronized (ImproveAsynchronousChannelProviderImpl.class) {
 				if (defaultImproveAsynchronousChannelGroup == null) {

@@ -4,8 +4,6 @@ import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousServerSocketChannel;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -16,8 +14,6 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 
 final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchronousServerSocketChannel {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousServerSocketChannelImpl.class);
 
 	private final ServerSocketChannel serverSocketChannel;
 

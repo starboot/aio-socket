@@ -5,16 +5,12 @@ import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelProvider;
 import cn.starboot.socket.core.jdk.nio.ImproveNioSelector;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.utils.ThreadUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.channels.SelectionKey;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChannelGroup {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousChannelGroupImpl.class);
 
 	/**
 	 * 递归回调次数上限
