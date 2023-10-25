@@ -19,7 +19,7 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 	/**
 	 * 递归回调次数上限
 	 */
-	public static final int MAX_INVOKER = 8;
+	static final int MAX_INVOKER = 8;
 
 	/**
 	 * 读回调处理线程池,可用于业务处理
