@@ -101,7 +101,7 @@ public final class ImproveNioSelector extends AbstractSelector {
 		isLoop = true;
 		int selectCnt = 0;
 		int select = 0;
-		long star = System.currentTimeMillis();
+		long star = (timeout > 0) ? System.currentTimeMillis() : 0;
 		while (isLoop) {
 			selectCnt++;
 			select = selector.select(timeout);
