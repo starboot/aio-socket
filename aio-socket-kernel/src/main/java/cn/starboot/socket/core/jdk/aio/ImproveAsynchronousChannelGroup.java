@@ -1,8 +1,5 @@
 package cn.starboot.socket.core.jdk.aio;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.channels.AsynchronousChannel;
 import java.nio.channels.ShutdownChannelGroupException;
@@ -11,8 +8,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public abstract class ImproveAsynchronousChannelGroup {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ImproveAsynchronousChannelGroup.class);
 
 	private final ImproveAsynchronousChannelProvider provider;
 
