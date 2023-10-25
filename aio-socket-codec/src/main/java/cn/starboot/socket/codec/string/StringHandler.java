@@ -15,11 +15,11 @@
  */
 package cn.starboot.socket.codec.string;
 
+import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.core.exception.AioEncoderException;
 import cn.starboot.socket.core.intf.AioHandler;
-import cn.starboot.socket.core.utils.AIOUtil;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.exception.AioDecoderException;
@@ -67,7 +67,7 @@ public abstract class StringHandler implements AioHandler {
             buffer.reset();
             return null;
         }
-        byte[] b = AIOUtil.getBytesFromByteBuffer(memoryUnit, length, Integer.BYTES, channelContext);
+        byte[] b = Aio.UtilApi.getBytesFromByteBuffer(memoryUnit, length, Integer.BYTES, channelContext);
         if (b == null) {
             buffer.reset();
             return null;

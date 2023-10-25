@@ -15,15 +15,15 @@
  */
 package cn.starboot.socket.codec.bytes;
 
+import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.WriteBuffer;
+import cn.starboot.socket.core.enums.ProtocolEnum;
+import cn.starboot.socket.core.exception.AioDecoderException;
 import cn.starboot.socket.core.exception.AioEncoderException;
 import cn.starboot.socket.core.intf.AioHandler;
-import cn.starboot.socket.core.utils.AIOUtil;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
-import cn.starboot.socket.core.Packet;
-import cn.starboot.socket.core.exception.AioDecoderException;
-import cn.starboot.socket.core.enums.ProtocolEnum;
 
 import java.nio.ByteBuffer;
 
@@ -46,7 +46,7 @@ public abstract class BytesHandler implements AioHandler {
 		}
 		buffer.mark();
 		int length = buffer.getInt();
-		byte[] b = AIOUtil.getBytesFromByteBuffer(readBuffer, length, Integer.BYTES, channelContext);
+		byte[] b = Aio.UtilApi.getBytesFromByteBuffer(readBuffer, length, Integer.BYTES, channelContext);
 		if (b == null) {
 			buffer.reset();
 			return null;

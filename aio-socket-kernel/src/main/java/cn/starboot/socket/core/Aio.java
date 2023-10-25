@@ -21,6 +21,7 @@ import cn.starboot.socket.core.utils.concurrent.collection.ConcurrentWithSet;
 import cn.starboot.socket.core.utils.concurrent.handle.ConcurrentWithReadHandler;
 import cn.starboot.socket.core.utils.page.Page;
 import cn.starboot.socket.core.utils.page.PageUtils;
+import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -2819,4 +2820,48 @@ public class Aio {
 	}
 
 	// ---------------------------------end----------------------------------
+
+	public static class UtilApi {
+		/**
+		 * aio-socket 作者自研超大包解决方案
+		 *
+		 * @param buffer         虚拟buffer
+		 * @param needLength     需要读取的长度
+		 * @param usedLength     已经读取的长度
+		 * @param channelContext 用户通道上下文信息
+		 * @return               byte数组
+		 */
+		public static byte[] getBytesFromByteBuffer(MemoryUnit buffer, int needLength, int usedLength, ChannelContext channelContext) {
+			// 小包消息处理
+			if (channelContext.getOldByteBuffer().isEmpty()) {
+				// 数据够用，直接读
+				if (needLength <= buffer.buffer().remaining()) {
+					byte[] bytes = new byte[needLength];
+					buffer.buffer().get(bytes);
+					return bytes;
+				}
+				// 数据不够
+				return null;
+			}
+			// 大包消息处理，检查队列数据是否足够
+			final int readBufferSize = channelContext.getAioConfig().getReadBufferSize();
+			if (needLength + usedLength <= channelContext.getOldByteBuffer().size() * readBufferSize) {
+				// 队列数据够，则读数据
+				byte[] bytes = new byte[needLength];
+				int index = 0;
+				MemoryUnit oldBuffer;
+				while ((oldBuffer = channelContext.getOldByteBuffer().poll()) != null && index <= needLength) {
+					int relatable = Math.min(needLength - index, oldBuffer.buffer().remaining());
+					oldBuffer.buffer().get(bytes, index, relatable);
+					index += relatable;
+					if (channelContext.getReadBuffer() != oldBuffer) {
+						oldBuffer.clean();
+					}
+				}
+				return bytes;
+			}
+			// 若队列数据不够则继续读
+			return null;
+		}
+	}
 }

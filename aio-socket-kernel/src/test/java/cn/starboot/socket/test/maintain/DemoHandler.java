@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.test.maintain;
 
+import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.enums.ProtocolEnum;
 import cn.starboot.socket.core.ChannelContext;
@@ -22,7 +23,6 @@ import cn.starboot.socket.core.WriteBuffer;
 import cn.starboot.socket.core.exception.AioEncoderException;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.test.core.DemoPacket;
-import cn.starboot.socket.core.utils.AIOUtil;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 
 import java.nio.ByteBuffer;
@@ -45,7 +45,7 @@ public class DemoHandler implements AioHandler {
         int anInt = buffer.getInt();
         int anInt1 = buffer.getInt();
         int length = buffer.getInt();
-        byte[] b = AIOUtil.getBytesFromByteBuffer(memoryUnit, length, Integer.BYTES * 3, channelContext);
+        byte[] b = Aio.UtilApi.getBytesFromByteBuffer(memoryUnit, length, Integer.BYTES * 3, channelContext);
         if (b == null) {
             buffer.reset();
             return null;
