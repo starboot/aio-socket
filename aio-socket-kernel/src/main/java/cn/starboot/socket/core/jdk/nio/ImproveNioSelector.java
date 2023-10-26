@@ -77,7 +77,7 @@ import java.util.Set;
  * static int do_epoll_wait(int epfd, struct epoll_event __user *events,
  * 			 int maxevents, struct timespec64 *to);
  *
- * @author MDong
+ * @author MDong And Netty
  */
 public final class ImproveNioSelector extends AbstractSelector {
 
