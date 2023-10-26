@@ -146,19 +146,19 @@ public final class MonitorPlugin extends AbstractPlugin implements Runnable {
 			LOGGER.debug("\r\n------------------------------------------------"
 					+ "\r\n\t\t\taio-socket performance"
 					+ "\r\n-------------------in " + seconds + " sec --------------------"
-					+ "\r\n输入流量:\t\t\t" + curInFlow * 1.0 / (1024 * 1024) + "(MB)"
-					+ "\r\n输出流量:\t\t\t" + curOutFlow * 1.0 / (1024 * 1024) + "(MB)"
-					+ "\r\n处理失败:\t\t\t" + curDiscardNum
-					+ "\r\n实时处理:\t\t\t" + curProcessMsgNum
-					+ "\r\n总处理量:\t\t\t" + totalProcessMsgNum
-					+ "\r\n读取次数:\t\t\t" + curReadCount
-					+ "\r\n写入次数:\t\t\t" + curWriteCount
-					+ "\r\n实时连接:\t\t\t" + connectCount
-					+ "\r\n断开连接:\t\t\t" + disConnectCount
-					+ "\r\n在线人数:\t\t\t" + onlineCount
-					+ "\r\n连接总量:\t\t\t" + totalConnect
-					+ "\r\n单位消息:\t\t\t" + curProcessMsgNum * 1.0 / seconds + " (条/s)"
-					+ "\r\n单位流量:\t\t\t" + (curInFlow * 1.0 / (1024 * 1024) / seconds) + " (MB/s)"
+					+ "\r\nInputStream:\t\t\t" + curInFlow * 1.0 / (1024 * 1024) + "(MB)"
+					+ "\r\nOutputStream:\t\t\t" + curOutFlow * 1.0 / (1024 * 1024) + "(MB)"
+					+ "\r\nprocess failed:\t\t\t" + curDiscardNum
+					+ "\r\nprocess count:\t\t\t" + curProcessMsgNum
+					+ "\r\nprocess total:\t\t\t" + totalProcessMsgNum
+					+ "\r\nread count:\t\t\t\t" + curReadCount
+					+ "\r\nwrite count:\t\t\t" + curWriteCount
+					+ "\r\nconnects:\t\t\t\t" + connectCount
+					+ "\r\ndisconnected:\t\t\t" + disConnectCount
+					+ "\r\nonline:\t\t\t\t\t" + onlineCount
+					+ "\r\nconnected:\t\t\t\t" + totalConnect
+					+ "\r\nRequests/sec:\t\t\t" + curProcessMsgNum * 1.0 / seconds
+					+ "\r\nTransfer/sec:\t\t\t" + (curInFlow * 1.0 / (1024 * 1024) / seconds) + " (MB)"
 					+ "\r\n------------------------------------------------");
 		}
 	}
