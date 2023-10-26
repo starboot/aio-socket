@@ -17,7 +17,6 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.core.enums.CloseCode;
 import cn.starboot.socket.core.enums.MaintainEnum;
-import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.core.utils.concurrent.collection.ConcurrentWithSet;
 import cn.starboot.socket.core.utils.concurrent.handle.ConcurrentWithReadHandler;
 import cn.starboot.socket.core.utils.page.Page;
@@ -26,8 +25,6 @@ import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.channels.NotYetConnectedException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.LongAdder;
@@ -2868,20 +2865,5 @@ public class Aio {
 			return null;
 		}
 
-		/**
-		 * 关闭用户通道
-		 *
-		 * @param asynchronousSocketChannel 用户通道
-		 */
-		public static void closeImproveAsynchronousSocketChannel(ImproveAsynchronousSocketChannel asynchronousSocketChannel)
-		{
-			if (asynchronousSocketChannel == null) {
-				return;
-			}
-			try {
-				asynchronousSocketChannel.shutdownInput().shutdownOutput().close();
-			} catch (NotYetConnectedException | IOException ignored) {
-			}
-		}
 	}
 }

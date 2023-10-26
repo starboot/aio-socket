@@ -15,7 +15,6 @@
  */
 package cn.starboot.socket.core.tcp;
 
-import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.config.AioServerConfig;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousServerSocketChannel;
@@ -141,12 +140,12 @@ public class ServerBootstrap extends TCPBootstrap {
 				context = getBootstrapFunction().apply(acceptChannel);
 				context.initTCPChannelContext();
 			} else {
-				Aio.UtilApi.closeImproveAsynchronousSocketChannel(channel);
+				TCPKernelUtils.closeImproveAsynchronousSocketChannel(channel);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (context == null) {
-				Aio.UtilApi.closeImproveAsynchronousSocketChannel(channel);
+				TCPKernelUtils.closeImproveAsynchronousSocketChannel(channel);
 			} else {
 				context.close(true);
 			}

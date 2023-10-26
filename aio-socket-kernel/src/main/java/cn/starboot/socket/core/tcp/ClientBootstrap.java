@@ -208,7 +208,7 @@ public class ClientBootstrap extends TCPBootstrap {
 			@Override
 			public void failed(Throwable throwable, ImproveAsynchronousSocketChannel socketChannel) {
 				handler.failed(throwable, future);
-				Aio.UtilApi.closeImproveAsynchronousSocketChannel(socketChannel);
+				TCPKernelUtils.closeImproveAsynchronousSocketChannel(socketChannel);
 				shutdownNow();
 			}
 		});
