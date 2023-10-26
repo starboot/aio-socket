@@ -13,7 +13,69 @@ import java.nio.channels.spi.AbstractSelector;
 import java.util.Set;
 
 /**
+ * Improve Selector implementation based on the Linux epoll facility.
  * 解决一下NIO空轮训的bug(虽然官方已经表明修复成功，但部分网友仍坚持还有出现的可能)
+ *
+ * Linux kernel code for Epoll.c
+ *
+ * epoll结构体:
+ * typedef union epoll_data {
+ *     void *ptr;
+ *     int fd;
+ *     __uint32_t u32;
+ *     __uint64_t u64;
+ *  } epoll_data_t;
+ *
+ * struct epoll_event {
+ *     __uint32_t events;
+ *     epoll_data_t data;
+ * }
+ *
+ * Linux系统调用(用户态切换至内核态): epoll_create function implementation
+ * SYSCALL_DEFINE1(epoll_create1, int, flags)
+ * {
+ * 	return do_epoll_create(flags);
+ * }
+ *
+ * // Open an eventpoll file descriptor.
+ * static int do_epoll_create(int flags);
+ *
+ *
+ * Linux系统调用(用户态切换至内核态): epoll_ctl function implementation
+ * SYSCALL_DEFINE4(epoll_ctl, int, epfd, int, op, int, fd,
+ * 		struct epoll_event __user *, event)
+ * {
+ * 	struct epoll_event epds;
+ *
+ * 	if (ep_op_has_event(op) &&
+ * 	    copy_from_user(&epds, event, sizeof(struct epoll_event)))
+ * 		return -EFAULT;
+ *
+ * 	return do_epoll_ctl(epfd, op, fd, &epds, false);
+ * }
+ *
+ * // The following function implements the controller interface for
+ * // the eventpoll file that enables the insertion/removal/change of
+ * // file descriptors inside the interest set.
+ * int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
+ * 		 bool nonblock);
+ *
+ *
+ * Linux系统调用(用户态切换至内核态): epoll_wait function implementation
+ * SYSCALL_DEFINE4(epoll_wait, int, epfd, struct epoll_event __user *, events,
+ * 		int, maxevents, int, timeout)
+ * {
+ * 	struct timespec64 to;
+ *
+ * 	return do_epoll_wait(epfd, events, maxevents,
+ * 			     ep_timeout_to_timespec(&to, timeout));
+ * }
+ *
+ * // Implement the event wait interface for the eventpoll file. It is the kernel
+ * // part of the user space epoll_wait(2).
+ *
+ * static int do_epoll_wait(int epfd, struct epoll_event __user *events,
+ * 			 int maxevents, struct timespec64 *to);
  *
  * @author MDong
  */
