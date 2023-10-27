@@ -34,7 +34,6 @@ public abstract class KernelBootstrapProvider {
 
 	}
 
-
 	public static KernelBootstrapProvider provider() {
 		return KernelBootstrapProvider.ProviderHolder.provider;
 	}

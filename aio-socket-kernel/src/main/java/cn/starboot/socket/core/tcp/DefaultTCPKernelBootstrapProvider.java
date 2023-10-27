@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-public final class DefaultTCPKernelBootstrapProvider {
+final class DefaultTCPKernelBootstrapProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTCPKernelBootstrapProvider.class);
 
@@ -16,7 +16,7 @@ public final class DefaultTCPKernelBootstrapProvider {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("Load default TCP kernel bootstrap provider.");
 		}
-		PrivilegedAction<TCPKernelBootstrapProvider> pa = TCPKernelBootstrapProvider::new;
+		PrivilegedAction<TCPKernelBootstrapProvider> pa = TCPKernelBootstrapProviderImpl::new;
 		INSTANCE = AccessController.doPrivileged(pa);
 	}
 
@@ -28,7 +28,7 @@ public final class DefaultTCPKernelBootstrapProvider {
 	/**
 	 * Returns the default AsynchronousChannelProvider.
 	 */
-	public static TCPKernelBootstrapProvider create() {
+	static TCPKernelBootstrapProvider create() {
 		return INSTANCE;
 	}
 }

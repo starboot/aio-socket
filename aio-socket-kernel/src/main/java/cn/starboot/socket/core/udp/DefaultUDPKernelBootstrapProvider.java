@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-public class DefaultUDPKernelBootstrapProvider {
+final class DefaultUDPKernelBootstrapProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultUDPKernelBootstrapProvider.class);
 
@@ -16,7 +16,7 @@ public class DefaultUDPKernelBootstrapProvider {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("Load default UDP kernel bootstrap provider.");
 		}
-		PrivilegedAction<UDPKernelBootstrapProvider> pa = UDPKernelBootstrapProvider::new;
+		PrivilegedAction<UDPKernelBootstrapProvider> pa = UDPKernelBootstrapProviderImpl::new;
 		INSTANCE = AccessController.doPrivileged(pa);
 	}
 
@@ -28,7 +28,7 @@ public class DefaultUDPKernelBootstrapProvider {
 	/**
 	 * Returns the default AsynchronousChannelProvider.
 	 */
-	public static UDPKernelBootstrapProvider create() {
+	static UDPKernelBootstrapProvider create() {
 		return INSTANCE;
 	}
 }
