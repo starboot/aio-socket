@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author MDong
  */
-public final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
+final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServerBootstrap.class);
 
-	public UDPServerBootstrap(UDPKernelBootstrapProvider kernelBootstrapProvider) {
+	UDPServerBootstrap(UDPKernelBootstrapProvider kernelBootstrapProvider) {
 		super(new AioServerConfig(), kernelBootstrapProvider);
 	}
 

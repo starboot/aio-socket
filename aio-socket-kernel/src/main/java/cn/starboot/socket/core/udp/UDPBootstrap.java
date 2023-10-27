@@ -17,7 +17,6 @@ package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.AbstractBootstrap;
 import cn.starboot.socket.core.config.AioServerConfig;
-import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.core.AioConfig;
@@ -28,7 +27,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.DatagramChannel;
 
-public class UDPBootstrap extends AbstractBootstrap {
+class UDPBootstrap extends AbstractBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPBootstrap.class);
 
@@ -48,7 +47,7 @@ public class UDPBootstrap extends AbstractBootstrap {
 		return udpKernelBootstrapProvider;
 	}
 
-    public UDPBootstrap(AioConfig config, UDPKernelBootstrapProvider kernelBootstrapProvider) {
+    UDPBootstrap(AioConfig config, UDPKernelBootstrapProvider kernelBootstrapProvider) {
 		super(config);
 		this.udpKernelBootstrapProvider = kernelBootstrapProvider;
 //        config.getPlugins().addAioHandler(handler);

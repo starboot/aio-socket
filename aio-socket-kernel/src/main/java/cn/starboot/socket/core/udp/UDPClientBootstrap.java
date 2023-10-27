@@ -16,11 +16,11 @@ import java.io.IOException;
  *
  * @author MDong
  */
-public final class UDPClientBootstrap extends UDPBootstrap implements ClientBootstrap {
+final class UDPClientBootstrap extends UDPBootstrap implements ClientBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPClientBootstrap.class);
 
-	public UDPClientBootstrap(UDPKernelBootstrapProvider kernelBootstrapProvider) {
+	UDPClientBootstrap(UDPKernelBootstrapProvider kernelBootstrapProvider) {
 		super(new AioClientConfig(), kernelBootstrapProvider);
 	}
 
