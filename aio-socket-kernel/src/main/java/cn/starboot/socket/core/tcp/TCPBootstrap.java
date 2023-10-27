@@ -14,7 +14,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-class TCPBootstrap extends AbstractBootstrap {
+abstract class TCPBootstrap extends AbstractBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TCPBootstrap.class);
 
