@@ -29,7 +29,7 @@ public abstract class KernelBootstrapProvider {
 		static final KernelBootstrapProvider provider = load();
 
 		private static KernelBootstrapProvider load() {
-			return cn.starboot.socket.core.spi.impl.DefaultKernelBootstrapProvider.create();
+			return DefaultKernelBootstrapProvider.create();
 		}
 
 	}

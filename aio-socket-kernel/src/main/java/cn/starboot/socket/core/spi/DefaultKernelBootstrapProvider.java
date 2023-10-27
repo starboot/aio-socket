@@ -1,4 +1,4 @@
-package cn.starboot.socket.core.spi.impl;
+package cn.starboot.socket.core.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import java.security.PrivilegedAction;
  *
  * @author MDong
  */
-public class DefaultKernelBootstrapProvider {
+final class DefaultKernelBootstrapProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultKernelBootstrapProvider.class);
 
@@ -33,7 +33,7 @@ public class DefaultKernelBootstrapProvider {
 	/**
 	 * Returns the default AsynchronousChannelProvider.
 	 */
-	public static KernelBootstrapProviderImpl create() {
+	static KernelBootstrapProviderImpl create() {
 		return INSTANCE;
 	}
 

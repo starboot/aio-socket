@@ -1,4 +1,4 @@
-package cn.starboot.socket.core.spi.impl;
+package cn.starboot.socket.core.spi;
 
 import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.core.ServerBootstrap;
