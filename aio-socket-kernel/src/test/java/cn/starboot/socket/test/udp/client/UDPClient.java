@@ -16,7 +16,7 @@ public class UDPClient {
         for (int i = 0; i < c; i++) {
             new Thread(() -> {
                 try {
-                    UDPBootstrap bootstrap = new UDPBootstrap(udpHandler);
+                    UDPBootstrap bootstrap = new UDPBootstrap(udpHandler, null);
                     bootstrap
 //                            .addPlugin(new MonitorPlugin(5))
                             .setReadBufferSize(1024);
