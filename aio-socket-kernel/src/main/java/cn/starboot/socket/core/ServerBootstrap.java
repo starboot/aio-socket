@@ -1,6 +1,6 @@
 package cn.starboot.socket.core;
 
-public class ServerBootstrap {
+public abstract class ServerBootstrap {
 
 	public static void startTCPService() {
 

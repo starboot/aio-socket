@@ -1,4 +1,4 @@
 package cn.starboot.socket.core;
 
-public class ClientBootstrap {
+public abstract class ClientBootstrap {
 }
