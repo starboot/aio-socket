@@ -3,7 +3,7 @@ package cn.starboot.socket.demo.heartbeat;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.TCPClientBootstrap;
+import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.core.plugins.ACKPlugin;
 import cn.starboot.socket.core.plugins.ReconnectPlugin;
 
@@ -16,20 +16,28 @@ public class HeartBeatClient {
 
 		StringPacket demoPacket = new StringPacket("HELLO WORD");
 		demoPacket.setReq(555);
-		TCPClientBootstrap bootstrap = new TCPClientBootstrap("127.0.0.1", 8888, new ClientHandler());
-		ChannelContext context = bootstrap
+
+		ClientBootstrap bootstrap = ClientBootstrap.startTCPService();
+
+		bootstrap
+				.remote("localhost", 8888)
+				.addAioHandler(new ClientHandler())
+				.setMemoryPoolFactory(1024 * 1024 * 4, 1, true)
+				.setReadBufferSize(1024 * 1024)
+				.setWriteBufferSize(1024 * 1024, 512)
+				.setMemoryKeep(true)
 				// 心跳插件
 				.addHeartPacket(new StringPacket("heartbeat message"))
 				// 重连插件
 				.addPlugin(new ReconnectPlugin(bootstrap))
 				// ACK收到确认插件
 				.addPlugin(new ACKPlugin(5, 3, TimeUnit.SECONDS))
-				// 设置内存池工厂
-				.setBufferFactory(1024 * 1024, 1, true)
-				// 启动
-				.start();
+				;
+
+		ChannelContext channelContext = bootstrap.start();
+
 		Thread.sleep(1000);
-		Aio.send(context, demoPacket);
+		Aio.send(channelContext, demoPacket);
 
 		Thread.sleep(1000);
 

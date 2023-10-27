@@ -15,11 +15,11 @@
  */
 package cn.starboot.socket.demo.batch.client;
 
+import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.bytes.BytesPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.utils.ThreadUtils;
 
@@ -45,14 +45,15 @@ public class StreamClient {
 		StreamClientHandler streamClientHandler = new StreamClientHandler();
 		for (int i = 0; i < 10; i++) {
 			new Thread(() -> {
-				TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, streamClientHandler);
 				try {
-					ChannelContext channelContext =
-							bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)
-									.setReadBufferSize(1024 * 1024)
-									.setWriteBufferSize(1024 * 1024, 512)
-									.setMemoryKeep(true)
-									.start(asynchronousChannelGroup);
+					ChannelContext channelContext = ClientBootstrap.startTCPService()
+							.remote("localhost", 8888)
+							.addAioHandler(streamClientHandler)
+							.setMemoryPoolFactory(1024 * 1024 * 4, 1, true)
+							.setReadBufferSize(1024 * 1024)
+							.setWriteBufferSize(1024 * 1024, 512)
+							.setMemoryKeep(true)
+							.start(asynchronousChannelGroup);
 
 					//(测试1和测试2的注释，不要同时打开，因为每个都是while(true).都打开没有测试的意义)
 					// 测试1. 多包发送，适合用作流媒体服务器开发

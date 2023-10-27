@@ -19,7 +19,6 @@ import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 import cn.starboot.socket.core.plugins.ACKPlugin;
 
 import java.io.IOException;
@@ -34,16 +33,16 @@ public class Client {
         // 设置同部位
         demoPacket.setReq(111);
 
-		TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, new ClientHandler());
+//		TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, new ClientHandler());
 
-		bootstrap.setBufferFactory(2 * 1024 * 1024, 2, true)
-				.setReadBufferSize(1024 * 1024)
-				.setWriteBufferSize(1024 * 1024, 512)
-				.addPlugin(new ACKPlugin(6, 2, TimeUnit.SECONDS));
+//		bootstrap.setBufferFactory(2 * 1024 * 1024, 2, true)
+//				.setReadBufferSize(1024 * 1024)
+//				.setWriteBufferSize(1024 * 1024, 512)
+//				.addPlugin(new ACKPlugin(6, 2, TimeUnit.SECONDS));
 
-		ChannelContext start = bootstrap.start();
+//		ChannelContext start = bootstrap.start();
 
-		Aio.send(start, demoPacket);
+//		Aio.send(start, demoPacket);
 
     }
 

@@ -19,7 +19,6 @@ import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.bytes.BytesPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.utils.ThreadUtils;
 
@@ -41,20 +40,20 @@ public class BatchClient {
         for (int i = 0; i < threadNum; i++) {
             new Thread(() -> {
                 // 127.0.0.1
-                TCPClientBootstrap bootstrap = new TCPClientBootstrap(ip, port, clientHandler);
-                bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)
-                        .setReadBufferSize(1024 * 1024)
-                        .setWriteBufferSize(1024 * 1024, 512)
+//                TCPClientBootstrap bootstrap = new TCPClientBootstrap(ip, port, clientHandler);
+//                bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)
+//                        .setReadBufferSize(1024 * 1024)
+//                        .setWriteBufferSize(1024 * 1024, 512)
                 ;
-                try {
-                    ChannelContext start = bootstrap.start(asynchronousChannelGroup);
+//                try {
+//                    ChannelContext start = bootstrap.start(asynchronousChannelGroup);
                     while (true) {
-                        Aio.send(start, bytesPacket);
+//                        Aio.send(start, bytesPacket);
                     }
 //                    bootstrap.shutdown();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
 
             }).start();
         }

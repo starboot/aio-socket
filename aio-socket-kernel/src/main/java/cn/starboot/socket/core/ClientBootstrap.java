@@ -1,5 +1,6 @@
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 
 import java.io.IOException;
@@ -21,6 +22,8 @@ public interface ClientBootstrap extends Bootstrap<ClientBootstrap> {
 	}
 
 	ChannelContext start() throws IOException;
+
+	ChannelContext start(ImproveAsynchronousChannelGroup asynchronousChannelGroup) throws IOException;
 
 	void shutdownNow();
 

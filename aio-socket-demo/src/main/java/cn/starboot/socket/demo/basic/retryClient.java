@@ -1,7 +1,6 @@
 package cn.starboot.socket.demo.basic;
 
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 import cn.starboot.socket.core.intf.AioHandler;
 
 import java.io.IOException;
@@ -19,23 +18,23 @@ public class retryClient {
 	}
 
 	private static void con() {
-		TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, new ClientHandler());
+//		TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, new ClientHandler());
 
 		// 配置类
-		bootstrap.setBufferFactory(10 * 1024 * 1024, 10, true)
+//		bootstrap.setBufferFactory(10 * 1024 * 1024, 10, true)
 //					.addPlugin(new ReconnectPlugin(clientBootstrap))
 //                    .addHeartPacket()
-				.setWriteBufferSize(32 * 1024, 128)
-				.setReadBufferSize(32 * 1024);
+//				.setWriteBufferSize(32 * 1024, 128)
+//				.setReadBufferSize(32 * 1024);
 
-		try {
+//		try {
 			ChannelContext start;
-			do {
-				start = bootstrap.start();
-			} while (start == null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//			do {
+//				start = bootstrap.start();
+//			} while (start == null);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 
@@ -44,7 +43,7 @@ public class retryClient {
 
 		private ChannelContext clientChannelContext;
 
-		private final TCPClientBootstrap TCPClientBootstrap;
+//		private final TCPClientBootstrap TCPClientBootstrap;
 
 		// 使用枚举构建单例模式
 		private enum TIMClientStarterSingletonEnum {
@@ -64,29 +63,29 @@ public class retryClient {
 		}
 
 		public TIMClient(AioHandler aioHandler) {
-			this.TCPClientBootstrap = new TCPClientBootstrap("localhost", 8888, aioHandler);
+//			this.TCPClientBootstrap = new TCPClientBootstrap("localhost", 8888, aioHandler);
 		}
 
 
 		public void start() {
 			init();
 
-			try {
-				do {
-					clientChannelContext = TCPClientBootstrap.start();
-				} while (clientChannelContext == null);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				do {
+//					clientChannelContext = TCPClientBootstrap.start();
+//				} while (clientChannelContext == null);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 
 		private void init() {
 			// 配置类
-			TCPClientBootstrap.setBufferFactory(10 * 1024 * 1024, 10, true)
+//			TCPClientBootstrap.setBufferFactory(10 * 1024 * 1024, 10, true)
 //					.addPlugin(new ReconnectPlugin(clientBootstrap))
 //                    .addHeartPacket()
-					.setWriteBufferSize(32 * 1024, 128)
-					.setReadBufferSize(32 * 1024);
+//					.setWriteBufferSize(32 * 1024, 128)
+//					.setReadBufferSize(32 * 1024);
 		}
 	}
 }

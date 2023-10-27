@@ -1,7 +1,6 @@
 package cn.starboot.socket.test.udp.client;
 
 import cn.starboot.socket.test.udp.UDPPacket;
-import cn.starboot.socket.core.udp.UDPBootstrap;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -16,10 +15,10 @@ public class UDPClient {
         for (int i = 0; i < c; i++) {
             new Thread(() -> {
                 try {
-                    UDPBootstrap bootstrap = new UDPBootstrap(udpHandler, null);
-                    bootstrap
+//                    UDPBootstrap bootstrap = new UDPBootstrap(udpHandler, null);
+//                    bootstrap
 //                            .addPlugin(new MonitorPlugin(5))
-                            .setReadBufferSize(1024);
+//                            .setReadBufferSize(1024);
 //                    UDPChannel channel = bootstrap.open();
 //                    ChannelContext session = channel.connect("localhost", 8888);
 //                    session.setProtocol(udpHandler.name());
@@ -32,7 +31,7 @@ public class UDPClient {
                     Thread.sleep(1000);
 //                    session.close();
 //                    System.out.println("发送完毕");
-                    bootstrap.shutdown();
+//                    bootstrap.shutdown();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

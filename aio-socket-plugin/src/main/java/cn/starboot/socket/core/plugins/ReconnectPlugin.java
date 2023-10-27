@@ -15,10 +15,10 @@
  */
 package cn.starboot.socket.core.plugins;
 
+import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.core.enums.StateMachineEnum;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.utils.TimerService;
 import org.slf4j.Logger;
@@ -39,19 +39,19 @@ public class ReconnectPlugin extends AbstractPlugin {
 
     private final ImproveAsynchronousChannelGroup asynchronousChannelGroup;
 
-    private final TCPClientBootstrap client;
+    private final ClientBootstrap client;
 
 	private final long period;
 
-    public ReconnectPlugin(TCPClientBootstrap client) {
+    public ReconnectPlugin(ClientBootstrap client) {
         this(client, 2, TimeUnit.SECONDS);
     }
 
-	public ReconnectPlugin(TCPClientBootstrap client, int period, TimeUnit timeUnit) {
+	public ReconnectPlugin(ClientBootstrap client, int period, TimeUnit timeUnit) {
 		this(client, period, timeUnit, null);
 	}
 
-    public ReconnectPlugin(TCPClientBootstrap client, int period, TimeUnit timeUnit, ImproveAsynchronousChannelGroup asynchronousChannelGroup) {
+    public ReconnectPlugin(ClientBootstrap client, int period, TimeUnit timeUnit, ImproveAsynchronousChannelGroup asynchronousChannelGroup) {
         this.client = client;
 		this.period =  timeUnit.toMillis(period);
         this.asynchronousChannelGroup = asynchronousChannelGroup;

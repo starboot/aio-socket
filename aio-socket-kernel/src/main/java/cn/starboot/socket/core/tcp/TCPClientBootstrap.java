@@ -113,6 +113,7 @@ final class TCPClientBootstrap extends TCPBootstrap implements ClientBootstrap {
 	 * @throws IOException IOException
 	 * @see java.nio.channels.AsynchronousSocketChannel#connect(SocketAddress)
 	 */
+	@Override
 	public ChannelContext start(ImproveAsynchronousChannelGroup asynchronousChannelGroup) throws IOException {
 		setAsynchronousChannelGroup(asynchronousChannelGroup);
 		if (isInit) {

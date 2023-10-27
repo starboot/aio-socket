@@ -15,7 +15,6 @@
  */
 package cn.starboot.socket.demo.outBatch.server;
 
-import cn.starboot.socket.core.tcp.TCPServerBootstrap;
 import cn.starboot.socket.core.plugins.MonitorPlugin;
 
 /**
@@ -46,13 +45,13 @@ public class BatchServer {
     public static void main(String[] args) {
 
 		System.out.println("IP: " + args[0] + ", Port: " + args[1] + " \r\n");
-        TCPServerBootstrap bootstrap = new TCPServerBootstrap(args[0], Integer.parseInt(args[1]), new ServerHandler());
-        bootstrap
-				.setMemoryPoolFactory(16 * 1024 * 1024, 10, true)
-                .setReadBufferSize(1024 * 1024)
-                .setWriteBufferSize(1024 * 4, 512)
-                .addPlugin(new MonitorPlugin(5))
-				.setThreadNum(Runtime.getRuntime().availableProcessors())
-                .start();
+//        TCPServerBootstrap bootstrap = new TCPServerBootstrap(args[0], Integer.parseInt(args[1]), new ServerHandler());
+//        bootstrap
+//				.setMemoryPoolFactory(16 * 1024 * 1024, 10, true)
+//                .setReadBufferSize(1024 * 1024)
+//                .setWriteBufferSize(1024 * 4, 512)
+//                .addPlugin(new MonitorPlugin(5))
+//				.setThreadNum(Runtime.getRuntime().availableProcessors())
+//                .start();
     }
 }

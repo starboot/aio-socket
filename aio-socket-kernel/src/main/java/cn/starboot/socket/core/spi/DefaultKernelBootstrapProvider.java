@@ -1,5 +1,6 @@
 package cn.starboot.socket.core.spi;
 
+import cn.starboot.socket.core.banner.AioSocketBanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +19,9 @@ final class DefaultKernelBootstrapProvider {
 	private static final KernelBootstrapProviderImpl INSTANCE;
 
 	static {
+		new AioSocketBanner().printBanner(System.out);
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("Load default improve asynchronous channel provider.");
+			LOGGER.info("Load default kernel bootstrap provider.");
 		}
 		PrivilegedAction<KernelBootstrapProviderImpl> pa = KernelBootstrapProviderImpl::new;
 		INSTANCE = AccessController.doPrivileged(pa);

@@ -15,11 +15,11 @@
  */
 package cn.starboot.socket.demo.basic;
 
+import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 
 import java.io.IOException;
 
@@ -34,15 +34,16 @@ public class Client {
 
         Packet demoPacket = new StringPacket("hello aio-socket");
 
-		TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, new ClientHandler());
-
-		bootstrap.setBufferFactory(2 * 1024 * 1024, 2, true)
+		ChannelContext channelContext = ClientBootstrap.startTCPService()
+				.remote("localhost", 8888)
+				.addAioHandler(new ClientHandler())
+				.setMemoryPoolFactory(1024 * 1024 * 4, 1, true)
 				.setReadBufferSize(1024 * 1024)
-				.setWriteBufferSize(1024 * 1024, 512);
+				.setWriteBufferSize(1024 * 1024, 512)
+				.setMemoryKeep(true)
+				.start();
 
-		ChannelContext start = bootstrap.start();
-
-		Aio.send(start, demoPacket);
+		Aio.send(channelContext, demoPacket);
 
     }
 
