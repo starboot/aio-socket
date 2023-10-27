@@ -13,13 +13,6 @@ public abstract class UDPKernelBootstrapProvider {
 	}
 	private UDPKernelBootstrapProvider(Void ignore) { }
 
-	/**
-	 * Initializes a new instance of this class.
-	 *
-	 * @throws  SecurityException
-	 *          If a security manager has been installed and it denies
-	 *          {@link RuntimePermission}{@code ("asynchronousChannelProvider")}
-	 */
 	protected UDPKernelBootstrapProvider() {
 		this(checkPermission());
 	}

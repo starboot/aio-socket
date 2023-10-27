@@ -13,13 +13,6 @@ public abstract class KernelBootstrapProvider {
 	}
 	private KernelBootstrapProvider(Void ignore) { }
 
-	/**
-	 * Initializes a new instance of this class.
-	 *
-	 * @throws  SecurityException
-	 *          If a security manager has been installed and it denies
-	 *          {@link RuntimePermission}{@code ("asynchronousChannelProvider")}
-	 */
 	protected KernelBootstrapProvider() {
 		this(checkPermission());
 	}
