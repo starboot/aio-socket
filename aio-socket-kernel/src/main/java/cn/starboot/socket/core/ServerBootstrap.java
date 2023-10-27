@@ -1,5 +1,6 @@
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.core.config.AioServerConfig;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 
@@ -8,11 +9,12 @@ import cn.starboot.socket.core.spi.KernelBootstrapProvider;
  *
  * @author MDong
  */
-public abstract class ServerBootstrap {
+public abstract class ServerBootstrap extends AbstractBootstrap {
 
 	private final KernelBootstrapProvider kernelBootstrapProvider;
 
 	protected ServerBootstrap(KernelBootstrapProvider kernelBootstrapProvider) {
+		super(new AioServerConfig());
 		this.kernelBootstrapProvider = kernelBootstrapProvider;
 	}
 
