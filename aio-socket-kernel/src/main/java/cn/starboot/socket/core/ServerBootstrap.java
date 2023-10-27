@@ -25,20 +25,20 @@ public abstract class ServerBootstrap extends AbstractBootstrap {
 	/**
 	 * 启动TCP服务
 	 */
-	public static void startTCPService() {
+	public static ServerBootstrap startTCPService() {
 
+		return null;
 	}
 
 	/**
 	 * 启动UDP服务
 	 */
-	public static void startUDPService() {
+	public static ServerBootstrap startUDPService() {
 
+		return null;
 	}
 
 	public abstract void start();
-
-	public abstract void shutdown();
 
 	public abstract ServerBootstrap listen(String host, int port);
 
