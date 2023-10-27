@@ -2,7 +2,6 @@ package cn.starboot.socket.core.spi;
 
 import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.core.ServerBootstrap;
-import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import cn.starboot.socket.core.tcp.TCPKernelBootstrapProvider;
 import cn.starboot.socket.core.udp.UDPKernelBootstrapProvider;
 
