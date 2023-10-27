@@ -15,17 +15,15 @@
  */
 package cn.starboot.socket.core.tcp;
 
-import cn.starboot.socket.core.Aio;
-import cn.starboot.socket.core.AioConfig;
-import cn.starboot.socket.core.ChannelContext;
+import cn.starboot.socket.core.*;
 import cn.starboot.socket.core.enums.ProtocolEnum;
 import cn.starboot.socket.core.config.AioClientConfig;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
-import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.plugins.Plugins;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import cn.starboot.socket.core.utils.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +44,9 @@ import java.util.concurrent.TimeUnit;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class ClientBootstrap extends TCPBootstrap {
+final class TCPClientBootstrap extends TCPBootstrap implements ClientBootstrap {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClientBootstrap.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TCPClientBootstrap.class);
 
 	/**
 	 * 重连插件使用
@@ -68,7 +66,7 @@ public class ClientBootstrap extends TCPBootstrap {
 	/**
 	 * 客户端所用协议
 	 */
-	private final ProtocolEnum clientProtocol;
+	private ProtocolEnum clientProtocol;
 
 	/**
 	 * 网络连接的会话对象
@@ -84,27 +82,21 @@ public class ClientBootstrap extends TCPBootstrap {
 	/**
 	 * 当前构造方法设置了启动Aio客户端的必要参数，基本实现开箱即用。
 	 *
-	 * @param host    远程服务器地址
-	 * @param port    远程服务器端口号
-	 * @param handler 协议编解码  消息处理器
 	 */
-	public ClientBootstrap(String host, int port, AioHandler handler) {
-		super(new AioClientConfig());
-		getConfig().setHost(host);
-		getConfig().setPort(port);
-		getConfig().getPlugins().addAioHandler(handler);
-		this.clientProtocol = handler.name();
+	TCPClientBootstrap(TCPKernelBootstrapProvider kernelBootstrapProvider) {
+		super(new AioClientConfig(), kernelBootstrapProvider);
 	}
 
 	/**
 	 * 启动客户端。
 	 * 本方法会构建线程数为threadNum的{@code asynchronousChannelGroup}
-	 * 并通过调用{@link ClientBootstrap#start(ImproveAsynchronousChannelGroup)}启动服务。
+	 * 并通过调用{@link TCPClientBootstrap#start(ImproveAsynchronousChannelGroup)}启动服务。
 	 *
 	 * @return 建立连接后的会话对象
 	 * @throws IOException IOException
-	 * @see ClientBootstrap#start(ImproveAsynchronousChannelGroup)
+	 * @see TCPClientBootstrap#start(ImproveAsynchronousChannelGroup)
 	 */
+	@Override
 	public final ChannelContext start() throws IOException {
 
 //		this.asynchronousChannelGroup = ImproveAsynchronousChannelGroup.withCachedThreadPool(ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber()), getConfig().getBossThreadNumber());
@@ -240,9 +232,10 @@ public class ClientBootstrap extends TCPBootstrap {
 	/**
 	 * 停止客户端服务.
 	 * 调用该方法会触发AioSession的close方法
-	 * 并且如果当前客户端若是通过执行{@link ClientBootstrap#start()}方法构建的
+	 * 并且如果当前客户端若是通过执行{@link TCPClientBootstrap#start()}方法构建的
 	 * 同时会触发asynchronousChannelGroup的shutdown动作。
 	 */
+	@Override
 	public final void shutdown() {
 		shutdown0(false);
 	}
@@ -250,8 +243,34 @@ public class ClientBootstrap extends TCPBootstrap {
 	/**
 	 * 立即关闭客户端
 	 */
+	@Override
 	public final void shutdownNow() {
 		shutdown0(true);
+	}
+
+	/**
+	 * 绑定指定端口
+	 *
+	 * @param port 端口号
+	 * @return this
+	 */
+	@Override
+	public ClientBootstrap listen(int port) {
+		this.localAddress = new InetSocketAddress(port);
+		return this;
+	}
+
+	/**
+	 *
+	 * @param host    远程服务器地址
+	 * @param port    远程服务器端口号
+	 * @return this
+	 */
+	@Override
+	public ClientBootstrap remote(String host, int port) {
+		getConfig().setHost(host);
+		getConfig().setPort(port);
+		return this;
 	}
 
 	/**
@@ -275,6 +294,7 @@ public class ClientBootstrap extends TCPBootstrap {
 	 * @param threadNum 线程数
 	 * @return this
 	 */
+	@Override
 	public ClientBootstrap setThreadNum(int threadNum) {
 		getConfig().setBossThreadNumber(threadNum);
 		return this;
@@ -288,7 +308,8 @@ public class ClientBootstrap extends TCPBootstrap {
 	 * @param useDirect 是否开启堆外内存
 	 * @return this
 	 */
-	public ClientBootstrap setBufferFactory(int size, int num, boolean useDirect) {
+	@Override
+	public ClientBootstrap setMemoryPoolFactory(int size, int num, boolean useDirect) {
 		getConfig().setDirect(useDirect).setMemoryBlockSize(size).setMemoryBlockNum(num);
 		return this;
 	}
@@ -300,6 +321,7 @@ public class ClientBootstrap extends TCPBootstrap {
 	 * @param maxWaitNum      最大等待队列长度
 	 * @return this
 	 */
+	@Override
 	public ClientBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum) {
 		getConfig().setWriteBufferSize(writeBufferSize)
 				.setMaxWaitNum(maxWaitNum);
@@ -312,6 +334,7 @@ public class ClientBootstrap extends TCPBootstrap {
 	 * @param readBufferSize 读缓冲区大小
 	 * @return this
 	 */
+	@Override
 	public ClientBootstrap setReadBufferSize(int readBufferSize) {
 		getConfig().setReadBufferSize(readBufferSize);
 		return this;
@@ -323,29 +346,38 @@ public class ClientBootstrap extends TCPBootstrap {
 	 * @param plugin 插件项
 	 * @return this
 	 */
+	@Override
 	public ClientBootstrap addPlugin(Plugin plugin) {
 		getConfig().getPlugins().addPlugin(plugin);
 		return this;
 	}
 
+	@Override
+	public synchronized ClientBootstrap addAioHandler(AioHandler handler) {
+		if (this.clientProtocol != null) {
+			String err = "ClientBootstrap can only call addAioHandler once";
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(err);
+			}else {
+				System.err.println(err);
+			}
+			return this;
+		}
+		getConfig().getPlugins().addAioHandler(handler);
+		this.clientProtocol = handler.name();
+		return this;
+	}
+
+	@Override
 	public ClientBootstrap setMemoryKeep(boolean isMemoryKeep) {
 		getConfig().setMemoryKeep(isMemoryKeep);
 		return this;
 	}
 
+	@Override
 	public ClientBootstrap addHeartPacket(Packet heartPacket) {
 		this.heartBeat = heartPacket;
 		return this;
 	}
 
-	/**
-	 * 绑定指定端口
-	 *
-	 * @param port 端口号
-	 * @return this
-	 */
-	public ClientBootstrap setLocalSocketAddress(int port) {
-		this.localAddress = new InetSocketAddress(port);
-		return this;
-	}
 }

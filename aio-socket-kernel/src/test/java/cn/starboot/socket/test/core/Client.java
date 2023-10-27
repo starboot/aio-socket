@@ -17,7 +17,7 @@ package cn.starboot.socket.test.core;
 
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.ClientBootstrap;
+import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ public class Client {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
-        ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
+        TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, new ClientHandler());
         ChannelContext channelContext = bootstrap.setBufferFactory(1024 * 1024, 1, true)
                 .setReadBufferSize(1024 * 2)
                 .setWriteBufferSize(1024 * 2, 512)

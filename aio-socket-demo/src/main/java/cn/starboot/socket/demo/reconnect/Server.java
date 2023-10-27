@@ -17,7 +17,7 @@ package cn.starboot.socket.demo.reconnect;
 
 import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.string.StringPacket;
-import cn.starboot.socket.core.tcp.ServerBootstrap;
+import cn.starboot.socket.core.tcp.TCPServerBootstrap;
 import cn.starboot.socket.core.plugins.HeartPlugin;
 
 import java.util.concurrent.TimeUnit;
@@ -26,7 +26,7 @@ public class Server {
 
     public static void main(String[] args) {
 
-        ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
+        TCPServerBootstrap bootstrap = new TCPServerBootstrap("localhost", 8888, new ServerHandler());
         bootstrap.setMemoryPoolFactory(2 * 1024 * 1024, 2, true)
                 .setReadBufferSize(1024 * 1024)
                 .setWriteBufferSize(1024 * 4, 512)

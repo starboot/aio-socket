@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.core.tcp;
 
+import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.core.config.AioServerConfig;
 import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousServerSocketChannel;
@@ -22,6 +23,7 @@ import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.plugins.Plugins;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,9 +40,9 @@ import java.util.Map;
  * @author MDong
  * @version 2.10.1.v20211002-RELEASE
  */
-public class ServerBootstrap extends TCPBootstrap {
+final class TCPServerBootstrap extends TCPBootstrap implements ServerBootstrap {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServerBootstrap.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TCPServerBootstrap.class);
 
 	/**
 	 * AIO Server 通道
@@ -50,20 +52,15 @@ public class ServerBootstrap extends TCPBootstrap {
 	/**
 	 * ServerBootstrap
 	 *
-	 * @param host    内网地址
-	 * @param port    端口
-	 * @param handler 任务处理器
 	 */
-	public ServerBootstrap(String host, int port, AioHandler handler) {
-		super(new AioServerConfig());
-		getConfig().setHost(host);
-		getConfig().setPort(port);
-		getConfig().getPlugins().addAioHandler(handler);
+	TCPServerBootstrap(TCPKernelBootstrapProvider kernelBootstrapProvider) {
+		super(new AioServerConfig(), kernelBootstrapProvider);
 	}
 
 	/**
 	 * 启动AIO Socket Server
 	 */
+	@Override
 	public void start() {
 		try {
 			beforeStart();
@@ -72,6 +69,19 @@ public class ServerBootstrap extends TCPBootstrap {
 		}
 
 		start0();
+	}
+
+	/**
+	 *
+	 * @param host    内网地址
+	 * @param port    端口
+	 * @return this
+	 */
+	@Override
+	public ServerBootstrap listen(String host, int port) {
+		getConfig().setHost(host);
+		getConfig().setPort(port);
+		return this;
 	}
 
 	/**
@@ -187,6 +197,7 @@ public class ServerBootstrap extends TCPBootstrap {
 	 * @param bossThreadNum 内核IO线程数量
 	 * @return ServerBootstrap 对象
 	 */
+	@Override
 	public ServerBootstrap setThreadNum(int bossThreadNum) {
 		getConfig().setBossThreadNumber(bossThreadNum);
 		return this;
@@ -200,6 +211,7 @@ public class ServerBootstrap extends TCPBootstrap {
 	 * @param useDirect 是否开启堆外内存
 	 * @return this
 	 */
+	@Override
 	public ServerBootstrap setMemoryPoolFactory(int size, int num, boolean useDirect) {
 		getConfig().setDirect(useDirect).setMemoryBlockSize(size).setMemoryBlockNum(num);
 		return this;
@@ -212,6 +224,7 @@ public class ServerBootstrap extends TCPBootstrap {
 	 * @param maxWaitNum      最大等待队列长度
 	 * @return ServerBootstrap 对象
 	 */
+	@Override
 	public ServerBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum) {
 		getConfig().setWriteBufferSize(writeBufferSize)
 				.setMaxWaitNum(maxWaitNum);
@@ -224,11 +237,13 @@ public class ServerBootstrap extends TCPBootstrap {
 	 * @param readBufferSize 读缓冲区大小
 	 * @return ServerBootstrap 对象
 	 */
+	@Override
 	public ServerBootstrap setReadBufferSize(int readBufferSize) {
 		getConfig().setReadBufferSize(readBufferSize);
 		return this;
 	}
 
+	@Override
 	public ServerBootstrap setMemoryKeep(boolean isMemoryKeep) {
 		getConfig().setMemoryKeep(isMemoryKeep);
 		return this;
@@ -240,6 +255,7 @@ public class ServerBootstrap extends TCPBootstrap {
 	 * @param plugin 插件项
 	 * @return ServerBootstrap 对象
 	 */
+	@Override
 	public ServerBootstrap addPlugin(Plugin plugin) {
 		getConfig().getPlugins().addPlugin(plugin);
 		return this;
@@ -251,6 +267,7 @@ public class ServerBootstrap extends TCPBootstrap {
 	 * @param aioHandler 协议处理器
 	 * @return ServerBootstrap 对象
 	 */
+	@Override
 	public ServerBootstrap addAioHandler(AioHandler aioHandler) {
 		getConfig().getPlugins().addAioHandler(aioHandler);
 		return this;

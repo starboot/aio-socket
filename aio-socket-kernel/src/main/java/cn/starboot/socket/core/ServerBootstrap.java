@@ -1,31 +1,16 @@
 package cn.starboot.socket.core;
 
-import cn.starboot.socket.core.config.AioServerConfig;
-import cn.starboot.socket.core.plugins.Plugin;
-import cn.starboot.socket.core.spi.KernelBootstrapProvider;
-
 /**
  * aio-socket Server BootStrap
  *
  * @author MDong
  */
-public abstract class ServerBootstrap extends AbstractBootstrap {
-
-	private final KernelBootstrapProvider kernelBootstrapProvider;
-
-	protected ServerBootstrap(KernelBootstrapProvider kernelBootstrapProvider) {
-		super(new AioServerConfig());
-		this.kernelBootstrapProvider = kernelBootstrapProvider;
-	}
-
-	public final KernelBootstrapProvider provider() {
-		return kernelBootstrapProvider;
-	}
+public interface ServerBootstrap extends Bootstrap<ServerBootstrap> {
 
 	/**
 	 * 启动TCP服务
 	 */
-	public static ServerBootstrap startTCPService() {
+	static ServerBootstrap startTCPService() {
 
 		return null;
 	}
@@ -33,27 +18,13 @@ public abstract class ServerBootstrap extends AbstractBootstrap {
 	/**
 	 * 启动UDP服务
 	 */
-	public static ServerBootstrap startUDPService() {
+	static ServerBootstrap startUDPService() {
 
 		return null;
 	}
 
-	public abstract void start();
+	void start();
 
-	public abstract ServerBootstrap listen(String host, int port);
-
-	public abstract ServerBootstrap setThreadNum(int bossThreadNum);
-
-	public abstract ServerBootstrap setMemoryPoolFactory(int size, int num, boolean useDirect);
-
-	public abstract ServerBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum);
-
-	public abstract ServerBootstrap setReadBufferSize(int readBufferSize);
-
-	public abstract ServerBootstrap setMemoryKeep(boolean isMemoryKeep);
-
-	public abstract ServerBootstrap addPlugin(Plugin plugin);
-
-	public abstract ServerBootstrap addAioHandler(String host, int port);
+	ServerBootstrap listen(String host, int port);
 
 }

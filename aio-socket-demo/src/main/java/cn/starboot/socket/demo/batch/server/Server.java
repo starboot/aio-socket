@@ -15,7 +15,7 @@
  */
 package cn.starboot.socket.demo.batch.server;
 
-import cn.starboot.socket.core.tcp.ServerBootstrap;
+import cn.starboot.socket.core.tcp.TCPServerBootstrap;
 import cn.starboot.socket.core.plugins.MonitorPlugin;
 
 /**
@@ -45,7 +45,7 @@ public class Server {
 	 */
     public static void main(String[] args) {
 
-        ServerBootstrap bootstrap = new ServerBootstrap("localhost", 8888, new ServerHandler());
+        TCPServerBootstrap bootstrap = new TCPServerBootstrap("localhost", 8888, new ServerHandler());
         bootstrap
 				.setMemoryPoolFactory(16 * 1024 * 1024, 10, true)
                 .setReadBufferSize(1024 * 1024)

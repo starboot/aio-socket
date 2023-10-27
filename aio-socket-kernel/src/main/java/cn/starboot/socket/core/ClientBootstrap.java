@@ -1,26 +1,13 @@
 package cn.starboot.socket.core;
 
-import cn.starboot.socket.core.config.AioClientConfig;
-import cn.starboot.socket.core.plugins.Plugin;
-import cn.starboot.socket.core.spi.KernelBootstrapProvider;
+import java.io.IOException;
 
-public abstract class ClientBootstrap extends AbstractBootstrap {
-
-	private final KernelBootstrapProvider kernelBootstrapProvider;
-
-	protected ClientBootstrap(KernelBootstrapProvider kernelBootstrapProvider) {
-		super(new AioClientConfig());
-		this.kernelBootstrapProvider = kernelBootstrapProvider;
-	}
-
-	public final KernelBootstrapProvider provider() {
-		return kernelBootstrapProvider;
-	}
+public interface ClientBootstrap extends Bootstrap<ClientBootstrap> {
 
 	/**
 	 * 启动TCP服务
 	 */
-	public static ClientBootstrap startTCPService() {
+	static ClientBootstrap startTCPService() {
 
 		return null;
 	}
@@ -28,34 +15,22 @@ public abstract class ClientBootstrap extends AbstractBootstrap {
 	/**
 	 * 启动UDP服务
 	 */
-	public static ClientBootstrap startUDPService() {
+	static ClientBootstrap startUDPService() {
 
 		return null;
 	}
 
-	public abstract ChannelContext start();
+	ChannelContext start() throws IOException;
 
-	public abstract void shutdownNow();
+	void shutdownNow();
 
-	public ClientBootstrap listen() {
+	default ClientBootstrap listen() {
 		return listen(-1);
 	}
 
-	public abstract ClientBootstrap listen(int port);
+	ClientBootstrap listen(int port);
 
-	public abstract ClientBootstrap setThreadNum(int bossThreadNum);
+	ClientBootstrap remote(String host, int port);
 
-	public abstract ClientBootstrap setMemoryPoolFactory(int size, int num, boolean useDirect);
-
-	public abstract ClientBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum);
-
-	public abstract ClientBootstrap setReadBufferSize(int readBufferSize);
-
-	public abstract ClientBootstrap setMemoryKeep(boolean isMemoryKeep);
-
-	public abstract ClientBootstrap addPlugin(Plugin plugin);
-
-	public abstract ClientBootstrap addAioHandler(String host, int port);
-
-	public abstract ClientBootstrap addHeartPacket(Packet heartPacket);
+	ClientBootstrap addHeartPacket(Packet heartPacket);
 }

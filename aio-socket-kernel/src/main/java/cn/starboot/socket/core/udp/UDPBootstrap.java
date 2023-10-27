@@ -17,7 +17,6 @@ package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.AbstractBootstrap;
 import cn.starboot.socket.core.config.AioServerConfig;
-import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPool;
@@ -33,6 +32,8 @@ public class UDPBootstrap extends AbstractBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPBootstrap.class);
 
+	private final UDPKernelBootstrapProvider udpKernelBootstrapProvider;
+
     private MemoryPool bufferPool;
 
     private MemoryPool innerBufferPool;
@@ -43,9 +44,14 @@ public class UDPBootstrap extends AbstractBootstrap {
 
     private boolean innerWorker = false;
 
-    public UDPBootstrap(AioHandler handler, AioConfig config) {
+	public final UDPKernelBootstrapProvider provider() {
+		return udpKernelBootstrapProvider;
+	}
+
+    public UDPBootstrap(AioConfig config, UDPKernelBootstrapProvider kernelBootstrapProvider) {
 		super(config);
-        config.getPlugins().addAioHandler(handler);
+		this.udpKernelBootstrapProvider = kernelBootstrapProvider;
+//        config.getPlugins().addAioHandler(handler);
         config.setHandler(config.getPlugins());
 	}
 
@@ -125,10 +131,10 @@ public class UDPBootstrap extends AbstractBootstrap {
      * @param size 单位：byte
      *
      */
-    public final UDPBootstrap setReadBufferSize(int size) {
-        this.config.setReadBufferSize(size);
-        return this;
-    }
+//    public final UDPBootstrap setReadBufferSize(int size) {
+//        this.config.setReadBufferSize(size);
+//        return this;
+//    }
 
     /**
      * 设置内存池的构造工厂。
@@ -151,8 +157,8 @@ public class UDPBootstrap extends AbstractBootstrap {
      * @param plugin 插件项
      * @return       this
      */
-    public final UDPBootstrap addPlugin(Plugin plugin) {
-        this.config.getPlugins().addPlugin(plugin);
-        return this;
-    }
+//    public final UDPBootstrap addPlugin(Plugin plugin) {
+//        this.config.getPlugins().addPlugin(plugin);
+//        return this;
+//    }
 }

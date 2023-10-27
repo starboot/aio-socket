@@ -18,6 +18,8 @@ abstract class TCPBootstrap extends AbstractBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TCPBootstrap.class);
 
+	private final TCPKernelBootstrapProvider tcpKernelBootstrapProvider;
+
 	/**
 	 * AIO 通道组
 	 */
@@ -45,6 +47,10 @@ abstract class TCPBootstrap extends AbstractBootstrap {
 					memoryPool.allocateMemoryBlock(),
 					readMemoryUnitFactory);
 
+	public final TCPKernelBootstrapProvider provider() {
+		return tcpKernelBootstrapProvider;
+	}
+
 	protected void beforeStart() throws IOException {
 		super.beforeStart();
 		if (this.asynchronousChannelGroup == null) {
@@ -62,8 +68,9 @@ abstract class TCPBootstrap extends AbstractBootstrap {
 	}
 
 
-	TCPBootstrap(AioConfig config) {
+	TCPBootstrap(AioConfig config, TCPKernelBootstrapProvider kernelBootstrapProvider) {
 		super(config);
+		this.tcpKernelBootstrapProvider = kernelBootstrapProvider;
 		this.aioReadCompletionHandler = new CompletionHandler<Integer, TCPChannelContext>() {
 			@Override
 			public void completed(Integer result, TCPChannelContext channelContext) {

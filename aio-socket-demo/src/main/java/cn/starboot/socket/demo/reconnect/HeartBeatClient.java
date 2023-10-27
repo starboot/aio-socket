@@ -3,7 +3,7 @@ package cn.starboot.socket.demo.reconnect;
 import cn.starboot.socket.codec.string.StringPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.ClientBootstrap;
+import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 import cn.starboot.socket.core.plugins.ACKPlugin;
 import cn.starboot.socket.core.plugins.ReconnectPlugin;
 
@@ -16,7 +16,7 @@ public class HeartBeatClient {
 
 		StringPacket demoPacket = new StringPacket("HELLO WORD");
 		demoPacket.setReq(555);
-		ClientBootstrap bootstrap = new ClientBootstrap("127.0.0.1", 8888, new ClientHandler());
+		TCPClientBootstrap bootstrap = new TCPClientBootstrap("127.0.0.1", 8888, new ClientHandler());
 		ChannelContext context = bootstrap
 				// 心跳插件
 				.addHeartPacket(new StringPacket("heartbeat message"))

@@ -17,7 +17,7 @@ package cn.starboot.socket.test.maintain;
 
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.ClientBootstrap;
+import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 import cn.starboot.socket.test.core.DemoPacket;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class Client1 {
         DemoPacket demoPacket = new DemoPacket("hello aio-socket");
         demoPacket.setFromId("999");
         demoPacket.setToId("111");
-        ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, new ClientHandler());
+        TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, new ClientHandler());
         ChannelContext channelContext = bootstrap.setBufferFactory(1024 * 1024, 1, true)
                 .setReadBufferSize(1024 * 2)
                 .setWriteBufferSize(1024 * 2, 512)

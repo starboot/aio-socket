@@ -4,7 +4,7 @@ import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.codec.bytes.BytesPacket;
 import cn.starboot.socket.core.Aio;
 import cn.starboot.socket.core.ChannelContext;
-import cn.starboot.socket.core.tcp.ClientBootstrap;
+import cn.starboot.socket.core.tcp.TCPClientBootstrap;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.utils.ThreadUtils;
 
@@ -30,7 +30,7 @@ public class ProcessorClient {
 		ProcessorClientHandler processorClientHandler = new ProcessorClientHandler();
 		for (int i = 0; i < 10; i++) {
 			new Thread(() -> {
-				ClientBootstrap bootstrap = new ClientBootstrap("localhost", 8888, processorClientHandler);
+				TCPClientBootstrap bootstrap = new TCPClientBootstrap("localhost", 8888, processorClientHandler);
 				try {
 					ChannelContext channelContext =
 							bootstrap.setBufferFactory(1024 * 1024 * 4, 1, true)
