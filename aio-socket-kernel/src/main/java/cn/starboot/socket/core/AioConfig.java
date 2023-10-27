@@ -36,8 +36,13 @@ import java.util.Objects;
  */
 public abstract class AioConfig {
 
+	/**
+	 * 项目名称
+	 */
+	public static final String PROJECT_NAME = "aio-socket";
+
     /**
-     * 当前aio-socket版本号
+     * aio-socket版本号
      */
     public static final String VERSION = "v3.0.0";
 
