@@ -3,15 +3,11 @@ package cn.starboot.socket.core;
 import cn.starboot.socket.core.utils.ThreadUtils;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnitFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
 public abstract class AbstractBootstrap implements Bootstrap {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBootstrap.class);
 
 	/**
 	 * 内存池
@@ -40,7 +36,6 @@ public abstract class AbstractBootstrap implements Bootstrap {
 		this.config = config;
 
 	}
-
 
 	/**
 	 * 启动
