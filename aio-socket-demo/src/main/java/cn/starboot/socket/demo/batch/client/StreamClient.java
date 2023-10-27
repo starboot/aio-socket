@@ -27,7 +27,7 @@ import java.io.IOException;
 
 /**
  * 用于测试 流量传输速率的 压测客户端
- *
+ * <p>
  * ---------  不要ProcessorClient和StreamClient同时打开，那样压力测试结果不准确----------
  *
  * @author MDong
@@ -46,7 +46,8 @@ public class StreamClient {
 		for (int i = 0; i < 10; i++) {
 			new Thread(() -> {
 				try {
-					ChannelContext channelContext = ClientBootstrap.startTCPService()
+					ClientBootstrap bootstrap = ClientBootstrap.startTCPService();
+					ChannelContext channelContext = bootstrap
 							.remote("localhost", 8888)
 							.addAioHandler(streamClientHandler)
 							.setMemoryPoolFactory(1024 * 1024 * 4, 1, true)
