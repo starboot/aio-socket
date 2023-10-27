@@ -5,6 +5,9 @@ import cn.starboot.socket.core.ServerBootstrap;
 
 final class TCPKernelBootstrapProviderImpl extends TCPKernelBootstrapProvider {
 
+	TCPKernelBootstrapProviderImpl() {
+	}
+
 	@Override
 	public ServerBootstrap openTCPServerBootstrap() {
 		return new TCPServerBootstrap(this);
