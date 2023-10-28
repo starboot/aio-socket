@@ -14,7 +14,10 @@ import java.util.Set;
 
 /**
  * Improve Selector implementation based on the Linux epoll facility.
+ *
  * 解决一下NIO空轮训的bug(虽然官方已经表明修复成功，但部分网友仍坚持还有出现的可能)
+ *
+ * 通过适配器设计模式进行改进一下JDK默认Selector实现类
  *
  * Linux kernel code for Epoll.c
  *
