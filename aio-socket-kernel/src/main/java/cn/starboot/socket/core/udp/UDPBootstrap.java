@@ -17,6 +17,7 @@ package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.AbstractBootstrap;
 import cn.starboot.socket.core.config.AioServerConfig;
+import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPool;
@@ -112,4 +113,8 @@ abstract class UDPBootstrap extends AbstractBootstrap {
         	LOGGER.info("The UDP service successfully exited");
 		}
     }
+
+    protected NioEventLoopWorker getNioEventLoopWorker() {
+    	return null;
+	}
 }
