@@ -112,27 +112,4 @@ abstract class UDPBootstrap extends AbstractBootstrap {
         	LOGGER.info("The UDP service successfully exited");
 		}
     }
-
-    /**
-     * 设置读缓存区大小
-     * @return  this
-     * @param size 单位：byte
-     *
-     */
-//    public final UDPBootstrap setReadBufferSize(int size) {
-//        this.config.setReadBufferSize(size);
-//        return this;
-//    }
-
-
-    /**
-     * 注册插件
-     *
-     * @param plugin 插件项
-     * @return       this
-     */
-//    public final UDPBootstrap addPlugin(Plugin plugin) {
-//        this.config.getPlugins().addPlugin(plugin);
-//        return this;
-//    }
 }
