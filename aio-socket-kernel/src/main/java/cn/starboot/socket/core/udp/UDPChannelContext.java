@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.channels.DatagramChannel;
 
 final class UDPChannelContext extends ChannelContext {
 
@@ -37,12 +38,14 @@ final class UDPChannelContext extends ChannelContext {
 
 //	private final UDPChannel udpChannel;
 
+	private DatagramChannel datagramChannel;
+
 	private final SocketAddress remote;
 
 	UDPChannelContext(
-//			UDPChannel udpChannel,
+			DatagramChannel datagramChannel,
 			SocketAddress remote, MemoryBlock memoryBlock) {
-//		this.udpChannel = udpChannel;
+		this.datagramChannel = datagramChannel;
 		this.remote = remote;
 		setWriteBuffer(
 				memoryBlock,
