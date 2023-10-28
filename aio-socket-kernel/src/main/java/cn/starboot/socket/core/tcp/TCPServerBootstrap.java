@@ -53,8 +53,8 @@ final class TCPServerBootstrap extends TCPBootstrap implements ServerBootstrap {
 	 * ServerBootstrap
 	 *
 	 */
-	TCPServerBootstrap(TCPKernelBootstrapProvider kernelBootstrapProvider) {
-		super(new AioServerConfig(), kernelBootstrapProvider);
+	TCPServerBootstrap(TCPKernelBootstrapProvider tcpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
+		super(new AioServerConfig(), tcpKernelBootstrapProvider, kernelBootstrapProvider);
 	}
 
 	/**

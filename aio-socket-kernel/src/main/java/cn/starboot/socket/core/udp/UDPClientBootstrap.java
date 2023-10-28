@@ -7,6 +7,7 @@ import cn.starboot.socket.core.config.AioClientConfig;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.plugins.Plugin;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +22,8 @@ final class UDPClientBootstrap extends UDPBootstrap implements ClientBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPClientBootstrap.class);
 
-	UDPClientBootstrap(UDPKernelBootstrapProvider kernelBootstrapProvider) {
-		super(new AioClientConfig(), kernelBootstrapProvider);
+	UDPClientBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
+		super(new AioClientConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
 	}
 
 	@Override

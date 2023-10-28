@@ -2,6 +2,7 @@ package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.core.ServerBootstrap;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 
 final class UDPKernelBootstrapProviderImpl extends UDPKernelBootstrapProvider {
 
@@ -9,12 +10,12 @@ final class UDPKernelBootstrapProviderImpl extends UDPKernelBootstrapProvider {
 	}
 
 	@Override
-	public ServerBootstrap openUDPServerBootstrap() {
-		return new UDPServerBootstrap(this);
+	public ServerBootstrap openUDPServerBootstrap(KernelBootstrapProvider kernelBootstrapProvider) {
+		return new UDPServerBootstrap(this, kernelBootstrapProvider);
 	}
 
 	@Override
-	public ClientBootstrap openUDPClientBootstrap() {
-		return new UDPClientBootstrap(this);
+	public ClientBootstrap openUDPClientBootstrap(KernelBootstrapProvider kernelBootstrapProvider) {
+		return new UDPClientBootstrap(this, kernelBootstrapProvider);
 	}
 }

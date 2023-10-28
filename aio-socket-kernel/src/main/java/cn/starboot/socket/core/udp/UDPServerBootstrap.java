@@ -4,6 +4,7 @@ import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.core.config.AioServerConfig;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.plugins.Plugin;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,8 +17,8 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServerBootstrap.class);
 
-	UDPServerBootstrap(UDPKernelBootstrapProvider kernelBootstrapProvider) {
-		super(new AioServerConfig(), kernelBootstrapProvider);
+	UDPServerBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
+		super(new AioServerConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
 	}
 
 	@Override

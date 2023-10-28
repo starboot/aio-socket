@@ -12,21 +12,21 @@ final class KernelBootstrapProviderImpl extends KernelBootstrapProvider {
 
 	@Override
 	public ServerBootstrap openTCPServerBootstrap() {
-		return TCPKernelBootstrapProvider.provider().openTCPServerBootstrap();
+		return TCPKernelBootstrapProvider.provider().openTCPServerBootstrap(this);
 	}
 
 	@Override
 	public ServerBootstrap openUDPServerBootstrap() {
-		return UDPKernelBootstrapProvider.provider().openUDPServerBootstrap();
+		return UDPKernelBootstrapProvider.provider().openUDPServerBootstrap(this);
 	}
 
 	@Override
 	public ClientBootstrap openTCPClientBootstrap() {
-		return TCPKernelBootstrapProvider.provider().openTCPClientBootstrap();
+		return TCPKernelBootstrapProvider.provider().openTCPClientBootstrap(this);
 	}
 
 	@Override
 	public ClientBootstrap openUDPClientBootstrap() {
-		return UDPKernelBootstrapProvider.provider().openUDPClientBootstrap();
+		return UDPKernelBootstrapProvider.provider().openUDPClientBootstrap(this);
 	}
 }

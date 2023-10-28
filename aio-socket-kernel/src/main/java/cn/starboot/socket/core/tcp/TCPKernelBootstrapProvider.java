@@ -2,6 +2,7 @@ package cn.starboot.socket.core.tcp;
 
 import cn.starboot.socket.core.ClientBootstrap;
 import cn.starboot.socket.core.ServerBootstrap;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 
 public abstract class TCPKernelBootstrapProvider {
 
@@ -38,7 +39,7 @@ public abstract class TCPKernelBootstrapProvider {
 		return TCPKernelBootstrapProvider.ProviderHolder.provider;
 	}
 
-	public abstract ServerBootstrap openTCPServerBootstrap();
+	public abstract ServerBootstrap openTCPServerBootstrap(KernelBootstrapProvider kernelBootstrapProvider);
 
-	public abstract ClientBootstrap openTCPClientBootstrap();
+	public abstract ClientBootstrap openTCPClientBootstrap(KernelBootstrapProvider kernelBootstrapProvider);
 }

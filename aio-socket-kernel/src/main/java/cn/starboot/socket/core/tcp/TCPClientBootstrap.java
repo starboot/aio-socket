@@ -83,8 +83,8 @@ final class TCPClientBootstrap extends TCPBootstrap implements ClientBootstrap {
 	 * 当前构造方法设置了启动Aio客户端的必要参数，基本实现开箱即用。
 	 *
 	 */
-	TCPClientBootstrap(TCPKernelBootstrapProvider kernelBootstrapProvider) {
-		super(new AioClientConfig(), kernelBootstrapProvider);
+	TCPClientBootstrap(TCPKernelBootstrapProvider tcpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
+		super(new AioClientConfig(), tcpKernelBootstrapProvider, kernelBootstrapProvider);
 	}
 
 	/**

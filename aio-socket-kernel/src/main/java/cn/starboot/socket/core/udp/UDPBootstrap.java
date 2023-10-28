@@ -17,6 +17,7 @@ package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.AbstractBootstrap;
 import cn.starboot.socket.core.config.AioServerConfig;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPoolFactory;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.core.AioConfig;
@@ -31,6 +32,8 @@ abstract class UDPBootstrap extends AbstractBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPBootstrap.class);
 
+	private final KernelBootstrapProvider kernelBootstrapProvider;
+
 	private final UDPKernelBootstrapProvider udpKernelBootstrapProvider;
 
     private MemoryPool bufferPool;
@@ -43,13 +46,21 @@ abstract class UDPBootstrap extends AbstractBootstrap {
 
     private boolean innerWorker = false;
 
-	public final UDPKernelBootstrapProvider provider() {
+	@Override
+	public final KernelBootstrapProvider KernelProvider() {
+		return kernelBootstrapProvider;
+	}
+
+	public final UDPKernelBootstrapProvider UdpProvider() {
 		return udpKernelBootstrapProvider;
 	}
 
-    UDPBootstrap(AioConfig config, UDPKernelBootstrapProvider kernelBootstrapProvider) {
+    UDPBootstrap(AioConfig config,
+				 UDPKernelBootstrapProvider udpKernelBootstrapProvider,
+				 KernelBootstrapProvider kernelBootstrapProvider) {
 		super(config);
-		this.udpKernelBootstrapProvider = kernelBootstrapProvider;
+		this.udpKernelBootstrapProvider = udpKernelBootstrapProvider;
+		this.kernelBootstrapProvider = kernelBootstrapProvider;
 //        config.getPlugins().addAioHandler(handler);
         config.setHandler(config.getPlugins());
 	}

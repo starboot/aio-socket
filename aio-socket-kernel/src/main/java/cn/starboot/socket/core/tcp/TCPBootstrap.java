@@ -6,6 +6,7 @@ import cn.starboot.socket.core.Monitor;
 import cn.starboot.socket.core.enums.StateMachineEnum;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,8 @@ import java.util.function.Function;
 abstract class TCPBootstrap extends AbstractBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TCPBootstrap.class);
+
+	private final KernelBootstrapProvider kernelBootstrapProvider;
 
 	private final TCPKernelBootstrapProvider tcpKernelBootstrapProvider;
 
@@ -47,7 +50,12 @@ abstract class TCPBootstrap extends AbstractBootstrap {
 					memoryPool.allocateMemoryBlock(),
 					readMemoryUnitFactory);
 
-	public final TCPKernelBootstrapProvider provider() {
+	@Override
+	public final KernelBootstrapProvider KernelProvider() {
+		return kernelBootstrapProvider;
+	}
+
+	public final TCPKernelBootstrapProvider TcpProvider() {
 		return tcpKernelBootstrapProvider;
 	}
 
@@ -68,9 +76,12 @@ abstract class TCPBootstrap extends AbstractBootstrap {
 	}
 
 
-	TCPBootstrap(AioConfig config, TCPKernelBootstrapProvider kernelBootstrapProvider) {
+	TCPBootstrap(AioConfig config,
+				 TCPKernelBootstrapProvider tcpKernelBootstrapProvider,
+				 KernelBootstrapProvider kernelBootstrapProvider) {
 		super(config);
-		this.tcpKernelBootstrapProvider = kernelBootstrapProvider;
+		this.tcpKernelBootstrapProvider = tcpKernelBootstrapProvider;
+		this.kernelBootstrapProvider = kernelBootstrapProvider;
 		this.aioReadCompletionHandler = new CompletionHandler<Integer, TCPChannelContext>() {
 			@Override
 			public void completed(Integer result, TCPChannelContext channelContext) {
