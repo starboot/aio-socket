@@ -36,16 +36,6 @@ abstract class UDPBootstrap extends AbstractBootstrap {
 
 	private final UDPKernelBootstrapProvider udpKernelBootstrapProvider;
 
-    private MemoryPool bufferPool;
-
-    private MemoryPool innerBufferPool;
-
-    private final AioConfig config = new AioServerConfig();
-
-//    private Worker worker;
-
-    private boolean innerWorker = false;
-
 	@Override
 	public final KernelBootstrapProvider KernelProvider() {
 		return kernelBootstrapProvider;
@@ -61,7 +51,6 @@ abstract class UDPBootstrap extends AbstractBootstrap {
 		super(config);
 		this.udpKernelBootstrapProvider = udpKernelBootstrapProvider;
 		this.kernelBootstrapProvider = kernelBootstrapProvider;
-//        config.getPlugins().addAioHandler(handler);
         config.setHandler(config.getPlugins());
 	}
 
@@ -95,14 +84,9 @@ abstract class UDPBootstrap extends AbstractBootstrap {
      * @throws IOException 开启异常
      */
     public void open(String host, int port) throws IOException {
-        if (bufferPool == null) {
-            this.bufferPool = config.getMemoryPoolFactory().createMemoryPool();
-            this.innerBufferPool = bufferPool;
-        }
-//        if (worker == null) {
-//            innerWorker = true;
-//            worker = new Worker(bufferPool, 5);
-//        }
+
+//    	beforeStart();
+
         DatagramChannel channel = DatagramChannel.open();
         channel.configureBlocking(false);
         if (port > 0) {
@@ -124,12 +108,6 @@ abstract class UDPBootstrap extends AbstractBootstrap {
      * 关闭UDP服务
      */
     public void shutdown() {
-        if (innerWorker) {
-//            this.worker.shutdown();
-        }
-        if (innerBufferPool != null) {
-            innerBufferPool.release();
-        }
         if (LOGGER.isInfoEnabled()) {
         	LOGGER.info("The UDP service successfully exited");
 		}
@@ -146,20 +124,6 @@ abstract class UDPBootstrap extends AbstractBootstrap {
 //        return this;
 //    }
 
-    /**
-     * 设置内存池的构造工厂。
-     * 通过工厂形式生成的内存池会强绑定到当前UdpBootstrap对象，
-     * 在UDPBootstrap执行shutdown时会释放内存池。
-     * <b>在启用内存池的情况下会有更好的性能表现</b>
-     *
-     * @param memoryPoolFactory 内存池工厂
-     * @return              当前AioQuickServer对象
-     */
-    public final UDPBootstrap setBufferFactory(MemoryPoolFactory memoryPoolFactory) {
-        this.config.setMemoryPoolFactory(memoryPoolFactory);
-        this.bufferPool = null;
-        return this;
-    }
 
     /**
      * 注册插件
