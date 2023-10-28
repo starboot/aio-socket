@@ -90,7 +90,7 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 	}
 
 	private boolean isDirectAccept() {
-		return acceptInvoker++ < ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
+		return acceptInvoker++ < ImproveInherentUtil.MAX_INVOKER;
 	}
 
 	private SocketChannel initSocketChannel(SocketChannel socketChannel) {
@@ -129,12 +129,12 @@ final class ImproveAsynchronousServerSocketChannelImpl extends ImproveAsynchrono
 			if (socketChannel != null) {
 				finishAccept(socketChannel);
 				if (!acceptPending && selectionKey != null) {
-					ImproveAsynchronousChannelGroupImpl.removeOps(selectionKey, SelectionKey.OP_ACCEPT);
+					ImproveInherentUtil.removeOps(selectionKey, SelectionKey.OP_ACCEPT);
 				}
 			} else if (selectionKey == null) {
 				initRegister();
 			} else {
-				ImproveAsynchronousChannelGroupImpl.interestOps(acceptWorker, selectionKey, SelectionKey.OP_ACCEPT);
+				ImproveInherentUtil.interestOps(acceptWorker, selectionKey, SelectionKey.OP_ACCEPT);
 			}
 		} catch (IOException e) {
 			this.acceptCompletionHandler.failed(e, attachment);

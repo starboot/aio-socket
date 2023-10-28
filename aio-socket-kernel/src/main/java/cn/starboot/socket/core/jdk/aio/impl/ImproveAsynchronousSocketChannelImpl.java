@@ -344,14 +344,14 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 		}
 	}
 
-	private byte readInvoker = ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
+	private byte readInvoker = ImproveInherentUtil.MAX_INVOKER;
 
 	public final void doRead() {
 		try {
 			if (readCompletionHandler == null) {
 				return;
 			}
-			boolean directRead = readInvoker++ < ImproveAsynchronousChannelGroupImpl.MAX_INVOKER;
+			boolean directRead = readInvoker++ < ImproveInherentUtil.MAX_INVOKER;
 
 			int readSize = 0;
 			boolean hasRemain = true;
@@ -365,7 +365,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				readFinish(readSize);
 				if (readCompletionHandler == null && readSelectionKey != null) {
 					// 当前用户已关闭，移除其select事件
-					ImproveAsynchronousChannelGroupImpl.removeOps(readSelectionKey, SelectionKey.OP_READ);
+					ImproveInherentUtil.removeOps(readSelectionKey, SelectionKey.OP_READ);
 				}
 			} else if (readSelectionKey == null) {
 				initReadRegister();
@@ -375,7 +375,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 					// 在这里应该释放内存
 					memoryUnitFunction.apply(false);
 				}
-				ImproveAsynchronousChannelGroupImpl.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
+				ImproveInherentUtil.interestOps(readWorker, readSelectionKey, SelectionKey.OP_READ);
 			}
 		} catch (Throwable e) {
 			readThrowableHandler(e);
@@ -444,7 +444,7 @@ final class ImproveAsynchronousSocketChannelImpl extends ImproveAsynchronousSock
 				if (commonSelectionKey == null) {
 					initWriteRegister();
 				} else {
-					ImproveAsynchronousChannelGroupImpl.interestOps(commonWorker, commonSelectionKey, SelectionKey.OP_WRITE);
+					ImproveInherentUtil.interestOps(commonWorker, commonSelectionKey, SelectionKey.OP_WRITE);
 				}
 			}
 		} catch (Throwable e) {

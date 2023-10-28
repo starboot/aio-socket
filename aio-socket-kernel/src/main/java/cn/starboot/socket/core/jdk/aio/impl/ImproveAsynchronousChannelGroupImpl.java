@@ -13,11 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChannelGroup {
 
 	/**
-	 * 递归回调次数上限
-	 */
-	static final int MAX_INVOKER = 8;
-
-	/**
 	 * 读回调处理线程池,可用于业务处理
 	 */
 	private final ExecutorService subReactorExecutorService;
@@ -94,23 +89,11 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 							//同步read
 							ImproveAsynchronousSocketChannelImpl asynchronousSocketChannel =
 									(ImproveAsynchronousSocketChannelImpl) selectionKey.attachment();
-							removeOps(selectionKey, SelectionKey.OP_READ);
+							ImproveInherentUtil.removeOps(selectionKey, SelectionKey.OP_READ);
 							asynchronousSocketChannel.doRead();
 						}
 					});
 			mainReactorExecutorService.execute(mainReactor[i]);
-		}
-	}
-
-	/**
-	 * 移除关注事件
-	 *
-	 * @param selectionKey 待操作的selectionKey
-	 * @param opt          移除的事件
-	 */
-	public static void removeOps(SelectionKey selectionKey, int opt) {
-		if ((selectionKey.interestOps() & opt) != 0) {
-			selectionKey.interestOps(selectionKey.interestOps() & ~opt);
 		}
 	}
 
@@ -160,17 +143,6 @@ final class ImproveAsynchronousChannelGroupImpl extends ImproveAsynchronousChann
 		closeAllReactor();
 		return subReactorExecutorService.awaitTermination(timeout, unit)
 				&& mainReactorExecutorService.awaitTermination(timeout, unit);
-	}
-
-	public static void interestOps(NioEventLoopWorker worker, SelectionKey selectionKey, int opt) {
-		if ((selectionKey.interestOps() & opt) != 0) {
-			return;
-		}
-		selectionKey.interestOps(selectionKey.interestOps() | opt);
-		//Worker线程无需wakeup
-		if (worker.getNioEventLoopThread() != Thread.currentThread()) {
-			selectionKey.selector().wakeup();
-		}
 	}
 
 }
