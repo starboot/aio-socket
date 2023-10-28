@@ -1,4 +1,4 @@
-package cn.starboot.socket.core;
+package cn.starboot.socket.core.functional;
 
 import cn.starboot.socket.core.ChannelContext;
 
@@ -7,6 +7,7 @@ import cn.starboot.socket.core.ChannelContext;
  *
  * @author MDong
  */
+@FunctionalInterface
 public interface ChannelContextFilter {
 
 	/**

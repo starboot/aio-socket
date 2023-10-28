@@ -17,6 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.core.enums.CloseCode;
 import cn.starboot.socket.core.enums.MaintainEnum;
+import cn.starboot.socket.core.functional.ChannelContextFilter;
 import cn.starboot.socket.core.utils.concurrent.collection.ConcurrentWithSet;
 import cn.starboot.socket.core.utils.concurrent.handle.ConcurrentWithReadHandler;
 import cn.starboot.socket.core.utils.page.Page;
