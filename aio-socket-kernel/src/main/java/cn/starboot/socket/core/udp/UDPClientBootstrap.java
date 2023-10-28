@@ -26,7 +26,9 @@ final class UDPClientBootstrap extends UDPBootstrap implements ClientBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPClientBootstrap.class);
 
-	private DatagramChannel clientDatagramChannel;
+	private UDPChannelContext channelContext;
+
+//	private DatagramChannel clientDatagramChannel;
 
 	/**
 	 * 绑定本地地址
@@ -72,10 +74,10 @@ final class UDPClientBootstrap extends UDPBootstrap implements ClientBootstrap {
 	}
 
 	private void shutdown0(boolean flag) {
-//		if (this.channelContext != null) {
-//			this.channelContext.close(flag);
-//			this.channelContext = null;
-//		}
+		if (this.channelContext != null) {
+			this.channelContext.close(flag);
+			this.channelContext = null;
+		}
 		super.shutdown();
 	}
 
