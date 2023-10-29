@@ -16,11 +16,8 @@
 package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.AbstractBootstrap;
-import cn.starboot.socket.core.config.AioServerConfig;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
-import cn.starboot.socket.core.utils.pool.memory.MemoryPoolFactory;
-import cn.starboot.socket.core.utils.pool.memory.MemoryPool;
 import cn.starboot.socket.core.AioConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +26,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.DatagramChannel;
 
-abstract class UDPBootstrap extends AbstractBootstrap {
+abstract class UDPAbstractBootstrap extends AbstractBootstrap {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UDPBootstrap.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UDPAbstractBootstrap.class);
 
 	private final KernelBootstrapProvider kernelBootstrapProvider;
 
@@ -46,9 +43,9 @@ abstract class UDPBootstrap extends AbstractBootstrap {
 		return udpKernelBootstrapProvider;
 	}
 
-    UDPBootstrap(AioConfig config,
-				 UDPKernelBootstrapProvider udpKernelBootstrapProvider,
-				 KernelBootstrapProvider kernelBootstrapProvider) {
+    UDPAbstractBootstrap(AioConfig config,
+						 UDPKernelBootstrapProvider udpKernelBootstrapProvider,
+						 KernelBootstrapProvider kernelBootstrapProvider) {
 		super(config);
 		this.udpKernelBootstrapProvider = udpKernelBootstrapProvider;
 		this.kernelBootstrapProvider = kernelBootstrapProvider;

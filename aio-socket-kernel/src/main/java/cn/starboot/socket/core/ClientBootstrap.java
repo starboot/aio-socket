@@ -14,18 +14,9 @@ public interface ClientBootstrap extends Bootstrap<ClientBootstrap> {
 		return KernelBootstrapProvider.provider().openTCPClientBootstrap();
 	}
 
-	/**
-	 * 启动UDP服务
-	 */
-	static ClientBootstrap startUDPService() {
-		return KernelBootstrapProvider.provider().openUDPClientBootstrap();
-	}
-
 	ChannelContext start() throws IOException;
 
 	ChannelContext start(ImproveAsynchronousChannelGroup asynchronousChannelGroup) throws IOException;
-
-	void shutdownNow();
 
 	default ClientBootstrap listen() {
 		return listen(-1);

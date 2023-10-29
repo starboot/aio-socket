@@ -1,6 +1,7 @@
 package cn.starboot.socket.core.spi;
 
 import cn.starboot.socket.core.ClientBootstrap;
+import cn.starboot.socket.core.DatagramBootstrap;
 import cn.starboot.socket.core.ServerBootstrap;
 
 public abstract class KernelBootstrapProvider {
@@ -33,10 +34,8 @@ public abstract class KernelBootstrapProvider {
 
 	public abstract ServerBootstrap openTCPServerBootstrap();
 
-	public abstract ServerBootstrap openUDPServerBootstrap();
-
 	public abstract ClientBootstrap openTCPClientBootstrap();
 
-	public abstract ClientBootstrap openUDPClientBootstrap();
+	public abstract DatagramBootstrap openUDPBootstrap();
 
 }

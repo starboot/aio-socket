@@ -1,5 +1,7 @@
 package cn.starboot.socket.core.udp;
 
+import cn.starboot.socket.core.DatagramBootstrap;
+import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.core.config.AioServerConfig;
 import cn.starboot.socket.core.intf.AioHandler;
@@ -28,9 +30,9 @@ import java.util.function.Consumer;
  *
  * @author MDong
  */
-final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
+final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements DatagramBootstrap {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServerBootstrap.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServerAbstractBootstrap.class);
 
 	private DatagramChannel serverDatagramChannel;
 
@@ -40,7 +42,7 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 
 	private final ConcurrentLinkedQueue<MemoryUnit> writeQueue = new ConcurrentLinkedQueue<>();
 
-	UDPServerBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
+	UDPServerAbstractBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new AioServerConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
 		nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
 			@Override
@@ -97,7 +99,7 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 	}
 
 	@Override
-	public void start() {
+	public DatagramBootstrap start() {
 		try {
 			beforeStart();
 		} catch (IOException e) {
@@ -105,6 +107,7 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 		}
 
 		start0();
+		return null;
 	}
 
 	private ExecutorService boss_udp;
@@ -119,7 +122,7 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 			boss_udp.submit(nioEventLoopWorker);
 			nioEventLoopWorker.addRegister(selector -> {
 				try {
-					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPServerBootstrap.this);
+					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPServerAbstractBootstrap.this);
 				} catch (ClosedChannelException closedChannelException) {
 					closedChannelException.printStackTrace();
 				}
@@ -175,51 +178,61 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 	}
 
 	@Override
-	public ServerBootstrap listen(String host, int port) {
+	public DatagramBootstrap listen(String host, int port) {
 		getConfig().setHost(host);
 		getConfig().setPort(port);
 		return this;
 	}
 
 	@Override
-	public ServerBootstrap setThreadNum(int bossThreadNum) {
+	public DatagramBootstrap remote(String host, int port) {
+		return null;
+	}
+
+	@Override
+	public DatagramBootstrap addHeartPacket(Packet heartPacket) {
+		return null;
+	}
+
+	@Override
+	public DatagramBootstrap setThreadNum(int bossThreadNum) {
 		getConfig().setBossThreadNumber(bossThreadNum);
 		return this;
 	}
 
 	@Override
-	public ServerBootstrap setMemoryPoolFactory(int size, int num, boolean useDirect) {
+	public DatagramBootstrap setMemoryPoolFactory(int size, int num, boolean useDirect) {
 		getConfig().setDirect(useDirect).setMemoryBlockSize(size).setMemoryBlockNum(num);
 		return this;
 	}
 
 	@Override
-	public ServerBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum) {
+	public DatagramBootstrap setWriteBufferSize(int writeBufferSize, int maxWaitNum) {
 		getConfig().setWriteBufferSize(writeBufferSize)
 				.setMaxWaitNum(maxWaitNum);
 		return this;
 	}
 
 	@Override
-	public ServerBootstrap setReadBufferSize(int readBufferSize) {
+	public DatagramBootstrap setReadBufferSize(int readBufferSize) {
 		getConfig().setReadBufferSize(readBufferSize);
 		return this;
 	}
 
 	@Override
-	public ServerBootstrap setMemoryKeep(boolean isMemoryKeep) {
+	public DatagramBootstrap setMemoryKeep(boolean isMemoryKeep) {
 		getConfig().setMemoryKeep(isMemoryKeep);
 		return this;
 	}
 
 	@Override
-	public ServerBootstrap addPlugin(Plugin plugin) {
+	public DatagramBootstrap addPlugin(Plugin plugin) {
 		getConfig().getPlugins().addPlugin(plugin);
 		return this;
 	}
 
 	@Override
-	public ServerBootstrap addAioHandler(AioHandler handler) {
+	public DatagramBootstrap addAioHandler(AioHandler handler) {
 		getConfig().getPlugins().addAioHandler(handler);
 		return this;
 	}

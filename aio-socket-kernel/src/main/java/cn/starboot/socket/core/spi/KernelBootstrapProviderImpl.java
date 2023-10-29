@@ -1,6 +1,7 @@
 package cn.starboot.socket.core.spi;
 
 import cn.starboot.socket.core.ClientBootstrap;
+import cn.starboot.socket.core.DatagramBootstrap;
 import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.core.tcp.TCPKernelBootstrapProvider;
 import cn.starboot.socket.core.udp.UDPKernelBootstrapProvider;
@@ -16,17 +17,12 @@ final class KernelBootstrapProviderImpl extends KernelBootstrapProvider {
 	}
 
 	@Override
-	public ServerBootstrap openUDPServerBootstrap() {
-		return UDPKernelBootstrapProvider.provider().openUDPServerBootstrap(this);
+	public DatagramBootstrap openUDPBootstrap() {
+		return UDPKernelBootstrapProvider.provider().openUDPBootstrap(this);
 	}
 
 	@Override
 	public ClientBootstrap openTCPClientBootstrap() {
 		return TCPKernelBootstrapProvider.provider().openTCPClientBootstrap(this);
-	}
-
-	@Override
-	public ClientBootstrap openUDPClientBootstrap() {
-		return UDPKernelBootstrapProvider.provider().openUDPClientBootstrap(this);
 	}
 }

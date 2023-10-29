@@ -15,16 +15,15 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.nio.channels.DatagramChannel;
 
 /**
  * UDP客户端引导程序
  *
  * @author MDong
  */
-final class UDPClientBootstrap extends UDPBootstrap implements ClientBootstrap {
+final class UDPClientAbstractBootstrap extends UDPAbstractBootstrap implements ClientBootstrap {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UDPClientBootstrap.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UDPClientAbstractBootstrap.class);
 
 	private UDPChannelContext channelContext;
 
@@ -45,7 +44,7 @@ final class UDPClientBootstrap extends UDPBootstrap implements ClientBootstrap {
 	 */
 	private Packet heartBeat = null;
 
-	UDPClientBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
+	UDPClientAbstractBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new AioClientConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
 	}
 

@@ -2,10 +2,15 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.plugins.Plugin;
+import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 
 public interface Bootstrap<T> {
 
 	void shutdown();
+
+	default void shutdownNow() {
+
+	}
 
 	AioConfig getConfig();
 
