@@ -2,7 +2,7 @@ package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.DatagramBootstrap;
 import cn.starboot.socket.core.Packet;
-import cn.starboot.socket.core.config.AioServerConfig;
+import cn.starboot.socket.core.config.DatagramConfig;
 import cn.starboot.socket.core.enums.ProtocolEnum;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.jdk.nio.ImproveNioSelector;
@@ -49,6 +49,13 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 	 */
 	private Packet heartBeat = null;
 
+
+	private ExecutorService boss_udp;
+
+	private final NioEventLoopWorker nioEventLoopWorker;
+
+	private final UDPWriteWorker writeWorker;
+
 	private DatagramChannel serverDatagramChannel;
 
 	private final Semaphore writeSemaphore = new Semaphore(1);
@@ -58,13 +65,14 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 	private final ConcurrentLinkedQueue<MemoryUnit> writeQueue = new ConcurrentLinkedQueue<>();
 
 	UDPBootstrapImpl(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
-		super(new AioServerConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
-		nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
+		super(new DatagramConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
+		this.nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
 			@Override
 			public void accept(SelectionKey selectionKey) {
 				handle0(selectionKey);
 			}
 		});
+		this.writeWorker = new UDPWriteWorker();
 	}
 
 	private void handle0(SelectionKey selectionKey) {
@@ -124,8 +132,6 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 		return null;
 	}
 
-	private ExecutorService boss_udp;
-	private final NioEventLoopWorker nioEventLoopWorker;
 
 	private void start0() {
 		try {
@@ -134,6 +140,7 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 			serverDatagramChannel.configureBlocking(false);
 			boss_udp = Executors.newFixedThreadPool(2, r -> new Thread("boss udp"));
 			boss_udp.submit(nioEventLoopWorker);
+			boss_udp.submit(writeWorker);
 			nioEventLoopWorker.addRegister(selector -> {
 				try {
 					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPBootstrapImpl.this);
