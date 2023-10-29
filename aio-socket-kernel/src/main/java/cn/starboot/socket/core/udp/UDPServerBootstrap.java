@@ -7,6 +7,7 @@ import cn.starboot.socket.core.jdk.nio.ImproveNioSelector;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
+import cn.starboot.socket.core.utils.concurrent.map.ConcurrentWithMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -31,6 +33,8 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServerBootstrap.class);
 
 	private DatagramChannel serverDatagramChannel;
+
+	private final ConcurrentWithMap<SocketAddress, UDPChannelContext> channelContextHashMap = new ConcurrentWithMap<>(new HashMap<>());
 
 	UDPServerBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new AioServerConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
@@ -62,6 +66,19 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 						DatagramChannel channel = (DatagramChannel) selectionKey.channel();
 						try {
 							SocketAddress receive = channel.receive(null);
+							channelContextHashMap.containsKey(receive, new Consumer<Boolean>() {
+								@Override
+								public void accept(Boolean aBoolean) {
+									if (!aBoolean) {
+										channelContextHashMap.put(receive, new UDPChannelContext(serverDatagramChannel, receive, null), new Consumer<UDPChannelContext>() {
+											@Override
+											public void accept(UDPChannelContext udpChannelContext) {
+												// 用不到
+											}
+										});
+									}
+								}
+							});
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
