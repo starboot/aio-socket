@@ -30,9 +30,9 @@ import java.util.function.Consumer;
  *
  * @author MDong
  */
-final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements DatagramBootstrap {
+final class UDPServerBootstrap extends UDPAbstractBootstrap implements DatagramBootstrap {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServerAbstractBootstrap.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServerBootstrap.class);
 
 	/**
 	 * 绑定本地地址
@@ -57,7 +57,7 @@ final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements D
 
 	private final ConcurrentLinkedQueue<MemoryUnit> writeQueue = new ConcurrentLinkedQueue<>();
 
-	UDPServerAbstractBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
+	UDPServerBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new AioServerConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
 		nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
 			@Override
@@ -137,7 +137,7 @@ final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements D
 			boss_udp.submit(nioEventLoopWorker);
 			nioEventLoopWorker.addRegister(selector -> {
 				try {
-					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPServerAbstractBootstrap.this);
+					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPServerBootstrap.this);
 				} catch (ClosedChannelException closedChannelException) {
 					closedChannelException.printStackTrace();
 				}
@@ -178,17 +178,38 @@ final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements D
 		}
 	}
 
+//	@Override
+//	public void shutdown() {
+//		try {
+//			if (this.serverDatagramChannel != null) {
+//				this.serverDatagramChannel.close();
+//				this.serverDatagramChannel = null;
+//			}
+//			boss_udp.shutdown();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		super.shutdown();
+//	}
+
 	@Override
-	public void shutdown() {
-		try {
-			if (this.serverDatagramChannel != null) {
-				this.serverDatagramChannel.close();
-				this.serverDatagramChannel = null;
-			}
-			boss_udp.shutdown();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public final void shutdown() {
+		shutdown0(false);
+	}
+
+	/**
+	 * 立即关闭客户端
+	 */
+	@Override
+	public final void shutdownNow() {
+		shutdown0(true);
+	}
+
+	private void shutdown0(boolean flag) {
+//		if (this.channelContext != null) {
+//			this.channelContext.close(flag);
+//			this.channelContext = null;
+//		}
 		super.shutdown();
 	}
 

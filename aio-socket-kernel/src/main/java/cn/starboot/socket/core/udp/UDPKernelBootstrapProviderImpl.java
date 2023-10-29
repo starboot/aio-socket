@@ -1,7 +1,6 @@
 package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.DatagramBootstrap;
-import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 
 final class UDPKernelBootstrapProviderImpl extends UDPKernelBootstrapProvider {
@@ -11,6 +10,6 @@ final class UDPKernelBootstrapProviderImpl extends UDPKernelBootstrapProvider {
 
 	@Override
 	public DatagramBootstrap openUDPBootstrap(KernelBootstrapProvider kernelBootstrapProvider) {
-		return new UDPServerAbstractBootstrap(this, kernelBootstrapProvider);
+		return new UDPServerBootstrap(this, kernelBootstrapProvider);
 	}
 }
