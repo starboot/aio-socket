@@ -56,18 +56,11 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 
 	private final DatagramChannel serverDatagramChannel;
 
-	private final Semaphore writeSemaphore = new Semaphore(1);
-
-
-	private final ConcurrentLinkedQueue<MemoryUnit> writeQueue = new ConcurrentLinkedQueue<>();
-
 	UDPBootstrapImpl(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new DatagramConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
 		this.serverDatagramChannel = openDatagramChannel();
-		this.readWorker = UDPReadWorker.openUDPReadWorker(serverDatagramChannel,
-				getConfig(),
-				getReadMemoryUnitSupplier());
-		this.writeWorker = new UDPWriteWorker(serverDatagramChannel);
+		this.readWorker = UDPReadWorker.openUDPReadWorker(serverDatagramChannel, getConfig(), getReadMemoryUnitSupplier());
+		this.writeWorker = UDPWriteWorker.openUDPWriteWorker(serverDatagramChannel);
 	}
 
 	private static DatagramChannel openDatagramChannel() {
@@ -79,11 +72,6 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 		}
 		return datagramChannel;
 	}
-
-	void initUDPBootstrap() {
-
-	}
-
 
 
 	@Override
@@ -123,36 +111,7 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 		}
 	}
 
-	private void doWrite(MemoryUnit writeMemoryUnit, SocketAddress remote) {
-		try {
-			if (!writeSemaphore.tryAcquire()) {
-				// 不可以写，存下来一会写，存remote
-				writeQueue.offer(writeMemoryUnit);
-				return;
-			}
-			int send = serverDatagramChannel.send(writeMemoryUnit.buffer(), remote);
 
-			if (send > 0) {
-				System.out.println("写入成功");
-			}
-
-			if (send == 0) {
-				// 无法写
-				readWorker.addRegister(new Consumer<Selector>() {
-					@Override
-					public void accept(Selector selector) {
-						try {
-							serverDatagramChannel.register(selector, SelectionKey.OP_WRITE, this);
-						} catch (ClosedChannelException closedChannelException) {
-							closedChannelException.printStackTrace();
-						}
-					}
-				});
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 //	@Override
 //	public void shutdown() {
