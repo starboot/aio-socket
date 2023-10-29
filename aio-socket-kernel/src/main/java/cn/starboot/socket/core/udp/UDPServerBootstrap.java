@@ -15,13 +15,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectableChannel;
-import java.nio.channels.SelectionKey;
+import java.nio.channels.*;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
 /**
@@ -35,10 +34,66 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 
 	private DatagramChannel serverDatagramChannel;
 
+	private final Semaphore writeSemaphore = new Semaphore(1);
+
 	private final ConcurrentWithMap<SocketAddress, UDPChannelContext> channelContextHashMap = new ConcurrentWithMap<>(new HashMap<>());
+
+	private final ConcurrentLinkedQueue<MemoryUnit> writeQueue = new ConcurrentLinkedQueue<>();
 
 	UDPServerBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new AioServerConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
+		nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
+			@Override
+			public void accept(SelectionKey selectionKey) {
+				handle0(selectionKey);
+			}
+		});
+	}
+
+	private void handle0(SelectionKey selectionKey) {
+		if (selectionKey.isReadable()) {
+			System.out.println("度");
+			DatagramChannel channel = (DatagramChannel) selectionKey.channel();
+			try {
+				// 申请内存
+				final MemoryUnit readMemoryUnit = readMemoryUnitFactory.createMemoryUnit(memoryPool.allocateMemoryBlock());
+				readMemoryUnit.buffer().clear();
+				SocketAddress receive = channel.receive(readMemoryUnit.buffer());
+				channelContextHashMap.containsKey(receive, new Consumer<Boolean>() {
+					@Override
+					public void accept(Boolean aBoolean) {
+						if (aBoolean) {
+							channelContextHashMap.get(receive, new Consumer<UDPChannelContext>() {
+								@Override
+								public void accept(UDPChannelContext udpChannelContext) {
+									udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
+								}
+							});
+						} else {
+							channelContextHashMap.put(
+									receive,
+									new UDPChannelContext(serverDatagramChannel,
+											getConfig(),
+											receive,
+											null,
+											nioEventLoopWorker),
+									new Consumer<UDPChannelContext>() {
+										@Override
+										public void accept(UDPChannelContext udpChannelContext) {
+											udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
+										}
+									});
+						}
+					}
+				});
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (selectionKey.isWritable()) {
+			selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
+			UDPChannelContext attachment = (UDPChannelContext) selectionKey.attachment();
+			attachment.doWrite();
+		}
 	}
 
 	@Override
@@ -53,53 +108,14 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 	}
 
 	private ExecutorService boss_udp;
+	private final NioEventLoopWorker nioEventLoopWorker;
+
 	private void start0() {
 		try {
 			serverDatagramChannel = DatagramChannel.open();
 			serverDatagramChannel.bind(new InetSocketAddress(getConfig().getHost(), getConfig().getPort()));
 			serverDatagramChannel.configureBlocking(false);
 			boss_udp = Executors.newFixedThreadPool(1, r -> new Thread("boss udp"));
-			NioEventLoopWorker nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
-				@Override
-				public void accept(SelectionKey selectionKey) {
-					if (selectionKey.isReadable()) {
-						System.out.println("度");
-						DatagramChannel channel = (DatagramChannel) selectionKey.channel();
-						try {
-							// 申请内存
-							final MemoryUnit readMemoryUnit = readMemoryUnitFactory.createMemoryUnit(memoryPool.allocateMemoryBlock());
-							readMemoryUnit.buffer().clear();
-							SocketAddress receive = channel.receive(readMemoryUnit.buffer());
-							channelContextHashMap.containsKey(receive, new Consumer<Boolean>() {
-								@Override
-								public void accept(Boolean aBoolean) {
-									if (aBoolean) {
-										channelContextHashMap.get(receive, new Consumer<UDPChannelContext>() {
-											@Override
-											public void accept(UDPChannelContext udpChannelContext) {
-												udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
-											}
-										});
-									} else {
-										channelContextHashMap.put(receive, new UDPChannelContext(serverDatagramChannel, getConfig(), receive, null, null), new Consumer<UDPChannelContext>() {
-											@Override
-											public void accept(UDPChannelContext udpChannelContext) {
-												udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
-											}
-										});
-									}
-								}
-							});
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}else if (selectionKey.isWritable()) {
-						selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
-						UDPChannelContext attachment = (UDPChannelContext) selectionKey.attachment();
-						attachment.doWrite();
-					}
-				}
-			});
 			boss_udp.submit(nioEventLoopWorker);
 			nioEventLoopWorker.addRegister(selector -> {
 				try {
@@ -108,6 +124,37 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 					closedChannelException.printStackTrace();
 				}
 			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void doWrite(MemoryUnit writeMemoryUnit, SocketAddress remote) {
+		try {
+			if (!writeSemaphore.tryAcquire()) {
+				// 不可以写，存下来一会写，存remote
+				writeQueue.offer(writeMemoryUnit);
+				return;
+			}
+			int send = serverDatagramChannel.send(writeMemoryUnit.buffer(), remote);
+
+			if (send > 0) {
+				System.out.println("写入成功");
+			}
+
+			if (send == 0) {
+				// 无法写
+				nioEventLoopWorker.addRegister(new Consumer<Selector>() {
+					@Override
+					public void accept(Selector selector) {
+						try {
+							serverDatagramChannel.register(selector, SelectionKey.OP_WRITE, this);
+						} catch (ClosedChannelException closedChannelException) {
+							closedChannelException.printStackTrace();
+						}
+					}
+				});
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

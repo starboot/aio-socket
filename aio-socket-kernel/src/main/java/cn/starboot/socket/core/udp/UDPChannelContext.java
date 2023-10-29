@@ -103,29 +103,7 @@ final class UDPChannelContext extends ChannelContext {
 
 	void doWrite() {
 		// 写
-		try {
-			int send = datagramChannel.send(writeMemoryUnit.buffer(), remote);
 
-			if (send > 0) {
-				System.out.println("写入成功");
-			}
-
-			if (send == 0) {
-				// 无法写
-				nioEventLoopWorker.addRegister(new Consumer<Selector>() {
-					@Override
-					public void accept(Selector selector) {
-						try {
-							datagramChannel.register(selector, SelectionKey.OP_WRITE, this);
-						} catch (ClosedChannelException closedChannelException) {
-							closedChannelException.printStackTrace();
-						}
-					}
-				});
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
