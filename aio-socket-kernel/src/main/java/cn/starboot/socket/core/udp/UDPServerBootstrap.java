@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectableChannel;
@@ -60,7 +61,7 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 						System.out.println("度");
 						DatagramChannel channel = (DatagramChannel) selectionKey.channel();
 						try {
-							channel.receive(null);
+							SocketAddress receive = channel.receive(null);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
