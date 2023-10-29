@@ -22,6 +22,7 @@ import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.exception.AioEncoderException;
 import cn.starboot.socket.core.AsyAioWorker;
+import cn.starboot.socket.core.utils.concurrent.collection.ConcurrentWithList;
 import cn.starboot.socket.core.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
+import java.util.ArrayList;
 
 final class UDPChannelContext extends ChannelContext {
 
@@ -39,6 +41,8 @@ final class UDPChannelContext extends ChannelContext {
 	private final DatagramChannel datagramChannel;
 
 	private final SocketAddress remote;
+
+	private final ConcurrentWithList<MemoryUnit> concurrentWithList = new ConcurrentWithList<>(new ArrayList<>());
 
 	UDPChannelContext(
 			DatagramChannel datagramChannel,
@@ -56,6 +60,14 @@ final class UDPChannelContext extends ChannelContext {
 				getAioConfig().getWriteBufferSize(),
 				16);
 		getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
+	}
+
+	boolean addMemoryUnit(MemoryUnit readMemoryUnit) {
+		return concurrentWithList.add(readMemoryUnit);
+	}
+
+	void handle() {
+
 	}
 
 	@Override

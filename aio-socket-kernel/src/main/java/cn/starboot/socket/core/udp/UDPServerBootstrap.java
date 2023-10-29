@@ -8,6 +8,7 @@ import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import cn.starboot.socket.core.utils.concurrent.map.ConcurrentWithMap;
+import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,15 +66,27 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 						System.out.println("度");
 						DatagramChannel channel = (DatagramChannel) selectionKey.channel();
 						try {
-							SocketAddress receive = channel.receive(null);
+							// 申请内存
+							final MemoryUnit readMemoryUnit = readMemoryUnitFactory.createMemoryUnit(memoryPool.allocateMemoryBlock());
+							readMemoryUnit.buffer().clear();
+							SocketAddress receive = channel.receive(readMemoryUnit.buffer());
 							channelContextHashMap.containsKey(receive, new Consumer<Boolean>() {
 								@Override
 								public void accept(Boolean aBoolean) {
-									if (!aBoolean) {
+									if (aBoolean) {
+										channelContextHashMap.get(receive, new Consumer<UDPChannelContext>() {
+											@Override
+											public void accept(UDPChannelContext udpChannelContext) {
+												udpChannelContext.addMemoryUnit(readMemoryUnit);
+												udpChannelContext.handle();
+											}
+										});
+									} else {
 										channelContextHashMap.put(receive, new UDPChannelContext(serverDatagramChannel, receive, null), new Consumer<UDPChannelContext>() {
 											@Override
 											public void accept(UDPChannelContext udpChannelContext) {
-												// 用不到
+												udpChannelContext.addMemoryUnit(readMemoryUnit);
+												udpChannelContext.handle();
 											}
 										});
 									}
