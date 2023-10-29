@@ -50,6 +50,14 @@ public abstract class AbstractBootstrap {
 
 	}
 
+	public MemoryPool getMemoryPool() {
+		return memoryPool;
+	}
+
+	public MemoryUnitFactory getReadMemoryUnitFactory() {
+		return readMemoryUnitFactory;
+	}
+
 	public AioConfig getConfig() {
 		return this.config;
 	}
@@ -58,8 +66,8 @@ public abstract class AbstractBootstrap {
 	 * 启动内核线程池
 	 */
 	protected void startExecutorService() {
-		if (getConfig().getBossThreadNumber() > 0) {
-			this.bossExecutorService = ThreadUtils.getGroupExecutor(getConfig().getBossThreadNumber());
+		if (getConfig().getKernelThreadNumber() > 0) {
+			this.bossExecutorService = ThreadUtils.getGroupExecutor(getConfig().getKernelThreadNumber());
 		} else {
 			this.bossExecutorService = ThreadUtils.getGroupExecutor();
 		}

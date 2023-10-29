@@ -6,11 +6,9 @@ import cn.starboot.socket.core.config.DatagramConfig;
 import cn.starboot.socket.core.enums.ProtocolEnum;
 import cn.starboot.socket.core.exception.AioParameterException;
 import cn.starboot.socket.core.intf.AioHandler;
-import cn.starboot.socket.core.jdk.nio.ImproveNioSelector;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
-import cn.starboot.socket.core.utils.concurrent.map.ConcurrentWithMap;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +17,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.*;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,73 +50,42 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 
 	private ExecutorService boss_udp;
 
-	private final NioEventLoopWorker nioEventLoopWorker;
+	private final NioEventLoopWorker readWorker;
 
 	private final UDPWriteWorker writeWorker;
 
-	private DatagramChannel serverDatagramChannel;
+	private final DatagramChannel serverDatagramChannel;
 
 	private final Semaphore writeSemaphore = new Semaphore(1);
 
-	private final ConcurrentWithMap<SocketAddress, UDPChannelContext> channelContextHashMap = new ConcurrentWithMap<>(new HashMap<>());
 
 	private final ConcurrentLinkedQueue<MemoryUnit> writeQueue = new ConcurrentLinkedQueue<>();
 
 	UDPBootstrapImpl(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new DatagramConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
-		this.nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
-			@Override
-			public void accept(SelectionKey selectionKey) {
-				handle0(selectionKey);
-			}
-		});
-		this.writeWorker = new UDPWriteWorker();
+		this.serverDatagramChannel = openDatagramChannel();
+		this.readWorker = UDPReadWorker.openUDPReadWorker(serverDatagramChannel,
+				getConfig(),
+				memoryPool.allocateMemoryBlock(),
+				readMemoryUnitFactory);
+		this.writeWorker = new UDPWriteWorker(serverDatagramChannel);
 	}
 
-	private void handle0(SelectionKey selectionKey) {
-		if (selectionKey.isReadable()) {
-			DatagramChannel channel = (DatagramChannel) selectionKey.channel();
-			try {
-				// 申请内存
-				final MemoryUnit readMemoryUnit = readMemoryUnitFactory.createMemoryUnit(memoryPool.allocateMemoryBlock());
-				readMemoryUnit.buffer().clear();
-				SocketAddress receive = channel.receive(readMemoryUnit.buffer());
-				channelContextHashMap.containsKey(receive, new Consumer<Boolean>() {
-					@Override
-					public void accept(Boolean aBoolean) {
-						if (aBoolean) {
-							channelContextHashMap.get(receive, new Consumer<UDPChannelContext>() {
-								@Override
-								public void accept(UDPChannelContext udpChannelContext) {
-									udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
-								}
-							});
-						} else {
-							channelContextHashMap.put(
-									receive,
-									new UDPChannelContext(serverDatagramChannel,
-											getConfig(),
-											receive,
-											null,
-											nioEventLoopWorker),
-									new Consumer<UDPChannelContext>() {
-										@Override
-										public void accept(UDPChannelContext udpChannelContext) {
-											udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
-										}
-									});
-						}
-					}
-				});
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (selectionKey.isWritable()) {
-			selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
-			UDPChannelContext attachment = (UDPChannelContext) selectionKey.attachment();
-			attachment.doWrite();
+	private static DatagramChannel openDatagramChannel() {
+		DatagramChannel datagramChannel = null;
+		try {
+			datagramChannel = DatagramChannel.open();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return datagramChannel;
 	}
+
+	void initUDPBootstrap() {
+
+	}
+
+
 
 	@Override
 	public DatagramBootstrap start() {
@@ -135,18 +101,18 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 
 	private void start0() {
 		try {
-			serverDatagramChannel = DatagramChannel.open();
+
 			serverDatagramChannel.bind(new InetSocketAddress(getConfig().getHost(), getConfig().getPort()));
 			serverDatagramChannel.configureBlocking(false);
 			boss_udp = Executors.newFixedThreadPool(getConfig().getKernelThreadNumber(), r -> new Thread("boss udp"));
-			boss_udp.submit(nioEventLoopWorker);
+			boss_udp.submit(readWorker);
 			boss_udp.submit(writeWorker);
 
 			for (int i = 0; i < getConfig().getKernelThreadNumber(); i++) {
 				boss_udp.submit(new UDPHandleWorker());
 			}
 
-			nioEventLoopWorker.addRegister(selector -> {
+			readWorker.addRegister(selector -> {
 				try {
 					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPBootstrapImpl.this);
 				} catch (ClosedChannelException closedChannelException) {
@@ -173,7 +139,7 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 
 			if (send == 0) {
 				// 无法写
-				nioEventLoopWorker.addRegister(new Consumer<Selector>() {
+				readWorker.addRegister(new Consumer<Selector>() {
 					@Override
 					public void accept(Selector selector) {
 						try {
