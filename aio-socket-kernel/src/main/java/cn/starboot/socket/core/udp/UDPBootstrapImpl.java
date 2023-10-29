@@ -9,7 +9,6 @@ import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.plugins.Plugin;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
-import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +16,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * UDP服务器引导程序
@@ -33,7 +30,7 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPBootstrapImpl.class);
 
 	/**
-	 * 绑定本地地址
+	 * 默认发送的目的网络地址
 	 */
 	private SocketAddress localAddress;
 
@@ -56,10 +53,17 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 
 	private final DatagramChannel serverDatagramChannel;
 
+	private final Function<SocketAddress, UDPChannelContext> udpChannelContextFunction = new Function<SocketAddress, UDPChannelContext>() {
+		@Override
+		public UDPChannelContext apply(SocketAddress socketAddress) {
+			return new UDPChannelContext(serverDatagramChannel, getConfig(), socketAddress, getWriteMemoryUnitSupplier());
+		}
+	};
+
 	UDPBootstrapImpl(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new DatagramConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
 		this.serverDatagramChannel = openDatagramChannel();
-		this.readWorker = UDPReadWorker.openUDPReadWorker(serverDatagramChannel, getConfig(), getReadMemoryUnitSupplier());
+		this.readWorker = UDPReadWorker.openUDPReadWorker(udpChannelContextFunction, getConfig(), getReadMemoryUnitSupplier());
 		this.writeWorker = UDPWriteWorker.openUDPWriteWorker(serverDatagramChannel);
 	}
 
@@ -88,7 +92,6 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 
 	private void start0() {
 		try {
-
 			serverDatagramChannel.bind(new InetSocketAddress(getConfig().getHost(), getConfig().getPort()));
 			serverDatagramChannel.configureBlocking(false);
 			boss_udp = Executors.newFixedThreadPool(getConfig().getKernelThreadNumber(), r -> new Thread("boss udp"));
@@ -152,13 +155,13 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 	public DatagramBootstrap listen(String host, int port) {
 		getConfig().setHost(host);
 		getConfig().setPort(port);
-		this.localAddress = new InetSocketAddress(host, port);
 		return this;
 	}
 
 	@Override
 	public DatagramBootstrap remote(String host, int port) {
-		return null;
+		this.localAddress = new InetSocketAddress(host, port);
+		return this;
 	}
 
 	@Override

@@ -1,17 +1,11 @@
 package cn.starboot.socket.core.udp;
 
-import cn.starboot.socket.core.AioConfig;
-import cn.starboot.socket.core.functional.MemoryUnitSupplier;
-import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.utils.concurrent.queue.ConcurrentWithQueue;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;

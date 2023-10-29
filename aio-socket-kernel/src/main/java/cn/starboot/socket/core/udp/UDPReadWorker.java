@@ -13,10 +13,11 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.util.HashMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 final class UDPReadWorker {
 
-	private final DatagramChannel serverDatagramChannel;
+	private final Function<SocketAddress, UDPChannelContext> udpChannelContextFunction;
 
 	private final NioEventLoopWorker nioEventLoopWorker;
 
@@ -26,16 +27,16 @@ final class UDPReadWorker {
 
 	private final ConcurrentWithMap<SocketAddress, UDPChannelContext> channelContextHashMap = new ConcurrentWithMap<>(new HashMap<>());
 
-	static NioEventLoopWorker openUDPReadWorker(DatagramChannel serverDatagramChannel,
+	static NioEventLoopWorker openUDPReadWorker(Function<SocketAddress, UDPChannelContext> udpChannelContextFunction,
 												AioConfig aioConfig,
 												MemoryUnitSupplier readMemoryUnitSupplier) {
-		return new UDPReadWorker(serverDatagramChannel, aioConfig, readMemoryUnitSupplier).nioEventLoopWorker;
+		return new UDPReadWorker(udpChannelContextFunction, aioConfig, readMemoryUnitSupplier).nioEventLoopWorker;
 	}
 
-	private UDPReadWorker(DatagramChannel serverDatagramChannel,
+	private UDPReadWorker(Function<SocketAddress, UDPChannelContext> udpChannelContextFunction,
 						  AioConfig aioConfig,
 						  MemoryUnitSupplier readMemoryUnitSupplier) {
-		this.serverDatagramChannel = serverDatagramChannel;
+		this.udpChannelContextFunction = udpChannelContextFunction;
 		this.aioConfig = aioConfig;
 		this.readMemoryUnitSupplier = readMemoryUnitSupplier;
 		this.nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
@@ -67,11 +68,7 @@ final class UDPReadWorker {
 						} else {
 							channelContextHashMap.put(
 									receive,
-									new UDPChannelContext(serverDatagramChannel,
-											aioConfig,
-											receive,
-											null,
-											nioEventLoopWorker),
+									udpChannelContextFunction.apply(receive),
 									new Consumer<UDPChannelContext>() {
 										@Override
 										public void accept(UDPChannelContext udpChannelContext) {

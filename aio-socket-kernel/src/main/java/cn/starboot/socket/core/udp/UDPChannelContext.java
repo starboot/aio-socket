@@ -22,9 +22,8 @@ import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.exception.AioEncoderException;
 import cn.starboot.socket.core.AsyAioWorker;
-import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
+import cn.starboot.socket.core.functional.MemoryUnitSupplier;
 import cn.starboot.socket.core.utils.concurrent.collection.ConcurrentWithList;
-import cn.starboot.socket.core.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +44,6 @@ final class UDPChannelContext extends ChannelContext {
 
 	private final AioConfig config;
 
-	private final NioEventLoopWorker nioEventLoopWorker;
-
 	/**
 	 * 存放待发送的完整比特流
 	 */
@@ -58,27 +55,24 @@ final class UDPChannelContext extends ChannelContext {
 			DatagramChannel datagramChannel,
 			final AioConfig aioConfig,
 			SocketAddress remote,
-			MemoryBlock memoryBlock,
-			NioEventLoopWorker nioEventLoopWorker) {
+			MemoryUnitSupplier writeMemoryUnitSupplier) {
 		this.datagramChannel = datagramChannel;
 		this.remote = remote;
 		this.config = aioConfig;
-		this.nioEventLoopWorker = nioEventLoopWorker;
-		initUDPChannelContext(memoryBlock);
+		initUDPChannelContext(writeMemoryUnitSupplier);
 	}
 
-	private void initUDPChannelContext(MemoryBlock memoryBlock) {
-//		setWriteBuffer(
-//				memoryBlock,
-//				memoryUnit -> {
-//					MemoryUnit writeUnit = memoryUnit.poll();
-//					if (writeUnit != null) {
-//						this.writeMemoryUnit = writeUnit;
+	private void initUDPChannelContext(MemoryUnitSupplier writeMemoryUnitSupplier) {
+		setWriteBuffer(
+				writeMemoryUnitSupplier,
+				memoryUnit -> {
+					MemoryUnit writeUnit = memoryUnit.poll();
+					if (writeUnit != null) {
+						this.writeMemoryUnit = writeUnit;
 //						doWrite();
-//					}
-//				},
-//				getAioConfig().getWriteBufferSize(),
-//				16);
+					}
+				},
+				16);
 		getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
 	}
 
@@ -90,16 +84,6 @@ final class UDPChannelContext extends ChannelContext {
 			LOGGER.error("存入失败");
 		}
 		return this;
-	}
-
-	void handle() {
-
-		// 处理
-	}
-
-	void doWrite() {
-		// 写
-
 	}
 
 	@Override
@@ -123,7 +107,6 @@ final class UDPChannelContext extends ChannelContext {
 
 	@Override
 	public InetSocketAddress getLocalAddress() throws IOException {
-//		return (InetSocketAddress) udpChannel.getChannel().getLocalAddress();
 		return (InetSocketAddress) datagramChannel.getLocalAddress();
 	}
 
@@ -163,5 +146,11 @@ final class UDPChannelContext extends ChannelContext {
 
 	protected void UDPFlush() {
 		flush(false);
+	}
+
+	public void handle() {
+	}
+
+	public void doWrite() {
 	}
 }
