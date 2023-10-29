@@ -66,8 +66,7 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 		this.serverDatagramChannel = openDatagramChannel();
 		this.readWorker = UDPReadWorker.openUDPReadWorker(serverDatagramChannel,
 				getConfig(),
-				memoryPool.allocateMemoryBlock(),
-				readMemoryUnitFactory);
+				getReadMemoryUnitSupplier());
 		this.writeWorker = new UDPWriteWorker(serverDatagramChannel);
 	}
 

@@ -1,6 +1,7 @@
 package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.core.functional.MemoryUnitSupplier;
 import cn.starboot.socket.core.jdk.nio.ImproveNioSelector;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.utils.concurrent.map.ConcurrentWithMap;
@@ -23,27 +24,22 @@ final class UDPReadWorker {
 
 	private final AioConfig aioConfig;
 
-	private final MemoryBlock memoryBlock;
-
-	private final MemoryUnitFactory readMemoryUnitFactory;
+	private final MemoryUnitSupplier readMemoryUnitSupplier;
 
 	private final ConcurrentWithMap<SocketAddress, UDPChannelContext> channelContextHashMap = new ConcurrentWithMap<>(new HashMap<>());
 
 	static NioEventLoopWorker openUDPReadWorker(DatagramChannel serverDatagramChannel,
 												AioConfig aioConfig,
-												MemoryBlock memoryBlock,
-												MemoryUnitFactory readMemoryUnitFactory) {
-		return new UDPReadWorker(serverDatagramChannel, aioConfig, memoryBlock, readMemoryUnitFactory).nioEventLoopWorker;
+												MemoryUnitSupplier readMemoryUnitSupplier) {
+		return new UDPReadWorker(serverDatagramChannel, aioConfig, readMemoryUnitSupplier).nioEventLoopWorker;
 	}
 
 	private UDPReadWorker(DatagramChannel serverDatagramChannel,
 						  AioConfig aioConfig,
-						  MemoryBlock memoryBlock,
-						  MemoryUnitFactory readMemoryUnitFactory) {
+						  MemoryUnitSupplier readMemoryUnitSupplier) {
 		this.serverDatagramChannel = serverDatagramChannel;
 		this.aioConfig = aioConfig;
-		this.memoryBlock = memoryBlock;
-		this.readMemoryUnitFactory = readMemoryUnitFactory;
+		this.readMemoryUnitSupplier = readMemoryUnitSupplier;
 		this.nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
 			@Override
 			public void accept(SelectionKey selectionKey) {
@@ -57,7 +53,7 @@ final class UDPReadWorker {
 			DatagramChannel channel = (DatagramChannel) selectionKey.channel();
 			try {
 				// 申请内存
-				final MemoryUnit readMemoryUnit = readMemoryUnitFactory.createMemoryUnit(memoryBlock);
+				final MemoryUnit readMemoryUnit = readMemoryUnitSupplier.applyMemoryUnit();
 				readMemoryUnit.buffer().clear();
 				SocketAddress receive = channel.receive(readMemoryUnit.buffer());
 				channelContextHashMap.containsKey(receive, new Consumer<Boolean>() {
