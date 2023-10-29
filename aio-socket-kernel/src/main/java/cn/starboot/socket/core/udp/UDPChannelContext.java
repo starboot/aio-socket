@@ -36,7 +36,7 @@ final class UDPChannelContext extends ChannelContext {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPChannelContext.class);
 
-	private DatagramChannel datagramChannel;
+	private final DatagramChannel datagramChannel;
 
 	private final SocketAddress remote;
 
