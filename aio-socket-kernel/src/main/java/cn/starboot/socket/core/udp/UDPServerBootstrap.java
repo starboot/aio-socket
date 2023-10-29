@@ -77,16 +77,14 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 										channelContextHashMap.get(receive, new Consumer<UDPChannelContext>() {
 											@Override
 											public void accept(UDPChannelContext udpChannelContext) {
-												udpChannelContext.addMemoryUnit(readMemoryUnit);
-												udpChannelContext.handle();
+												udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
 											}
 										});
 									} else {
-										channelContextHashMap.put(receive, new UDPChannelContext(serverDatagramChannel, receive, null), new Consumer<UDPChannelContext>() {
+										channelContextHashMap.put(receive, new UDPChannelContext(serverDatagramChannel, getConfig(), receive, null), new Consumer<UDPChannelContext>() {
 											@Override
 											public void accept(UDPChannelContext udpChannelContext) {
-												udpChannelContext.addMemoryUnit(readMemoryUnit);
-												udpChannelContext.handle();
+												udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
 											}
 										});
 									}

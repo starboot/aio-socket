@@ -42,13 +42,21 @@ final class UDPChannelContext extends ChannelContext {
 
 	private final SocketAddress remote;
 
+	private final AioConfig config;
+
 	private final ConcurrentWithList<MemoryUnit> concurrentWithList = new ConcurrentWithList<>(new ArrayList<>());
 
 	UDPChannelContext(
 			DatagramChannel datagramChannel,
+			final AioConfig aioConfig,
 			SocketAddress remote, MemoryBlock memoryBlock) {
 		this.datagramChannel = datagramChannel;
 		this.remote = remote;
+		this.config = aioConfig;
+		initUDPChannelContext(memoryBlock);
+	}
+
+	private void initUDPChannelContext(MemoryBlock memoryBlock) {
 		setWriteBuffer(
 				memoryBlock,
 				buffer -> {
@@ -62,8 +70,14 @@ final class UDPChannelContext extends ChannelContext {
 		getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
 	}
 
-	boolean addMemoryUnit(MemoryUnit readMemoryUnit) {
-		return concurrentWithList.add(readMemoryUnit);
+	UDPChannelContext addMemoryUnit(MemoryUnit readMemoryUnit) {
+		if (concurrentWithList.add(readMemoryUnit)) {
+			return this;
+		}
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("存入失败");
+		}
+		return this;
 	}
 
 	void handle() {
@@ -107,8 +121,7 @@ final class UDPChannelContext extends ChannelContext {
 
 	@Override
 	public AioConfig getAioConfig() {
-//		return this.udpChannel.config;
-		return null;
+		return config;
 	}
 
 	@Override
