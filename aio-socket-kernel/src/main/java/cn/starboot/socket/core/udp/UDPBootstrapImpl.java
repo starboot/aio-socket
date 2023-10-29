@@ -53,15 +53,16 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 
 	private final DatagramChannel serverDatagramChannel;
 
-	private final Function<SocketAddress, UDPChannelContext> udpChannelContextFunction = new Function<SocketAddress, UDPChannelContext>() {
-		@Override
-		public UDPChannelContext apply(SocketAddress socketAddress) {
-			return new UDPChannelContext(serverDatagramChannel, getConfig(), socketAddress, getWriteMemoryUnitSupplier());
-		}
-	};
+	private final Function<SocketAddress, UDPChannelContext> udpChannelContextFunction;
 
 	UDPBootstrapImpl(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new DatagramConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
+		this.udpChannelContextFunction = new Function<SocketAddress, UDPChannelContext>() {
+			@Override
+			public UDPChannelContext apply(SocketAddress socketAddress) {
+				return new UDPChannelContext(serverDatagramChannel, getConfig(), socketAddress, getWriteMemoryUnitSupplier());
+			}
+		};
 		this.serverDatagramChannel = openDatagramChannel();
 		this.readWorker = UDPReadWorker.openUDPReadWorker(udpChannelContextFunction, getConfig(), getReadMemoryUnitSupplier());
 		this.writeWorker = UDPWriteWorker.openUDPWriteWorker(serverDatagramChannel);
