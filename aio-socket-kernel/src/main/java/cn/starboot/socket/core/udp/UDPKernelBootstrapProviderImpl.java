@@ -10,6 +10,6 @@ final class UDPKernelBootstrapProviderImpl extends UDPKernelBootstrapProvider {
 
 	@Override
 	public DatagramBootstrap openUDPBootstrap(KernelBootstrapProvider kernelBootstrapProvider) {
-		return new UDPBootstrap(this, kernelBootstrapProvider);
+		return new UDPBootstrapImpl(this, kernelBootstrapProvider);
 	}
 }

@@ -30,9 +30,9 @@ import java.util.function.Consumer;
  *
  * @author MDong
  */
-final class UDPBootstrap extends UDPAbstractBootstrap implements DatagramBootstrap {
+final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBootstrap {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UDPBootstrap.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UDPBootstrapImpl.class);
 
 	/**
 	 * 绑定本地地址
@@ -57,7 +57,7 @@ final class UDPBootstrap extends UDPAbstractBootstrap implements DatagramBootstr
 
 	private final ConcurrentLinkedQueue<MemoryUnit> writeQueue = new ConcurrentLinkedQueue<>();
 
-	UDPBootstrap(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
+	UDPBootstrapImpl(UDPKernelBootstrapProvider udpKernelBootstrapProvider, KernelBootstrapProvider kernelBootstrapProvider) {
 		super(new AioServerConfig(), udpKernelBootstrapProvider, kernelBootstrapProvider);
 		nioEventLoopWorker = new NioEventLoopWorker(ImproveNioSelector.open(), new Consumer<SelectionKey>() {
 			@Override
@@ -136,7 +136,7 @@ final class UDPBootstrap extends UDPAbstractBootstrap implements DatagramBootstr
 			boss_udp.submit(nioEventLoopWorker);
 			nioEventLoopWorker.addRegister(selector -> {
 				try {
-					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPBootstrap.this);
+					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPBootstrapImpl.this);
 				} catch (ClosedChannelException closedChannelException) {
 					closedChannelException.printStackTrace();
 				}
