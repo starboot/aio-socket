@@ -17,6 +17,7 @@ package cn.starboot.socket.core;
 
 import cn.starboot.socket.core.enums.ChannelStatusEnum;
 import cn.starboot.socket.core.enums.CloseCode;
+import cn.starboot.socket.core.functional.MemoryUnitSupplier;
 import cn.starboot.socket.core.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.utils.queue.AioFullWaitQueue;
 import cn.starboot.socket.core.utils.queue.AioQueue;
@@ -97,14 +98,13 @@ public abstract class ChannelContext {
     /**
      * 设置通道上下文的输出流
      *
-     * @param memoryBlock 输出流所在内存页
+     * @param writeMemoryUnitSupplier 输出流所在内存页
      * @param consumer   消费函数
-     * @param chunkSize  输出流大小（单位字节）
      * @param capacity   待输出数组的大小
      */
-    protected void setWriteBuffer(MemoryBlock memoryBlock, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
+    protected void setWriteBuffer(MemoryUnitSupplier writeMemoryUnitSupplier, Consumer<WriteBuffer> consumer, int capacity) {
         if (byteBuf == null) {
-            byteBuf = new WriteBuffer(memoryBlock, consumer, chunkSize, capacity);
+            byteBuf = new WriteBuffer(writeMemoryUnitSupplier, consumer, capacity);
         }
     }
 

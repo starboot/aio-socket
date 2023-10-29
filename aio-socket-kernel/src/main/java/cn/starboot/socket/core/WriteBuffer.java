@@ -16,6 +16,7 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.core.exception.AioEncoderException;
+import cn.starboot.socket.core.functional.MemoryUnitSupplier;
 import cn.starboot.socket.core.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 
@@ -44,7 +45,7 @@ public final class WriteBuffer {
     /**
      * 为当前 WriteBuffer 提供数据存放功能的缓存页 用于申请内存空间
      */
-    private final MemoryBlock memoryBlock;
+    private final MemoryUnitSupplier writeMemoryUnitSupplier;
 
     /**
      * 缓冲区数据刷新Function，执行发送的具体逻辑函数
@@ -54,7 +55,7 @@ public final class WriteBuffer {
     /**
      * 默认内存块大小 写操作所申请的空间初始大小，默认128字节
      */
-    private final int chunkSize;
+//    private final int chunkSize;
 
     /**
      * items 读索引位
@@ -89,16 +90,14 @@ public final class WriteBuffer {
     /**
      * 输出流对象
      *
-     * @param memoryBlock 所在内存块
+     * @param writeMemoryUnitSupplier 所在内存块
      * @param consumer    调用底层IO通讯
-     * @param chunkSize   输出流大小（单位字节）
      * @param capacity    最大带输出队列容量
      */
-    WriteBuffer(MemoryBlock memoryBlock, Consumer<WriteBuffer> consumer, int chunkSize, int capacity) {
-        this.memoryBlock = memoryBlock;
+    WriteBuffer(MemoryUnitSupplier writeMemoryUnitSupplier, Consumer<WriteBuffer> consumer, int capacity) {
+        this.writeMemoryUnitSupplier = writeMemoryUnitSupplier;
         this.consumer = consumer;
         this.items = new MemoryUnit[capacity];
-        this.chunkSize = chunkSize;
     }
 
     /**
@@ -108,7 +107,7 @@ public final class WriteBuffer {
      * @return 虚拟空间
      */
     public MemoryUnit newVirtualBuffer(int size) {
-        return memoryBlock.allocate(size);
+        return writeMemoryUnitSupplier.applyMemoryUnit();
     }
 
     /**
@@ -137,7 +136,7 @@ public final class WriteBuffer {
      */
     public synchronized void writeByte(byte b) {
         if (writeInBuf == null) {
-            writeInBuf = memoryBlock.allocate(chunkSize);
+            writeInBuf = writeMemoryUnitSupplier.applyMemoryUnit();
         }
         writeInBuf.buffer().put(b);
         flushWriteBuffer(false);
@@ -192,7 +191,7 @@ public final class WriteBuffer {
      */
     public synchronized void write(byte[] b, int off, int len) throws AioEncoderException {
         if (writeInBuf == null) {
-            writeInBuf = memoryBlock.allocate(Math.max(chunkSize, len));
+            writeInBuf = writeMemoryUnitSupplier.applyMemoryUnit();
         }
         ByteBuffer writeBuffer = writeInBuf.buffer();
         if (closed) {

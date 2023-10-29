@@ -1,20 +1,23 @@
 package cn.starboot.socket.core;
 
 import cn.starboot.socket.core.banner.AioSocketBanner;
+import cn.starboot.socket.core.functional.MemoryUnitSupplier;
 import cn.starboot.socket.core.spi.KernelBootstrapProvider;
 import cn.starboot.socket.core.utils.ThreadUtils;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPool;
+import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnitFactory;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Supplier;
 
 public abstract class AbstractBootstrap {
 
 	/**
 	 * 内存池
 	 */
-	protected MemoryPool memoryPool;
+	private MemoryPool memoryPool;
 
 	/**
 	 * 服务器配置类
@@ -30,8 +33,25 @@ public abstract class AbstractBootstrap {
 	/**
 	 * 虚拟内存工厂，这里为读操作获取虚拟内存
 	 */
-	protected final MemoryUnitFactory readMemoryUnitFactory
+	private final MemoryUnitFactory readMemoryUnitFactory
 			= memoryBlock -> memoryBlock.allocate(getConfig().getReadBufferSize());
+
+	private final MemoryUnitFactory writeMemoryUnitFactory
+			= memoryBlock -> memoryBlock.allocate(getConfig().getWriteBufferSize());
+
+	private final MemoryUnitSupplier readMemoryUnitSupplier = new MemoryUnitSupplier() {
+		@Override
+		public MemoryUnit applyMemoryUnit() {
+			return readMemoryUnitFactory.createMemoryUnit(memoryPool.allocateMemoryBlock());
+		}
+	};
+
+	private final MemoryUnitSupplier writeMemoryUnitSupplier = new MemoryUnitSupplier() {
+		@Override
+		public MemoryUnit applyMemoryUnit() {
+			return writeMemoryUnitFactory.createMemoryUnit(memoryPool.allocateMemoryBlock());
+		}
+	};
 
 	public abstract KernelBootstrapProvider KernelProvider();
 
@@ -50,12 +70,12 @@ public abstract class AbstractBootstrap {
 
 	}
 
-	public MemoryPool getMemoryPool() {
-		return memoryPool;
+	protected MemoryUnitSupplier getReadMemoryUnitSupplier() {
+		return readMemoryUnitSupplier;
 	}
 
-	public MemoryUnitFactory getReadMemoryUnitFactory() {
-		return readMemoryUnitFactory;
+	protected MemoryUnitSupplier getWriteMemoryUnitSupplier() {
+		return writeMemoryUnitSupplier;
 	}
 
 	public AioConfig getConfig() {

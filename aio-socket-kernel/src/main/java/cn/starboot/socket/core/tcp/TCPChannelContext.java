@@ -18,6 +18,7 @@ package cn.starboot.socket.core.tcp;
 import cn.starboot.socket.core.*;
 import cn.starboot.socket.core.enums.ChannelStatusEnum;
 import cn.starboot.socket.core.exception.AioEncoderException;
+import cn.starboot.socket.core.functional.MemoryUnitSupplier;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.core.functional.MemoryUnitFunction;
 import cn.starboot.socket.core.utils.pool.memory.MemoryBlock;
@@ -114,14 +115,14 @@ final class TCPChannelContext extends ChannelContext {
 	 * @param config                 		配置项
 	 * @param readCompletionHandler  		读回调
 	 * @param writeCompletionHandler 		写回调
-	 * @param memoryBlock            		绑定内存页
+	 * @param readMemoryUnitSupplier            绑定内存页
 	 */
 	TCPChannelContext(ImproveAsynchronousSocketChannel asynchronousSocketChannel,
 					  final AioConfig config,
 					  CompletionHandler<Integer, TCPChannelContext> readCompletionHandler,
 					  CompletionHandler<Integer, TCPChannelContext> writeCompletionHandler,
-					  MemoryBlock memoryBlock,
-					  MemoryUnitFactory readMemoryUnitFactory) {
+					  MemoryUnitSupplier readMemoryUnitSupplier,
+					  MemoryUnitSupplier writeMemoryUnitSupplier) {
 		this.asynchronousSocketChannel = asynchronousSocketChannel;
 		this.readCompletionHandler = readCompletionHandler;
 		this.writeCompletionHandler = writeCompletionHandler;
@@ -129,7 +130,7 @@ final class TCPChannelContext extends ChannelContext {
 		this.memoryUnitFunction = isGet -> {
 			if (isGet) {
 				if (readBuffer == null) {
-					readBuffer = readMemoryUnitFactory.createMemoryUnit(memoryBlock);
+					readBuffer = readMemoryUnitSupplier.applyMemoryUnit();
 				}
 			} else {
 				if (aioConfig.isMemoryKeep() || readBuffer == null) {
@@ -153,7 +154,7 @@ final class TCPChannelContext extends ChannelContext {
 			}
 		};
 		// 为当前ChannelContext添加对外输出流
-		setWriteBuffer(memoryBlock, flushConsumer, getAioConfig().getWriteBufferSize(), 16);
+		setWriteBuffer(writeMemoryUnitSupplier, flushConsumer, 16);
 	}
 
 	/**

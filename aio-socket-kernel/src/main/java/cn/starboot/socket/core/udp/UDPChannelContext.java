@@ -68,17 +68,17 @@ final class UDPChannelContext extends ChannelContext {
 	}
 
 	private void initUDPChannelContext(MemoryBlock memoryBlock) {
-		setWriteBuffer(
-				memoryBlock,
-				memoryUnit -> {
-					MemoryUnit writeUnit = memoryUnit.poll();
-					if (writeUnit != null) {
-						this.writeMemoryUnit = writeUnit;
-						doWrite();
-					}
-				},
-				getAioConfig().getWriteBufferSize(),
-				16);
+//		setWriteBuffer(
+//				memoryBlock,
+//				memoryUnit -> {
+//					MemoryUnit writeUnit = memoryUnit.poll();
+//					if (writeUnit != null) {
+//						this.writeMemoryUnit = writeUnit;
+//						doWrite();
+//					}
+//				},
+//				getAioConfig().getWriteBufferSize(),
+//				16);
 		getAioConfig().getHandler().stateEvent(this, StateMachineEnum.NEW_CHANNEL, null);
 	}
 

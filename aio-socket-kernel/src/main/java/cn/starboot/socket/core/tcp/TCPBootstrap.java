@@ -47,8 +47,8 @@ abstract class TCPBootstrap extends AbstractBootstrap {
 					getConfig(),
 					getAioReadCompletionHandler(),
 					getAioWriteCompletionHandler(),
-					memoryPool.allocateMemoryBlock(),
-					readMemoryUnitFactory);
+					getReadMemoryUnitSupplier(),
+					getWriteMemoryUnitSupplier());
 
 	@Override
 	public final KernelBootstrapProvider KernelProvider() {
@@ -64,13 +64,13 @@ abstract class TCPBootstrap extends AbstractBootstrap {
 		if (this.asynchronousChannelGroup == null) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Start the default thread pool for the aio-socket kernel with thread pool number :{} ",
-						getConfig().getBossThreadNumber());
+						getConfig().getKernelThreadNumber());
 			}
 			startExecutorService();
 			this.asynchronousChannelGroup =
 					ImproveAsynchronousChannelGroup
 							.withCachedThreadPool(this.bossExecutorService,
-									getConfig().getBossThreadNumber());
+									getConfig().getKernelThreadNumber());
 		}
 
 	}
