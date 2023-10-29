@@ -69,7 +69,6 @@ final class UDPBootstrap extends UDPAbstractBootstrap implements DatagramBootstr
 
 	private void handle0(SelectionKey selectionKey) {
 		if (selectionKey.isReadable()) {
-			System.out.println("度");
 			DatagramChannel channel = (DatagramChannel) selectionKey.channel();
 			try {
 				// 申请内存
