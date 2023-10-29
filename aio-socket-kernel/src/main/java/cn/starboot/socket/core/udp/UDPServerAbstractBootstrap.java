@@ -2,8 +2,8 @@ package cn.starboot.socket.core.udp;
 
 import cn.starboot.socket.core.DatagramBootstrap;
 import cn.starboot.socket.core.Packet;
-import cn.starboot.socket.core.ServerBootstrap;
 import cn.starboot.socket.core.config.AioServerConfig;
+import cn.starboot.socket.core.enums.ProtocolEnum;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.jdk.nio.ImproveNioSelector;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
@@ -33,6 +33,21 @@ import java.util.function.Consumer;
 final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements DatagramBootstrap {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServerAbstractBootstrap.class);
+
+	/**
+	 * 绑定本地地址
+	 */
+	private SocketAddress localAddress;
+
+	/**
+	 * 客户端所用协议
+	 */
+	private ProtocolEnum clientProtocol;
+
+	/**
+	 * 心跳包
+	 */
+	private Packet heartBeat = null;
 
 	private DatagramChannel serverDatagramChannel;
 
@@ -181,6 +196,7 @@ final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements D
 	public DatagramBootstrap listen(String host, int port) {
 		getConfig().setHost(host);
 		getConfig().setPort(port);
+		this.localAddress = new InetSocketAddress(host, port);
 		return this;
 	}
 
@@ -191,7 +207,8 @@ final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements D
 
 	@Override
 	public DatagramBootstrap addHeartPacket(Packet heartPacket) {
-		return null;
+		this.heartBeat = heartPacket;
+		return this;
 	}
 
 	@Override
@@ -232,7 +249,10 @@ final class UDPServerAbstractBootstrap extends UDPAbstractBootstrap implements D
 	}
 
 	@Override
-	public DatagramBootstrap addAioHandler(AioHandler handler) {
+	public synchronized DatagramBootstrap addAioHandler(AioHandler handler) {
+		if (this.clientProtocol == null) {
+			this.clientProtocol = handler.name();
+		}
 		getConfig().getPlugins().addAioHandler(handler);
 		return this;
 	}

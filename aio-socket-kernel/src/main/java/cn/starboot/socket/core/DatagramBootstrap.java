@@ -24,4 +24,5 @@ public interface DatagramBootstrap extends Bootstrap<DatagramBootstrap> {
 	DatagramBootstrap remote(String host, int port);
 
 	DatagramBootstrap addHeartPacket(Packet heartPacket);
+
 }
