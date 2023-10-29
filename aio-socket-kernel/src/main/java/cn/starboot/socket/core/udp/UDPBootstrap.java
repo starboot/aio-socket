@@ -132,7 +132,7 @@ final class UDPBootstrap extends UDPAbstractBootstrap implements DatagramBootstr
 			serverDatagramChannel = DatagramChannel.open();
 			serverDatagramChannel.bind(new InetSocketAddress(getConfig().getHost(), getConfig().getPort()));
 			serverDatagramChannel.configureBlocking(false);
-			boss_udp = Executors.newFixedThreadPool(1, r -> new Thread("boss udp"));
+			boss_udp = Executors.newFixedThreadPool(2, r -> new Thread("boss udp"));
 			boss_udp.submit(nioEventLoopWorker);
 			nioEventLoopWorker.addRegister(selector -> {
 				try {
