@@ -149,6 +149,7 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 //			this.channelContext.close(flag);
 //			this.channelContext = null;
 //		}
+		boss_udp.shutdown();
 		super.shutdown();
 	}
 
