@@ -36,8 +36,6 @@ final class UDPChannelContext extends ChannelContext {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UDPChannelContext.class);
 
-//	private final UDPChannel udpChannel;
-
 	private DatagramChannel datagramChannel;
 
 	private final SocketAddress remote;
@@ -82,7 +80,7 @@ final class UDPChannelContext extends ChannelContext {
 	@Override
 	public InetSocketAddress getLocalAddress() throws IOException {
 //		return (InetSocketAddress) udpChannel.getChannel().getLocalAddress();
-		return null;
+		return (InetSocketAddress) datagramChannel.getLocalAddress();
 	}
 
 	@Override
