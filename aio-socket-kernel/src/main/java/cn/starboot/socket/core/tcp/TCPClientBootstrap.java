@@ -18,6 +18,7 @@ package cn.starboot.socket.core.tcp;
 import cn.starboot.socket.core.*;
 import cn.starboot.socket.core.enums.ProtocolEnum;
 import cn.starboot.socket.core.config.AioClientConfig;
+import cn.starboot.socket.core.exception.AioParameterException;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousChannelGroup;
 import cn.starboot.socket.core.jdk.aio.ImproveAsynchronousSocketChannel;
 import cn.starboot.socket.core.intf.AioHandler;
@@ -297,7 +298,11 @@ final class TCPClientBootstrap extends TCPBootstrap implements ClientBootstrap {
 	 */
 	@Override
 	public ClientBootstrap setThreadNum(int threadNum) {
-		getConfig().setKernelThreadNumber(threadNum);
+		try {
+			getConfig().setKernelThreadNumber(threadNum);
+		} catch (AioParameterException e) {
+			e.printStackTrace();
+		}
 		return this;
 	}
 

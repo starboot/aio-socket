@@ -4,6 +4,7 @@ import cn.starboot.socket.core.DatagramBootstrap;
 import cn.starboot.socket.core.Packet;
 import cn.starboot.socket.core.config.DatagramConfig;
 import cn.starboot.socket.core.enums.ProtocolEnum;
+import cn.starboot.socket.core.exception.AioParameterException;
 import cn.starboot.socket.core.intf.AioHandler;
 import cn.starboot.socket.core.jdk.nio.ImproveNioSelector;
 import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
@@ -132,15 +133,19 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 		return null;
 	}
 
-
 	private void start0() {
 		try {
 			serverDatagramChannel = DatagramChannel.open();
 			serverDatagramChannel.bind(new InetSocketAddress(getConfig().getHost(), getConfig().getPort()));
 			serverDatagramChannel.configureBlocking(false);
-			boss_udp = Executors.newFixedThreadPool(2, r -> new Thread("boss udp"));
+			boss_udp = Executors.newFixedThreadPool(getConfig().getKernelThreadNumber(), r -> new Thread("boss udp"));
 			boss_udp.submit(nioEventLoopWorker);
 			boss_udp.submit(writeWorker);
+
+			for (int i = 0; i < getConfig().getKernelThreadNumber(); i++) {
+				boss_udp.submit(new UDPHandleWorker());
+			}
+
 			nioEventLoopWorker.addRegister(selector -> {
 				try {
 					serverDatagramChannel.register(selector, SelectionKey.OP_READ, UDPBootstrapImpl.this);
@@ -240,7 +245,11 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 
 	@Override
 	public DatagramBootstrap setThreadNum(int threadNum) {
-		getConfig().setKernelThreadNumber(threadNum);
+		try {
+			getConfig().setKernelThreadNumber(threadNum);
+		} catch (AioParameterException e) {
+			e.printStackTrace();
+		}
 		return this;
 	}
 

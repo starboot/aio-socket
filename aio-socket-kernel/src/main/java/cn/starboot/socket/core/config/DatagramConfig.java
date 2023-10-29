@@ -1,6 +1,7 @@
 package cn.starboot.socket.core.config;
 
 import cn.starboot.socket.core.AioConfig;
+import cn.starboot.socket.core.exception.AioParameterException;
 
 public class DatagramConfig extends AioConfig {
 
@@ -20,7 +21,10 @@ public class DatagramConfig extends AioConfig {
 	}
 
 	@Override
-	public void setKernelThreadNumber(int threadNum) {
+	public void setKernelThreadNumber(int threadNum) throws AioParameterException {
+		if (threadNum < 2) {
+			throw new AioParameterException("threadNum cannot be less than 2");
+		}
 		this.kernelThreadNum = threadNum;
 	}
 

@@ -15,6 +15,7 @@
  */
 package cn.starboot.socket.core;
 
+import cn.starboot.socket.core.exception.AioParameterException;
 import cn.starboot.socket.core.maintain.*;
 import cn.starboot.socket.core.utils.concurrent.collection.ConcurrentWithSet;
 import cn.starboot.socket.core.utils.pool.memory.MemoryPool;
@@ -286,7 +287,7 @@ public abstract class AioConfig {
 
 	public abstract boolean isServer();
 
-	public abstract void setKernelThreadNumber(int threadNum);
+	public abstract void setKernelThreadNumber(int threadNum) throws AioParameterException;
 
 	public abstract int getKernelThreadNumber();
 
