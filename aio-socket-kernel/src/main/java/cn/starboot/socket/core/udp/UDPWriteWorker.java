@@ -11,7 +11,7 @@ final class UDPWriteWorker implements Runnable {
 
 	private boolean isRunning = true;
 
-	private Semaphore semaphore = new Semaphore(1);
+	private final Semaphore semaphore = new Semaphore(1);
 
 	void shutdownWriteWorker() {
 		isRunning = false;
