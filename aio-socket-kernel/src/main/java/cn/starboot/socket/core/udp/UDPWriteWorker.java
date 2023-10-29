@@ -1,13 +1,15 @@
 package cn.starboot.socket.core.udp;
 
+import cn.starboot.socket.core.utils.concurrent.queue.ConcurrentWithQueue;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.function.Consumer;
 
 final class UDPWriteWorker implements Runnable {
 
-	private final ConcurrentLinkedQueue<MemoryUnit> writeQueue = new ConcurrentLinkedQueue<>();
+	private final ConcurrentWithQueue<MemoryUnit> writeQueue = new ConcurrentWithQueue<>(new LinkedBlockingQueue<>());
 
 	private boolean isRunning = true;
 
@@ -18,14 +20,21 @@ final class UDPWriteWorker implements Runnable {
 	}
 
 	void addMemoryUnitToWriteQueue(MemoryUnit WriteMemoryUnit) {
-		writeQueue.offer(WriteMemoryUnit);
+		writeQueue.offer(WriteMemoryUnit, new Consumer<Boolean>() {
+			@Override
+			public void accept(Boolean aBoolean) {
+				if (aBoolean) {
+					semaphore.release();
+				}
+			}
+		});
 	}
 
 	@Override
 	public void run() {
 
 		while (isRunning) {
-			if (writeQueue.poll() != null) {
+			if (writeQueue != null) {
 				//
 			} else {
 				try {
