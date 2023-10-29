@@ -22,6 +22,7 @@ import cn.starboot.socket.core.AioConfig;
 import cn.starboot.socket.core.ChannelContext;
 import cn.starboot.socket.core.exception.AioEncoderException;
 import cn.starboot.socket.core.AsyAioWorker;
+import cn.starboot.socket.core.jdk.nio.NioEventLoopWorker;
 import cn.starboot.socket.core.utils.concurrent.collection.ConcurrentWithList;
 import cn.starboot.socket.core.utils.pool.memory.MemoryBlock;
 import cn.starboot.socket.core.utils.pool.memory.MemoryUnit;
@@ -31,8 +32,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 final class UDPChannelContext extends ChannelContext {
 
@@ -44,25 +49,36 @@ final class UDPChannelContext extends ChannelContext {
 
 	private final AioConfig config;
 
+	private final NioEventLoopWorker nioEventLoopWorker;
+
+	/**
+	 * 存放待发送的完整比特流
+	 */
+	private MemoryUnit writeMemoryUnit;
+
 	private final ConcurrentWithList<MemoryUnit> concurrentWithList = new ConcurrentWithList<>(new ArrayList<>());
 
 	UDPChannelContext(
 			DatagramChannel datagramChannel,
 			final AioConfig aioConfig,
-			SocketAddress remote, MemoryBlock memoryBlock) {
+			SocketAddress remote,
+			MemoryBlock memoryBlock,
+			NioEventLoopWorker nioEventLoopWorker) {
 		this.datagramChannel = datagramChannel;
 		this.remote = remote;
 		this.config = aioConfig;
+		this.nioEventLoopWorker = nioEventLoopWorker;
 		initUDPChannelContext(memoryBlock);
 	}
 
 	private void initUDPChannelContext(MemoryBlock memoryBlock) {
 		setWriteBuffer(
 				memoryBlock,
-				buffer -> {
-					MemoryUnit writeBuffer = buffer.poll();
-					if (writeBuffer != null) {
-//						this.udpChannel.write(writeBuffer, this);
+				memoryUnit -> {
+					MemoryUnit writeUnit = memoryUnit.poll();
+					if (writeUnit != null) {
+						this.writeMemoryUnit = writeUnit;
+						doWrite();
 					}
 				},
 				getAioConfig().getWriteBufferSize(),
@@ -82,6 +98,34 @@ final class UDPChannelContext extends ChannelContext {
 
 	void handle() {
 
+		// 处理
+	}
+
+	void doWrite() {
+		// 写
+		try {
+			int send = datagramChannel.send(writeMemoryUnit.buffer(), remote);
+
+			if (send > 0) {
+				System.out.println("写入成功");
+			}
+
+			if (send == 0) {
+				// 无法写
+				nioEventLoopWorker.addRegister(new Consumer<Selector>() {
+					@Override
+					public void accept(Selector selector) {
+						try {
+							datagramChannel.register(selector, SelectionKey.OP_WRITE, this);
+						} catch (ClosedChannelException closedChannelException) {
+							closedChannelException.printStackTrace();
+						}
+					}
+				});
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

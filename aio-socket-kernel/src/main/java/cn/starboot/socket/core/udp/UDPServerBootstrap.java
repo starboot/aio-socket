@@ -81,7 +81,7 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 											}
 										});
 									} else {
-										channelContextHashMap.put(receive, new UDPChannelContext(serverDatagramChannel, getConfig(), receive, null), new Consumer<UDPChannelContext>() {
+										channelContextHashMap.put(receive, new UDPChannelContext(serverDatagramChannel, getConfig(), receive, null, null), new Consumer<UDPChannelContext>() {
 											@Override
 											public void accept(UDPChannelContext udpChannelContext) {
 												udpChannelContext.addMemoryUnit(readMemoryUnit).handle();
@@ -94,7 +94,9 @@ final class UDPServerBootstrap extends UDPBootstrap implements ServerBootstrap {
 							e.printStackTrace();
 						}
 					}else if (selectionKey.isWritable()) {
-						System.out.println("写");
+						selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
+						UDPChannelContext attachment = (UDPChannelContext) selectionKey.attachment();
+						attachment.doWrite();
 					}
 				}
 			});
