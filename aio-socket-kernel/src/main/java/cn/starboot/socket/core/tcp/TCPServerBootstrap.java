@@ -194,12 +194,12 @@ final class TCPServerBootstrap extends TCPBootstrap implements ServerBootstrap {
 	/**
 	 * 设置线程池线程数量
 	 *
-	 * @param bossThreadNum 内核IO线程数量
+	 * @param threadNum 内核IO线程数量
 	 * @return ServerBootstrap 对象
 	 */
 	@Override
-	public ServerBootstrap setThreadNum(int bossThreadNum) {
-		getConfig().setBossThreadNumber(bossThreadNum);
+	public ServerBootstrap setThreadNum(int threadNum) {
+		getConfig().setKernelThreadNumber(threadNum);
 		return this;
 	}
 

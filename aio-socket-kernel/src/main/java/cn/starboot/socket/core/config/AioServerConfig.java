@@ -7,7 +7,7 @@ public class AioServerConfig extends AioConfig {
 	/**
 	 * 内核IO线程池线程数量
 	 */
-	private int bossThreadNum = Runtime.getRuntime().availableProcessors();
+	private int kernelThreadNum = Runtime.getRuntime().availableProcessors();
 
 
 	@Override
@@ -21,13 +21,13 @@ public class AioServerConfig extends AioConfig {
 	}
 
 	@Override
-	public void setBossThreadNumber(int bossThreadNumber) {
-		this.bossThreadNum = bossThreadNumber;
+	public void setKernelThreadNumber(int threadNum) {
+		this.kernelThreadNum = threadNum;
 	}
 
 	@Override
-	public int getBossThreadNumber() {
-		return this.bossThreadNum;
+	public int getKernelThreadNumber() {
+		return this.kernelThreadNum;
 	}
 
 }

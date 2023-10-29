@@ -2,16 +2,16 @@ package cn.starboot.socket.core.config;
 
 import cn.starboot.socket.core.AioConfig;
 
-public class AioClientConfig extends AioConfig {
+public class DatagramConfig extends AioConfig {
 
 	/**
-	 * 客户端线程数默认为2;就够用了
+	 * 内核IO线程池线程数量
 	 */
-	private int kernelThreadNum = 1;
+	private int kernelThreadNum = 2;
 
 	@Override
 	public String getName() {
-		return "Client Configuration";
+		return "UDP Configuration";
 	}
 
 	@Override
@@ -26,7 +26,6 @@ public class AioClientConfig extends AioConfig {
 
 	@Override
 	public int getKernelThreadNumber() {
-		return this.kernelThreadNum;
+		return kernelThreadNum;
 	}
-
 }

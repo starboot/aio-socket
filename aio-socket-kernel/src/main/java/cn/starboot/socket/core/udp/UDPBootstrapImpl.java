@@ -232,8 +232,8 @@ final class UDPBootstrapImpl extends UDPAbstractBootstrap implements DatagramBoo
 	}
 
 	@Override
-	public DatagramBootstrap setThreadNum(int bossThreadNum) {
-		getConfig().setBossThreadNumber(bossThreadNum);
+	public DatagramBootstrap setThreadNum(int threadNum) {
+		getConfig().setKernelThreadNumber(threadNum);
 		return this;
 	}
 

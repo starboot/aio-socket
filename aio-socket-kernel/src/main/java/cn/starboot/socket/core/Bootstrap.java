@@ -14,7 +14,7 @@ public interface Bootstrap<T> {
 
 	AioConfig getConfig();
 
-	T setThreadNum(int bossThreadNum);
+	T setThreadNum(int threadNum);
 
 	T setMemoryPoolFactory(int size, int num, boolean useDirect);
 

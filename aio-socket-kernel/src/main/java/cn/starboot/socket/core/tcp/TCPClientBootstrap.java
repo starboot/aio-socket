@@ -297,7 +297,7 @@ final class TCPClientBootstrap extends TCPBootstrap implements ClientBootstrap {
 	 */
 	@Override
 	public ClientBootstrap setThreadNum(int threadNum) {
-		getConfig().setBossThreadNumber(threadNum);
+		getConfig().setKernelThreadNumber(threadNum);
 		return this;
 	}
 
