@@ -173,6 +173,11 @@
         <module>../aio-socket-codec-rtmp</module>
 		<module>../aio-socket-codec-http-flv</module>
 		<module>../aio-socket-codec-webrtc</module>
+        <module>../aio-socket-struct</module>
+		<module>../aio-socket-memory</module>
+		<module>../aio-socket-object</module>
+		<module>../aio-socket-log</module>
+		<module>../aio-socket-thread</module>
 	</modules>
 
 	<build>
