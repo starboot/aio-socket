@@ -178,6 +178,7 @@
 		<module>../aio-socket-object</module>
 		<module>../aio-socket-log</module>
 		<module>../aio-socket-thread</module>
+		<module>../aio-socket-bom</module>
 	</modules>
 
 	<build>
