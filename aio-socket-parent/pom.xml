@@ -180,7 +180,8 @@
 		<module>../aio-socket-thread</module>
 		<module>../aio-socket-bom</module>
 		<module>../aio-socket-common</module>
-	</modules>
+        <module>../aio-socket-security</module>
+    </modules>
 
 	<build>
 		<!-- 适配idea下生成不了配置文件问题 -->
